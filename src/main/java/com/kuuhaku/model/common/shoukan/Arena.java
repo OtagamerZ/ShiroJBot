@@ -141,7 +141,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 	}
 
 	public boolean isFieldEmpty(Side side) {
-		boolean sentinel = game.getHands().get(side).getOrigins().synergy() == Race.SENTINEL;
+		boolean sentinel = game.getHands().get(side).getOrigins().hasSynergy(Race.SENTINEL);
 		return slots.get(side).stream().allMatch(sc -> sc.getTop() == null && (!sentinel || sc.getBottom() == null));
 	}
 

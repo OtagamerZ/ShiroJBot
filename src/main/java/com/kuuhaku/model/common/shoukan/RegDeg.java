@@ -49,7 +49,7 @@ public class RegDeg {
 
 	public void add(Number val, double mult) {
 		if (val == null) return;
-		else if (parent != null && parent.getOrigins().synergy() == Race.CONDEMNED) return;
+		if (parent != null && parent.getOrigins().hasSynergy(Race.CONDEMNED)) return;
 		int value = val.intValue();
 
 		if (value < 0) {
@@ -63,7 +63,7 @@ public class RegDeg {
 				}
 
 				mult = parent.getStats().getDegenMult().apply(mult);
-				if (parent.getOther().getOrigins().synergy() == Race.GHOUL) {
+				if (parent.getOther().getOrigins().hasSynergy(Race.GHOUL)) {
 					int split = -value / 2;
 					values.add(new Degen(split, mult));
 					values.add(new Degen(split, mult));
@@ -133,7 +133,7 @@ public class RegDeg {
 	public int next() {
 		try {
 			int virus = 0;
-			if (parent != null && parent.getOrigins().synergy() == Race.VIRUS) {
+			if (parent != null && parent.getOrigins().hasSynergy(Race.VIRUS)) {
 				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
 			}
 
@@ -145,7 +145,7 @@ public class RegDeg {
 			while (it.hasNext()) {
 				ValueOverTime vot = it.next();
 				if (vot instanceof Degen) {
-					if (parent != null && parent.getGame().getCurrent().getOrigins().synergy() == Race.FIEND && parent.getGame().getRng().nextBoolean()) {
+					if (parent != null && parent.getGame().getCurrent().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
 						break;
 					}
 
@@ -159,7 +159,7 @@ public class RegDeg {
 	public int peek() {
 		int virus = 0;
 		if (parent != null) {
-			if (parent.getOrigins().synergy() == Race.VIRUS && parent.getOther().getOrigins().synergy() != Race.VIRUS) {
+			if (parent.getOrigins().hasSynergy(Race.VIRUS) && parent.getOther().getOrigins().synergy() != Race.VIRUS) {
 				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
 			}
 		}

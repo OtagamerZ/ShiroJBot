@@ -97,7 +97,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (getEquipments(false).contains(e)) return false;
 		else if (isSupporting()) return false;
 
-		if (getHand().getOrigins().synergy() == Race.SLIME) {
+		if (getHand().getOrigins().hasSynergy(Race.SLIME)) {
 			getStats().getAtk().set(new FlatMod(e.getDmg()));
 			getStats().getDfs().set(new FlatMod(e.getDfs()));
 			getStats().getDodge().set(new FlatMod(e.getDodge()));
@@ -229,7 +229,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public Race getRace() {
-		if (hand != null && getGame() != null && hand.getOrigins().synergy() == Race.DOPPELGANGER) {
+		if (hand != null && getGame() != null && hand.getOrigins().hasSynergy(Race.DOPPELGANGER)) {
 			return Race.MIXED;
 		}
 
@@ -327,7 +327,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isEquipped(String id) {
-		if (getHand().getOrigins().synergy() == Race.SLIME) {
+		if (getHand().getOrigins().hasSynergy(Race.SLIME)) {
 			JSONArray equips = getStats().getData().getJSONArray("absorbed_equips");
 			if (equips != null && equips.contains(id)) return true;
 		}
@@ -530,11 +530,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public int getMPCost(boolean ignoreRace) {
 		int flat = base.getMana() + (isFusion() ? 5 : 0);
 		if (hand != null && !ignoreRace) {
-			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
+			if (hand.getOrigins().hasSynergy(Race.CELESTIAL)) {
 				flat -= hand.getCards().size() / 2;
 			}
 
-			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && flat > hand.getMP()) {
+			if (hand.getOrigins().hasSynergy(Race.HOMUNCULUS) && flat > hand.getMP()) {
 				flat = hand.getMP();
 			}
 
@@ -566,7 +566,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (hand != null) {
 			int mp = getMPCost(true);
 
-			if (hand.getOrigins().synergy() == Race.HOMUNCULUS && mp > hand.getMP()) {
+			if (hand.getOrigins().hasSynergy(Race.HOMUNCULUS) && mp > hand.getMP()) {
 				flat += mp - hand.getMP();
 			}
 		}
@@ -611,7 +611,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (hand != null) {
 			mult *= getFieldMult();
 
-			if (hand.getOrigins().synergy() == Race.WEREBEAST && isSleeping()) {
+			if (hand.getOrigins().hasSynergy(Race.WEREBEAST) && isSleeping()) {
 				mult *= 1.5;
 			}
 		}
@@ -635,11 +635,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (getRace().isRace(r)) {
 				double mod = ((Number) e.getValue()).doubleValue();
 
-				if (mod != 0 && hand.getOrigins().synergy() == Race.ELF) {
+				if (mod != 0 && hand.getOrigins().hasSynergy(Race.ELF)) {
 					mod += 0.15;
 				}
 
-				if (mod != 0 && hand.getOther().getOrigins().synergy() == Race.DARK_ELF) {
+				if (mod != 0 && hand.getOther().getOrigins().hasSynergy(Race.DARK_ELF)) {
 					mod -= 0.15;
 				}
 
@@ -681,11 +681,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.WEREBEAST) {
+			if (hand.getOrigins().hasSynergy(Race.WEREBEAST)) {
 				min += 10;
 			}
 
-			if (hand.getOrigins().synergy() == Race.ELEMENTAL) {
+			if (hand.getOrigins().hasSynergy(Race.ELEMENTAL)) {
 				int wind = (int) getCards(hand.getSide()).parallelStream()
 						.filter(s -> s.getElement() == ElementType.WIND)
 						.count();
@@ -709,7 +709,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		int min = 0;
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.CYBORG) {
+			if (hand.getOrigins().hasSynergy(Race.CYBORG)) {
 				min += 10;
 			}
 		}
@@ -721,11 +721,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	public double getCostMult() {
 		double mult = stats.getCost().multiplier();
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.PIXIE) {
+			if (hand.getOrigins().hasSynergy(Race.PIXIE)) {
 				mult *= getFieldMult();
 			}
 
-			if (hand.getOrigins().synergy() == Race.DULLAHAN) {
+			if (hand.getOrigins().hasSynergy(Race.DULLAHAN)) {
 				mult *= 2;
 			}
 		}
@@ -745,7 +745,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= 1.5;
 			}
 
-			if (hand.getOrigins().synergy() == Race.FABLED) {
+			if (hand.getOrigins().hasSynergy(Race.FABLED)) {
 				mult *= getPower();
 			}
 		}
@@ -770,7 +770,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (isSupporting()) {
-				if (hand.getOrigins().synergy() == Race.FAERIE) {
+				if (hand.getOrigins().hasSynergy(Race.FAERIE)) {
 					mult *= 1.25;
 				} else {
 					mult *= 0.75;
@@ -781,9 +781,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				mult *= getFieldMult();
 			}
 
-			if (hand.getOrigins().synergy() == Race.DRYAD) {
+			if (hand.getOrigins().hasSynergy(Race.DRYAD)) {
 				mult *= 1 + Calc.clamp(hand.getRegDeg().peek() / hand.getBase().hp(), 0, 1);
-			} else if (hand.getOrigins().synergy() == Race.ALIEN) {
+			}
+			if (hand.getOrigins().hasSynergy(Race.ELDRITCH)) {
+				mult *= 1 + Math.max(0, -hand.getRegDeg().peek() / (double) hand.getBase().hp()) * 2;
+			}
+			if (hand.getOrigins().hasSynergy(Race.ALIEN)) {
 				mult *= 1 + Calc.prcnt(hand.getUserDeck().getEvoWeight(), 24) / 4;
 			}
 		}
@@ -796,7 +800,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 		int flat = equipments.stream().filter(Evogear::isAvailable).mapToInt(extractor).sum();
 		if (hand != null) {
-			if (hand.getOrigins().synergy() == Race.EX_MACHINA) {
+			if (hand.getOrigins().hasSynergy(Race.EX_MACHINA)) {
 				Senshi sup = getSupport();
 				if (sup != null) {
 					flat += extractor.applyAsInt(sup);
@@ -1034,7 +1038,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public boolean isBerserk() {
 		if (getGame() != null) {
-			if (getOriginalHand().getOrigins().synergy() == Race.REVENANT && !Objects.equals(getHand(), getOriginalHand())) {
+			if (getOriginalHand().getOrigins().hasSynergy(Race.REVENANT) && !Objects.equals(getHand(), getOriginalHand())) {
 				return true;
 			}
 		}
@@ -1244,7 +1248,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				base.lockAll();
 				return false;
 			}
-		} else if (hand.getOther().getOrigins().synergy() == Race.NIGHTMARE && isSleeping()) {
+		}
+		if (hand.getOther().getOrigins().hasSynergy(Race.NIGHTMARE) && isSleeping()) {
 			return false;
 		}
 
@@ -1323,7 +1328,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
 			}
 
-			if (hand.getOrigins().synergy() == Race.EX_MACHINA) {
+			if (hand.getOrigins().hasSynergy(Race.EX_MACHINA)) {
 				Senshi sup = getSupport();
 				if (sup != null) {
 					Evogear e = new EquippableSenshi(sup);
@@ -1475,7 +1480,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean hasAttributes() {
-		return !isSupporting() || getHand().getOrigins().synergy() == Race.SENTINEL;
+		return !isSupporting() || getHand().getOrigins().hasSynergy(Race.SENTINEL);
 	}
 
 	public int getDamage(Senshi target) {

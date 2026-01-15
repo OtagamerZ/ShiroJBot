@@ -504,7 +504,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int mult = 1;
-		if (curr.getOrigins().synergy() == Race.DULLAHAN) {
+		if (curr.getOrigins().hasSynergy(Race.DULLAHAN)) {
 			mult = 2;
 		}
 
@@ -549,7 +549,7 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		if (d instanceof Senshi s && curr.getOrigins().synergy() == Race.SHIKIGAMI) {
+		if (d instanceof Senshi s && curr.getOrigins().hasSynergy(Race.SHIKIGAMI)) {
 			d = new EquippableSenshi(s);
 
 			EquippableSenshi es = (EquippableSenshi) d;
@@ -721,7 +721,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		double mult = 0.5;
-		if (curr.getOther().getOrigins().synergy() == Race.INFERNAL) {
+		if (curr.getOther().getOrigins().hasSynergy(Race.INFERNAL)) {
 			mult *= 2;
 		}
 
@@ -771,7 +771,7 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			double mult = 0.5;
-			if (curr.getOther().getOrigins().synergy() == Race.INFERNAL) {
+			if (curr.getOther().getOrigins().hasSynergy(Race.INFERNAL)) {
 				mult *= 2;
 			}
 
@@ -825,7 +825,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getDiscard().add(d);
 
-		if (curr.getOrigins().synergy() == Race.FAMILIAR && d instanceof Senshi s) {
+		if (curr.getOrigins().hasSynergy(Race.FAMILIAR) && d instanceof Senshi s) {
 			for (Drawable<?> c : curr.getCards()) {
 				if (c.isAvailable() && c instanceof Senshi it && it.getElement() == s.getElement()) {
 					it.getStats().getMana().set(new FlatMod(-1));
@@ -861,7 +861,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		curr.getDiscard().addAll(cards);
 
-		if (curr.getOrigins().synergy() == Race.FAMILIAR) {
+		if (curr.getOrigins().hasSynergy(Race.FAMILIAR)) {
 			for (Drawable<?> c : cards) {
 				if (c instanceof Senshi s) {
 					for (Drawable<?> d : curr.getCards()) {
@@ -1204,7 +1204,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		double mult = 1;
-		if (curr.getOrigins().synergy() == Race.DULLAHAN) {
+		if (curr.getOrigins().hasSynergy(Race.DULLAHAN)) {
 			mult = 0.5;
 		}
 
@@ -1313,7 +1313,7 @@ public class Shoukan extends GameInstance<Phase> {
 		int dmg = damage;
 		int direct = (int) (damage * source.getStats().getPiercing().offset());
 		int lifesteal = you.getBase().lifesteal() + (int) (100 * source.getStats().getLifesteal().offset());
-		if (you.getOrigins().synergy() == Race.VAMPIRE && you.isLowLife()) {
+		if (you.getOrigins().hasSynergy(Race.VAMPIRE) && you.isLowLife()) {
 			lifesteal += 7;
 		}
 
@@ -1347,7 +1347,7 @@ public class Shoukan extends GameInstance<Phase> {
 					if (!ignore) {
 						target.setFlipped(false);
 
-						boolean dbl = op.getOrigins().synergy() == Race.CYBERBEAST && chance(20);
+						boolean dbl = op.getOrigins().hasSynergy(Race.CYBERBEAST) && chance(20);
 						boolean unstop = source.hasFlag(Flag.UNSTOPPABLE, true);
 						boolean support = target.isSupporting();
 
@@ -1437,7 +1437,7 @@ public class Shoukan extends GameInstance<Phase> {
 											duration = Utils.clamp(dmg / enemyStats, 1, 5);
 										}
 
-										if (you.getOrigins().synergy() == Race.ELEMENTAL) {
+										if (you.getOrigins().hasSynergy(Race.ELEMENTAL)) {
 											int earth = (int) getCards(you.getSide()).parallelStream()
 													.filter(s -> s.getElement() == ElementType.EARTH)
 													.count();
@@ -1553,7 +1553,7 @@ public class Shoukan extends GameInstance<Phase> {
 						you.modHP(dmg * lifesteal / 100);
 					}
 
-					if (you.getOrigins().synergy() == Race.DAEMON) {
+					if (you.getOrigins().hasSynergy(Race.DAEMON)) {
 						you.modMP((int) (Math.max(0d, eHP - op.getHP()) / op.getBase().hp() * 0.05));
 					}
 				}
@@ -1834,11 +1834,12 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (trigger == ON_TURN_BEGIN) {
-				if (h.getOrigins().synergy() == Race.REBORN && (getTurn() / 2 + 1) % 3 == 0) {
+				if (h.getOrigins().hasSynergy(Race.REBORN) && (getTurn() / 2 + 1) % 3 == 0) {
 					Evogear reb = DAO.find(Evogear.class, "REBIRTH");
 					reb.setEthereal(true);
 					h.getCards().add(reb);
-				} else if (h.getOrigins().synergy() == Race.GEIST) {
+				}
+				if (h.getOrigins().hasSynergy(Race.GEIST)) {
 					for (int i = 0; i < 3; i++) {
 						boolean top = Calc.chance(50);
 						List<SlotColumn> slts = getOpenSlots(side, top);
@@ -2047,11 +2048,14 @@ public class Shoukan extends GameInstance<Phase> {
 				hand.getStats().removeIf(ValueMod::isExpired);
 				hand.flushStacks();
 
-				if (hand.getOrigins().synergy() == Race.SUCCUBUS && hand.isLowLife()) {
+				if (hand.getOrigins().hasSynergy(Race.SUCCUBUS) && hand.isLowLife()) {
 					Hand op = hand.getOther();
 					if (op.getLockTime(Lock.CHARM) == 0) {
 						op.modLockTime(Lock.CHARM, 1);
 					}
+				}
+				if (hand.getOrigins().hasSynergy(Race.ELDRITCH) && -hand.getRegDeg().peek() >= hand.getBase().hp()) {
+					hand.setDefeat(new SpecialDefeat("end/eldritch", hand.getName()));
 				}
 
 				SpecialDefeat def = hand.getDefeat();
@@ -2064,7 +2068,7 @@ public class Shoukan extends GameInstance<Phase> {
 						hand.getData().put("undying", true);
 					}
 
-					if (hand.getOrigins().synergy() == Race.GOLEM) {
+					if (hand.getOrigins().hasSynergy(Race.GOLEM)) {
 						int miss = hand.getBase().hp() - hand.getHP();
 						hand.modMP((int) (miss * (1 - Math.pow(0.9, hand.getMP()))));
 						hand.consumeMP(hand.getMP());
@@ -2547,7 +2551,7 @@ public class Shoukan extends GameInstance<Phase> {
 		});
 
 		if (getPhase() == Phase.PLAN) {
-			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().synergy() == Race.DJINN) {
+			if (!curr.getCards().isEmpty() && (getTurn() == 1 && !curr.hasRerolled()) || curr.getOrigins().hasSynergy(Race.DJINN)) {
 				helper.addAction(getString("str/reroll_hand"), w -> {
 					if (isLocked()) return;
 
@@ -2780,7 +2784,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 			}
 
-			if (curr.getOrigins().synergy() == Race.ORACLE) {
+			if (curr.getOrigins().hasSynergy(Race.ORACLE)) {
 				helper.addAction(getString("str/race_oracle"), w -> {
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
 					Objects.requireNonNull(w.getHook())
@@ -3208,7 +3212,7 @@ public class Shoukan extends GameInstance<Phase> {
 		turns.add(new HistoryTurn(this));
 
 		Hand curr = getCurrent();
-		if (getOther().getOrigins().synergy() == Race.ELEMENTAL) {
+		if (getOther().getOrigins().hasSynergy(Race.ELEMENTAL)) {
 			int fire = (int) getCards(getOther().getSide()).parallelStream()
 					.filter(s -> s.getElement() == ElementType.FIRE)
 					.count();
@@ -3227,7 +3231,7 @@ public class Shoukan extends GameInstance<Phase> {
 		trigger(ON_TURN_END, curr.getSide());
 		curr.applyRegDeg();
 
-		if (curr.getOrigins().synergy() == Race.ANGEL) {
+		if (curr.getOrigins().hasSynergy(Race.ANGEL)) {
 			curr.getRegDeg().add(curr.getMP() * 100);
 		}
 
@@ -3288,8 +3292,8 @@ public class Shoukan extends GameInstance<Phase> {
 			curr.manualDraw(curr.getRemainingDraws());
 		}
 
-		if (curr.getOrigins().synergy() == Race.WRAITH) {
-			curr.getOther().modHP((int) -(curr.getGraveyard().size() * Math.ceil(getTurn() / 2d)));
+		if (curr.getOrigins().hasSynergy(Race.WRAITH)) {
+			curr.getOther().modHP(-curr.getGraveyard().size() * (1 + getTurn() / 2));
 		}
 
 		curr.getStats().expireMods();

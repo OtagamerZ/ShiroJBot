@@ -263,7 +263,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public int getMPCost(boolean ignoreRace) {
 		int flat = base.getMana();
 		if (hand != null && !ignoreRace) {
-			if (hand.getOrigins().synergy() == Race.CELESTIAL) {
+			if (hand.getOrigins().hasSynergy(Race.CELESTIAL)) {
 				flat -= hand.getCards().size() / 2;
 			}
 
@@ -300,7 +300,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	public int getDmg() {
 		int flat = base.getAtk();
 
-		if (hand != null && hand.getOrigins().synergy() == Race.CYBERBEAST) {
+		if (hand != null && hand.getOrigins().hasSynergy(Race.CYBERBEAST)) {
 			flat += getCards(getSide()).stream().mapToInt(Senshi::getParry).sum();
 		}
 
@@ -319,7 +319,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int flat = base.getDodge();
 
 		int min = 0;
-		if (hand != null && hand.getOrigins().synergy() == Race.WEREBEAST) {
+		if (hand != null && hand.getOrigins().hasSynergy(Race.WEREBEAST)) {
 			min += 10;
 		}
 
@@ -331,7 +331,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		int flat = base.getParry();
 
 		int min = 0;
-		if (hand != null && hand.getOrigins().synergy() == Race.CYBORG) {
+		if (hand != null && hand.getOrigins().hasSynergy(Race.CYBORG)) {
 			min += 10;
 		}
 
@@ -346,7 +346,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				mult *= 0.8;
 			}
 
-			if (hand.getOrigins().synergy() == Race.DULLAHAN) {
+			if (hand.getOrigins().hasSynergy(Race.DULLAHAN)) {
 				mult *= 2;
 			}
 		}
@@ -366,7 +366,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 				mult *= 1.5;
 			}
 
-			if (hand.getOrigins().synergy() == Race.FABLED) {
+			if (hand.getOrigins().hasSynergy(Race.FABLED)) {
 				mult *= getPower();
 			}
 		}

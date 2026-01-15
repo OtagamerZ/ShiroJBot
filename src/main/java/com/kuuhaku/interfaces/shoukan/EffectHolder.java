@@ -268,7 +268,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						for (Object type : types) {
 							props.compute(String.valueOf(type), (k, v) -> {
 								double power = getPower();
-								if (!display && h.getOrigins().synergy() == Race.FABLED) {
+								if (!display && h.getOrigins().hasSynergy(Race.FABLED)) {
 									power = 1;
 								}
 

@@ -515,10 +515,14 @@ public class Deck extends DAO<Deck> {
 				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				g1.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						  + "\n\n- " + locale.get("major/pureblood")
-						  + "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major())
-						  + (ori.demon() ? "\n\n&- " + Race.DEMON.getMinor(locale) : "");
+						+ "\n\n- " + locale.get("major/pureblood")
+						+ "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major())
+						+ (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			} else if (ori.major() == Race.MIXED) {
+				if (ori.isPure(Race.MIXED)) {
+					g1.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
+				}
+
 				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				g1.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
 
@@ -528,11 +532,12 @@ public class Deck extends DAO<Deck> {
 				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				g1.setColor(Color.WHITE);
 				effects = "- " + locale.get("major/mixed")
-						  + "\n\n" + Arrays.stream(ori.minor())
-								  .filter(r -> r != Race.DEMON)
-								  .map(o -> "- " + o.getMinor(locale))
-								  .collect(Collectors.joining("\n\n"))
-						  + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+						+ "\n\n" + Arrays.stream(ori.minor())
+						.filter(r -> r != Race.DEMON)
+						.map(o -> "- " + o.getMinor(locale))
+						.collect(Collectors.joining("\n\n"))
+						+ (ori.isPure(Race.MIXED) ? "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major()) : "")
+						+ (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			} else {
 				g1.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
 				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
@@ -551,12 +556,12 @@ public class Deck extends DAO<Deck> {
 				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				g1.setColor(Color.WHITE);
 				effects = "- " + ori.major().getMajor(locale)
-						  + "\n\n" + Arrays.stream(ori.minor())
-								  .filter(r -> r != Race.DEMON)
-								  .map(o -> "- " + o.getMinor(locale))
-								  .collect(Collectors.joining("\n\n"))
-						  + "\n\n- " + syn.getSynergy(locale)
-						  + (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
+						+ "\n\n" + Arrays.stream(ori.minor())
+						.filter(r -> r != Race.DEMON)
+						.map(o -> "- " + o.getMinor(locale))
+						.collect(Collectors.joining("\n\n"))
+						+ "\n\n- " + syn.getSynergy(locale)
+						+ (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			}
 
 			Graph.drawMultilineString(g1, effects,
@@ -701,7 +706,7 @@ public class Deck extends DAO<Deck> {
 					base += 1000;
 				}
 
-				if (origin.synergy() == Race.DRAGON) {
+				if (origin.hasSynergy(Race.DRAGON)) {
 					base += 4000;
 				}
 
@@ -723,7 +728,7 @@ public class Deck extends DAO<Deck> {
 							}
 
 							if (h != null && h.getGame() != null) {
-								if (origin.synergy() == Race.DEMIGOD) {
+								if (origin.hasSynergy(Race.DEMIGOD)) {
 									m += (int) h.getGame().getCards(h.getSide()).parallelStream()
 											.filter(Senshi::isFusion)
 											.count();
@@ -733,7 +738,7 @@ public class Deck extends DAO<Deck> {
 									m += 1;
 								}
 
-								if (origin.synergy() == Race.FEY) {
+								if (origin.hasSynergy(Race.FEY)) {
 									if (Math.ceil(h.getGame().getTurn() / 2d) % 2 == 0) {
 										m = (int) Math.ceil(m * 1.5);
 									} else {
@@ -751,7 +756,7 @@ public class Deck extends DAO<Deck> {
 
 				SupplyChain<Integer> handCap = new SupplyChain<>(5)
 						.add(c -> {
-							if (origin.synergy() == Race.DRAGON) {
+							if (origin.hasSynergy(Race.DRAGON)) {
 								c += 1;
 							}
 
@@ -763,7 +768,7 @@ public class Deck extends DAO<Deck> {
 					ls += 10;
 				}
 
-				if (origin.synergy() == Race.VAMPIRE) {
+				if (origin.hasSynergy(Race.VAMPIRE)) {
 					ls += 7;
 				}
 

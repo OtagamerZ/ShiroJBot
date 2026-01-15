@@ -224,12 +224,27 @@ public enum Race {
 
 		if (Integer.bitCount(flag) == 1) {
 			g2d.setColor(Graph.getColor(bi));
-		} else {
+		} else if (this != MIXED) {
 			List<Race> subs = split();
 
 			g2d.setPaint(new GradientPaint(
 					0, 0, subs.getFirst().getColor(),
 					bi.getWidth(), 0, subs.get(1).getColor()
+			));
+		} else {
+			List<Race> subs = split();
+			float[] stops = new float[subs.size()];
+			Color[] colors = new Color[subs.size()];
+
+			for (int i = 0; i < subs.size(); i++) {
+				stops[i] = 1f / subs.size() * i;
+				colors[i] = subs.get(i).getColor();
+			}
+
+			int rad = bi.getWidth() / 2;
+			g2d.setPaint(new RadialGradientPaint(
+					rad, rad, rad,
+					stops, colors
 			));
 		}
 

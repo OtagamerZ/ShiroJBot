@@ -55,8 +55,9 @@ public record Origin(boolean variant, Race major, Race[] minor) {
 	}
 
 	public Race[] minor() {
-		if (major == Race.MIXED) return minor;
-		else if (demon()) return ArrayUtils.add(minor, major);
+		if (demon() && major.isPure()) {
+			return ArrayUtils.add(minor, major);
+		}
 
 		return minor;
 	}
@@ -75,6 +76,7 @@ public record Origin(boolean variant, Race major, Race[] minor) {
 	}
 
 	public boolean isPure(Race r) {
+		if (r == Race.MIXED && minor.length == 8) return true;
 		return major == r && isPure();
 	}
 
@@ -84,6 +86,15 @@ public record Origin(boolean variant, Race major, Race[] minor) {
 		}
 
 		return false;
+	}
+
+	public boolean hasSynergy(Race race) {
+		if (race.isPure()) return false;
+		else if (isPure(Race.MIXED)) {
+			return true;
+		}
+
+		return synergy() == race;
 	}
 
 	public boolean demon() {

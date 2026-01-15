@@ -216,16 +216,17 @@ public class Hand {
 					modHP((s.getDmg() + s.getDfs()) / 10);
 				}
 
-				if (op.getOrigins().synergy() == Race.SHINIGAMI) {
+				if (op.getOrigins().hasSynergy(Race.SHINIGAMI)) {
 					op.getCards().add(s.withCopy(c -> {
 						c.setEthereal(true);
 						c.getStats().getCost().set(new MultMod(0.5));
 					}));
-				} else if (op.getOrigins().synergy() == Race.REAPER) {
+				}
+				if (op.getOrigins().hasSynergy(Race.REAPER)) {
 					op.getDiscard().add(d.copy());
 				}
 
-				if (getOrigins().synergy() == Race.ESPER) {
+				if (getOrigins().hasSynergy(Race.ESPER)) {
 					getCards().add(s.withCopy(c -> c.setEthereal(true)));
 				}
 			}
@@ -321,7 +322,7 @@ public class Hand {
 	}
 
 	public void loadCards() {
-		Stream<? extends Drawable<?>> toAdd;
+		List<? extends Drawable<?>> toAdd;
 		if (game.getArcade() == Arcade.CARDMASTER) {
 			List<List<? extends Drawable<?>>> cards = new ArrayList<>();
 			cards.add(DAO.queryAll(Senshi.class, "SELECT s FROM Senshi s WHERE cast(get_rarity_index(s.card.rarity) AS INTEGER) BETWEEN 1 AND 5 AND NOT CAST(has(s.base.tags, 'FUSION') AS BOOLEAN)"));
@@ -330,20 +331,18 @@ public class Hand {
 
 			toAdd = cards.parallelStream()
 					.flatMap(List::stream)
-					.map(Drawable::copy);
+					.map(Drawable::copy)
+					.toList();
 		} else {
 			toAdd = Stream.of(userDeck.getSenshiRaw(), userDeck.getEvogearRaw(), userDeck.getFieldsRaw())
 					.parallel()
 					.flatMap(List::stream)
-					.map(DeckEntry::card);
+					.map(DeckEntry::card)
+					.toList();
 		}
 
 		BondedList<Drawable<?>> stack = getMainStack();
-		stack.addAll(toAdd.parallel().peek(d -> {
-			if (d instanceof Senshi s && origin.synergy() == Race.ELDRITCH && !s.hasEffect()) {
-				s.getStats().setSource(Senshi.getRandom(game.getRng(), "WHERE effect IS NOT NULL", "AND mana = " + s.getBase().getMana()));
-			}
-		}).toList());
+		stack.addAll(toAdd);
 
 		Hero h = userDeck.getHero(game.getLocale());
 		if (h != null) {
@@ -426,7 +425,7 @@ public class Hand {
 	}
 
 	public BondedList<Drawable<?>> getMainStack() {
-		return origin.synergy() == Race.LICH ? graveyard : deck;
+		return origin.hasSynergy(Race.LICH) ? graveyard : deck;
 	}
 
 	public BondedList<Drawable<?>> getDeck() {
@@ -461,7 +460,7 @@ public class Hand {
 		BondedList<Drawable<?>> stack = getMainStack();
 
 		Drawable<?> out;
-		if (origin.synergy() == Race.GEIST) {
+		if (origin.hasSynergy(Race.GEIST)) {
 			out = stack.removeFirst(d -> !(d instanceof Senshi));
 		} else {
 			if (cards.stream().noneMatch(d -> d instanceof Senshi)) {
@@ -624,7 +623,7 @@ public class Hand {
 	private Drawable<?> addToHand(Drawable<?> out, boolean manual, boolean oriSkip) {
 		if (!oriSkip) {
 			if (out instanceof Evogear e && !e.isSpell()) {
-				if (origin.synergy() == Race.MUMMY && out.getCurses().isEmpty() && !selectionPending()) {
+				if (origin.hasSynergy(Race.MUMMY) && out.getCurses().isEmpty() && !selectionPending()) {
 					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
 
 					requestChoice(
@@ -643,7 +642,7 @@ public class Hand {
 				}
 			}
 
-			if (getOther().getOrigins().synergy() == Race.IMP) {
+			if (getOther().getOrigins().hasSynergy(Race.IMP)) {
 				modHP(-75);
 			}
 		}
@@ -676,7 +675,7 @@ public class Hand {
 				.collect(Collectors.toCollection(ArrayList::new));
 
 		if (reroll.isEmpty()) return;
-		else if (origin.synergy() == Race.DJINN) {
+		if (origin.hasSynergy(Race.DJINN)) {
 			Drawable<?> offer = Utils.getRandomEntry(reroll);
 			reroll.remove(offer);
 			cards.remove(offer);
@@ -752,7 +751,7 @@ public class Hand {
 		cards.removeIf(d -> d.isEthereal() || !d.isAvailable());
 		graveyard.addAll(discard);
 
-		if (origin.synergy() == Race.REAPER) {
+		if (origin.hasSynergy(Race.REAPER)) {
 			regdeg.add(100 * discard.size());
 		}
 
@@ -830,9 +829,10 @@ public class Hand {
 				value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
 			}
 
-			if (origin.synergy() == Race.POSSESSED && value > 0) {
+			if (origin.hasSynergy(Race.POSSESSED) && value > 0) {
 				value *= 1 + getOther().getGraveyard().size() * 0.05;
-			} else if (origin.synergy() == Race.PRIMAL && value < 0) {
+			}
+			if (origin.hasSynergy(Race.PRIMAL) && value < 0) {
 				int degen = (int) (value * 0.25);
 				if (degen < 0) {
 					regdeg.add(degen);
@@ -870,14 +870,14 @@ public class Hand {
 		if (hpDelta <= 0) {
 			game.trigger(Trigger.ON_DAMAGE, side);
 
-			if (origin.synergy() == Race.TORMENTED) {
+			if (origin.hasSynergy(Race.TORMENTED)) {
 				getOther().modHP((int) (hpDelta * 0.15));
 			}
 		} else {
 			game.trigger(Trigger.ON_HEAL, side);
 		}
 
-		if (origin.synergy() == Race.GARGOYLE) {
+		if (origin.hasSynergy(Race.GARGOYLE)) {
 			if (isCritical()) {
 				if (!reached) {
 					stats.getDamageMult().set(new MultMod(game.getArena().DEFAULT_FIELD, -1, 1));
@@ -961,7 +961,7 @@ public class Hand {
 		if (value > 0) {
 			game.trigger(Trigger.ON_MP, side);
 
-			if (origin.synergy() == Race.GHOST) {
+			if (origin.hasSynergy(Race.GHOST)) {
 				modHP(mpDelta * 50);
 			}
 		}
@@ -1022,14 +1022,14 @@ public class Hand {
 		int val = regdeg.next();
 		if (val == 0) return;
 
-		if (origin.synergy() == Race.DRYAD && val > 0) {
+		if (origin.hasSynergy(Race.DRYAD) && val > 0) {
 			val = 0;
 		}
 
 		modHP(val, true);
 		game.trigger(val < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, getSide());
 
-		if (val < 0 && getOther().getOrigins().synergy() == Race.VIRUS) {
+		if (val < 0 && getOther().getOrigins().hasSynergy(Race.VIRUS)) {
 			getOther().modHP(-val / 2);
 		}
 	}
