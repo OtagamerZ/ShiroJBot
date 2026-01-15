@@ -231,7 +231,7 @@ public interface Drawable<T extends Drawable<T>> {
 	BufferedImage render(I18N locale);
 
 	default void drawName(Graphics2D g2d) {
-		Deck deck = getOriginalHand().getUserDeck();
+		Deck deck = Utils.getOr(getOriginalHand(), getHand()).getUserDeck();
 
 		g2d.setFont(FONT);
 		g2d.setColor(deck.getFrame().getPrimaryColor());
