@@ -1848,7 +1848,7 @@ public class Shoukan extends GameInstance<Phase> {
 							if (slts.isEmpty()) break;
 						}
 
-						Senshi card = (Senshi) h.getRealDeck().removeFirst(d -> d instanceof Senshi);
+						Senshi card = (Senshi) h.getMainStack().removeFirst(d -> d instanceof Senshi);
 						if (card != null) {
 							Utils.getRandomEntry(slts).setCard(card, top);
 						}
