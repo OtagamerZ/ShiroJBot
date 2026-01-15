@@ -506,7 +506,7 @@ public class Deck extends DAO<Deck> {
 			String effects;
 			if (ori.isPure()) {
 				g1.drawImage(ori.major().getImage(), 0, 0, 150, 150, null);
-				g1.setFont(Fonts.OPEN_SANS.deriveBold(60));
+				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				g1.setColor(ori.major().getColor());
 
 				String text = locale.get("str/deck_origin_pure", ori.major().getName(locale));
@@ -519,15 +519,16 @@ public class Deck extends DAO<Deck> {
 						+ "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major())
 						+ (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			} else if (ori.major() == Race.MIXED) {
-				if (ori.isPure(Race.MIXED)) {
-					g1.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
-				}
-
 				g1.setFont(Fonts.OPEN_SANS_EXTRABOLD.deriveBold(60));
 				g1.setColor(Graph.mix(Arrays.stream(ori.minor()).map(Race::getColor).toArray(Color[]::new)));
 
 				String text = locale.get("str/deck_origin_mixed");
-				Graph.drawOutlinedString(g1, text, 0, (150 + 75) / 2, 2, Color.BLACK);
+				if (ori.isPure(Race.MIXED)) {
+					g1.drawImage(ori.major().getBadge(), 0, 0, 150, 150, null);
+					Graph.drawOutlinedString(g1, text, 175, (150 + 75) / 2, 2, Color.BLACK);
+				} else {
+					Graph.drawOutlinedString(g1, text, 0, (150 + 75) / 2, 2, Color.BLACK);
+				}
 
 				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				g1.setColor(Color.WHITE);
