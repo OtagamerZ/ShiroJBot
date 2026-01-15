@@ -213,7 +213,7 @@ public class Hand {
 				getGame().trigger(Trigger.ON_CONFIRMED_KILL, s.getLastInteraction().asSource(Trigger.ON_CONFIRMED_KILL), s.asTarget());
 
 				if (op.getOrigins().hasMinor(Race.UNDEAD)) {
-					modHP((s.getDmg() + s.getDfs()) / 10);
+					getRegDeg().add((s.getDmg() + s.getDfs()) / 10);
 				}
 
 				if (op.getOrigins().hasSynergy(Race.SHINIGAMI)) {
