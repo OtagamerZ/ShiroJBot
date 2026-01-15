@@ -230,7 +230,7 @@ public enum Race {
 			Color[] colors = new Color[subs.size()];
 
 			for (int i = 0; i < subs.size(); i++) {
-				stops[i] = 1f / subs.size() * i;
+				stops[i] = 1f / (subs.size() - 1) * i;
 				colors[i] = subs.get(i).getColor();
 			}
 
