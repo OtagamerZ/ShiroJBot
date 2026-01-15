@@ -825,18 +825,25 @@ public class Hand {
 		int before = hp;
 
 		if (!pure) {
-			if (origin.hasMinor(Race.HUMAN) && value < 0) {
-				value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
-			}
+			if (value > 0) {
+				if (origin.major() == Race.HUMAN) {
+					value *= 1.5;
+				}
 
-			if (origin.hasSynergy(Race.POSSESSED) && value > 0) {
-				value *= 1 + getOther().getGraveyard().size() * 0.05;
-			}
-			if (origin.hasSynergy(Race.PRIMAL) && value < 0) {
-				int degen = (int) (value * 0.25);
-				if (degen < 0) {
-					regdeg.add(degen);
-					value -= degen;
+				if (origin.hasSynergy(Race.POSSESSED)) {
+					value *= 1 + getOther().getGraveyard().size() * 0.05;
+				}
+			} else if (value < 0) {
+				if (origin.hasMinor(Race.HUMAN)) {
+					value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
+				}
+
+				if (origin.hasSynergy(Race.PRIMAL)) {
+					int degen = (int) (value * 0.25);
+					if (degen < 0) {
+						regdeg.add(degen);
+						value -= degen;
+					}
 				}
 			}
 

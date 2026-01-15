@@ -74,13 +74,9 @@ public class RegDeg {
 			values.add(new Degen(-value, mult));
 		} else if (value > 0) {
 			if (parent != null) {
-				if (parent.getOrigins().major() == Race.HUMAN) {
-					if (parent.getOrigins().isPure()) {
-						parent.modHP(val.intValue());
-						return;
-					}
-
-					mult += 0.2;
+				if (parent.getOrigins().isPure(Race.HUMAN)) {
+					parent.modHP(val.intValue());
+					return;
 				}
 
 				if (parent.getGame().getArcade() == Arcade.DECAY) {
