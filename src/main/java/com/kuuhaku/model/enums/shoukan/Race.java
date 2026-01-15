@@ -235,7 +235,7 @@ public enum Race {
 			}
 
 			g2d.setPaint(new LinearGradientPaint(
-					0, 0, bi.getWidth(), 0,
+					0, 0, out.getWidth(), 0,
 					stops, colors
 			));
 		}
