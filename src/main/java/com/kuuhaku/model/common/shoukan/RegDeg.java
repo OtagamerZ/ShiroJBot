@@ -163,7 +163,7 @@ public class RegDeg {
 	private int peek(boolean ignoreRace) {
 		int virus = 0;
 		if (!ignoreRace) {
-			if (parent != null && parent.getGame() != null) {
+			if (parent != null && parent.getOther() != parent) {
 				if (parent.getOrigins().hasSynergy(Race.VIRUS) && parent.getOther().getOrigins().synergy() != Race.VIRUS) {
 					virus = -Math.min(parent.getOther().getRegDeg().peek(true), 0);
 				}
