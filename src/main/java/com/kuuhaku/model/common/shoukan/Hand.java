@@ -827,7 +827,7 @@ public class Hand {
 		if (!pure) {
 			if (value > 0) {
 				if (origin.major() == Race.HUMAN) {
-					value *= 1.5;
+					value *= 1.25;
 				}
 
 				if (origin.hasSynergy(Race.POSSESSED)) {
