@@ -156,18 +156,18 @@ public enum Race {
 	}
 
 	public List<Race> split() {
-		return split(false);
-	}
-
-	public List<Race> split(boolean pure) {
 		List<Race> races = new ArrayList<>();
+		if (isPure()) {
+			races.add(this);
+			return races;
+		}
 
 		int bits = flag;
 		int i = 1;
 		while (bits > 0) {
 			if ((bits & 1) == 1) {
 				Race r = getByFlag(i);
-				if (!pure || r.isPure()) {
+				if (r != NONE) {
 					races.add(r);
 				}
 			}
