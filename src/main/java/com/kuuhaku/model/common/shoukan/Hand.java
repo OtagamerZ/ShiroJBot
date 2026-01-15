@@ -834,6 +834,10 @@ public class Hand {
 					value *= 1 + getOther().getGraveyard().size() * 0.05;
 				}
 			} else if (value < 0) {
+				if (origin.major() == Race.HUMAN && isCritical()) {
+					value /= 2;
+				}
+
 				if (origin.hasMinor(Race.HUMAN)) {
 					value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
 				}

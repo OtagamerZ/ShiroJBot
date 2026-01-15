@@ -54,7 +54,7 @@ public class RegDeg {
 
 		if (value < 0) {
 			if (parent != null) {
-				if (Utils.equalsAny(parent.getOrigins().major(), Race.HUMAN, Race.UNDEAD)) {
+				if (parent.getOrigins().major() == Race.UNDEAD) {
 					value /= 2;
 				}
 
