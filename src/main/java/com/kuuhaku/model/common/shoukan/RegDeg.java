@@ -59,10 +59,14 @@ public class RegDeg {
 				}
 
 				if (parent.getGame().getArcade() == Arcade.DECAY) {
-					mult *= 1.5;
+					value = (int) (value * 1.5);
 				}
 
-				mult = parent.getStats().getDegenMult().apply(mult);
+				if (parent.getOrigins().hasSynergy(Race.PRIMAL)) {
+					mult /= 3;
+				}
+
+				value = (int) parent.getStats().getDegenMult().apply(value);
 				if (parent.getOther().getOrigins().hasSynergy(Race.GHOUL)) {
 					int split = -value / 2;
 					values.add(new Degen(split, mult));
@@ -128,12 +132,18 @@ public class RegDeg {
 
 	public int next() {
 		try {
-			int virus = 0;
-			if (parent != null && parent.getOrigins().hasSynergy(Race.VIRUS)) {
-				virus = -Math.min(parent.getOther().getRegDeg().peek(), 0);
+			int value;
+			if (parent != null && parent.getOther().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
+				value = values.stream().mapToInt(ValueOverTime::peek).sum();
+			} else {
+				value = values.stream().mapToInt(ValueOverTime::next).sum();
 			}
 
-			return values.stream().mapToInt(ValueOverTime::next).sum() + virus;
+			if (parent != null && parent.getOrigins().hasSynergy(Race.VIRUS)) {
+				value -= Math.min(parent.getOther().getRegDeg().peek(), 0);
+			}
+
+			return value;
 		} finally {
 			values.removeIf(v -> v.getValue() <= 0);
 
@@ -141,8 +151,14 @@ public class RegDeg {
 			while (it.hasNext()) {
 				ValueOverTime vot = it.next();
 				if (vot instanceof Degen) {
-					if (parent != null && parent.getGame().getCurrent().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
-						break;
+					if (parent != null) {
+						if (parent.getOrigins().hasSynergy(Race.PRIMAL)) {
+							vot.reduce((int) (vot.getBaseValue() * vot.getMultiplier()));
+							continue;
+						}
+						if (parent.getOther().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
+							break;
+						}
 					}
 
 					it.remove();
