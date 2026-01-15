@@ -628,7 +628,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		Field f = getGame().getArena().getField();
 
 		double mult = 1;
-		int races = getRace().split(true).size();
+		int races = getRace().split().size();
 		for (Map.Entry<String, Object> e : f.getModifiers().entrySet()) {
 			Race r = Race.valueOf(e.getKey());
 
