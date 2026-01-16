@@ -122,6 +122,7 @@ public record Market(String uid) {
 		}
 
 		sc.setKawaipon(buyer.getKawaipon());
+		sc.setInCollection(false);
 		sc.setPrice(0);
 		sc.save();
 

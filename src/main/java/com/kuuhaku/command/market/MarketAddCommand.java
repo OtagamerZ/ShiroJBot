@@ -76,6 +76,7 @@ public class MarketAddCommand implements Executable {
 						return;
 					}
 
+					sc.setInCollection(false);
 					sc.setPrice(price);
 					sc.save();
 

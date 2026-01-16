@@ -941,7 +941,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isSleeping() {
-		return !isStunned() && Bit64.on(state, 2, 4);
+		return !isStunned() && getRemainingSleep() > 0;
 	}
 
 	public int getRemainingSleep() {
@@ -969,7 +969,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isStunned() {
-		return !isStasis() && Bit64.on(state, 3, 4);
+		return !isStasis() && getRemainingStun() > 0;
 	}
 
 	public int getRemainingStun() {
@@ -989,7 +989,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isStasis() {
-		return Bit64.on(state, 4, 4);
+		return getRemainingStasis() > 0;
 	}
 
 	public int getRemainingStasis() {
@@ -1010,6 +1010,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public Senshi getTarget() {
 		return target;
+	}
+
+	public boolean isTaunted() {
+		return getRemainingTaunt() > 0;
 	}
 
 	public int getRemainingTaunt() {
@@ -1037,17 +1041,18 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public boolean isBerserk() {
-		if (getGame() != null) {
-			if (getOriginalHand().getOrigins().hasSynergy(Race.REVENANT) && !Objects.equals(getHand(), getOriginalHand())) {
-				return true;
-			}
-		}
-
-		return Bit64.on(state, 6, 4);
+		return getRemainingBerserk() > 0;
 	}
 
 	public int getRemainingBerserk() {
-		return (int) Bit64.get(state, 6, 4);
+		int min = 0;
+		if (getGame() != null) {
+			if (getOriginalHand().getOrigins().hasSynergy(Race.REVENANT) && !Objects.equals(getHand(), getOriginalHand())) {
+				min = 1;
+			}
+		}
+
+		return (int) Math.max(min, Bit64.get(state, 6, 4));
 	}
 
 	public void setBerserk(int time) {
@@ -1071,12 +1076,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public boolean hasStatusEffect() {
 		return !isAvailable()
-			   || isSleeping()
-			   || isStunned()
-			   || isStasis()
-			   || getRemainingTaunt() > 0
-			   || isBerserk()
-			   || isManipulated();
+				|| isSleeping()
+				|| isStunned()
+				|| isStasis()
+				|| isTaunted()
+				|| isBerserk()
+				|| isManipulated();
 	}
 
 	@Override
@@ -1629,20 +1634,20 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			boolean over = false;
-			String[] states = {"stasis", "stun", "sleep", "berserk", "taunt", "defense"};
-			int[] timers = {
-					getRemainingStasis(),
-					getRemainingStun(),
-					getRemainingSleep(),
-					getRemainingBerserk(),
-					getRemainingTaunt()
-			};
-			for (int i = 0; i < timers.length; i++) {
-				int time = timers[i];
+			Map<String, Integer> states = Map.of(
+					"stasis", getRemainingStasis(),
+					"stun", getRemainingStun(),
+					"sleep", getRemainingSleep(),
+					"berserk", getRemainingBerserk(),
+					"taunt", getRemainingTaunt()
+			);
+
+			for (Map.Entry<String, Integer> e : states.entrySet()) {
+				int time = e.getValue();
 
 				if (time > 0) {
 					over = true;
-					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + states[i] + ".png");
+					BufferedImage overlay = IO.getResourceAsImage("shoukan/states/" + e.getKey() + ".png");
 					g1.drawImage(overlay, 0, 0, null);
 
 					String str = locale.get("str/turns", time);
@@ -1675,8 +1680,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Senshi senshi = (Senshi) o;
 		return SERIAL == senshi.SERIAL
-			   && Objects.equals(id, senshi.id)
-			   && Objects.equals(card, senshi.card);
+				&& Objects.equals(id, senshi.id)
+				&& Objects.equals(card, senshi.card);
 	}
 
 	public int posHash() {
