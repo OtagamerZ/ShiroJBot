@@ -111,7 +111,15 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 			return false;
 		}
 
-		return !d.isEthereal() && !(d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY));
+		if (d.isEthereal() || (d instanceof EffectHolder<?> eh && eh.hasFlag(Flag.DESTROY))) {
+			if (d.getCurrentStack() != null) {
+				d.getCurrentStack().remove(d);
+			}
+
+			return false;
+		}
+
+		return true;
 	}, d -> d.setCurrentStack(getBanned(false)), Utils::doNothing);
 
 	public final Field DEFAULT_FIELD = DAO.find(Field.class, "DEFAULT");
