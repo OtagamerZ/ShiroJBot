@@ -841,14 +841,6 @@ public class Hand {
 				if (origin.hasMinor(Race.HUMAN)) {
 					value *= 1 - Math.min(game.getTurn() * 0.02, 0.75);
 				}
-
-				if (origin.hasSynergy(Race.PRIMAL)) {
-					int degen = (int) (value * 0.25);
-					if (degen < 0) {
-						regdeg.add(degen);
-						value -= degen;
-					}
-				}
 			}
 
 			if (getOther().getOrigins().synergy() != Race.SPAWN) {
