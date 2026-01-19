@@ -69,7 +69,7 @@ public enum Race {
 	TORMENTED(SPIRIT.flag | DEMON.flag),
 	REBORN(UNDEAD.flag | MYSTICAL.flag),
 	SPAWN(UNDEAD.flag | DEMON.flag),
-	IMP(MYSTICAL.flag | DEMON.flag),
+	SUCCUBUS(MYSTICAL.flag | DEMON.flag),
 
 	DOPPELGANGER(HUMAN.flag | BEAST.flag, true),
 	HOMUNCULUS(HUMAN.flag | MACHINE.flag, true),
@@ -98,7 +98,7 @@ public enum Race {
 	NIGHTMARE(SPIRIT.flag | DEMON.flag, true),
 	MUMMY(UNDEAD.flag | MYSTICAL.flag, true),
 	DULLAHAN(UNDEAD.flag | DEMON.flag, true),
-	SUCCUBUS(MYSTICAL.flag | DEMON.flag, true),
+	IMP(MYSTICAL.flag | DEMON.flag, true),
 
 	MIXED(Integer.MAX_VALUE),
 	NONE(0);
