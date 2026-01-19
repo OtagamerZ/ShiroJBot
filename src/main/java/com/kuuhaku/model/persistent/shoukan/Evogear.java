@@ -268,7 +268,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 
 			if (hand.getOrigins().major() == Race.DEMON) {
-				return flat;
+				return 0;
 			}
 		}
 

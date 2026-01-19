@@ -555,6 +555,7 @@ public class Shoukan extends GameInstance<Phase> {
 			EquippableSenshi es = (EquippableSenshi) d;
 			es.getStats().getData().put("_shiki", true);
 			es.getStats().getAttr().set(new MultMod(-0.4));
+			es.getStats().getCost().set(new MultMod(-0.5));
 		}
 
 		if (d instanceof Evogear chosen && !chosen.isSpell()) {
