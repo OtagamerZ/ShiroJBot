@@ -247,7 +247,7 @@ public class BondedList<T> extends ArrayList<T> {
 
 	@Override
 	public void clear() {
-		for (T t : this) {
+		for (T t : List.copyOf(this)) {
 			onRemove.accept(t);
 		}
 

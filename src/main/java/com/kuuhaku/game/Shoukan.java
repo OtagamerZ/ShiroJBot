@@ -1866,6 +1866,10 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public boolean trigger(Trigger trigger, Source source, Target... targets) {
+		return trigger(trigger, source, List.of(targets));
+	}
+
+	public boolean trigger(Trigger trigger, Source source, List<Target> targets) {
 		if (isRestoring()) return false;
 
 		EffectParameters ep = new EffectParameters(trigger, source.side(), source, targets);
