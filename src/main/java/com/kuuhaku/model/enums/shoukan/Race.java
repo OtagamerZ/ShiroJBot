@@ -48,8 +48,8 @@ public enum Race {
 	ESPER(HUMAN.flag | SPIRIT.flag),
 	LICH(HUMAN.flag | UNDEAD.flag),
 	ELF(HUMAN.flag | MYSTICAL.flag),
-	ONI(HUMAN.flag | DEMON.flag),
-	CYBERBEAST(BEAST.flag | MACHINE.flag),
+	CONDEMNED(HUMAN.flag | DEMON.flag),
+	GARGOYLE(BEAST.flag | MACHINE.flag),
 	PRIMAL(BEAST.flag | DIVINITY.flag),
 	FAMILIAR(BEAST.flag | SPIRIT.flag),
 	GHOUL(BEAST.flag | UNDEAD.flag),
@@ -71,42 +71,48 @@ public enum Race {
 	SPAWN(UNDEAD.flag | DEMON.flag),
 	IMP(MYSTICAL.flag | DEMON.flag),
 
-	DOPPELGANGER(HUMAN.flag | BEAST.flag),
-	HOMUNCULUS(HUMAN.flag | MACHINE.flag),
-	ORACLE(HUMAN.flag | DIVINITY.flag),
-	DRYAD(HUMAN.flag | SPIRIT.flag),
-	VAMPIRE(HUMAN.flag | UNDEAD.flag),
-	DARK_ELF(HUMAN.flag | MYSTICAL.flag),
-	CONDEMNED(HUMAN.flag | DEMON.flag),
-	GARGOYLE(BEAST.flag | MACHINE.flag),
-	CELESTIAL(BEAST.flag | DIVINITY.flag),
-	ALIEN(BEAST.flag | SPIRIT.flag),
-	SLIME(BEAST.flag | UNDEAD.flag),
-	DRAGON(BEAST.flag | MYSTICAL.flag),
-	INFERNAL(BEAST.flag | DEMON.flag),
-	SENTINEL(MACHINE.flag | DIVINITY.flag),
-	GEIST(MACHINE.flag | SPIRIT.flag),
-	REVENANT(MACHINE.flag | UNDEAD.flag),
-	GOLEM(MACHINE.flag | MYSTICAL.flag),
-	DAEMON(MACHINE.flag | DEMON.flag),
-	DJINN(DIVINITY.flag | SPIRIT.flag),
-	REAPER(DIVINITY.flag | UNDEAD.flag),
-	ELEMENTAL(DIVINITY.flag | MYSTICAL.flag),
-	ELDRITCH(DIVINITY.flag | DEMON.flag),
-	WRAITH(SPIRIT.flag | UNDEAD.flag),
-	FAERIE(SPIRIT.flag | MYSTICAL.flag),
-	NIGHTMARE(SPIRIT.flag | DEMON.flag),
-	MUMMY(UNDEAD.flag | MYSTICAL.flag),
-	DULLAHAN(UNDEAD.flag | DEMON.flag),
-	SUCCUBUS(MYSTICAL.flag | DEMON.flag),
+	DOPPELGANGER(HUMAN.flag | BEAST.flag, true),
+	HOMUNCULUS(HUMAN.flag | MACHINE.flag, true),
+	ORACLE(HUMAN.flag | DIVINITY.flag, true),
+	DRYAD(HUMAN.flag | SPIRIT.flag, true),
+	VAMPIRE(HUMAN.flag | UNDEAD.flag, true),
+	DARK_ELF(HUMAN.flag | MYSTICAL.flag, true),
+	ONI(HUMAN.flag | DEMON.flag, true),
+	CYBERBEAST(BEAST.flag | MACHINE.flag, true),
+	CELESTIAL(BEAST.flag | DIVINITY.flag, true),
+	ALIEN(BEAST.flag | SPIRIT.flag, true),
+	SLIME(BEAST.flag | UNDEAD.flag, true),
+	DRAGON(BEAST.flag | MYSTICAL.flag, true),
+	INFERNAL(BEAST.flag | DEMON.flag, true),
+	SENTINEL(MACHINE.flag | DIVINITY.flag, true),
+	GEIST(MACHINE.flag | SPIRIT.flag, true),
+	REVENANT(MACHINE.flag | UNDEAD.flag, true),
+	GOLEM(MACHINE.flag | MYSTICAL.flag, true),
+	DAEMON(MACHINE.flag | DEMON.flag, true),
+	DJINN(DIVINITY.flag | SPIRIT.flag, true),
+	REAPER(DIVINITY.flag | UNDEAD.flag, true),
+	ELEMENTAL(DIVINITY.flag | MYSTICAL.flag, true),
+	ELDRITCH(DIVINITY.flag | DEMON.flag, true),
+	WRAITH(SPIRIT.flag | UNDEAD.flag, true),
+	FAERIE(SPIRIT.flag | MYSTICAL.flag, true),
+	NIGHTMARE(SPIRIT.flag | DEMON.flag, true),
+	MUMMY(UNDEAD.flag | MYSTICAL.flag, true),
+	DULLAHAN(UNDEAD.flag | DEMON.flag, true),
+	SUCCUBUS(MYSTICAL.flag | DEMON.flag, true),
 
 	MIXED(Integer.MAX_VALUE),
 	NONE(0);
 
 	private final int flag;
+	private final boolean variant;
 
 	Race(int flag) {
+		this(flag, false);
+	}
+
+	Race(int flag, boolean variant) {
 		this.flag = flag;
+		this.variant = variant;
 	}
 
 	public String getName(I18N locale) {
@@ -267,6 +273,10 @@ public enum Race {
 		return DAO.queryNative(Integer.class, "SELECT count(1) FROM senshi WHERE race = ?1 OR race IN ?2",
 				name(), Arrays.stream(derivates()).map(Race::name).toList()
 		);
+	}
+
+	public boolean isVariant() {
+		return variant;
 	}
 
 	public Race getVariant() {

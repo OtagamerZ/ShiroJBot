@@ -394,7 +394,7 @@ public class Hand {
 			stack.removeAll(strats);
 			for (Evogear e : strats) {
 				e.executeAssert(ON_INITIALIZE);
-				getGame().getChannel().buffer(getGame().getString("str/stratagem_use", this));
+				getGame().getChannel().buffer(getGame().getString("str/stratagem_use", e));
 			}
 		}
 	}

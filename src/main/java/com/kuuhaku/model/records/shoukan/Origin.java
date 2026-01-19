@@ -91,7 +91,7 @@ public record Origin(boolean variant, Race major, Race[] minor) {
 	public boolean hasSynergy(Race race) {
 		if (race.isPure()) return false;
 		else if (isPure(Race.MIXED)) {
-			return true;
+			return variant == race.isVariant();
 		}
 
 		return synergy() == race;

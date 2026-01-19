@@ -530,6 +530,14 @@ public class Deck extends DAO<Deck> {
 					Graph.drawOutlinedString(g1, text, 0, (150 + 75) / 2, 2, Color.BLACK);
 				}
 
+				String pureDesc = "";
+				if (ori.isPure(Race.MIXED)) {
+					pureDesc = "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major());
+					if (ori.variant()) {
+						pureDesc += " (" + locale.get("str/variant") + ")";
+					}
+				}
+
 				g1.setFont(Fonts.OPEN_SANS.derivePlain(36));
 				g1.setColor(Color.WHITE);
 				effects = "- " + locale.get("major/mixed")
@@ -537,7 +545,7 @@ public class Deck extends DAO<Deck> {
 						.filter(r -> r != Race.DEMON)
 						.map(o -> "- " + o.getMinor(locale))
 						.collect(Collectors.joining("\n\n"))
-						+ (ori.isPure(Race.MIXED) ? "\n\n&(#8CC4FF)- " + locale.get("pure/" + ori.major()) : "")
+						+ pureDesc
 						+ (ori.demon() ? "\n\n&(#D72929)- " + Race.DEMON.getMinor(locale) : "");
 			} else {
 				g1.drawImage(ori.synergy().getBadge(), 0, 0, 150, 150, null);
