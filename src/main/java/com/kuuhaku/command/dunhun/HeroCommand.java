@@ -207,9 +207,9 @@ public class HeroCommand implements Executable {
 
 		helper.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					Hero nh = h.refresh();
-					nh.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
-					nh.save();
+					h.refresh();
+					h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
+					h.save();
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
@@ -402,10 +402,10 @@ public class HeroCommand implements Executable {
 				})
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					Hero nh = h.refresh();
-					nh.getStats().setUnlockedSkills(h.getStats().getUnlockedSkills());
-					nh.getCache().setSkills(skills);
-					nh.save();
+					h.refresh();
+					h.getStats().setUnlockedSkills(h.getStats().getUnlockedSkills());
+					h.getCache().setSkills(skills);
+					h.save();
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
@@ -509,9 +509,9 @@ public class HeroCommand implements Executable {
 				})
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					Hero nh = h.refresh();
-					nh.getCache().setEquipment(h.getEquipment());
-					nh.save();
+					h.refresh();
+					h.getCache().setEquipment(h.getEquipment());
+					h.save();
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});

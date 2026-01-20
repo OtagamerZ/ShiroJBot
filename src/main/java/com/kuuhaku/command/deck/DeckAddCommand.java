@@ -90,11 +90,11 @@ public class DeckAddCommand implements Executable {
 				return;
 			}
 
-			Deck dk = d.refresh();
+			d.refresh();
 			for (int i = 0, j = 0; i < stash.size() && j < qtd; i++) {
 				StashedCard sc = stash.get(i);
 				if (sc.getCard().equals(card)) {
-					if (!addToDeck(locale, event, dk, sc)) {
+					if (!addToDeck(locale, event, d, sc)) {
 						if (j == 0) {
 							event.channel().sendMessage(locale.get("error/not_owned")).queue();
 							return;
@@ -113,9 +113,9 @@ public class DeckAddCommand implements Executable {
 
 		Utils.selectOption(locale, event.channel(), stash, card, event.user())
 				.thenAccept(sc -> {
-					Deck dk = d.refresh();
-					if (!addToDeck(locale, event, dk, sc)) return;
-					dk.save();
+					d.refresh();
+					if (!addToDeck(locale, event, d, sc)) return;
+					d.save();
 
 					event.channel().sendMessage(locale.get("success/deck_add")).queue();
 				})

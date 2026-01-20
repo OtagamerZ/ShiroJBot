@@ -206,7 +206,7 @@ public class SynthesizeCommand implements Executable {
 							}
 
 							lock.set(true);
-							Kawaipon k = kp.refresh();
+							kp.refresh();
 
 							double totalQ = 1;
 							int chromas = 0;
@@ -242,7 +242,7 @@ public class SynthesizeCommand implements Executable {
 
 							if (Calc.chance(field)) {
 								Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effectOnly = FALSE"));
-								StashedCard sc = new StashedCard(k, f);
+								StashedCard sc = new StashedCard(kp, f);
 								if (Calc.chance(0.05 * chromas)) {
 									sc.setChrome(true);
 								}
@@ -253,11 +253,11 @@ public class SynthesizeCommand implements Executable {
 								}
 
 								event.channel().sendMessage(locale.get("success/synth", f))
-										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, k.getAccount().getDeck()), "png"), "synth.png"))
+										.addFiles(FileUpload.fromData(IO.getBytes(f.render(locale, kp.getAccount().getDeck()), "png"), "synth.png"))
 										.queue();
 							} else {
 								Evogear e = rollSynthesis(event.user(), mult, lucky.get());
-								StashedCard sc = new StashedCard(k, e);
+								StashedCard sc = new StashedCard(kp, e);
 								if (Calc.chance(0.05 * chromas)) {
 									sc.setChrome(true);
 								}
@@ -270,7 +270,7 @@ public class SynthesizeCommand implements Executable {
 								}
 
 								event.channel().sendMessage(locale.get("success/synth", e + " (" + StringUtils.repeat("★", e.getTier()) + ")"))
-										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, k.getAccount().getDeck()), "png"), "synth.png"))
+										.addFiles(FileUpload.fromData(IO.getBytes(e.render(locale, kp.getAccount().getDeck()), "png"), "synth.png"))
 										.queue();
 							}
 

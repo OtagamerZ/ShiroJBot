@@ -304,9 +304,6 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 
 		try {
 			base.lock(ep.trigger());
-			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-				execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
-			}
 
 			currentTrigger = ep.trigger();
 			CachedScriptManager csm = getCSM();

@@ -377,16 +377,11 @@ public abstract class DAO<T extends DAO<T>> {
 	@SuppressWarnings("unchecked")
 	public final T refresh() {
 		return Manager.getFactory().callInTransaction(em -> {
-			if (em.contains(this)) {
-				em.refresh(this);
-				return (T) this;
-			} else {
-				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				T t = (T) em.find(getClass(), key);
-				copyFields(t);
+			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+			T t = (T) em.find(getClass(), key);
+			copyFields(t);
 
-				return (T) Utils.getOr(t, this);
-			}
+			return (T) this;
 		});
 	}
 

@@ -183,12 +183,6 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 		}
 
 		field.executeAssert(ON_INITIALIZE);
-		for (Hand hd : game.getHands().values()) {
-			hd.getCards().remove(field);
-			hd.getGraveyard().remove(field);
-			hd.getRealDeck().remove(field);
-			hd.getDiscard().remove(field);
-		}
 
 		field.getHand().getData().put("last_field", this.field);
 		game.trigger(Trigger.ON_FIELD_CHANGE);
