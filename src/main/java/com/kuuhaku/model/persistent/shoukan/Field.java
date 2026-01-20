@@ -364,7 +364,11 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 			}
 
 			csm.run();
-		} catch (Exception ignored) {
+		} catch (Exception e) {
+			Drawable<?> source = Utils.getOr(stats.getSource(), this);
+			String name = source.getVanity().getName();
+
+			Constants.LOGGER.warn("Failed to initialize {}\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
 		}
 	}
 
