@@ -103,7 +103,7 @@ configurations.configureEach {
 dependencies {
 	//Core
 	implementation "net.dv8tion:JDA:6.1.0"
-	implementation "com.github.ygimenez:Pagination-Utils:3d30e346b0"
+	implementation "com.github.ygimenez:Pagination-Utils:7e0a34df93"
 	implementation "com.github.ygimenez:Simple-Moshi:1.1.2"
 
 	//Database
@@ -145,7 +145,7 @@ dependencies {
 	implementation "org.slf4j:slf4j-log4j12:2.0.17"
 	implementation "org.apache.logging.log4j:log4j-api:2.25.2"
 	implementation "org.apache.logging.log4j:log4j-1.2-api:2.25.2"
-	implementation "org.apache.logging.log4j:log4j-core:2.25.2"
+	implementation 'org.apache.logging.log4j:log4j-core:2.25.3'
 	implementation "org.apache.logging.log4j:log4j-slf4j-impl:2.25.2"
 	implementation "com.lmax:disruptor:4.0.0"
 
