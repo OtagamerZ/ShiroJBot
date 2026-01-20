@@ -2279,7 +2279,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (u.getId().equals(getModerator())) return true;
 
 		return !isClosed() && getCurrentSide() == current.getSide() && (
-				u.getId().equals(current.getUid()) || allowed.contains(b.getCustomId())
+				u.getId().equals(current.getUid()) || allowed.contains(b.getLabel())
 		);
 	}
 
