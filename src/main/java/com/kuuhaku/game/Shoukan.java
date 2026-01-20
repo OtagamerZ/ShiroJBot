@@ -3010,8 +3010,8 @@ public class Shoukan extends GameInstance<Phase> {
 						}));
 					}
 
-					if (curr.getLockTime(Lock.TAUNT) == 0) {
-						extra.add(new Pair<>(h.getOther().getName(), bw -> {
+					if (h.getLockTime(Lock.TAUNT) > 0) {
+						extra.add(new Pair<>(h.getName(), bw -> {
 							if (selfDamage(h.getSide(), JSONObject.of(Map.entry("inField", i)))) {
 								message.get().delete().queue(null, Utils::doNothing);
 							}
