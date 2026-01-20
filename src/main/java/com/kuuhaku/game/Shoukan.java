@@ -131,10 +131,7 @@ public class Shoukan extends GameInstance<Phase> {
 		this.arena = new Arena(this);
 
 		setSingleplayer(p1.equals(p2));
-		this.hands = Map.of(
-				Side.TOP, new Hand(p1, this, Side.TOP),
-				Side.BOTTOM, new Hand(p2, this, Side.BOTTOM)
-		);
+		this.hands = Map.of(Side.TOP, new Hand(p1, this, Side.TOP), Side.BOTTOM, new Hand(p2, this, Side.BOTTOM));
 
 		setTimeout(_ -> {
 			if (getCurrent().selectionPending() && isLocked()) {
@@ -147,9 +144,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		return isSingleplayer()
-				|| getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), message.getAuthor().getId())
-				|| hands.values().stream().anyMatch(h -> h.getUid().equals(message.getAuthor().getId()) && h.selectionPending());
+		return isSingleplayer() || getTurn() % 2 == ArrayUtils.indexOf(getPlayers(), message.getAuthor().getId()) || hands.values().stream().anyMatch(h -> h.getUid().equals(message.getAuthor().getId()) && h.selectionPending());
 	}
 
 	@Override
@@ -162,11 +157,18 @@ public class Shoukan extends GameInstance<Phase> {
 			h.manualDraw(h.getRemainingDraws());
 
 			if (isNotVoided()) {
-				Deck deck = h.getUserDeck();
-				if (deck.getEvogearRaw().size() >= 5 && !deck.getFieldsRaw().isEmpty()) {
-					if (h.getMainStack().parallelStream().allMatch(d -> d.getStashRef() != null && d.getStashRef().isChrome())) {
-						h.getAccount().setDynValue("all_chrome", true);
+				boolean allChrome = true;
+				for (Drawable<?> d : h.getMainStack()) {
+					StashedCard ref = d.getStashRef();
+					if (ref == null) continue;
+					else if (!ref.isChrome()) {
+						allChrome = false;
+						break;
 					}
+				}
+
+				if (allChrome) {
+					h.getAccount().setDynValue("all_chrome", true);
 				}
 
 				int fields = (int) h.getCards().parallelStream().filter(d -> d instanceof Field).count();
@@ -201,12 +203,7 @@ public class Shoukan extends GameInstance<Phase> {
 	protected void onMessage(User user, String value) {
 		Hand hand = getCurrent();
 
-		Pair<Method, JSONObject> action = toAction(
-				value.toLowerCase().replace(" ", ""),
-				m -> (!isLocked() || (hand.selectionPending() && m.getName().startsWith("sel")))
-						&& hand.selectionPending() == m.getName().startsWith("sel")
-						|| m.getName().startsWith("deb")
-		);
+		Pair<Method, JSONObject> action = toAction(value.toLowerCase().replace(" ", ""), m -> (!isLocked() || (hand.selectionPending() && m.getName().startsWith("sel"))) && hand.selectionPending() == m.getName().startsWith("sel") || m.getName().startsWith("deb"));
 
 		if (action != null) {
 			action.getSecond().put("is_mod", user.getId().equals(getModerator()));
@@ -947,16 +944,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		switch (chosen.getTargetType()) {
 			case NONE -> reportEvent("str/activate_card", true, false, curr.getName(), chosen);
-			case ALLY -> reportEvent("str/activate_card_single", true, false, curr.getName(), chosen,
-					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos()))
-			);
-			case ENEMY -> reportEvent("str/activate_card_single", true, false, curr.getName(), chosen,
-					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
-			);
-			case BOTH -> reportEvent("str/activate_card_multi", true, false, curr.getName(), chosen,
-					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())),
-					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
-			);
+			case ALLY ->
+					reportEvent("str/activate_card_single", true, false, curr.getName(), chosen, Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())));
+			case ENEMY ->
+					reportEvent("str/activate_card_single", true, false, curr.getName(), chosen, Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos())));
+			case BOTH ->
+					reportEvent("str/activate_card_multi", true, false, curr.getName(), chosen, Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())), Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos())));
 		}
 
 		return true;
@@ -1016,19 +1009,17 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		int tick = this.tick;
-		curr.getSelection().result()
-				.add(t -> {
-					if (tick == this.tick) {
-						if (sel.source() != null) {
-							reportEvent(getString("str/effect_choice", curr.getName(), sel.indexes().size(), sel.source()), true, false);
-						} else {
-							reportEvent(getString("str/effect_choice_ns", curr.getName(), sel.indexes().size()), true, false);
-						}
-					}
+		curr.getSelection().result().add(t -> {
+			if (tick == this.tick) {
+				if (sel.source() != null) {
+					reportEvent(getString("str/effect_choice", curr.getName(), sel.indexes().size(), sel.source()), true, false);
+				} else {
+					reportEvent(getString("str/effect_choice_ns", curr.getName(), sel.indexes().size()), true, false);
+				}
+			}
 
-					return t;
-				})
-				.process(cards);
+			return t;
+		}).process(cards);
 		return true;
 	}
 
@@ -1115,16 +1106,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 		switch (d.getTargetType()) {
 			case NONE -> reportEvent("str/card_special", true, false, curr.getName(), d);
-			case ALLY -> reportEvent("str/card_special_single", true, false, curr.getName(), d,
-					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos()))
-			);
-			case ENEMY -> reportEvent("str/card_special_single", true, false, curr.getName(), d,
-					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
-			);
-			case BOTH -> reportEvent("str/card_special_multi", true, false, curr.getName(), d,
-					Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())),
-					Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos()))
-			);
+			case ALLY ->
+					reportEvent("str/card_special_single", true, false, curr.getName(), d, Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())));
+			case ENEMY ->
+					reportEvent("str/card_special_single", true, false, curr.getName(), d, Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos())));
+			case BOTH ->
+					reportEvent("str/card_special_multi", true, false, curr.getName(), d, Utils.getOr(tgt.ally(), getString("str/slot", tgt.allyPos())), Utils.getOr(tgt.enemy(), getString("str/slot", tgt.enemyPos())));
 		}
 
 		return true;
@@ -1439,9 +1426,7 @@ public class Shoukan extends GameInstance<Phase> {
 										}
 
 										if (you.getOrigins().hasSynergy(Race.ELEMENTAL)) {
-											int earth = (int) getCards(you.getSide()).parallelStream()
-													.filter(s -> s.getElement() == ElementType.EARTH)
-													.count();
+											int earth = (int) getCards(you.getSide()).parallelStream().filter(s -> s.getElement() == ElementType.EARTH).count();
 
 											if (earth >= 4) {
 												duration *= 2;
@@ -1530,9 +1515,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 					switch (you.getOrigins().synergy()) {
 						case ELEMENTAL -> {
-							int water = (int) getCards(you.getSide()).parallelStream()
-									.filter(s -> s.getElement() == ElementType.WATER)
-									.count();
+							int water = (int) getCards(you.getSide()).parallelStream().filter(s -> s.getElement() == ElementType.WATER).count();
 
 							if (water >= 4) {
 								you.modMP(1);
@@ -1784,11 +1767,7 @@ public class Shoukan extends GameInstance<Phase> {
 			out = findCard(h.getSide(), s -> s.SERIAL == serial);
 			if (out != null) break;
 
-			out = Stream.of(h.getCards(false), h.getDiscard(false), h.getGraveyard(false), h.getRealDeck(false))
-					.parallel()
-					.flatMap(List::stream)
-					.filter(d -> d.getSerial() == serial)
-					.findFirst().orElse(null);
+			out = Stream.of(h.getCards(false), h.getDiscard(false), h.getGraveyard(false), h.getRealDeck(false)).parallel().flatMap(List::stream).filter(d -> d.getSerial() == serial).findFirst().orElse(null);
 		}
 
 		return out;
@@ -1894,9 +1873,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	public void triggerBindings(EffectParameters ep) {
-		var binds = bindings.stream()
-				.sorted(Comparator.comparing(b -> b.holder().getSide() == getCurrentSide(), Comparator.reverseOrder()))
-				.toList();
+		var binds = bindings.stream().sorted(Comparator.comparing(b -> b.holder().getSide() == getCurrentSide(), Comparator.reverseOrder())).toList();
 
 		for (TriggerBind binding : binds) {
 			if (binding.isBound(ep)) {
@@ -2017,9 +1994,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (msg != null) {
 				GuildMessageChannel channel = Main.getApp().getMessageChannelById(chn);
 				if (channel != null) {
-					channel.retrieveMessageById(msg)
-							.flatMap(Objects::nonNull, Message::delete)
-							.queue(null, Utils::doNothing);
+					channel.retrieveMessageById(msg).flatMap(Objects::nonNull, Message::delete).queue(null, Utils::doNothing);
 				}
 			}
 
@@ -2126,29 +2101,26 @@ public class Shoukan extends GameInstance<Phase> {
 			if (buffer) {
 				getChannel().buffer(StringUtils.capitalize(getString(message, args)));
 			} else {
-				getChannel().sendMessage(StringUtils.capitalize(getString(message, args)))
-						.addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg")
-						.apply(helper::apply)
-						.queue(m -> {
-							Pages.buttonize(m, helper);
-							messages.compute(m.getChannel().getId(), replaceMessages(m));
+				getChannel().sendMessage(StringUtils.capitalize(getString(message, args))).addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg").apply(helper::apply).queue(m -> {
+					Pages.buttonize(m, helper);
+					messages.compute(m.getChannel().getId(), replaceMessages(m));
 
-							if (!registered.get()) {
-								if (!message.startsWith("str/game_history")) {
-									getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-								}
+					if (!registered.get()) {
+						if (!message.startsWith("str/game_history")) {
+							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+						}
 
-								registered.set(true);
-							}
+						registered.set(true);
+					}
 
-							try {
-								byte[] bytes = IO.getBytes(img.get());
-								m.editMessageAttachments(FileUpload.fromData(bytes, "game.jpg")).queue(null, Utils::doNothing);
-							} catch (CancellationException ignore) {
-							} catch (ExecutionException | InterruptedException e) {
-								throw new RuntimeException(e);
-							}
-						}, Utils::doNothing);
+					try {
+						byte[] bytes = IO.getBytes(img.get());
+						m.editMessageAttachments(FileUpload.fromData(bytes, "game.jpg")).queue(null, Utils::doNothing);
+					} catch (CancellationException ignore) {
+					} catch (ExecutionException | InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				}, Utils::doNothing);
 			}
 		} finally {
 			setSending(false);
@@ -2251,10 +2223,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
-		ButtonizeHelper selector = new ButtonizeHelper(true)
-				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> canInteract(hand, u, b, List.of()))
-				.setCancellable(false);
+		ButtonizeHelper selector = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(hand, u, b, List.of())).setCancellable(false);
 
 		for (int row = 0; row < rows; row++) {
 			for (int col = 1; col <= buttons; col++) {
@@ -2278,23 +2247,14 @@ public class Shoukan extends GameInstance<Phase> {
 	private boolean canInteract(Hand current, User u, Button b, List<String> allowed) {
 		if (u.getId().equals(getModerator())) return true;
 
-		return !isClosed() && getCurrentSide() == current.getSide() && (
-				u.getId().equals(current.getUid()) || allowed.contains(b.getLabel())
-		);
+		return !isClosed() && getCurrentSide() == current.getSide() && (u.getId().equals(current.getUid()) || allowed.contains(b.getLabel()));
 	}
 
 	private ButtonizeHelper getButtons() {
-		List<String> allowed = List.of(
-				getString("str/view_equips"),
-				getString("str/view_history"),
-				getString("str/surrender")
-		);
+		List<String> allowed = List.of(getString("str/view_equips"), getString("str/view_history"), getString("str/surrender"));
 
 		Hand curr = getCurrent();
-		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> canInteract(curr, u, b, allowed))
-				.setCancellable(false);
+		ButtonizeHelper helper = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(curr, u, b, allowed)).setCancellable(false);
 
 		helper.addAction(getString("str/next_phase"), w -> {
 			if (isLocked()) return;
@@ -2363,23 +2323,16 @@ public class Shoukan extends GameInstance<Phase> {
 			if (isSingleplayer() || w.getUser().getId().equals(getModerator())) {
 				h = curr;
 			} else {
-				h = hands.values().stream()
-						.filter(hand -> hand.getUid().equals(w.getUser().getId()))
-						.findFirst().orElse(null);
+				h = hands.values().stream().filter(hand -> hand.getUid().equals(w.getUser().getId())).findFirst().orElse(null);
 			}
 
 			if (h == null) return;
 			else if (h.selectionPending()) {
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png"))
-						.queue();
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(h.renderChoices(), "png"), "choices.png")).queue();
 				return;
 			}
 
-			WebhookMessageCreateAction<Message> act = Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
+			WebhookMessageCreateAction<Message> act = Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(h.render(), "png"), "hand.png"));
 
 			List<Drawable<?>> cards = List.copyOf(h.getCards(false));
 			if (cards.isEmpty() || h.getSide() != getCurrentSide()) {
@@ -2428,37 +2381,22 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 
 								labels.add(getString("str/select_" + (type == TargetType.ENEMY ? "target" : "source")));
-								pages.add(new Pair<>(makeSelector(h, 5, 1,
-										(n, r, c) -> {
-											args.put("target" + tgt, c);
-											if (tgt == passes.size()) {
-												if (activate(h.getSide(), args)) {
-													message.get().delete().queue(null, Utils::doNothing);
-												}
-											} else {
-												disableOptions(message,
-														m -> m.editMessage(labels.get(tgt + 1)),
-														pages.get(tgt + 1).getFirst(),
-														pages.get(tgt + 1).getSecond()
-												);
-											}
-										},
-										new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> {
-											args.remove("target" + tgt);
-											disableOptions(message,
-													m -> m.editMessage(labels.get(tgt - 1)),
-													pages.get(tgt - 1).getFirst(),
-													pages.get(tgt - 1).getSecond()
-											);
-										})
-								), passDisable));
+								pages.add(new Pair<>(makeSelector(h, 5, 1, (n, r, c) -> {
+									args.put("target" + tgt, c);
+									if (tgt == passes.size()) {
+										if (activate(h.getSide(), args)) {
+											message.get().delete().queue(null, Utils::doNothing);
+										}
+									} else {
+										disableOptions(message, m -> m.editMessage(labels.get(tgt + 1)), pages.get(tgt + 1).getFirst(), pages.get(tgt + 1).getSecond());
+									}
+								}, new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> {
+									args.remove("target" + tgt);
+									disableOptions(message, m -> m.editMessage(labels.get(tgt - 1)), pages.get(tgt - 1).getFirst(), pages.get(tgt - 1).getSecond());
+								})), passDisable));
 							}
 
-							disableOptions(message,
-									m -> m.editMessage(labels.get(1)),
-									pages.get(1).getFirst(),
-									pages.get(1).getSecond()
-							);
+							disableOptions(message, m -> m.editMessage(labels.get(1)), pages.get(1).getFirst(), pages.get(1).getSecond());
 						}
 
 						return;
@@ -2481,38 +2419,28 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 
-					ButtonizeHelper target = makeSelector(h, 5, card instanceof Senshi ? 2 : 1,
-							(child, row, col) -> {
-								args.put("inField", col);
+					ButtonizeHelper target = makeSelector(h, 5, card instanceof Senshi ? 2 : 1, (child, row, col) -> {
+						args.put("inField", col);
 
-								if (card instanceof Senshi) {
-									if (row > 0) {
-										args.put("notCombat", true);
-									}
+						if (card instanceof Senshi) {
+							if (row > 0) {
+								args.put("notCombat", true);
+							}
 
-									Consumer<String> placeWithMode = m -> {
-										args.put("mode", m);
-										if (placeCard(h.getSide(), args)) {
-											message.get().delete().queue(null, Utils::doNothing);
-										}
-									};
-
-									ButtonizeHelper mode = new ButtonizeHelper(true)
-											.setTimeout(5, TimeUnit.MINUTES)
-											.setCanInteract((u, b) -> canInteract(curr, u, b, List.of()))
-											.setCancellable(false)
-											.addAction(StringUtils.capitalize(getString("str/attack_mode")), bw -> placeWithMode.accept("a"))
-											.addAction(StringUtils.capitalize(getString("str/defense_mode")), bw -> placeWithMode.accept("d"))
-											.addAction(StringUtils.capitalize(getString("str/flipped_mode")), bw -> placeWithMode.accept("b"))
-											.addAction(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, child, disable));
-
-									Pages.buttonize(message.get(), mode);
-								} else if (card instanceof Evogear) {
-									equipCard(h.getSide(), args);
+							Consumer<String> placeWithMode = m -> {
+								args.put("mode", m);
+								if (placeCard(h.getSide(), args)) {
+									message.get().delete().queue(null, Utils::doNothing);
 								}
-							},
-							new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, parent, disable))
-					);
+							};
+
+							ButtonizeHelper mode = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(curr, u, b, List.of())).setCancellable(false).addAction(StringUtils.capitalize(getString("str/attack_mode")), bw -> placeWithMode.accept("a")).addAction(StringUtils.capitalize(getString("str/defense_mode")), bw -> placeWithMode.accept("d")).addAction(StringUtils.capitalize(getString("str/flipped_mode")), bw -> placeWithMode.accept("b")).addAction(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, child, disable));
+
+							Pages.buttonize(message.get(), mode);
+						} else if (card instanceof Evogear) {
+							equipCard(h.getSide(), args);
+						}
+					}, new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, parent, disable)));
 
 					disableOptions(message, target, disable);
 				});
@@ -2526,17 +2454,10 @@ public class Shoukan extends GameInstance<Phase> {
 
 		ButtonizeHelper extra = getExtraButtons(helper, curr);
 		if (extra.getContent().size() > 1) {
-			helper.addAction(getString("str/extra_actions"), w ->
-					extra.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, extra))
-			);
+			helper.addAction(getString("str/extra_actions"), w -> extra.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, extra)));
 		}
 
-		helper.addAction(getString("str/view_equips"), w ->
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png"))
-						.queue()
-		);
+		helper.addAction(getString("str/view_equips"), w -> Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(arena.renderEvogears(), "png"), "evogears.png")).queue());
 
 		helper.addAction(getString("str/view_history"), w -> {
 			if (isLocked()) return;
@@ -2549,10 +2470,7 @@ public class Shoukan extends GameInstance<Phase> {
 				sb.appendNewLine(it.next().message());
 			}
 
-			Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendMessage(sb.toString())
-					.queue();
+			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(sb.toString()).queue();
 		});
 
 		if (getPhase() == Phase.PLAN) {
@@ -2580,10 +2498,7 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						curr.manualDraw();
-						Objects.requireNonNull(w.getHook())
-								.setEphemeral(true)
-								.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-								.queue();
+						Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 						reportEvent("str/drawn_card", true, false, curr.getName(), 1, "");
 					});
@@ -2601,10 +2516,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 
 							curr.manualDraw(curr.getRemainingDraws());
-							Objects.requireNonNull(w.getHook())
-									.setEphemeral(true)
-									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-									.queue();
+							Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 							reportEvent("str/drawn_card", true, false, curr.getName(), rem, "s");
 						});
@@ -2621,9 +2533,7 @@ public class Shoukan extends GameInstance<Phase> {
 							return;
 						}
 
-						int eths = (int) curr.getCards().stream()
-								.filter(Drawable::isEthereal)
-								.count();
+						int eths = (int) curr.getCards().stream().filter(Drawable::isEthereal).count();
 
 						Drawable<?> d = curr.manualDraw();
 						if (d != null) {
@@ -2631,10 +2541,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							int loss = (int) Math.max(2, curr.getBase().hp() * 0.06) * eths;
 							curr.setHP(Math.max(1, curr.getHP() - loss));
-							Objects.requireNonNull(w.getHook())
-									.setEphemeral(true)
-									.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-									.queue();
+							Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 							reportEvent("str/drawn_card", true, false, curr.getName(), 1, "");
 						}
@@ -2668,10 +2575,7 @@ public class Shoukan extends GameInstance<Phase> {
 								curr.getCards().add(ds.getFirst());
 								curr.setUsedDestiny(true);
 
-								Objects.requireNonNull(w.getHook())
-										.setEphemeral(true)
-										.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-										.queue();
+								Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 								reportEvent("str/destiny_draw", true, false, curr.getName());
 							});
@@ -2726,9 +2630,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (curr.getOriginCooldown() == 0) {
 				if (curr.getOrigins().major() == Race.SPIRIT) {
-					List<SelectionCard> valid = curr.getCards().stream()
-							.filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false))
-							.toList();
+					List<SelectionCard> valid = curr.getCards().stream().filter(Drawable::isAvailable).map(d -> new SelectionCard(d, false)).toList();
 
 					if (!valid.isEmpty()) {
 						helper.addAction(getString("str/race_synth"), w -> {
@@ -2744,9 +2646,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							try {
 								curr.requestChoice(null, valid, new SelectionRange(1, null), ds -> {
-									List<StashedCard> material = ds.stream()
-											.map(d -> new StashedCard(null, d))
-											.toList();
+									List<StashedCard> material = ds.stream().map(d -> new StashedCard(null, d)).toList();
 
 									List<SelectionCard> pool = new ArrayList<>();
 									for (int j = 0; j < 3; j++) {
@@ -2770,10 +2670,7 @@ public class Shoukan extends GameInstance<Phase> {
 											}
 
 											curr.setOriginCooldown(Math.max(0, 4 - material.size()));
-											Objects.requireNonNull(w.getHook())
-													.setEphemeral(true)
-													.sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png"))
-													.queue();
+											Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(curr.render(), "png"), "cards.png")).queue();
 
 											reportEvent("str/spirit_synth", true, false, curr.getName());
 										});
@@ -2792,10 +2689,7 @@ public class Shoukan extends GameInstance<Phase> {
 			if (curr.getOrigins().hasSynergy(Race.ORACLE)) {
 				helper.addAction(getString("str/race_oracle"), w -> {
 					BufferedImage cards = curr.render(curr.getDeck().subList(0, Math.min(3, curr.getDeck().size())));
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png"))
-							.queue();
+					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendFiles(FileUpload.fromData(IO.getBytes(cards, "png"), "hand.png")).queue();
 				});
 			}
 
@@ -2827,10 +2721,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 
 					h.setForfeit(true);
-					Objects.requireNonNull(w.getHook())
-							.setEphemeral(true)
-							.sendMessage(getString("str/confirm_forfeit"))
-							.queue();
+					Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/confirm_forfeit")).queue();
 				});
 			}
 		}
@@ -2839,10 +2730,7 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getExtraButtons(ButtonizeHelper parent, Hand curr) {
-		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract((u, b) -> canInteract(curr, u, b, List.of()))
-				.setCancellable(false);
+		ButtonizeHelper helper = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(curr, u, b, List.of())).setCancellable(false);
 
 		if (getPhase() == Phase.PLAN) {
 			List<Pair<Integer, Boolean>> disable = new ArrayList<>();
@@ -2857,26 +2745,21 @@ public class Shoukan extends GameInstance<Phase> {
 
 			helper.addAction(getString("str/flip_card"), w -> {
 				AtomicReference<Message> message = new AtomicReference<>();
-				ButtonizeHelper source = makeSelector(curr, 5, 2,
-						(n, row, col) -> {
-							JSONObject args = JSONObject.of(Map.entry("inField", col));
-							if (row > 0) {
-								args.put("notCombat", true);
-							}
+				ButtonizeHelper source = makeSelector(curr, 5, 2, (n, row, col) -> {
+					JSONObject args = JSONObject.of(Map.entry("inField", col));
+					if (row > 0) {
+						args.put("notCombat", true);
+					}
 
-							if (flipCard(curr.getSide(), args)) {
-								message.get().delete().queue(null, Utils::doNothing);
-							}
-						}
-				);
+					if (flipCard(curr.getSide(), args)) {
+						message.get().delete().queue(null, Utils::doNothing);
+					}
+				});
 
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_source"))
-						.queue(s -> {
-							message.set(s);
-							disableOptions(message, source, disable);
-						});
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/select_source")).queue(s -> {
+					message.set(s);
+					disableOptions(message, source, disable);
+				});
 			});
 			helper.addAction(getString("str/prom_card"), w -> {
 				List<Pair<Integer, Boolean>> singleDisable = new ArrayList<>();
@@ -2887,44 +2770,34 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				AtomicReference<Message> message = new AtomicReference<>();
-				ButtonizeHelper source = makeSelector(curr, 5, 1,
-						(n, row, col) -> {
-							if (promoteCard(curr.getSide(), JSONObject.of(Map.entry("inField", col)))) {
-								message.get().delete().queue(null, Utils::doNothing);
-							}
-						}
-				);
+				ButtonizeHelper source = makeSelector(curr, 5, 1, (n, row, col) -> {
+					if (promoteCard(curr.getSide(), JSONObject.of(Map.entry("inField", col)))) {
+						message.get().delete().queue(null, Utils::doNothing);
+					}
+				});
 
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_source"))
-						.queue(s -> {
-							message.set(s);
-							disableOptions(message, source, singleDisable);
-						});
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/select_source")).queue(s -> {
+					message.set(s);
+					disableOptions(message, source, singleDisable);
+				});
 			});
 			helper.addAction(getString("str/sacrifice_card"), w -> {
 				AtomicReference<Message> message = new AtomicReference<>();
-				ButtonizeHelper source = makeSelector(curr, 5, 2,
-						(n, row, col) -> {
-							JSONObject args = JSONObject.of(Map.entry("inField", col));
-							if (row > 0) {
-								args.put("notCombat", true);
-							}
+				ButtonizeHelper source = makeSelector(curr, 5, 2, (n, row, col) -> {
+					JSONObject args = JSONObject.of(Map.entry("inField", col));
+					if (row > 0) {
+						args.put("notCombat", true);
+					}
 
-							if (sacrificeCard(curr.getSide(), args)) {
-								message.get().delete().queue(null, Utils::doNothing);
-							}
-						}
-				);
+					if (sacrificeCard(curr.getSide(), args)) {
+						message.get().delete().queue(null, Utils::doNothing);
+					}
+				});
 
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_source"))
-						.queue(s -> {
-							message.set(s);
-							disableOptions(message, source, disable);
-						});
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/select_source")).queue(s -> {
+					message.set(s);
+					disableOptions(message, source, disable);
+				});
 			});
 			helper.addAction(getString("str/discard_card"), w -> {
 				List<Drawable<?>> cards = curr.getCards(false);
@@ -2939,10 +2812,7 @@ public class Shoukan extends GameInstance<Phase> {
 					}
 				});
 
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_a_card"))
-						.queue(s -> Pages.buttonize(s, source));
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/select_a_card")).queue(s -> Pages.buttonize(s, source));
 			});
 		}
 
@@ -2952,9 +2822,7 @@ public class Shoukan extends GameInstance<Phase> {
 				if (isSingleplayer() || w.getUser().getId().equals(getModerator())) {
 					h = curr;
 				} else {
-					h = hands.values().stream()
-							.filter(hand -> hand.getUid().equals(w.getUser().getId()))
-							.findFirst().orElse(null);
+					h = hands.values().stream().filter(hand -> hand.getUid().equals(w.getUser().getId())).findFirst().orElse(null);
 				}
 
 				if (h == null) return;
@@ -3018,29 +2886,21 @@ public class Shoukan extends GameInstance<Phase> {
 						}));
 					}
 
-					extra.add(new Pair<>(Utils.parseEmoji(Constants.RETURN), bw ->
-							disableOptions(message, m -> m.editMessage(getString("str/select_source")), par, sourceDisable)
-					));
+					extra.add(new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, m -> m.editMessage(getString("str/select_source")), par, sourceDisable)));
 
-					target = makeSelector(h, 5, 2,
-							(child, row, col) -> {
-								if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
-									message.get().delete().queue(null, Utils::doNothing);
-								}
-							},
-							extra
-					);
+					target = makeSelector(h, 5, 2, (child, row, col) -> {
+						if (attack(h.getSide(), JSONObject.of(Map.entry("inField", i), Map.entry("target", col)))) {
+							message.get().delete().queue(null, Utils::doNothing);
+						}
+					}, extra);
 
 					disableOptions(message, m -> m.editMessage(getString("str/select_target")), target, targetDisable);
 				});
 
-				Objects.requireNonNull(w.getHook())
-						.setEphemeral(true)
-						.sendMessage(getString("str/select_source"))
-						.queue(s -> {
-							message.set(s);
-							disableOptions(message, source, sourceDisable);
-						});
+				Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/select_source")).queue(s -> {
+					message.set(s);
+					disableOptions(message, source, sourceDisable);
+				});
 			});
 		}
 
@@ -3098,52 +2958,32 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 
 						labels.add(getString("str/select_" + (type == TargetType.ENEMY ? "target" : "source")));
-						pages.add(new Pair<>(makeSelector(curr, 5, 1,
-								(n, r, c) -> {
-									args.put("target" + tgt, c);
-									if (tgt == passes.size()) {
-										if (special(curr.getSide(), args)) {
-											message.get().delete().queue(null, Utils::doNothing);
-										}
-									} else {
-										disableOptions(message,
-												m -> m.editMessage(labels.get(tgt + 1)),
-												pages.get(tgt + 1).getFirst(),
-												pages.get(tgt + 1).getSecond()
-										);
-									}
-								},
-								new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> {
-									args.remove("target" + tgt);
-									disableOptions(message,
-											m -> m.editMessage(labels.get(tgt - 1)),
-											pages.get(tgt - 1).getFirst(),
-											pages.get(tgt - 1).getSecond()
-									);
-								})
-						), passDisable));
+						pages.add(new Pair<>(makeSelector(curr, 5, 1, (n, r, c) -> {
+							args.put("target" + tgt, c);
+							if (tgt == passes.size()) {
+								if (special(curr.getSide(), args)) {
+									message.get().delete().queue(null, Utils::doNothing);
+								}
+							} else {
+								disableOptions(message, m -> m.editMessage(labels.get(tgt + 1)), pages.get(tgt + 1).getFirst(), pages.get(tgt + 1).getSecond());
+							}
+						}, new Pair<>(Utils.parseEmoji(Constants.RETURN), bw -> {
+							args.remove("target" + tgt);
+							disableOptions(message, m -> m.editMessage(labels.get(tgt - 1)), pages.get(tgt - 1).getFirst(), pages.get(tgt - 1).getSecond());
+						})), passDisable));
 					}
 
-					disableOptions(message,
-							m -> m.editMessage(labels.get(1)),
-							pages.get(1).getFirst(),
-							pages.get(1).getSecond()
-					);
+					disableOptions(message, m -> m.editMessage(labels.get(1)), pages.get(1).getFirst(), pages.get(1).getSecond());
 				}
 			});
 
-			Objects.requireNonNull(w.getHook())
-					.setEphemeral(true)
-					.sendMessage(getString("str/select_source"))
-					.queue(s -> {
-						message.set(s);
-						disableOptions(message, source, sourceDisable);
-					});
+			Objects.requireNonNull(w.getHook()).setEphemeral(true).sendMessage(getString("str/select_source")).queue(s -> {
+				message.set(s);
+				disableOptions(message, source, sourceDisable);
+			});
 		});
 
-		helper.addAction(Utils.parseEmoji(Constants.RETURN), w ->
-				parent.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, parent))
-		);
+		helper.addAction(Utils.parseEmoji(Constants.RETURN), w -> parent.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, parent)));
 
 		return helper;
 	}
@@ -3218,9 +3058,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Hand curr = getCurrent();
 		if (getOther().getOrigins().hasSynergy(Race.ELEMENTAL)) {
-			int fire = (int) getCards(getOther().getSide()).parallelStream()
-					.filter(s -> s.getElement() == ElementType.FIRE)
-					.count();
+			int fire = (int) getCards(getOther().getSide()).parallelStream().filter(s -> s.getElement() == ElementType.FIRE).count();
 
 			if (fire >= 4) {
 				try {
