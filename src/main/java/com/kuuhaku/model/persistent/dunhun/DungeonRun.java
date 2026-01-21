@@ -1,5 +1,6 @@
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.dunhun.AreaMap;
@@ -193,6 +194,12 @@ public class DungeonRun extends DAO<DungeonRun> {
 					return false;
 				}
 			}
+		}
+
+		try {
+			modifier.load(game);
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to load modifier {}", modifier.getId(), e);
 		}
 
 		return modifiers.add(modifier);
