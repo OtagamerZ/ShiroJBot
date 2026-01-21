@@ -14,6 +14,7 @@ import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
+import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
@@ -26,6 +27,7 @@ import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.ClusterAction;
+import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.model.records.dunhun.Choice;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
@@ -40,6 +42,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.components.buttons.ButtonStyle;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -960,6 +963,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		return Utils.regex(getString(text), "\\[(?<S>[^\\[\\]]*?)\\|(?<P>.*?)]")
 				.replaceAll(r -> r.group(plural));
+	}
+
+	public void send(Drawable<?> source, String text) {
+		if (text.isBlank()) return;
+
+		String path = Constants.API_ROOT + (source.getId().startsWith("H:") ? "heroes/" : "monsters/");
+		for (GuildMessageChannel chn : getChannel().getChannels()) {
+			PseudoUser pu = new PseudoUser(source.toString(), path + source.getCard().getId(), chn);
+			pu.send(null, text);
+		}
 	}
 
 	private void onTimeout(int turn) {
