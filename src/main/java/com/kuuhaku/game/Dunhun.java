@@ -965,12 +965,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 				.replaceAll(r -> r.group(plural));
 	}
 
-	public void send(Drawable<?> source, String text) {
+	public void send(Actor<?> source, String text) {
 		if (text.isBlank()) return;
 
 		String path = Constants.API_ROOT + (source.getId().startsWith("H:") ? "heroes/" : "monsters/");
 		for (GuildMessageChannel chn : getChannel().getChannels()) {
-			PseudoUser pu = new PseudoUser(source.toString(), path + source.getCard().getId(), chn);
+			PseudoUser pu = new PseudoUser(source.toString(), path + source.getId(), chn);
 			pu.send(null, text);
 		}
 	}
