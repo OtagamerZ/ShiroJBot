@@ -14,7 +14,6 @@ import com.kuuhaku.game.engine.GameInstance;
 import com.kuuhaku.game.engine.GameReport;
 import com.kuuhaku.game.engine.NullPhase;
 import com.kuuhaku.game.engine.PlayerAction;
-import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.XStringBuilder;
