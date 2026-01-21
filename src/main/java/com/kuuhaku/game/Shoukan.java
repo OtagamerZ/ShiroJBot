@@ -158,6 +158,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 			if (isNotVoided()) {
 				boolean allChrome = true;
+				boolean hasField = false;
+				int evos = 0;
 				for (Drawable<?> d : h.getMainStack()) {
 					StashedCard ref = d.getStashRef();
 					if (ref == null) continue;
@@ -165,9 +167,15 @@ public class Shoukan extends GameInstance<Phase> {
 						allChrome = false;
 						break;
 					}
+
+					if (d instanceof Field) {
+						hasField = true;
+					} else if (d instanceof Evogear) {
+						evos++;
+					}
 				}
 
-				if (allChrome) {
+				if (allChrome && hasField && evos >= 5) {
 					h.getAccount().setDynValue("all_chrome", true);
 				}
 
