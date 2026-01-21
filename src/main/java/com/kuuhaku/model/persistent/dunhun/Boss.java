@@ -19,6 +19,10 @@ import java.util.Map;
 @Table(name = "boss", schema = "dunhun")
 public class Boss extends MonsterBase<Boss> {
 	@Language("Groovy")
+	@Column(name = "on_start", columnDefinition = "TEXT")
+	private String onStart;
+
+	@Language("Groovy")
 	@Column(name = "on_enrage", columnDefinition = "TEXT")
 	private String onEnrage;
 
@@ -81,6 +85,19 @@ public class Boss extends MonsterBase<Boss> {
 	@Override
 	public int getMaxHp() {
 		return (int) Math.max(1, stats.getBaseHp() * (1 + getLevel() / 5d));
+	}
+
+	@Override
+	public void load() {
+		getModifiers().clear();
+
+		try {
+			Utils.exec(getId(), onStart, Map.of(
+					"ctx", new ActorContext(this, null)
+			));
+		} catch (Exception e) {
+			Constants.LOGGER.warn("Failed to initialize {}", getId(), e);
+		}
 	}
 
 	@Override
