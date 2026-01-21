@@ -13,7 +13,6 @@ import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
-import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -128,7 +127,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public boolean onAddActor(Actor<?> actor, Team team) {
 		List<Actor<?>> acts = getActors(team);
-		if (acts.size() >= 6) return false;
+		if (acts.size() >= 6) {
+			actor.destroy();
+			return false;
+		}
 
 		getActors(team.getOther()).remove(actor);
 
