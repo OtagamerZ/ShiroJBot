@@ -199,7 +199,7 @@ public class EffectProperties<T> {
 
 	public boolean isSafeToRemove() {
 		if (expiration == 0) return true;
-		else if (effect != null) return false;
+		else if (effect != null && !effect.isClosed()) return false;
 
 		for (Field f : fieldCache) {
 			try {
