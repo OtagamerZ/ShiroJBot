@@ -160,8 +160,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@Override
 	protected boolean validate(Message message) {
 		return !duel || (
-				getCombat() != null
-						&& getCombat().getCurrent() instanceof Hero h
+				combat.get() != null
+						&& combat.get().getCurrent() instanceof Hero h
 						&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
 	}
@@ -172,7 +172,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			try {
 				if (duel) {
 					combat.set(new Combat(this, map.getPlayerNode(), heroes.values()));
-					getCombat().process();
+					combat.get().process();
 
 					Hero winner = heroes.values().stream()
 							.filter(h -> !h.isOutOfCombat())
@@ -317,8 +317,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						case BOSS -> beginCombat(nextNode, Boss.getRandom(nextNode));
 					}
 
-					if (getCombat() != null && getCombat().isDone()) {
-						if (getCombat().isWin()) {
+					if (combat.get() != null && combat.get().isDone()) {
+						if (combat.get().isWin()) {
 							grantCombatLoot();
 						} else if (nextNode.getType() != NodeType.EVENT) {
 							try {
@@ -462,7 +462,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	private void grantCombatLoot() {
-		Loot loot = getCombat().getLoot();
+		Loot loot = combat.get().getLoot();
 		XStringBuilder sb = new XStringBuilder();
 		if (!loot.gear().isEmpty() || !loot.items().isEmpty()) {
 			this.loot.add(loot);
@@ -517,7 +517,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		Set<String> pool = node.getEnemyPool();
 		for (int i = 0; i < 4; i++) {
-			List<Actor<?>> keepers = getCombat().getActors(Team.KEEPERS);
+			List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
 			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 			Monster chosen;
@@ -529,23 +529,24 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
-		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
+		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
 			combat.set(null);
 			return true;
 		}
 
-		getCombat().process();
-		return getCombat().isWin();
+		combat.get().process();
+		boolean win = combat.get().isWin();
+		combat.set(null);
+
+		return win;
 	}
 
 	@SafeVarargs
 	public final <T extends MonsterBase<T>> void beginCombat(Node node, Actor<T>... enemies) {
 		if (combat.get() != null) return;
 		combat.set(new Combat(this, node, enemies));
-
-		if (getCombat().getActors(Team.KEEPERS).isEmpty()) {
-			combat.set(null);
-		}
+		combat.get().process();
+		combat.set(null);
 	}
 
 	public void runEvent(Node node, Event evt) {
@@ -576,8 +577,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		} catch (Exception ignore) {
 		}
 
-		if (getCombat() != null) {
-			getCombat().process();
+		if (combat.get() != null) {
+			combat.get().process();
 		}
 	}
 
@@ -771,7 +772,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@PlayerAction("reload")
 	private void reload(JSONObject args, User u) {
-		if (getCombat() != null) getCombat().getLock().complete(null);
+		if (combat.get() != null) combat.get().getLock().complete(null);
 		if (getMessage() != null) {
 			ButtonizeHelper helper = getMessage().getSecond();
 			if (helper != null) {
@@ -796,11 +797,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	private void info(Team team) {
-		if (getCombat() == null || duel) return;
+		if (combat.get() == null || duel) return;
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		for (Actor<?> a : getCombat().getActors()) {
+		for (Actor<?> a : combat.get().getActors()) {
 			if (a.getTeam() != team) continue;
 
 			XStringBuilder sb = new XStringBuilder("#-# " + a.getName());
@@ -973,12 +974,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 			return;
 		}
 
-		if (getCombat() != null) {
-			Actor<?> current = getCombat().getCurrent();
+		if (combat.get() != null) {
+			Actor<?> current = combat.get().getCurrent();
 			if (current != null) {
-				getCombat().getLock().complete(() -> current.setFleed(true));
+				combat.get().getLock().complete(() -> current.setFleed(true));
 			} else {
-				getCombat().getLock().complete(null);
+				combat.get().getLock().complete(null);
 			}
 
 			setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
