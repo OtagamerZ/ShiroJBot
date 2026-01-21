@@ -185,7 +185,7 @@ public class Node {
 	}
 
 	public boolean isFinalNode() {
-		return sublevel.getFloor().getNumber() == sublevel.getFloor().size() - 1;
+		return sublevel.getNumber() == sublevel.getFloor().size() - 1;
 	}
 
 	public boolean isSafeNode() {
