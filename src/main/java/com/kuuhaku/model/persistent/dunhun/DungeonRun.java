@@ -11,6 +11,7 @@ import com.kuuhaku.model.records.id.DungeonRunId;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
+import org.apache.commons.collections4.ListUtils;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -175,7 +176,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 	}
 
 	public List<RunModifier> getModifiers() {
-		return modifiers;
+		return ListUtils.unmodifiableList(modifiers);
 	}
 
 	public boolean addModifier(RunModifier modifier) {
