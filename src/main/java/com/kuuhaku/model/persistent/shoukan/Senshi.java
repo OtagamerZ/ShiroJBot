@@ -1515,7 +1515,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			if (getGame().chance(getDodge())) {
 				if (announce) {
 					Shoukan game = getGame();
-					game.getChannel().buffer(game.getLocale().get("str/avoid_effect", this));
+					game.getChannel().buffer(game.getString("str/avoid_effect", this));
 					game.trigger(ON_DODGE, asSource(ON_DODGE));
 				}
 

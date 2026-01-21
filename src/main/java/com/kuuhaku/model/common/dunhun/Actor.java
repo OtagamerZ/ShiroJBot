@@ -346,7 +346,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public void setFleed(boolean fleed) {
 		if (getGame() != null && !this.fleed && fleed) {
-			getGame().getChannel().sendMessage(getGame().getLocale().get("str/actor_flee", getName()));
+			getGame().getChannel().sendMessage(getGame().getString("str/actor_flee", getName()));
 		}
 
 		setAp(0);

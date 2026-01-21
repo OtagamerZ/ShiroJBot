@@ -123,12 +123,6 @@ public class Combat implements Renderer<BufferedImage> {
 		for (List<Hero> hs : ListUtils.partition(sides, sides.size() / 2)) {
 			team.addAll(hs);
 			team = keepers;
-
-			for (Hero h : hs) {
-				h.getSenshi().setFlag(Flag.NO_STASIS);
-				h.getSenshi().setFlag(Flag.NO_PARALYSIS);
-				h.getSenshi().setFlag(Flag.NO_SLEEP);
-			}
 		}
 	}
 

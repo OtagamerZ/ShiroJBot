@@ -7,8 +7,6 @@ import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.Flag;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -50,13 +48,8 @@ public class Boss extends MonsterBase<Boss> {
 					));
 				}
 
-				Senshi s = getSenshi();
-				s.setFlag(Flag.NO_SLEEP);
-				s.setFlag(Flag.NO_PARALYSIS);
-				s.setFlag(Flag.NO_STASIS);
-
 				Combat comb = getGame().getCombat();
-				comb.getHistory().add(getGame().getLocale().get("str/boss_enraged", getName()));
+				comb.getHistory().add(getGame().getString("str/boss_enraged", getName()));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}
@@ -78,17 +71,6 @@ public class Boss extends MonsterBase<Boss> {
 	@Override
 	public int getMaxHp() {
 		return (int) Math.max(1, stats.getBaseHp() * (1 + getLevel() / 5d));
-	}
-
-	@Override
-	public Senshi createSenshi() {
-		Senshi senshi = super.createSenshi();
-		senshi.setFlag(Flag.NO_PARALYSIS);
-		senshi.setFlag(Flag.NO_SLEEP);
-		senshi.setFlag(Flag.NO_STUN);
-		senshi.setFlag(Flag.NO_STASIS);
-
-		return senshi;
 	}
 
 	@Override
