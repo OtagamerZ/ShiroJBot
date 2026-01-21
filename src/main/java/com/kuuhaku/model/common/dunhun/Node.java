@@ -48,7 +48,7 @@ public class Node {
 		this(sublevel, NodeType.NONE, parents);
 
 		if (sublevel.getNumber() == sublevel.getFloor().size() - 1) {
-			this.type = NodeType.BOSS;
+			this.type = getSublevel().getFloor().getNumber() % 5 == 0 ? NodeType.BOSS : NodeType.DANGER;
 		}
 	}
 
@@ -184,8 +184,12 @@ public class Node {
 		return type == NodeType.DANGER ? 5 : 0;
 	}
 
+	public boolean isFinalNode() {
+		return sublevel.getFloor().getNumber() == sublevel.getFloor().size() - 1;
+	}
+
 	public boolean isSafeNode() {
-		return type == NodeType.BOSS || !sublevel.getFloor().isUnsafeArea();
+		return isFinalNode() || !sublevel.getFloor().isUnsafeArea();
 	}
 
 	public BufferedImage getIcon() {

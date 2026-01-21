@@ -382,11 +382,11 @@ public class AreaMap {
 
 					float part = ((float) prev.size() / nodeCount);
 					for (int k = 0; k < nodeCount; k++) {
-						Node boss = prev.getNodes().stream()
-								.filter(n -> n.getType() == NodeType.BOSS)
+						Node last = prev.getNodes().stream()
+								.filter(Node::isFinalNode)
 								.findFirst().orElse(null);
 
-						if (boss == null) {
+						if (last == null) {
 							List<Node> parents = new ArrayList<>(prev.getNodes().subList(
 									(int) (part * k),
 									(int) Math.ceil(part * (k + 1))
@@ -432,7 +432,7 @@ public class AreaMap {
 
 							sub.addNode(parents);
 						} else {
-							sub.addNode(boss);
+							sub.addNode(last);
 						}
 					}
 				}
@@ -442,7 +442,7 @@ public class AreaMap {
 				Sublevel last = sublevels.getLast();
 				if (last.size() == 1) {
 					Node n = last.getNode(0);
-					if (n.getType() == NodeType.BOSS) {
+					if (n.isFinalNode()) {
 						Node ret = last.newNode(NodeType.RETURN, List.of(n));
 						ret.setOffsetNode(true);
 					}

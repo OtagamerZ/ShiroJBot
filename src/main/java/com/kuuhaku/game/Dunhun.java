@@ -385,7 +385,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				if (deadEnd) {
-					if (getAreaType() == NodeType.BOSS) {
+					if (pNode.isFinalNode()) {
 						for (Hero h : heroes.values()) {
 							h.apply(n -> n.getCompletedDungeons().add(dungeon));
 						}
