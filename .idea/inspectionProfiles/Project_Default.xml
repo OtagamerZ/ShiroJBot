@@ -13,5 +13,6 @@
         </value>
       </option>
     </inspection_tool>
+    <inspection_tool class="UnnecessaryQualifiedReference" enabled="true" level="INFORMATION" enabled_by_default="true" />
   </profile>
 </component>

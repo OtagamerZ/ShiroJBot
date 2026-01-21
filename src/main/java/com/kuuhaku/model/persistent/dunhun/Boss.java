@@ -2,18 +2,24 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
+import com.kuuhaku.model.common.dunhun.Node;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.intellij.lang.annotations.Language;
 
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
 @Table(name = "boss", schema = "dunhun")
@@ -88,15 +94,16 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public void load() {
-		getModifiers().clear();
-
-		try {
-			Utils.exec(getId(), onStart, Map.of(
-					"ctx", new ActorContext(this, null)
-			));
-		} catch (Exception e) {
-			Constants.LOGGER.warn("Failed to initialize {}", getId(), e);
+	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
+		super.trigger(trigger, target, usable, value);
+		if (trigger == Trigger.ON_COMBAT && onStart != null) {
+			try {
+				Utils.exec(getId(), onStart, Map.of(
+						"ctx", new ActorContext(this, null)
+				));
+			} catch (Exception e) {
+				Constants.LOGGER.warn("Failed to initialize {}", getId(), e);
+			}
 		}
 	}
 
@@ -114,7 +121,16 @@ public class Boss extends MonsterBase<Boss> {
 		return clone;
 	}
 
-	public static Boss getRandom() {
-		return DAO.query(Boss.class, "SELECT b FROM Boss b ORDER BY random()");
+	public static Boss getRandom(Node node) {
+		List<String> bosses = DAO.queryAllNative(String.class, "SELECT id FROM boss");
+
+		Set<String> pool = node.getEnemyPool();
+		if (!pool.isEmpty()) {
+			bosses.removeIf(a -> !pool.contains(a));
+		}
+
+		if (bosses.isEmpty()) return null;
+
+		return DAO.find(Boss.class, Utils.getRandomEntry(node.getSeed(), bosses));
 	}
 }

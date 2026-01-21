@@ -314,14 +314,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								run.setNode(currNode);
 							}
 						}
-						case BOSS -> {
-							Set<String> pool = nextNode.getEnemyPool();
-							if (!pool.isEmpty()) {
-								beginCombat(nextNode, DAO.find(Boss.class, Utils.getRandomEntry(getNodeRng(), pool)));
-							} else {
-								beginCombat(nextNode, Boss.getRandom());
-							}
-						}
+						case BOSS -> beginCombat(nextNode, Boss.getRandom(nextNode));
 					}
 
 					if (getCombat() != null && getCombat().isDone()) {
