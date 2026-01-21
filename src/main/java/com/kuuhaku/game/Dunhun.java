@@ -959,7 +959,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		String path = Constants.API_ROOT + (source.getId().startsWith("H:") ? "heroes/" : "monsters/");
 		for (GuildMessageChannel chn : getChannel().getChannels()) {
-			PseudoUser pu = new PseudoUser(source.toString(), path + source.getId(), chn);
+			PseudoUser pu = new PseudoUser(source.getName(getLocale()), path + source.getId(), chn);
 			pu.send(null, text);
 		}
 	}
