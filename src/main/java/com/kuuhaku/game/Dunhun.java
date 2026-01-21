@@ -317,17 +317,21 @@ public class Dunhun extends GameInstance<NullPhase> {
 						case BOSS -> beginCombat(nextNode, Boss.getRandom(nextNode));
 					}
 
-					if (combat.get() != null && combat.get().isDone()) {
-						if (combat.get().isWin()) {
-							grantCombatLoot();
-						} else if (nextNode.getType() != NodeType.EVENT) {
-							try {
-								Collection<Hero> hs = heroes.values();
-								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
-									if (!defeat()) return;
+					if (combat.get() != null) {
+						combat.get().process();
+
+						if (combat.get().isDone()) {
+							if (combat.get().isWin()) {
+								grantCombatLoot();
+							} else if (nextNode.getType() != NodeType.EVENT) {
+								try {
+									Collection<Hero> hs = heroes.values();
+									if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
+										if (!defeat()) return;
+									}
+								} finally {
+									run.setNode(currNode);
 								}
-							} finally {
-								run.setNode(currNode);
 							}
 						}
 					}
@@ -512,6 +516,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public boolean runCombat(Node node, Consumer<Combat> initializer) {
+		if (combat.get() != null) return true;
+
 		combat.set(new Combat(this, node));
 		initializer.accept(combat.get());
 
@@ -529,24 +535,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
-		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
-			combat.set(null);
-			return true;
-		}
-
 		combat.get().process();
-		boolean win = combat.get().isWin();
-		combat.set(null);
-
-		return win;
+		return combat.get().isWin();
 	}
 
 	@SafeVarargs
 	public final <T extends MonsterBase<T>> void beginCombat(Node node, Actor<T>... enemies) {
 		if (combat.get() != null) return;
 		combat.set(new Combat(this, node, enemies));
-		combat.get().process();
-		combat.set(null);
 	}
 
 	public void runEvent(Node node, Event evt) {
