@@ -30,10 +30,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.Hand;
-import com.kuuhaku.model.common.shoukan.SlotColumn;
-import com.kuuhaku.model.common.shoukan.TagBundle;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -528,8 +525,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withVar("trigger", ep.trigger());
 
 			if (!isSpell()) {
-				if (stats.getSource() instanceof Senshi) {
-					csm.withVar("me", stats.getSource());
+				if (this instanceof EquippableSenshi s) {
+					csm.withVar("me", s);
+				} else if (stats.getSource() instanceof Senshi s) {
+					csm.withVar("me", s);
 				}
 
 				if (stats.getSource() instanceof Senshi s && equipper == null) {
@@ -604,8 +603,10 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withVar("trigger", trigger);
 
 			if (!isSpell()) {
-				if (stats.getSource() instanceof Senshi) {
-					csm.withVar("me", stats.getSource());
+				if (this instanceof EquippableSenshi s) {
+					csm.withVar("me", s);
+				} else if (stats.getSource() instanceof Senshi s) {
+					csm.withVar("me", s);
 				}
 
 				if (stats.getSource() instanceof Senshi s && equipper == null) {
