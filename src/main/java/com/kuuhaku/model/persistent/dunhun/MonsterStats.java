@@ -75,6 +75,11 @@ public class MonsterStats implements Serializable {
 	@Column(name = "loot_generator", columnDefinition = "TEXT")
 	private String lootGenerator;
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray tags = new JSONArray();
+
 	public MonsterStats() {
 	}
 
@@ -154,5 +159,9 @@ public class MonsterStats implements Serializable {
 		}
 
 		return loot;
+	}
+
+	public JSONArray getTags() {
+		return tags;
 	}
 }
