@@ -75,8 +75,6 @@ public class Floor {
 			int events = (int) (nodes.size() * eventRatio);
 			List<Node> eNodes = Utils.getRandomN(nodes, events, 1, rng);
 			for (Node n : eNodes) {
-				if (run.getVisitedNodes().contains(n.getId())) continue;
-
 				if (n.getParents().stream().anyMatch(p -> n.depth() - p.depth() > 1)) {
 					n.setType(NodeType.DANGER);
 				} else {
@@ -103,9 +101,7 @@ public class Floor {
 			for (List<Node> group : parts) {
 				if (group.isEmpty()) continue;
 				Node n = Utils.getRandomEntry(rng, group);
-				if (!run.getVisitedNodes().contains(n.getId())) {
-					n.setType(NodeType.REST);
-				}
+				n.setType(NodeType.REST);
 			}
 
 			return null;

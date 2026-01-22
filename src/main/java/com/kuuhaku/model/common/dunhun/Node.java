@@ -179,7 +179,12 @@ public class Node {
 	}
 
 	public NodeType getType() {
-		return type;
+		DungeonRun run = sublevel.getFloor().getMap().getRun();
+		if (isFinalNode() || !run.getVisitedNodes().contains(getId())) {
+			return type;
+		}
+
+		return NodeType.NONE;
 	}
 
 	public void setType(NodeType type) {
