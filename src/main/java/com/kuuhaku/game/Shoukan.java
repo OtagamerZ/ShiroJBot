@@ -2078,6 +2078,7 @@ public class Shoukan extends GameInstance<Phase> {
 				iterateSlots(side, s -> {
 					s.getBase().unlockAll();
 					s.setLastInteraction(null);
+					s.setChangedSlot(false);
 					s.clearBlocked();
 					s.getStats().getFlags().clearTemp();
 					for (Evogear e : s.getEquipments()) {

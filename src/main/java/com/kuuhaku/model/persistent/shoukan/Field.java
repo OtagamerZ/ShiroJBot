@@ -399,6 +399,8 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 
 	@Override
 	public void reset() {
+		stats.clear();
+		base.unlockAll();
 		state = (byte) ((state & 0b100) | 0b1);
 	}
 

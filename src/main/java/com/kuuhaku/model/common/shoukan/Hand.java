@@ -211,7 +211,11 @@ public class Hand {
 		}
 
 		if (d instanceof Senshi s) {
-			if (getGame().getCurrentSide() != getSide() && getGame().chance(s.getDodge() / 2d)) {
+			boolean avoid = getGame().getCurrentSide() != getSide() && (
+					s.hasChangedSlot() || getGame().chance(s.getDodge() / 2d)
+			);
+
+			if (avoid) {
 				getGame().getChannel().sendMessage(getGame().getString("str/avoid_destruction", s)).queue();
 				return false;
 			} else if (s.hasFlag(Flag.NO_DEATH, true) || s.hasCharm(Charm.WARDING, true)) {

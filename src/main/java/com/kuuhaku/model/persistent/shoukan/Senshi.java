@@ -171,14 +171,15 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private long state = 0b1;
 	/*
 	0x0000 000 FF FFFFF FF
-	           ││ │││││ └┴ 0 111 1111
-	           ││ │││││      │││ │││└─ available
-	           ││ │││││      │││ ││└── defending
-	           ││ │││││      │││ │└─── flipped
-	           ││ │││││      │││ └──── sealed
-	           ││ │││││      ││└─ ethereal
-	           ││ │││││      │└── switched
-	           ││ │││││      └─── manipulated
+	           ││ │││││ └┴ 1111 1111
+	           ││ │││││    ││││ │││└─ available
+	           ││ │││││    ││││ ││└── defending
+	           ││ │││││    ││││ │└─── flipped
+	           ││ │││││    ││││ └──── sealed
+	           ││ │││││    │││└─ ethereal
+	           ││ │││││    ││└── switched
+	           ││ │││││    │└─── manipulated
+	           ││ │││││    └──── changed slot
 	           ││ ││││└─ (0 - 15) sleeping
 	           ││ │││└── (0 - 15) stunned
 	           ││ ││└─── (0 - 15) stasis
@@ -405,6 +406,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	@Override
 	public void setSlot(SlotColumn slot) {
+		setChangedSlot(Objects.equals(this.slot, slot));
 		this.slot = slot;
 	}
 
@@ -938,6 +940,14 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	@Override
 	public void setManipulated(boolean manipulated) {
 		state = Bit64.set(state, 6, manipulated);
+	}
+
+	public boolean hasChangedSlot() {
+		return Bit64.on(state, 7);
+	}
+
+	public void setChangedSlot(boolean changed) {
+		state = Bit64.set(state, 7, changed);
 	}
 
 	public boolean isSleeping() {
