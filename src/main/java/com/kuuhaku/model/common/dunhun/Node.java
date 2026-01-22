@@ -48,7 +48,7 @@ public class Node {
 	public Node(Sublevel sublevel, List<Node> parents) {
 		this(sublevel, NodeType.NONE, parents);
 
-		if (sublevel.getNumber() == sublevel.getFloor().size() - 1) {
+		if (sublevel != null && sublevel.getNumber() == sublevel.getFloor().size() - 1) {
 			DungeonRun run = sublevel.getFloor().getMap().getRun();
 			if (sublevel.getFloor().getNumber() % 5 == 0 && !run.getVisitedNodes().contains(getId())) {
 				this.type = NodeType.BOSS;
@@ -179,12 +179,14 @@ public class Node {
 	}
 
 	public NodeType getType() {
-		DungeonRun run = sublevel.getFloor().getMap().getRun();
-		if (isFinalNode() || !run.getVisitedNodes().contains(getId())) {
-			return type;
+		if (sublevel != null) {
+			DungeonRun run = sublevel.getFloor().getMap().getRun();
+			if (!isFinalNode() && run.getVisitedNodes().contains(getId())) {
+				return NodeType.NONE;
+			}
 		}
 
-		return NodeType.NONE;
+		return type;
 	}
 
 	public void setType(NodeType type) {
