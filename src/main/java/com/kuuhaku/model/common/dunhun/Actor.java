@@ -268,7 +268,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 						if (this instanceof MonsterBase<?> m && m.getStats().getKillXp() > 0 && !m.didDropLoot()) {
 							MonsterStats stats = m.getStats();
-							Loot lt = stats.generateLoot(m);
+							Loot lt = m.generateLoot();
 							lt.xp().addAndGet(m.getKillXp());
 
 							double mf = killer.getModifiers().getMagicFind(1);
