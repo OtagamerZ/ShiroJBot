@@ -267,7 +267,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						}
 						setKiller(killer);
 
-						if (this instanceof MonsterBase<?> m && m.getStats().getKillXp() > 0 && !m.didDropLoot()) {
+						if (this instanceof MonsterBase<?> m && !m.isMinion() && !m.didDropLoot()) {
 							MonsterStats stats = m.getStats();
 							Loot lt = m.generateLoot();
 							lt.xp().addAndGet(m.getKillXp());
@@ -275,8 +275,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							double mf = killer.getModifiers().getMagicFind(1);
 							double mult = mf
 									* stats.getLootMultiplier(m)
-									* Math.pow(1.2, getGame().getModifiers().size())
-									* (getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
+									* Math.pow(1.2, cbt.getGame().getModifiers().size())
+									* (cbt.getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
 
 							double dropFac = 20 * mult;
 							while (Calc.chance(dropFac)) {
@@ -290,7 +290,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 							dropFac = 5 * mult;
 							while (Calc.chance(dropFac)) {
-								GlobalDrop drop = GlobalDrop.getRandom(getGame());
+								GlobalDrop drop = GlobalDrop.getRandom(cbt.getGame());
 								if (drop == null) break;
 
 								lt.items().add(drop.getItem());

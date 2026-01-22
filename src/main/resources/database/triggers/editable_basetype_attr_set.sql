@@ -21,12 +21,19 @@ CREATE OR REPLACE FUNCTION t_update_basetype_attr_set()
     LANGUAGE plpgsql
 AS
 $$
+DECLARE
+    level INT;
+    total INT;
 BEGIN
+    level = 1 + 21 * (NEW.tier - 1);
+    total = 10 * NEW.tier;
+
     UPDATE basetype
-    SET attributes = (NEW.str & cast(x'FF' AS INT))
-                         + ((NEW.dex & cast(x'FF' AS INT)) << 8)
-                         + ((NEW.wis & cast(x'FF' AS INT)) << 16)
-                         + ((NEW.vit & cast(x'FF' AS INT)) << 24)
+    SET req_level      = level
+      , req_attributes = (cast(total * NEW.str AS INT) & cast(x'FF' AS INT))
+        + ((cast(total * NEW.dex AS INT) & cast(x'FF' AS INT)) << 8)
+        + ((cast(total * NEW.wis AS INT) & cast(x'FF' AS INT)) << 16)
+        + ((cast(total * NEW.vit AS INT) & cast(x'FF' AS INT)) << 24)
     WHERE id = NEW.id;
 
     RETURN NEW;

@@ -19,22 +19,22 @@
 -- DROP VIEW IF EXISTS dunhun.v_basetype_attr_set;
 CREATE OR REPLACE VIEW dunhun.v_basetype_attr_set AS
 SELECT id
-     , gear_type
-     , str
-     , dex
-     , wis
-     , vit
-     , (str + dex + wis + vit) AS total
-     , x.class
-FROM (
-     SELECT id
-          , gear_type
-          , bit_get(req_attributes, 8, 0) AS str
-          , bit_get(req_attributes, 8, 1) AS dex
-          , bit_get(req_attributes, 8, 2) AS wis
-          , bit_get(req_attributes, 8, 3) AS vit
-          , get_attribute_class(req_attributes) AS class
-     FROM basetype
-     WHERE req_attributes != -1
-     ) x
-ORDER BY -str, -(str + dex) / 2, -dex, -(dex + wis) / 2, -wis, -(wis + vit) / 2, -vit, -(vit + str) / 2, id
+     , implicit_id
+     , req_level
+     , str / (10.0 * tier) AS str
+     , dex / (10.0 * tier) AS dex
+     , wis / (10.0 * tier) AS wis
+     , vit / (10.0 * tier) AS vit
+     , tier
+FROM (SELECT id
+           , gear_type
+           , implicit_id
+           , req_level
+           , bit_get(req_attributes, 8, 0) AS str
+           , bit_get(req_attributes, 8, 1) AS dex
+           , bit_get(req_attributes, 8, 2) AS wis
+           , bit_get(req_attributes, 8, 3) AS vit
+           , (req_level - 1) / 21 + 1      AS tier
+      FROM basetype
+      WHERE regexp_like(id, '_[0-9]+$')) x
+ORDER BY gear_type, cast(split_part(id, '_', -1) AS INT);

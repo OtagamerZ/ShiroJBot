@@ -20,21 +20,18 @@
 CREATE OR REPLACE VIEW dunhun.v_skill_attr_set AS
 SELECT id
      , req_tags
-     , str
-     , dex
-     , wis
-     , vit
-     , (str + dex + wis + vit) AS total
-     , x.class
-FROM (
-     SELECT id
-          , req_tags
-          , bit_get(req_attributes, 8, 0) AS str
-          , bit_get(req_attributes, 8, 1) AS dex
-          , bit_get(req_attributes, 8, 2) AS wis
-          , bit_get(req_attributes, 8, 3) AS vit
-          , get_attribute_class(req_attributes) AS class
-     FROM skill
-     WHERE req_attributes != -1
+     , str > 0                                            AS str
+     , dex > 0                                            AS dex
+     , wis > 0                                            AS wis
+     , vit > 0                                            AS vit
+     , cast(sqrt((str + dex + wis + vit) + 4) - 2 AS INT) AS tier
+FROM (SELECT id
+           , req_tags
+           , bit_get(req_attributes, 8, 0) AS str
+           , bit_get(req_attributes, 8, 1) AS dex
+           , bit_get(req_attributes, 8, 2) AS wis
+           , bit_get(req_attributes, 8, 3) AS vit
+      FROM skill
+      WHERE req_attributes != -1
      ) x
-ORDER BY -str, -(str + dex) / 2, -dex, -(dex + wis) / 2, -wis, -(wis + vit) / 2, -vit, -(vit + str) / 2, id
+ORDER BY tier DESC, x.str DESC, x.dex DESC, x.wis DESC, x.vit DESC, id;

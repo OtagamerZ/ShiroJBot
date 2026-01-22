@@ -21,13 +21,21 @@ CREATE OR REPLACE FUNCTION t_update_skill_attr_set()
     LANGUAGE plpgsql
 AS
 $$
+DECLARE
+    total INT;
+    parts INT;
+    each  INT;
 BEGIN
+    total = (4 + NEW.tier) * NEW.tier;
+    parts = bool_value(NEW.str) + bool_value(NEW.dex) + bool_value(NEW.wis) + bool_value(NEW.vit);
+    each = iif(parts > 0, total / parts, 0);
+
     UPDATE skill
-    SET req_tags = NEW.req_tags
-      , attributes = (NEW.str & cast(x'FF' AS INT))
-                         + ((NEW.dex & cast(x'FF' AS INT)) << 8)
-                         + ((NEW.wis & cast(x'FF' AS INT)) << 16)
-                         + ((NEW.vit & cast(x'FF' AS INT)) << 24)
+    SET req_tags       = NEW.req_tags
+      , req_attributes = (iif(NEW.str, each, 0) & cast(x'FF' AS INT))
+        + ((iif(NEW.dex, each, 0) & cast(x'FF' AS INT)) << 8)
+        + ((iif(NEW.wis, each, 0) & cast(x'FF' AS INT)) << 16)
+        + ((iif(NEW.vit, each, 0) & cast(x'FF' AS INT)) << 24)
     WHERE id = NEW.id;
 
     RETURN NEW;
