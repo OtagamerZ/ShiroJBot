@@ -262,16 +262,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							return "CONFIRM";
 						}
 
-						if (!currNode.isSafeNode()) {
-							if (defeat()) {
-								run.setNode(currNode);
-								run.save();
-							}
-
-							return null;
-						}
-
-						finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
+						onTimeout(getTurn());
 						return null;
 					}));
 
@@ -983,6 +974,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		DungeonRun run = map.getRun();
+		Node pNode = map.getPlayerNode();
+		if (!pNode.isSafeNode()) {
+			if (defeat()) {
+				run.setNode(pNode);
+				run.save();
+			}
+
+			return;
+		}
+
 		finish("str/dungeon_leave", getHeroNames(), run.getFloor(), run.getSublevel() + 1);
 	}
 }
