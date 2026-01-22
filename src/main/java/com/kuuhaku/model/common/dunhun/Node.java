@@ -48,7 +48,11 @@ public class Node {
 		this(sublevel, NodeType.NONE, parents);
 
 		if (sublevel.getNumber() == sublevel.getFloor().size() - 1) {
-			this.type = getSublevel().getFloor().getNumber() % 5 == 0 ? NodeType.BOSS : NodeType.DANGER;
+			if (getSublevel().getFloor().getNumber() % 5 == 0) {
+				this.type = NodeType.BOSS;
+			} else {
+				this.type = NodeType.DANGER;
+			}
 		}
 	}
 

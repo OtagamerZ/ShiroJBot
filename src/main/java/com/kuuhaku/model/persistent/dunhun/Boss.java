@@ -68,10 +68,6 @@ public class Boss extends MonsterBase<Boss> {
 
 					comb.getTurns().setIndex(idx);
 				}
-
-				UniqueProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
-				props.setDamageTaken(new MultMod(-1));
-				getModifiers().addEffect(props);
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}
@@ -85,6 +81,10 @@ public class Boss extends MonsterBase<Boss> {
 		int half = getMaxHp() / 2;
 		if (onEnrage != null && getHp() > half && value <= half && !enraged) {
 			value = half;
+
+			UniqueProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
+			props.setDamageTaken(new MultMod(-1));
+			getModifiers().addEffect(props);
 		}
 
 		super.setHp(value);
