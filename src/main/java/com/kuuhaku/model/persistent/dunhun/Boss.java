@@ -70,7 +70,7 @@ public class Boss extends MonsterBase<Boss> {
 				if (idx > -1) {
 					comb.getCurrent().setAp(0);
 					while (comb.getTurns().peekNext() != this) {
-						comb.getTurns().next();
+						comb.getTurns().getNext();
 					}
 				}
 
