@@ -181,6 +181,10 @@ public class EffectProperties<T> {
 		return expiration;
 	}
 
+	public void setExpiration(int expiration) {
+		this.expiration = expiration;
+	}
+
 	public void decExpiration() {
 		if (expiration > 0) {
 			this.expiration--;
