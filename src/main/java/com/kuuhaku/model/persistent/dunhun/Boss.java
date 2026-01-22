@@ -45,20 +45,27 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public int getHp() {
-		int hp = super.getHp();
-		if (hp <= getMaxHp() / 2 && !enraged) {
+	public void setHp(int value) {
+		int half = getMaxHp() / 2;
+		if (value <= half && !enraged && onEnrage != null) {
+			value = half;
+
 			try {
 				enraged = true;
-				if (onEnrage != null) {
-					Utils.exec(getId(), onEnrage, Map.of(
-							"ctx", new ActorContext(this, null)
-					));
-				}
+				Utils.exec(getId(), onEnrage, Map.of(
+						"ctx", new ActorContext(this, null)
+				));
+
+				EffectProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
+				props.setDamageTaken(new MultMod(-1));
+				getModifiers().addEffect(props);
+
+				props = new PermanentProperties<>(null);
+				props.setDamageTaken(new MultMod(-0.5));
+				props.setMaxAp(new MultMod(0.5));
+				getModifiers().addEffect(props);
 
 				Combat comb = getGame().getCombat();
-				comb.getHistory().add(getGame().getString("str/boss_enraged", getName()));
-
 				int idx = comb.getTurns().indexOf(this);
 				if (idx > -1) {
 					idx--;
@@ -69,23 +76,11 @@ public class Boss extends MonsterBase<Boss> {
 					comb.getCurrent().setAp(0);
 					comb.getTurns().setIndex(idx);
 				}
+
+				comb.getHistory().add(getGame().getString("str/boss_enraged", getName()));
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}
-		}
-
-		return hp;
-	}
-
-	@Override
-	public void setHp(int value) {
-		int half = getMaxHp() / 2;
-		if (onEnrage != null && getHp() > half && value <= half && !enraged) {
-			value = half;
-
-			UniqueProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
-			props.setDamageTaken(new MultMod(-1));
-			getModifiers().addEffect(props);
 		}
 
 		super.setHp(value);
