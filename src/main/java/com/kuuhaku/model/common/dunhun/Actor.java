@@ -19,6 +19,7 @@ import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.CombatCardAttributes;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -556,7 +557,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			int level = m.getLevel();
 			mult = switch (getRarityClass()) {
 				case RARE -> {
-					senshi.setHueOffset(Calc.rng(90, 270, SERIAL));
+					senshi.setStashRef(new StashedCard(senshi.getCard(), true));
 					yield 2;
 				}
 				case MAGIC -> 1.25;

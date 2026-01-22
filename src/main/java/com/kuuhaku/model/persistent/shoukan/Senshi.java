@@ -165,7 +165,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient StashedCard stashRef = null;
 	private transient BondedList<? extends Drawable<?>> currentStack;
 	private transient Trigger currentTrigger = null;
-	private transient int hueOffset = 0;
 
 	@Transient
 	private long state = 0b1;
@@ -1243,14 +1242,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		return currentTrigger;
 	}
 
-	public int getHueOffset() {
-		return hueOffset;
-	}
-
-	public void setHueOffset(int hueOffset) {
-		this.hueOffset = hueOffset;
-	}
-
 	@Override
 	public CachedScriptManager getCSM() {
 		return cachedEffect;
@@ -1608,14 +1599,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				Senshi card = Utils.getOr(stats.getDisguise(), this);
 				String desc = isSealed() ? "" : card.getDescription(locale);
 
-				BufferedImage img;
-				if (hueOffset != 0) {
-					img = card.getVanity().drawCardNoBorder();
-					Graph.forEachPixel(img, (x, y, rgb) -> Graph.rotate(rgb, hueOffset));
-				} else {
-					img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
-				}
-
+				BufferedImage img = card.getVanity().drawCardNoBorder(Utils.getOr(() -> stashRef.isChrome(), false));
 				g1.setClip(deck.getFrame().getBoundary());
 				g1.drawImage(img, 0, 0, null);
 				g1.setClip(null);
