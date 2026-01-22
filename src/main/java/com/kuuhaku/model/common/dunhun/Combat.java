@@ -512,14 +512,14 @@ public class Combat implements Renderer<BufferedImage> {
 								.average()
 								.orElse(1);
 
-						double risk = curr.getHp() * (threat / curr.getThreatScore()) / curr.getMaxHp();
+						double risk = (1 - (double) curr.getHp() / curr.getMaxHp()) * (threat / curr.getThreatScore());
 						if (curr instanceof Monster m && !m.isMinion() && risk > 1 && Calc.chance(20)) {
 							curr.setFleed(true);
 							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
 							return;
 						}
 
-						if (canDefend && Calc.chance(5 * risk)) {
+						if (canDefend && Calc.chance(10 * risk)) {
 							curr.getSenshi().setDefending(true);
 							curr.setAp(0);
 
