@@ -122,7 +122,7 @@ public class UserItem extends DAO<UserItem> {
 		return syntax;
 	}
 
-	public void execute(I18N locale, MessageChannel channel, Profile prof, JSONObject params) {
+	public void execute(I18N locale, GuildMessageChannel channel, Profile prof, JSONObject params) {
 		if (effect == null) throw new PassiveItemException();
 
 		Utils.exec(getClass().getSimpleName(), effect, Map.of(

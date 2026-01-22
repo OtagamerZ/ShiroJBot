@@ -298,13 +298,15 @@ public class HeroInspectCommand implements Executable {
 			helper.addAction(
 					new EmojiId(Utils.parseEmoji(item.getIcon()), String.valueOf(acc.getItemCount(item.getId()))),
 					w -> {
+						if (!w.getMessage().isFromGuild()) return;
+
 						try {
 							if (!acc.consumeItem(item)) {
 								w.getChannel().sendMessage(locale.get("error/insufficient_item")).queue();
 								return;
 							}
 
-							mat.apply(locale, w.getChannel(), acc, g);
+							mat.apply(locale, w.getMessage().getGuildChannel(), acc, g);
 							if (g.isDestroyed()) {
 								w.getMessage().delete().queue(null, Utils::doNothing);
 							} else {
