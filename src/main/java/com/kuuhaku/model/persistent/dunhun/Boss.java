@@ -68,13 +68,10 @@ public class Boss extends MonsterBase<Boss> {
 				Combat comb = getGame().getCombat();
 				int idx = comb.getTurns().indexOf(this);
 				if (idx > -1) {
-					idx--;
-					if (idx < 0) {
-						idx = comb.getTurns().size() - idx;
-					}
-
 					comb.getCurrent().setAp(0);
-					comb.getTurns().setIndex(idx);
+					while (comb.getTurns().peekNext() != this) {
+						comb.getTurns().next();
+					}
 				}
 
 				comb.getHistory().add(getGame().getString("str/boss_enraged", getName()));
