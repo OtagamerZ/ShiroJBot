@@ -66,6 +66,7 @@ public class Boss extends MonsterBase<Boss> {
 						idx = comb.getTurns().size() - idx;
 					}
 
+					comb.getCurrent().setAp(0);
 					comb.getTurns().setIndex(idx);
 				}
 			} catch (Exception e) {

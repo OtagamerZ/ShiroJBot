@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
+import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.IO;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -48,7 +49,8 @@ public class Node {
 		this(sublevel, NodeType.NONE, parents);
 
 		if (sublevel.getNumber() == sublevel.getFloor().size() - 1) {
-			if (getSublevel().getFloor().getNumber() % 5 == 0) {
+			DungeonRun run = sublevel.getFloor().getMap().getRun();
+			if (sublevel.getFloor().getNumber() % 5 == 0 && !run.getVisitedNodes().contains(getId())) {
 				this.type = NodeType.BOSS;
 			} else {
 				this.type = NodeType.DANGER;
