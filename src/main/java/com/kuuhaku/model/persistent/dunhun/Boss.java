@@ -3,11 +3,9 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.dunhun.Usable;
-import com.kuuhaku.model.common.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.Combat;
-import com.kuuhaku.model.common.dunhun.MonsterBase;
-import com.kuuhaku.model.common.dunhun.Node;
+import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
+import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.util.Utils;
@@ -70,6 +68,10 @@ public class Boss extends MonsterBase<Boss> {
 
 					comb.getTurns().setIndex(idx);
 				}
+
+				UniqueProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
+				props.setDamageTaken(new MultMod(-1));
+				getModifiers().addEffect(props);
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to enrage {}", getId(), e);
 			}
@@ -82,7 +84,7 @@ public class Boss extends MonsterBase<Boss> {
 	public void setHp(int value) {
 		int half = getMaxHp() / 2;
 		if (onEnrage != null && getHp() > half && value <= half && !enraged) {
-			value = getMaxHp() / 2;
+			value = half;
 		}
 
 		super.setHp(value);
