@@ -73,6 +73,8 @@ public class RegDeg {
 					values.add(new Degen(split, mult));
 					return;
 				}
+			} else {
+				mult /= 3;
 			}
 
 			values.add(new Degen(-value, mult));
@@ -151,18 +153,16 @@ public class RegDeg {
 			while (it.hasNext()) {
 				ValueOverTime vot = it.next();
 				if (vot instanceof Degen) {
-					if (parent != null) {
-						if (parent.getOrigins().hasSynergy(Race.PRIMAL)) {
-							vot.reduce((int) (vot.getBaseValue() * vot.getMultiplier()));
-							continue;
-						}
+					if (parent != null && !parent.getOrigins().hasSynergy(Race.PRIMAL)) {
 						if (parent.getOther().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
 							break;
 						}
+
+						it.remove();
+						break;
 					}
 
-					it.remove();
-					break;
+					vot.reduce((int) (vot.getBaseValue() * vot.getMultiplier()));
 				}
 			}
 		}
