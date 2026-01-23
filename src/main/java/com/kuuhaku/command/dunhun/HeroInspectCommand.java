@@ -132,6 +132,14 @@ public class HeroInspectCommand implements Executable {
 			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
 		}
 
+		eb.appendDescription("-# " + locale.get("str/item_level", g.getItemLevel()) + "\n");
+
+		if (g.isImmutable()) {
+			eb.appendDescription("-# **" + locale.get("str/immutable") + "**\n");
+		}
+
+		eb.appendDescription("\n");
+
 		boolean hasStats = false;
 		GearStats stats = g.getBasetype().getStats();
 		if (g.getDmg() != 0) {
@@ -167,10 +175,6 @@ public class HeroInspectCommand implements Executable {
 
 		if (!attrs.isEmpty()) {
 			eb.appendDescription(String.join(" | ", attrs) + "\n");
-		}
-
-		if (g.isImmutable()) {
-			eb.appendDescription("-# **" + locale.get("str/immutable") + "**\n");
 		}
 
 		eb.appendDescription("\n");

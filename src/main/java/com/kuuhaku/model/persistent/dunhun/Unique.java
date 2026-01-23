@@ -117,7 +117,7 @@ public class Unique extends DAO<Unique> {
 
 	public static Unique getRandom(Actor<?> source) {
 		Dunhun game = null;
-		int dropLevel = Integer.MAX_VALUE;
+		int dropLevel = Actor.MAX_LEVEL;
 		if (source != null && source.getGame() != null) {
 			game = source.getGame();
 			dropLevel = source.getDropLevel();

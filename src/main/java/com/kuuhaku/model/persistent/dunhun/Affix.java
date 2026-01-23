@@ -188,10 +188,6 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public static Affix getRandom(Gear gear, AffixType type, RarityClass maxRarity) {
-		return getRandom(gear, type, maxRarity, Integer.MAX_VALUE);
-	}
-
-	public static Affix getRandom(Gear gear, AffixType type, RarityClass maxRarity, int areaLevel) {
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().allTags());
@@ -228,13 +224,12 @@ public class Affix extends DAO<Affix> {
 						WHERE ((?1 = '' OR type = ?1) AND type NOT LIKE 'MON\\_%')
 						  AND weight > 0
 						  AND min_level <= ?2
-						  AND (min_level <= ?3 OR has(cast(?4 AS JSONB), 'ACCESSORY'))
 						  AND req_tags <@ cast(?4 AS JSONB)
 						  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?4 AS JSONB), 'OFFHAND'))
 						  AND NOT has(get_affix_family(cast(?5 AS JSONB)), get_affix_family(id))
 						  AND (affix_group IS NULL OR affix_group NOT IN ?6)
 						  AND (cast(?7 AS VARCHAR) = '' OR has(tags, ?7))
-						""", tp, areaLevel, gear.getReqLevel(), tags.toString(), affixes.toString(), groups, only.get())
+						""", tp, gear.getItemLevel(), tags.toString(), affixes.toString(), groups, only.get())
 		);
 		if (affs.isEmpty()) return null;
 

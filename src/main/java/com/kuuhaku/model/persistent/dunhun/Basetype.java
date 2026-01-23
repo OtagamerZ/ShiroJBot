@@ -91,7 +91,7 @@ public class Basetype extends DAO<Basetype> {
 	public static Basetype getRandom(Actor<?> source) {
 		Dunhun game = null;
 
-		int dropLevel = Integer.MAX_VALUE;
+		int dropLevel = Actor.MAX_LEVEL;
 		if (source != null && source.getGame() != null) {
 			game = source.getGame();
 			dropLevel = source.getDropLevel();

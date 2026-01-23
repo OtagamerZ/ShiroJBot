@@ -82,6 +82,9 @@ public class Gear extends DAO<Gear> {
 	@Column(name = "seed", nullable = false)
 	private int seed = Calc.rng(Integer.MAX_VALUE);
 
+	@Column(name = "item_level", nullable = false)
+	private int itemLevel;
+
 	@Column(name = "immutable", nullable = false)
 	private boolean immutable = false;
 
@@ -249,6 +252,14 @@ public class Gear extends DAO<Gear> {
 		return seed;
 	}
 
+	public int getItemLevel() {
+		return itemLevel;
+	}
+
+	public void setItemLevel(int itemLevel) {
+		this.itemLevel = itemLevel;
+	}
+
 	public boolean isImmutable() {
 		return immutable;
 	}
@@ -409,7 +420,7 @@ public class Gear extends DAO<Gear> {
 		if (base == null) return null;
 
 		double mult = 1;
-		int dropLevel = Integer.MAX_VALUE;
+		int dropLevel = Actor.MAX_LEVEL;
 		if (source != null && source.getGame() != null) {
 			dropLevel = source.getDropLevel();
 
@@ -442,11 +453,13 @@ public class Gear extends DAO<Gear> {
 		}
 
 		Gear out = new Gear(null, base);
+		out.setItemLevel(dropLevel);
+
 		if (rarity == RarityClass.NORMAL) return out;
 
 		int mods = Calc.rng(1, rarity.getMaxMods());
 		for (int i = 0; i < mods; i++) {
-			Affix af = Affix.getRandom(out, null, rarity, dropLevel);
+			Affix af = Affix.getRandom(out, null, rarity);
 			if (af == null) break;
 
 			out.getAffixes().add(new GearAffix(out, af));
