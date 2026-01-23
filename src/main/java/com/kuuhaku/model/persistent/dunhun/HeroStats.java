@@ -40,7 +40,8 @@ public class HeroStats implements Serializable {
 	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
 
 	static {
-		for (int i = 1; i <= Actor.MAX_LEVEL; i++) {
+		xpTable.put(0, 1);
+		for (int i = 2; i <= Actor.MAX_LEVEL; i++) {
 			xpTable.put((int) (Math.pow(i, 2.5) * 10), i);
 		}
 	}
