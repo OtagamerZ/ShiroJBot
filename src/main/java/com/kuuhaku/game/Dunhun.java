@@ -434,11 +434,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 					if (rank > 0) {
 						Main.getApp().getMessageChannelById("971503733202628698")
 								.sendMessage(getLocale().get("loss/dungeon_death",
-										h.getName(), rank, run.getFloor(), dungeon.getInfo(getLocale()).getName()
+										h.getName(), rank, run.getFloor() + "-" + run.getSublevel(),
+										dungeon.getInfo(getLocale()).getName()
 								))
 								.queue();
 //						Utils.broadcast("loss/dungeon_death", loc -> List.of(
-//								h.getName(), rank, run.getFloor(), dungeon.getInfo(loc).getName()
+//						h.getName(), rank, run.getFloor() + "-" + run.getSublevel(),
+//								dungeon.getInfo(getLocale()).getName()
 //						));
 					}
 				}
