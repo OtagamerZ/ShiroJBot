@@ -10,6 +10,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
+import org.apache.commons.collections4.list.FixedSizeList;
 
 import java.util.*;
 import java.util.function.Function;
@@ -86,10 +87,11 @@ public class ActorCache {
 				ids = new JSONArray();
 			}
 
-			skills = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", ids).stream()
-					.filter(Objects::nonNull)
-					.sorted(Comparator.comparingInt(s -> ids.indexOf(s.getId())))
-					.collect(ArrayList::new, List::add, List::addAll);
+			List<Skill> alloc = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", ids);
+			skills = Arrays.asList(new Skill[5]);
+			for (int i = 0; i < alloc.size(); i++) {
+				skills.set(i, alloc.get(i));
+			}
 		}
 
 		return skills;

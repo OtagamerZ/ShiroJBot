@@ -293,11 +293,11 @@ public class HeroCommand implements Executable {
 		};
 
 		Function<Integer, String> getButtonLabel = j -> {
-			if (j >= skills.size() || skills.get(j) == null) {
-				return locale.get("str/slot", j + 1);
+			if (skills.get(j) instanceof Skill s) {
+				return s.getName(locale);
 			}
 
-			return skills.get(j).getName(locale);
+			return locale.get("str/slot", j + 1);
 		};
 
 		for (int j = 0; j < 5; j++) {

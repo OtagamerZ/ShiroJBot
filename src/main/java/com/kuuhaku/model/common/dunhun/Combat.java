@@ -271,6 +271,7 @@ public class Combat implements Renderer<BufferedImage> {
 					sen.reduceDebuffs(1);
 					sen.reduceStasis(1);
 					for (Skill s : actor.getSkills()) {
+						if (s == null) return;
 						s.reduceCd();
 					}
 
@@ -367,7 +368,7 @@ public class Combat implements Renderer<BufferedImage> {
 			});
 
 			List<Skill> skills = h.getSkills();
-			if (!skills.isEmpty()) {
+			if (skills.stream().anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					EventHandler handle = Pages.getHandler();
 					Map<String, List<?>> values = handle.getDropdownValues(handle.getEventId(w.getMessage()));
@@ -584,7 +585,8 @@ public class Combat implements Renderer<BufferedImage> {
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicBoolean force) {
 		List<Skill> skills = new ArrayList<>();
 		for (Skill s : source.getSkills()) {
-			if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
+			if (s == null) continue;
+			else if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
 			switch (s.canCpuUse(source, null)) {
 				case ANY -> skills.add(s);
@@ -605,14 +607,15 @@ public class Combat implements Renderer<BufferedImage> {
 		List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
 
 		List<Skill> skills = h.getSkills();
-		if (!skills.isEmpty()) {
+		if (skills.stream().anyMatch(Objects::nonNull)) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
 					.setPlaceholder(getLocale().get("str/use_a_skill"))
 					.setMaxValues(1);
 
 			for (Skill s : skills) {
-				String extra = "";
+				if (s == null) continue;
 
+				String extra = "";
 				if (s.getToggledEffect() != null) {
 					extra += "[" + getLocale().get("str/active").toUpperCase() + "]";
 				} else {

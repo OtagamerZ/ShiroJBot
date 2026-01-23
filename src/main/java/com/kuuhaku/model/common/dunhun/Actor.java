@@ -32,6 +32,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 
+import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -101,6 +102,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public int getReservedAp() {
 		return getSkills().stream()
+				.filter(Objects::nonNull)
 				.filter(s -> s.getToggledEffect() != null)
 				.map(Skill::getStats)
 				.mapToInt(SkillStats::getReservation)
@@ -480,7 +482,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Skill getSkill(String id) {
-		return cache.getSkills().parallelStream()
+		return cache.getSkills().stream()
+				.filter(Objects::nonNull)
 				.filter(s -> s.getId().equalsIgnoreCase(id))
 				.findFirst().orElse(null);
 	}
