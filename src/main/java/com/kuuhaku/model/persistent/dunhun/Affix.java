@@ -224,11 +224,11 @@ public class Affix extends DAO<Affix> {
 						WHERE ((?1 = '' OR type = ?1) AND type NOT LIKE 'MON\\_%')
 						  AND weight > 0
 						  AND min_level <= ?2
-						  AND req_tags <@ cast(?4 AS JSONB)
-						  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?4 AS JSONB), 'OFFHAND'))
-						  AND NOT has(get_affix_family(cast(?5 AS JSONB)), get_affix_family(id))
-						  AND (affix_group IS NULL OR affix_group NOT IN ?6)
-						  AND (cast(?7 AS VARCHAR) = '' OR has(tags, ?7))
+						  AND req_tags <@ cast(?3 AS JSONB)
+						  AND NOT (has(req_tags, 'WEAPON') AND has(cast(?3 AS JSONB), 'OFFHAND'))
+						  AND NOT has(get_affix_family(cast(?4 AS JSONB)), get_affix_family(id))
+						  AND (affix_group IS NULL OR affix_group NOT IN ?5)
+						  AND (cast(?6 AS VARCHAR) = '' OR has(tags, ?6))
 						""", tp, gear.getItemLevel(), tags.toString(), affixes.toString(), groups, only.get())
 		);
 		if (affs.isEmpty()) return null;
