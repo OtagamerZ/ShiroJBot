@@ -18,10 +18,13 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.model.enums.I18N;
+
 public class VariableValue extends Value {
 	private final String name;
 
-	public VariableValue(String name) {
+	public VariableValue(I18N locale, String name) {
+		super(locale);
 		this.name = name;
 	}
 

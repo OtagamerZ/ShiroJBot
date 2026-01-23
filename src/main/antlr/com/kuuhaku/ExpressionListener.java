@@ -51,7 +51,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 			if (e instanceof ShoukanExprParser.ValueContext value) {
 				Value v;
 				if (value.element.getType() == VAR) {
-					v = new VariableValue(value.getText());
+					v = new VariableValue(locale, value.getText());
 				} else {
 					if (ctx.op.getType() == MUL) {
 						v = new PercentageValue(locale, Double.parseDouble(value.getText()));
@@ -78,7 +78,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 			if (e instanceof ValueContext value) {
 				Value v;
 				if (value.element.getType() == VAR) {
-					v = new VariableValue(value.getText());
+					v = new VariableValue(locale, value.getText());
 				} else {
 					v = new FlatValue(locale, Double.parseDouble(value.getText()));
 				}
@@ -100,7 +100,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 			case ValueContext value -> {
 				Value v;
 				if (value.element.getType() == VAR) {
-					v = new VariableValue(value.getText());
+					v = new VariableValue(locale, value.getText());
 				} else {
 					v = new FlatValue(locale, Double.parseDouble(value.getText()));
 				}
