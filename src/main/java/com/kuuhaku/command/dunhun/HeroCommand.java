@@ -42,6 +42,7 @@ import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -402,8 +403,9 @@ public class HeroCommand implements Executable {
 				})
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
+					JSONArray unlocked = h.getStats().getUnlockedSkills();
 					h.apply(n -> {
-						n.getStats().setUnlockedSkills(n.getStats().getUnlockedSkills());
+						n.getStats().setUnlockedSkills(unlocked);
 						n.getCache().setSkills(skills);
 					});
 
@@ -474,7 +476,6 @@ public class HeroCommand implements Executable {
 						return;
 					}
 
-					h.save();
 					msg.getChannel().sendMessage(locale.get("success/equipped")).queue();
 					ctx.get().run();
 				})
@@ -504,13 +505,13 @@ public class HeroCommand implements Executable {
 						return;
 					}
 
-					h.save();
 					w.getChannel().sendMessage(locale.get("success/unequipped")).queue();
 					ctx.get().run();
 				})
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					h.apply(n -> n.getCache().setEquipment(n.getEquipment()));
+					Equipment equips = h.getEquipment();
+					h.apply(n -> n.getCache().setEquipment(equips));
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
