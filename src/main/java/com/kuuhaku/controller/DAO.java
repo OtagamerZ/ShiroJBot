@@ -360,12 +360,17 @@ public abstract class DAO<T extends DAO<T>> {
 	@SuppressWarnings("unchecked")
 	public void apply(@NotNull Consumer<T> consumer) {
 		Manager.getFactory().runInTransaction(em -> {
-			if (this instanceof Blacklistable lock) {
+			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+
+			T t = (T) em.find(getClass(), key);
+			if (t == null) return;
+			else if (t instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
 			}
 
-			consumer.accept(refresh());
-			em.merge(this);
+			consumer.accept(t);
+			consumer.accept((T) this);
+			em.merge(t);
 		});
 	}
 
