@@ -147,9 +147,9 @@ public class Hero extends Actor<Hero> {
 	@Override
 	public double getCritical() {
 		double flat = getEquipment().getWeaponList().stream()
-							  .filter(Gear::isWeapon)
-							  .mapToDouble(Gear::getCritical)
-							  .average().orElse(0) + stats.getRaceBonus().critical();
+				.filter(Gear::isWeapon)
+				.mapToDouble(Gear::getCritical)
+				.average().orElse(0) + stats.getRaceBonus().critical();
 
 		return Calc.clamp(getModifiers().getCritical(flat), 0, 100);
 	}
@@ -306,11 +306,10 @@ public class Hero extends Actor<Hero> {
 			stats.setSkills(skillCache.stream()
 					.filter(Objects::nonNull)
 					.map(Skill::getId)
+					.filter(id -> stats.getUnlockedSkills().contains(id))
 					.collect(Collectors.toCollection(JSONArray::new))
 			);
 		}
-
-		stats.getSkills().removeIf(s -> !stats.getUnlockedSkills().contains(s));
 	}
 
 	@Override
