@@ -21,10 +21,10 @@ CREATE OR REPLACE VIEW dunhun.v_basetype_attr_set AS
 SELECT id
      , implicit_id
      , req_level
-     , str / (10.0 * tier) AS str
-     , dex / (10.0 * tier) AS dex
-     , wis / (10.0 * tier) AS wis
-     , vit / (10.0 * tier) AS vit
+     , str / (5.0 * tier) AS str
+     , dex / (5.0 * tier) AS dex
+     , wis / (5.0 * tier) AS wis
+     , vit / (5.0 * tier) AS vit
      , tier
 FROM (SELECT id
            , gear_type

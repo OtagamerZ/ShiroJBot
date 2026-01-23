@@ -26,7 +26,7 @@ DECLARE
     total INT;
 BEGIN
     level = 1 + 21 * (NEW.tier - 1);
-    total = 10 * NEW.tier;
+    total = 5 * NEW.tier;
 
     UPDATE basetype
     SET req_level      = level
