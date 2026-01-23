@@ -160,12 +160,12 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		Attributes reqs = stats.requirements().attributes();
-		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
+		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0 || g.getReqLevel() > 1) {
 			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
 		}
 
 		List<String> attrs = new ArrayList<>();
-		if (g.getReqLevel() > 0) attrs.add(locale.get("str/level", g.getReqLevel()));
+		if (g.getReqLevel() > 1) attrs.add(locale.get("str/level", g.getReqLevel()));
 
 		for (AttrType t : AttrType.values()) {
 			if (t.ordinal() >= AttrType.LVL.ordinal()) break;
