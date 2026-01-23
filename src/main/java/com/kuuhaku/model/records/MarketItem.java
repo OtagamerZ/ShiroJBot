@@ -50,7 +50,7 @@ public record MarketItem(I18N locale, Market market, StashedCard sc) {
 
 		String quality = "";
 		if (sc.getQuality() > 0) {
-			quality = " (Q: " + Utils.roundToString(sc.getQuality(), 1) + "%)";
+			quality = " (Q: " + Utils.roundToString(locale, sc.getQuality(), 1) + "%)";
 		}
 
 		double mult = 1;

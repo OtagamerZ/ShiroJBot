@@ -331,7 +331,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		replaces.put("guild", getGuild().getName());
 		replaces.put("g_rank", locale.separate(account.getRanking()));
 		replaces.put("l_rank", locale.separate(getRanking()));
-		replaces.put("xp", Utils.shorten(getXp()));
+		replaces.put("xp", Utils.shorten(locale, getXp()));
 		replaces.put("level", getLevel());
 
 		for (AccountTitle title : account.getTitles()) {
@@ -442,7 +442,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		Graph.drawOutlinedString(g2d, Utils.getOr(account.getName(), "???"), 88 + offset, 25, 3, Color.BLACK);
 
 		String details = "XP: %s/%s I Rank: ".formatted(
-				Utils.shorten(getXp() - lvlXp), Utils.shorten(toNext - lvlXp)
+				Utils.shorten(locale, getXp() - lvlXp), Utils.shorten(locale, toNext - lvlXp)
 		);
 		g2d.setFont(Fonts.OPEN_SANS_BOLD.deriveBold(20));
 		Graph.drawOutlinedString(g2d, details, 88 + offset, 51, 3, Color.BLACK);

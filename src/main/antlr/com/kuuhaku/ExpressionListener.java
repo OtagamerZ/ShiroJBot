@@ -20,14 +20,20 @@ package com.kuuhaku;
 
 import com.kuuhaku.generated.ShoukanExprBaseListener;
 import com.kuuhaku.generated.ShoukanExprParser;
+import com.kuuhaku.model.enums.I18N;
 
 import java.util.List;
 
 import static com.kuuhaku.generated.ShoukanExprParser.*;
 
 public class ExpressionListener extends ShoukanExprBaseListener {
+	private I18N locale;
 	private Scalable current;
 	private Scalable output;
+
+	public ExpressionListener(I18N locale) {
+		this.locale = locale;
+	}
 
 	@Override
 	public void enterLine(LineContext ctx) {
@@ -48,9 +54,9 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 					v = new VariableValue(value.getText());
 				} else {
 					if (ctx.op.getType() == MUL) {
-						v = new PercentageValue(Double.parseDouble(value.getText()));
+						v = new PercentageValue(locale, Double.parseDouble(value.getText()));
 					} else {
-						v = new PercentageValue(1 / Double.parseDouble(value.getText()));
+						v = new PercentageValue(locale, 1 / Double.parseDouble(value.getText()));
 					}
 				}
 
@@ -74,7 +80,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 				if (value.element.getType() == VAR) {
 					v = new VariableValue(value.getText());
 				} else {
-					v = new FlatValue(Double.parseDouble(value.getText()));
+					v = new FlatValue(locale, Double.parseDouble(value.getText()));
 				}
 
 				curr.set(i, v);
@@ -96,7 +102,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 				if (value.element.getType() == VAR) {
 					v = new VariableValue(value.getText());
 				} else {
-					v = new FlatValue(Double.parseDouble(value.getText()));
+					v = new FlatValue(locale, Double.parseDouble(value.getText()));
 				}
 
 				current.setLeft(v);

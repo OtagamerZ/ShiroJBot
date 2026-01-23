@@ -18,13 +18,15 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.Utils;
 
 public class PercentageValue extends Value implements Invertable {
 	private double value;
 	private boolean flat;
 
-	public PercentageValue(double value) {
+	public PercentageValue(I18N locale, double value) {
+		super(locale);
 		this.value = value;
 	}
 
@@ -40,9 +42,9 @@ public class PercentageValue extends Value implements Invertable {
 	@Override
 	public String toString() {
 		if (flat) {
-			return Utils.roundToString(value, 2);
+			return Utils.roundToString(locale, value, 2);
 		}
 
-		return Utils.roundToString(value * 100, 2) + "%";
+		return Utils.roundToString(locale, value * 100, 2) + "%";
 	}
 }

@@ -108,13 +108,13 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		if (s.getStats().getEfficiency(lvl) > 0) {
-			String eff = Utils.roundToString(s.getStats().getEfficiency(lvl) * 100, 0) + "%";
+			String eff = Utils.roundToString(locale, s.getStats().getEfficiency(lvl) * 100, 0) + "%";
 			eb.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n");
 		}
 
 		if (s.getStats().getCritical() > 0) {
 			double crit = h.getModifiers().getCritical(s.getStats().getCritical());
-			String text = "**" + Utils.roundToString(crit, 1) + "**";
+			String text = "**" + Utils.roundToString(locale, crit, 1) + "**";
 			eb.appendDescription("-# " + locale.get("str/bonus_critical", text) + "\n");
 		}
 

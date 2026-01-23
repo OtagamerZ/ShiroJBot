@@ -143,7 +143,7 @@ public class HeroInspectCommand implements Executable {
 			hasStats = true;
 		}
 		if (g.getCritical() != 0) {
-			eb.appendDescription(locale.get("str/bonus_critical", Utils.roundToString(g.getCritical(), 2)) + "\n");
+			eb.appendDescription(locale.get("str/bonus_critical", Utils.roundToString(locale, g.getCritical(), 2)) + "\n");
 			hasStats = true;
 		}
 

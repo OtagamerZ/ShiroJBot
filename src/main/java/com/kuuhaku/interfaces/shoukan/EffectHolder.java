@@ -472,7 +472,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		if (desc != null) {
 			Matcher pat = Utils.regex(desc, "\\{=(\\S+?)}|([A-Za-z]+?)?\\{([a-z_]+?)}");
 
-			return parse(pat)
+			return parse(locale, pat)
 					.replaceAll("\\(([^()]|\\(([^()]|\\(([^()]|\\(([^()])*\\))*\\))*\\))*\\)", "**$0**")
 					.replaceAll("\\({2}([^()]+?)\\){2}", "($1)");
 		}
@@ -480,7 +480,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return "";
 	}
 
-	private static String parse(Matcher matcher) {
+	private static String parse(I18N locale, Matcher matcher) {
 		return matcher.replaceAll(m -> {
 			if (m.group(1) != null) {
 				ShoukanExprLexer lex = new ShoukanExprLexer(CharStreams.fromString(m.group(1)));
@@ -490,7 +490,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				ShoukanExprParser.LineContext tree = parser.line();
 
 				ParseTreeWalker walker = new ParseTreeWalker();
-				ExpressionListener listener = new ExpressionListener();
+				ExpressionListener listener = new ExpressionListener(locale);
 
 				walker.walk(listener, tree);
 

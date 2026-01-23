@@ -88,7 +88,7 @@ public class ShoukanHistoryCommand implements Executable {
 				.setAuthor(locale.get("str/history_title", acc.getName()))
 				.setDescription(locale.get("str/history_matches",
 						acc.getShoukanRanking(),
-						Utils.roundToString(acc.getWinrate(), 2) + "%",
+						Utils.roundToString(locale, acc.getWinrate(), 2) + "%",
 						matches.size()
 				));
 
@@ -188,7 +188,7 @@ public class ShoukanHistoryCommand implements Executable {
 					FieldMimic fm = new FieldMimic(
 							Utils.getEmoteString(r.name()) + " " + r.getName(locale),
 							locale.get("str/history_races_matches",
-									Utils.roundToString(rs.won() * 100d / rs.played(), 2) + "%",
+									Utils.roundToString(locale, rs.won() * 100d / rs.played(), 2) + "%",
 									rs.played()
 							)
 					);

@@ -18,5 +18,12 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.model.enums.I18N;
+
 public abstract class Value {
+	protected final I18N locale;
+
+	public Value(I18N locale) {
+		this.locale = locale;
+	}
 }

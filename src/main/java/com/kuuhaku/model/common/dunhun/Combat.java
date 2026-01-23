@@ -233,7 +233,7 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor<?> a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
 				sb.appendNewLine(a.getName());
-				a.addHpBar(sb);
+				a.addHpBar(getLocale(), sb);
 				a.addApBar(sb);
 			}
 

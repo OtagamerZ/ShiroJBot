@@ -118,7 +118,7 @@ public class SeeCardCommand implements Executable {
 
 				if (sc != null) {
 					XStringBuilder sb = new XStringBuilder();
-					sb.appendNewLine(locale.get("str/quality", Utils.roundToString(sc.getQuality(), 1)));
+					sb.appendNewLine(locale.get("str/quality", Utils.roundToString(locale, sc.getQuality(), 1)));
 					sb.appendNewLine(locale.get("str/suggested_price", sc.getSuggestedPrice()));
 
 					eb.addField(locale.get("str/information"), sb.toString(), true);

@@ -87,6 +87,7 @@ public class ActorCache {
 			}
 
 			skills = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", ids).stream()
+					.filter(Objects::nonNull)
 					.sorted(Comparator.comparingInt(s -> ids.indexOf(s.getId())))
 					.collect(ArrayList::new, List::add, List::addAll);
 		}

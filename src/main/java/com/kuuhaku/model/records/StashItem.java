@@ -62,7 +62,7 @@ public record StashItem(I18N locale, StashedCard sc) {
 
 		String quality = "";
 		if (sc.getQuality() > 0) {
-			quality = " (Q: " + Utils.roundToString(sc.getQuality(), 1) + "%)";
+			quality = " (Q: " + Utils.roundToString(locale, sc.getQuality(), 1) + "%)";
 		}
 
 		return new FieldMimic(

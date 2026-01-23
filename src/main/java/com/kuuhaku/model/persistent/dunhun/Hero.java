@@ -309,6 +309,8 @@ public class Hero extends Actor<Hero> {
 					.collect(Collectors.toCollection(JSONArray::new))
 			);
 		}
+
+		stats.getSkills().removeIf(s -> !stats.getUnlockedSkills().contains(s));
 	}
 
 	@Override

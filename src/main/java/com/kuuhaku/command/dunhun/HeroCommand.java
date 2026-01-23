@@ -102,7 +102,7 @@ public class HeroCommand implements Executable {
 					locale.get("str/ap", h.getMaxAp()),
 					locale.get("str/threat", h.getThreatScore()),
 					locale.get("str/initiative", h.getInitiative()),
-					locale.get("str/bonus_critical", Utils.roundToString(h.getCritical(), 2)),
+					locale.get("str/bonus_critical", Utils.roundToString(locale, h.getCritical(), 2)),
 					locale.get("str/level", h.getLevel()),
 					h.getStats().getXp(), h.getStats().getXpToNext()
 			), true);
@@ -207,9 +207,9 @@ public class HeroCommand implements Executable {
 
 		helper.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					h.refresh();
-					h.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])));
-					h.save();
+					h.apply(n ->
+							n.getStats().setAttributes(alloc.merge(new Attributes(attr[0], attr[1], attr[2], attr[3])))
+					);
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
@@ -402,10 +402,10 @@ public class HeroCommand implements Executable {
 				})
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					h.refresh();
-					h.getStats().setUnlockedSkills(h.getStats().getUnlockedSkills());
-					h.getCache().setSkills(skills);
-					h.save();
+					h.apply(n -> {
+						n.getStats().setUnlockedSkills(n.getStats().getUnlockedSkills());
+						n.getCache().setSkills(skills);
+					});
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
@@ -509,9 +509,7 @@ public class HeroCommand implements Executable {
 				})
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
-					h.refresh();
-					h.getCache().setEquipment(h.getEquipment());
-					h.save();
+					h.apply(n -> n.getCache().setEquipment(n.getEquipment()));
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});

@@ -41,7 +41,7 @@ public class CalcCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		try {
 			FunctionX func = new FunctionX(args.getString("expression"));
-			event.channel().sendMessage("x = " + Utils.roundToString(func.getF_xo(0), 5)).queue();
+			event.channel().sendMessage("x = " + Utils.roundToString(locale, func.getF_xo(0), 5)).queue();
 		} catch (CalculatorException e) {
 			event.channel().sendMessage(locale.get("error/invalid_expression")).queue();
 		}

@@ -130,9 +130,7 @@ public class HeroShopCommand implements Executable {
 							return true;
 						}
 
-				h.refresh();
-				h.modConsumableCount(item, amount);
-				h.save();
+				h.apply(n -> n.modConsumableCount(item, amount));
 
 						acc.consumeCR(value, "Consumable " + amount + "x " + item.getName(locale));
 

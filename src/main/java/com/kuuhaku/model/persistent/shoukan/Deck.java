@@ -466,14 +466,14 @@ public class Deck extends DAO<Deck> {
 							%s
 							""".formatted(
 							base.hp(),
-							Utils.roundToString(mp, 1),
+							Utils.roundToString(locale, mp, 1),
 							allCards.size(), getSenshi().size(), getEvogear().size(), getFields().size(),
 							weight, color,
-							Utils.roundToString(getMetaDivergence() * 100, 0),
-							Utils.roundToString((float) getAverageMPCost(), 1),
-							Utils.roundToString((float) getAverageHPCost(), 1),
-							Utils.roundToString((float) totalDmg / allCards.size(), 0),
-							Utils.roundToString((float) totalDfs / allCards.size(), 0),
+							Utils.roundToString(locale, getMetaDivergence() * 100, 0),
+							Utils.roundToString(locale, (float) getAverageMPCost(), 1),
+							Utils.roundToString(locale, (float) getAverageHPCost(), 1),
+							Utils.roundToString(locale, (float) totalDmg / allCards.size(), 0),
+							Utils.roundToString(locale, (float) totalDfs / allCards.size(), 0),
 							getMaxSenshiCopies(), getMaxEvogearCopies(1), getMaxEvogearCopies(4),
 							3
 					), 1175, 45, 175, 0,
@@ -806,11 +806,11 @@ public class Deck extends DAO<Deck> {
 	public String toString(I18N locale) {
 		return locale.get("str/deck_resume",
 				getSenshi().size(), getEvogear().size(), getFields().size(),
-				Utils.roundToString(Stream.of(getSenshi(), getEvogear())
+				Utils.roundToString(locale, Stream.of(getSenshi(), getEvogear())
 						.flatMap(List::stream)
 						.mapToInt(d -> d.getHPCost())
 						.average().orElse(0), 1),
-				Utils.roundToString(Stream.of(getSenshi(), getEvogear())
+				Utils.roundToString(locale, Stream.of(getSenshi(), getEvogear())
 						.flatMap(List::stream)
 						.mapToInt(d -> d.getMPCost())
 						.average().orElse(0), 1)

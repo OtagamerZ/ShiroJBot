@@ -83,7 +83,6 @@ import java.math.BigDecimal;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.text.DecimalFormat;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.*;
@@ -202,10 +201,10 @@ public abstract class Utils {
 		return Arrays.asList(compareWith).contains(value);
 	}
 
-	public static String roundToString(Object value, int places) {
+	public static String roundToString(I18N locale, double value, int places) {
 		if (places < 0) throw new IllegalArgumentException();
 
-		return new DecimalFormat("#,##0" + (places > 0 ? "." : "") + StringUtils.repeat("#", places)).format(value);
+		return locale.separate(Calc.round(value, places));
 	}
 
 	public static Pattern regex(@Language("RegExp") String regex) {
@@ -1035,8 +1034,8 @@ public abstract class Utils {
 		}
 	}
 
-	public static String shorten(double number) {
-		if (number < 1000) return roundToString(number, 1);
+	public static String shorten(I18N locale, double number) {
+		if (number < 1000) return roundToString(locale, number, 1);
 
 		NavigableMap<Double, String> suf = new TreeMap<>();
 		suf.put(1_000D, "k");
@@ -1046,7 +1045,7 @@ public abstract class Utils {
 		suf.put(1_000_000_000_000_000D, "q");
 
 		Map.Entry<Double, String> entry = suf.floorEntry(number);
-		return roundToString(number / entry.getKey(), 1) + entry.getValue();
+		return roundToString(locale, number / entry.getKey(), 1) + entry.getValue();
 	}
 
 	public static String replaceTags(String text, char delimiter, Map<String, Object> tags) {

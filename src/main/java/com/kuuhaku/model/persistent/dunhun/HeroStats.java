@@ -78,7 +78,19 @@ public class HeroStats implements Serializable {
 	}
 
 	public int getPointsLeft() {
-		return (4 + Math.min(Actor.MAX_LEVEL, getLevel())) - attributes.count() - unlockedSkills.size();
+		return (4 + Math.min(Actor.MAX_LEVEL, getLevel())) - getAttributePoints() - getSkillPoints();
+	}
+
+	public int getAttributePoints() {
+		return attributes.count();
+	}
+
+	public int getSkillPoints() {
+		return unlockedSkills.size();
+	}
+
+	public int getTotalPoints() {
+		return attributes.count() + unlockedSkills.size();
 	}
 
 	public int getXpToCurrent() {

@@ -394,13 +394,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return props;
 	}
 
-	public void addHpBar(XStringBuilder sb) {
-		sb.appendNewLine("HP: " + Utils.shorten(getHp()) + "/" + Utils.shorten(getMaxHp()));
+	public void addHpBar(I18N locale, XStringBuilder sb) {
+		sb.appendNewLine("HP: " + Utils.shorten(locale, getHp()) + "/" + Utils.shorten(locale, getMaxHp()));
 
 		int rd = getRegDeg().peek();
 		if (rd != 0) {
 			String icon = Utils.getEmoteString(rd > 0 ? "regen" : "degen");
-			sb.append(" (" + icon + Utils.shorten(Math.abs(rd)) + ")");
+			sb.append(" (" + icon + Utils.shorten(locale, Math.abs(rd)) + ")");
 		}
 
 		int max = getMaxHp();

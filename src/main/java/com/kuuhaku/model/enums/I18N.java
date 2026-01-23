@@ -25,7 +25,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Locale;
@@ -137,11 +137,7 @@ public enum I18N {
 	public String separate(Object value) {
 		try {
 			Number n = value instanceof Number nb ? nb : NumberUtils.createNumber(String.valueOf(value));
-			DecimalFormat df = new DecimalFormat();
-			df.setGroupingSize(3);
-			df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(locale));
-
-			return df.format(n);
+			return DecimalFormat.getInstance(locale).format(n);
 		} catch (NumberFormatException e) {
 			return String.valueOf(value);
 		}

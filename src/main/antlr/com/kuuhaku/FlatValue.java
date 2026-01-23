@@ -18,12 +18,14 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.util.Utils;
 
 public class FlatValue extends Value implements Invertable {
 	private double value;
 
-	public FlatValue(double value) {
+	public FlatValue(I18N locale, double value) {
+		super(locale);
 		this.value = value;
 	}
 
@@ -34,6 +36,6 @@ public class FlatValue extends Value implements Invertable {
 
 	@Override
 	public String toString() {
-		return Utils.roundToString(value, 2);
+		return Utils.roundToString(locale, value, 2);
 	}
 }
