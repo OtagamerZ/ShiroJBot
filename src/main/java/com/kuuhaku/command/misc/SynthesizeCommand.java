@@ -22,6 +22,7 @@ import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.InteractPage;
 import com.github.ygimenez.model.Page;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
+import com.github.ygimenez.type.Action;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -178,9 +179,6 @@ public class SynthesizeCommand implements Executable {
 						Button btn = w.getButton();
 						assert btn != null;
 
-						String id = btn.getCustomId();
-						assert id != null;
-
 						if (acc.getItemCount("chromatic_essence") == 0) {
 							event.channel().sendMessage(locale.get("error/no_chromatic")).queue();
 							return;
@@ -195,7 +193,7 @@ public class SynthesizeCommand implements Executable {
 						);
 
 						Pages.modifyButtons(w.getMessage(), p, Map.of(
-								btn.getCustomId(), Button::asDisabled
+								Action.getId(Utils.parseEmoji("1103779997317087364")), Button::asDisabled
 						));
 					})
 					.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {

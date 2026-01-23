@@ -304,7 +304,8 @@ public class HeroCommand implements Executable {
 			if (skills.size() <= j) skills.add(null);
 
 			int fi = j;
-			helper.addAction(locale.get("str/slot", j + 1), w -> {
+			String id = getButtonLabel.apply(j);
+			helper.addAction(id, w -> {
 				w.getChannel().sendMessage(locale.get("str/select_a_skill")).queue();
 
 				Message m = Utils.awaitMessage(
@@ -362,12 +363,9 @@ public class HeroCommand implements Executable {
 					i.set(pages.size() - 1);
 				}
 
-				Button btn = w.getButton();
-				if (btn != null && btn.getCustomId() != null) {
-					Pages.modifyButtons(w.getMessage(), pages.get(i.get()), Map.of(
-							btn.getCustomId(), b -> b.withLabel(getButtonLabel.apply(fi))
-					));
-				}
+				Pages.modifyButtons(w.getMessage(), pages.get(i.get()), Map.of(
+						id, b -> b.withLabel(getButtonLabel.apply(fi))
+				));
 			});
 		}
 
@@ -404,7 +402,11 @@ public class HeroCommand implements Executable {
 					JSONArray unlocked = h.getStats().getUnlockedSkills();
 					h.apply(n -> {
 						n.getStats().setUnlockedSkills(unlocked);
-						n.getCache().setSkills(skills);
+						n.getStats().setSkills(skills.stream()
+								.filter(Objects::nonNull)
+								.map(Skill::getId)
+								.collect(Collectors.toCollection(JSONArray::new))
+						);
 					});
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
@@ -412,16 +414,7 @@ public class HeroCommand implements Executable {
 
 		refresh.run();
 		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst())))
-				.queue(s -> {
-					Pages.buttonize(s, helper);
-					Pages.modifyButtons(s, null, Map.of(
-							locale.get("str/slot", 1), b -> b.withLabel(getButtonLabel.apply(0)),
-							locale.get("str/slot", 2), b -> b.withLabel(getButtonLabel.apply(1)),
-							locale.get("str/slot", 3), b -> b.withLabel(getButtonLabel.apply(2)),
-							locale.get("str/slot", 4), b -> b.withLabel(getButtonLabel.apply(3)),
-							locale.get("str/slot", 5), b -> b.withLabel(getButtonLabel.apply(4))
-					));
-				});
+				.queue(s -> Pages.buttonize(s, helper));
 	}
 
 	private void allocGear(I18N locale, Consumer<Message> restore, Hero h, Message msg) {
@@ -509,7 +502,7 @@ public class HeroCommand implements Executable {
 				.addAction(Utils.parseEmoji(Constants.RETURN), w -> restore.accept(w.getMessage()))
 				.addAction(Utils.parseEmoji(Constants.ACCEPT), w -> {
 					Equipment equips = h.getEquipment();
-					h.apply(n -> n.getCache().setEquipment(equips));
+					h.apply(n -> n.setEquipmentRefs(new JSONObject(equips.toString())));
 
 					w.getChannel().sendMessage(locale.get("success/changes_saved")).queue();
 				});
