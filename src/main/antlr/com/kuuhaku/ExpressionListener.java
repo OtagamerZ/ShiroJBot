@@ -37,7 +37,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 
 	@Override
 	public void enterLine(LineContext ctx) {
-		current = output = new Scalable();
+		current = output = new Scalable(locale);
 		flatten(ctx.expr());
 	}
 
@@ -62,7 +62,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 
 				curr.set(i, v);
 			} else {
-				current = (Scalable) curr.set(i, new Scalable());
+				current = (Scalable) curr.set(i, new Scalable(locale));
 				flatten(e);
 			}
 		}
@@ -85,7 +85,7 @@ public class ExpressionListener extends ShoukanExprBaseListener {
 
 				curr.set(i, v);
 			} else {
-				current = (Scalable) curr.set(i, new Scalable());
+				current = (Scalable) curr.set(i, new Scalable(locale));
 				flatten(e);
 			}
 		}

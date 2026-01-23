@@ -18,6 +18,8 @@
 
 package com.kuuhaku;
 
+import com.kuuhaku.model.enums.I18N;
+
 import java.util.Arrays;
 import java.util.Comparator;
 
@@ -25,6 +27,10 @@ public class Scalable extends Value {
 	private final Value[] values = new Value[2];
 	private String delimiter;
 	private boolean grouped;
+
+	public Scalable(I18N locale) {
+		super(locale);
+	}
 
 	public Value set(int pos, Value value) {
 		if (pos == 0) {
