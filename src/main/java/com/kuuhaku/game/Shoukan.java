@@ -1564,8 +1564,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 			double mult = val > 0 ? dmgMult : (100 * op.getStats().getHealMult().offset());
 			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString((getLocale(), 1 - mult) * 100, 2))
-				+")";
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
 			}
 		}
 		if (pHP != you.getHP()) {
