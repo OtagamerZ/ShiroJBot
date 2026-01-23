@@ -297,8 +297,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 							} else {
 								runEvent(nextNode, Event.getRandom(nextNode));
 							}
+
+							run.setVisited(nextNode);
 						}
-						case REST -> runEvent(nextNode, Event.find(Event.class, "REST"));
+						case REST -> {
+							runEvent(nextNode, Event.find(Event.class, "REST"));
+							run.setVisited(nextNode);
+						}
 						case RETURN -> {
 							runEvent(nextNode, Event.find(Event.class, "RETURN"));
 							if (map.getPlayerNode() == nextNode) {
@@ -312,6 +317,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						combat.get().process();
 
 						if (combat.get().isDone()) {
+							run.setVisited(nextNode);
 							if (combat.get().isWin()) {
 								grantCombatLoot();
 							} else if (nextNode.getType() != NodeType.EVENT) {

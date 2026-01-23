@@ -154,16 +154,18 @@ public class DungeonRun extends DAO<DungeonRun> {
 		sublevel = node.getSublevel().getNumber();
 		path = node.getPath();
 
-		if (!visitedNodes.contains(node.getId())) {
-			visitedNodes.add(node.getId());
-		}
-
 		AreaMap map = game.getMap();
 		map.getRenderFloor().set(floor);
 
 		nodeRng.setSeed(node.getSeed());
 		if (prevFloor != floor && dungeon.isInfinite()) {
 			map.generate(game);
+		}
+	}
+
+	public void setVisited(Node node) {
+		if (!visitedNodes.contains(node.getId())) {
+			visitedNodes.add(node.getId());
 		}
 	}
 
