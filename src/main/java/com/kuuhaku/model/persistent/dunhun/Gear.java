@@ -409,7 +409,10 @@ public class Gear extends DAO<Gear> {
 		if (base == null) return null;
 
 		double mult = 1;
+		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
+			dropLevel = source.getDropLevel();
+
 			if (source.getKiller() instanceof Hero h) {
 				mult *= h.getModifiers().getMagicFind(1);
 			}
@@ -443,7 +446,7 @@ public class Gear extends DAO<Gear> {
 
 		int mods = Calc.rng(1, rarity.getMaxMods());
 		for (int i = 0; i < mods; i++) {
-			Affix af = Affix.getRandom(out, null, rarity);
+			Affix af = Affix.getRandom(out, null, rarity, dropLevel);
 			if (af == null) break;
 
 			out.getAffixes().add(new GearAffix(out, af));

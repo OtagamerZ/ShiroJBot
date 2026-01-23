@@ -20,8 +20,8 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
-import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedBasetype;
 import com.kuuhaku.model.records.dunhun.GearStats;
@@ -90,15 +90,11 @@ public class Basetype extends DAO<Basetype> {
 
 	public static Basetype getRandom(Actor<?> source) {
 		Dunhun game = null;
+
 		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
 			game = source.getGame();
-			dropLevel = source.getLevel() + switch (source.getRarityClass()) {
-				case NORMAL -> 0;
-				case MAGIC -> 1;
-				case RARE -> 2;
-				case UNIQUE -> 5;
-			};
+			dropLevel = source.getDropLevel();
 		}
 
 		List<Object[]> bases = DAO.queryAllUnmapped("""

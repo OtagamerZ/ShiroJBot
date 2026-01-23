@@ -84,6 +84,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract int getLevel();
 
+	public int getDropLevel() {
+		return getGame().getAreaLevel() + switch (getRarityClass()) {
+			case MAGIC -> 1;
+			case RARE -> 2;
+			case UNIQUE -> 5;
+			default -> 0;
+		};
+	}
+
 	public abstract int getMaxHp();
 
 	public abstract int getMaxAp();

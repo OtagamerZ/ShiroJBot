@@ -20,15 +20,15 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
-import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedUnique;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 
 import java.util.HashSet;
@@ -120,12 +120,7 @@ public class Unique extends DAO<Unique> {
 		int dropLevel = Integer.MAX_VALUE;
 		if (source != null && source.getGame() != null) {
 			game = source.getGame();
-			dropLevel = source.getLevel() + switch (source.getRarityClass()) {
-				case NORMAL -> 0;
-				case MAGIC -> 1;
-				case RARE -> 2;
-				case UNIQUE -> 5;
-			};
+			dropLevel = source.getDropLevel();
 		}
 
 		List<Object[]> uqs = DAO.queryAllUnmapped("""
