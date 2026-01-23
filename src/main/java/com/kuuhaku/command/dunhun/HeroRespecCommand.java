@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
@@ -46,7 +47,6 @@ import net.dv8tion.jda.api.JDA;
 public class HeroRespecCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Account acc = data.profile().getAccount();
 		Deck d = data.profile().getAccount().getDeck();
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
@@ -69,8 +69,15 @@ public class HeroRespecCommand implements Executable {
 			points += h.getStats().getSkillPoints();
 		}
 
+		int cost = Calc.round(300 * Math.pow(1.075, points));
+
+		Account acc = data.profile().getAccount();
+		if (!acc.hasEnough(cost, Currency.CR)) {
+			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
+			return;
+		}
+
 		try {
-			int cost = Calc.round(300 * Math.pow(1.075, points));
 			Utils.confirm(locale.get("question/respec", points, cost), event.channel(), w -> {
 						if (acc.hasChanged()) {
 							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
