@@ -474,6 +474,7 @@ public class HeroCommand implements Executable {
 						return;
 					}
 
+					h.save();
 					msg.getChannel().sendMessage(locale.get("success/equipped")).queue();
 					ctx.get().run();
 				})
