@@ -316,8 +316,8 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 					.withVar("side", getSide())
 					.withVar("trigger", ep.trigger());
 
-			if (stats.getSource() instanceof Senshi) {
-				csm.withVar("me", stats.getSource());
+			if (stats.getSource() instanceof Senshi s) {
+				csm.withVar("me", s);
 			}
 
 			csm.run();
@@ -360,8 +360,8 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 					.withVar("side", getSide())
 					.withVar("trigger", trigger);
 
-			if (stats.getSource() instanceof Senshi) {
-				csm.withVar("me", stats.getSource());
+			if (stats.getSource() instanceof Senshi s) {
+				csm.withVar("me", s);
 			}
 
 			csm.run();

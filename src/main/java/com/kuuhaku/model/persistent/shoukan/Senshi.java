@@ -1440,22 +1440,23 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
 		else if (!getEffect().contains(trigger.name())) return;
 
+		Shoukan game = getGame();
 		if (trigger == ON_INITIALIZE) {
 			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
-				replace(new AugmentSenshi(this, Senshi.getRandom(getGame().getRng())));
+				replace(new AugmentSenshi(this, Senshi.getRandom(game.getRng())));
 				return;
 			}
 		} else if (trigger == ON_REMOVE) {
-			getGame().unbind(this);
+			game.unbind(this);
 		}
 
 		try {
 			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+			csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
 					.forScript(getEffect())
 					.withConst("me", this)
 					.withConst("self", this)
-					.withConst("game", getGame())
+					.withConst("game", game)
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())

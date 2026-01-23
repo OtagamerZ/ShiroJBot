@@ -526,7 +526,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			if (!isSpell()) {
 				if (this instanceof EquippableSenshi s) {
-					csm.withVar("me", s);
+					csm.withVar("me", s.getOriginal());
 				} else if (stats.getSource() instanceof Senshi s) {
 					csm.withVar("me", s);
 				}
@@ -587,16 +587,17 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE) || !hasEffect()) return;
 		else if (!getEffect().contains(trigger.name()) && !getTags().contains("STRATAGEM")) return;
 
+		Shoukan game = getGame();
 		if (trigger == ON_REMOVE) {
-			getGame().unbind(this);
+			game.unbind(this);
 		}
 
 		try {
 			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+			csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
 					.forScript(getEffect())
 					.withConst("evo", this)
-					.withConst("game", getGame())
+					.withConst("game", game)
 					.withConst("data", stats.getData())
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
@@ -604,7 +605,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 			if (!isSpell()) {
 				if (this instanceof EquippableSenshi s) {
-					csm.withVar("me", s);
+					csm.withVar("me", s.getOriginal());
 				} else if (stats.getSource() instanceof Senshi s) {
 					csm.withVar("me", s);
 				}
@@ -617,6 +618,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 
 			csm.run();
+		} catch (ActivationException e) {
+			game.getChannel().sendMessage(game.getString("error/spell", game.getString(e.getMessage()))).queue();
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 			String name = source.getVanity().getName();
