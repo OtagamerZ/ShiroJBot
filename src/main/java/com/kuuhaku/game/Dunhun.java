@@ -970,7 +970,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			return;
 		}
 
-		if (combat.get() != null) {
+		if (combat.get() != null && combat.get().getLock() != null) {
 			Actor<?> current = combat.get().getCurrent();
 			if (current != null) {
 				combat.get().getLock().complete(() -> current.setFleed(true));
