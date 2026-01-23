@@ -174,7 +174,7 @@ public class HeroInspectCommand implements Executable {
 		}
 
 		if (!attrs.isEmpty()) {
-			eb.appendDescription(String.join(" | ", attrs) + "\n");
+			eb.appendDescription("-# " + String.join(" | ", attrs) + "\n");
 		}
 
 		eb.appendDescription("\n");
