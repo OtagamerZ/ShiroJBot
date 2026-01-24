@@ -515,7 +515,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public CompletableFuture<Boolean> runCombat(Node node, Actor<?>... enemies) {
-		return runCombat(node, c -> c.getActors(Team.KEEPERS).addAll(List.of(enemies)));
+		return runCombat(node, List.of(enemies));
+	}
+
+	public CompletableFuture<Boolean> runCombat(Node node, List<Actor<?>> enemies) {
+		return runCombat(node, c -> c.getActors(Team.KEEPERS).addAll(enemies));
 	}
 
 	public CompletableFuture<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
