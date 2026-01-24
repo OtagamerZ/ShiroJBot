@@ -179,6 +179,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 			return Utils.getOr(out, key);
 		} catch (MissingFormatArgumentException e) {
+			Constants.LOGGER.warn("Missing format argument for key {}: {}", key, e.getMessage(), e);
 			return "";
 		}
 	}
