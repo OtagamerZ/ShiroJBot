@@ -57,6 +57,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class Dunhun extends GameInstance<NullPhase> {
@@ -511,20 +512,20 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(null);
 	}
 
-	public CompletableFuture<Boolean> runCombat(Node node) {
+	public Supplier<Boolean> runCombat(Node node) {
 		return runCombat(node, Utils::doNothing);
 	}
 
-	public CompletableFuture<Boolean> runCombat(Node node, Actor<?>... enemies) {
+	public Supplier<Boolean> runCombat(Node node, Actor<?>... enemies) {
 		return runCombat(node, List.of(enemies));
 	}
 
-	public CompletableFuture<Boolean> runCombat(Node node, List<Actor<?>> enemies) {
+	public Supplier<Boolean> runCombat(Node node, List<Actor<?>> enemies) {
 		return runCombat(node, c -> c.getActors(Team.KEEPERS).addAll(enemies));
 	}
 
-	public CompletableFuture<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
-		if (combat.get() != null) return CompletableFuture.completedFuture(true);
+	public Supplier<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
+		if (combat.get() != null) return () -> true;
 
 		combat.set(new Combat(this, node));
 		initializer.accept(combat.get());
@@ -543,10 +544,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
-		return CompletableFuture.supplyAsync(() -> {
+		return () -> {
 			combat.get().process();
 			return combat.get().isWin();
-		});
+		};
 	}
 
 	public void runEvent(Node node, Event evt) {

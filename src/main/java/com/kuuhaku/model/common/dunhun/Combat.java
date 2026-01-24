@@ -271,7 +271,7 @@ public class Combat implements Renderer<BufferedImage> {
 					sen.reduceDebuffs(1);
 					sen.reduceStasis(1);
 					for (Skill s : actor.getSkills()) {
-						if (s == null) return;
+						if (s == null) continue;
 						s.reduceCd();
 					}
 
