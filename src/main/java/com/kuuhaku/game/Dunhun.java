@@ -310,7 +310,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								run.setNode(currNode);
 							}
 						}
-						case BOSS -> beginCombat(nextNode, Boss.getRandom(nextNode));
+						case BOSS -> runCombat(nextNode, Boss.getRandom(nextNode));
 					}
 
 					if (combat.get() != null) {
@@ -510,12 +510,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(null);
 	}
 
-	public boolean runCombat(Node node) {
+	public CompletableFuture<Boolean> runCombat(Node node) {
 		return runCombat(node, Utils::doNothing);
 	}
 
-	public boolean runCombat(Node node, Consumer<Combat> initializer) {
-		if (combat.get() != null) return true;
+	public CompletableFuture<Boolean> runCombat(Node node, Actor<?>... enemies) {
+		return runCombat(node, c -> c.getActors(Team.KEEPERS).addAll(List.of(enemies)));
+	}
+
+	public CompletableFuture<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
+		if (combat.get() != null) return CompletableFuture.completedFuture(true);
 
 		combat.set(new Combat(this, node));
 		initializer.accept(combat.get());
@@ -534,42 +538,37 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 		}
 
-		combat.get().process();
-		return combat.get().isWin();
-	}
-
-	@SafeVarargs
-	public final <T extends MonsterBase<T>> void beginCombat(Node node, Actor<T>... enemies) {
-		if (combat.get() != null) return;
-		combat.set(new Combat(this, node, enemies));
+		return CompletableFuture.supplyAsync(() -> {
+			combat.get().process();
+			return combat.get().isWin();
+		});
 	}
 
 	public void runEvent(Node node, Event evt) {
 		if (evt == null) {
 			runCombat(node);
-			return;
-		}
+		} else {
+			EventDescription ed = evt.parse(this, node);
 
-		EventDescription ed = evt.parse(this, node);
+			EmbedBuilder eb = new ColorlessEmbedBuilder()
+					.setDescription(ed.description());
 
-		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setDescription(ed.description());
+			ButtonizeHelper helper = new ButtonizeHelper(true)
+					.setTimeout(5, TimeUnit.MINUTES)
+					.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
+					.setCancellable(false);
 
-		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setTimeout(5, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
-				.setCancellable(false);
+			Set<Choice> choices = new LinkedHashSet<>();
+			for (EventAction act : ed.actions()) {
+				choices.add(new Choice(act.action(), act.label(), _ ->
+						evt.getAction(act.action()).get()
+				));
+			}
 
-		Set<Choice> choices = new LinkedHashSet<>();
-		for (EventAction act : ed.actions()) {
-			choices.add(new Choice(act.action(), act.label(), _ ->
-					evt.getAction(act.action()).get()
-			));
-		}
-
-		try {
-			requestChoice(eb, null, helper, choices);
-		} catch (Exception ignore) {
+			try {
+				requestChoice(eb, null, helper, choices);
+			} catch (Exception ignore) {
+			}
 		}
 
 		if (combat.get() != null) {
