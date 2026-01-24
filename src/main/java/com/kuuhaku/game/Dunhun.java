@@ -269,7 +269,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 					try {
 						requestChoice(eb, bi, helper, choices);
 						if (isClosed()) return;
-					} catch (Exception ignore) {
+					} catch (Exception e) {
+						Constants.LOGGER.error("Error during dungeon runtime {}", e.getMessage(), e);
 						continue;
 					}
 
