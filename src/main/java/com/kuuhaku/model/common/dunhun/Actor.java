@@ -32,7 +32,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
 
-import javax.annotation.Nullable;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
@@ -576,7 +575,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				}
 				case MAGIC -> 1.25;
 				default -> 1;
-			} * MonsterBase.statTable[level] * (
+			} * MonsterBase.STAT_TABLE[level - 1] * (
 					getTeam() == Team.KEEPERS
 							? 0.7 + getGame().getPartySize() * 0.3
 							: 1

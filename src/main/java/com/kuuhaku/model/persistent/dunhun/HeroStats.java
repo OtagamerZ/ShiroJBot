@@ -37,12 +37,12 @@ import java.util.TreeMap;
 
 @Embeddable
 public class HeroStats implements Serializable {
-	private static final NavigableMap<Integer, Integer> xpTable = new TreeMap<>();
+	public static final NavigableMap<Integer, Integer> XP_TABLE = new TreeMap<>();
 
 	static {
-		xpTable.put(0, 1);
+		XP_TABLE.put(0, 1);
 		for (int i = 2; i <= Actor.MAX_LEVEL; i++) {
-			xpTable.put((int) (Math.pow(i, 2.5) * 10), i);
+			XP_TABLE.put((int) (Math.pow(i, 2.5) * 10), i);
 		}
 	}
 
@@ -74,7 +74,7 @@ public class HeroStats implements Serializable {
 	private transient RaceValues raceBonus;
 
 	public int getLevel() {
-		return xpTable.floorEntry(xp).getValue();
+		return XP_TABLE.floorEntry(xp).getValue();
 	}
 
 	public int getPointsLeft() {
@@ -94,11 +94,11 @@ public class HeroStats implements Serializable {
 	}
 
 	public int getXpToCurrent() {
-		return xpTable.floorKey(xp);
+		return XP_TABLE.floorKey(xp);
 	}
 
 	public int getXpToNext() {
-		return xpTable.ceilingKey(xp + 1);
+		return XP_TABLE.ceilingKey(xp + 1);
 	}
 
 	public int getLosableXp() {
