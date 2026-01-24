@@ -446,7 +446,10 @@ public class Gear extends DAO<Gear> {
 		if (rarity == RarityClass.UNIQUE) {
 			Unique u = Unique.getRandom(source);
 			if (u != null) {
-				return u.asGear();
+				Gear out = u.asGear();
+				out.setItemLevel(dropLevel);
+
+				return out;
 			}
 
 			rarity = RarityClass.RARE;
