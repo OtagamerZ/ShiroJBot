@@ -375,7 +375,7 @@ public abstract class DAO<T extends DAO<T>> {
 			T t = (T) em.find(getClass(), key);
 			copyFields(t);
 
-			return (T) this;
+			return (T) t;
 		});
 	}
 
