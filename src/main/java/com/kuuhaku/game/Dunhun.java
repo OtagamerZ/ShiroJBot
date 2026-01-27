@@ -348,14 +348,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 								gp.setValue(run.getFloor());
 								gp.save();
 
-								Main.getApp().getMessageChannelById("971503733202628698")
-										.sendMessage(getLocale().get("achievement/dungeon_floor",
-												h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(getLocale()).getName()
-										))
-										.queue();
-//									Utils.broadcast("achievement/dungeon_floor", loc -> List.of(
-//											h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(loc).getName()
-//									));
+								Utils.broadcast("achievement/dungeon_floor", loc -> List.of(
+										h.getName(), h.getAccount().getName(), run.getFloor(), dungeon.getInfo(loc).getName()
+								));
 							}
 						} catch (Exception ignore) {
 						}
@@ -434,16 +429,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					);
 
 					if (rank > 0) {
-						Main.getApp().getMessageChannelById("971503733202628698")
-								.sendMessage(getLocale().get("loss/dungeon_death",
-										h.getName(), rank, run.getFloor() + "-" + run.getSublevel(),
-										dungeon.getInfo(getLocale()).getName()
-								))
-								.queue();
-//						Utils.broadcast("loss/dungeon_death", loc -> List.of(
-//						h.getName(), rank, run.getFloor() + "-" + run.getSublevel(),
-//								dungeon.getInfo(getLocale()).getName()
-//						));
+						Utils.broadcast("loss/dungeon_death", loc -> List.of(
+								h.getName(), rank, run.getFloor() + "-" + run.getSublevel(),
+								dungeon.getInfo(loc).getName()
+						));
 					}
 				}
 			} catch (Exception ignore) {
