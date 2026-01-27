@@ -130,6 +130,8 @@ public class HeroSkillCommand implements Executable {
 			eb.appendDescription("-# " + locale.get("str/bonus_critical", text) + "\n");
 		}
 
+		eb.appendDescription("\n");
+
 		Attributes reqs = s.getRequirements().attributes();
 		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
 			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
@@ -145,10 +147,10 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		if (!attrs.isEmpty()) {
-			eb.appendDescription(String.join(" | ", attrs) + "\n");
+			eb.appendDescription("-# " + String.join(" | ", attrs) + "\n\n");
 		}
 
-		eb.appendDescription("\n" + s.getDescription(locale, h));
+		eb.appendDescription(s.getDescription(locale, h));
 		return eb;
 	}
 }
