@@ -59,13 +59,13 @@ public class HeroRespecCommand implements Executable {
 			return;
 		}
 
-		String type = args.getString("type", null);
+		String type = args.getString("type", "all");
 
 		int points = 0;
-		if (type == null || type.equals("attributes")) {
+		if (Utils.equalsAny(type, "attributes", "all")) {
 			points += h.getStats().getAttributePoints();
 		}
-		if (type == null || type.equals("skills")) {
+		if (Utils.equalsAny(type, "skills", "all")) {
 			points += h.getStats().getSkillPoints();
 		}
 
@@ -85,10 +85,10 @@ public class HeroRespecCommand implements Executable {
 						}
 
 						h.apply(n -> {
-							if (type == null || type.equals("attributes")) {
+							if (Utils.equalsAny(type, "attributes", "all")) {
 								n.getStats().setAttributes(new Attributes());
 							}
-							if (type == null || type.equals("skills")) {
+							if (Utils.equalsAny(type, "skills", "all")) {
 								n.getStats().getUnlockedSkills().clear();
 							}
 						});

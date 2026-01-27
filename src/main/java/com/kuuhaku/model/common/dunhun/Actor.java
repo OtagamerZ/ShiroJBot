@@ -496,8 +496,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		if (this instanceof Hero h) {
 			RaceValues bonus = h.getStats().getRaceBonus();
-			dmg = 100 + bonus.attack();
-			def = 100 + bonus.defense();
+			dmg = 150 + bonus.attack();
+			def = 150 + bonus.defense();
 			ddg = bonus.dodge();
 			pry = bonus.parry();
 			pow = (bonus.power() / 100d) + h.getAttributes().wis() * 0.05;

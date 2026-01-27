@@ -120,7 +120,7 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public int getMaxHp() {
-		int flat = 280 + stats.getRaceBonus().hp() + getLevel() * 20;
+		int flat = 300 + stats.getRaceBonus().hp() + getLevel() * 20;
 
 		return (int) Math.max(1, getModifiers().getMaxHp(flat) * (1 + getAttributes().vit() * 0.1));
 	}
