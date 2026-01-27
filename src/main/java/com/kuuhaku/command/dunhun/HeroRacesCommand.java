@@ -56,7 +56,7 @@ import java.util.List;
 		path = "races",
 		category = Category.MISC
 )
-@Syntax("<name:word:r> <race:word:r> <url:text>")
+@Syntax("<race:word>")
 public class HeroRacesCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
