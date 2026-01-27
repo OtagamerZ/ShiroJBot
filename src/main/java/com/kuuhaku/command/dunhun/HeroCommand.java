@@ -48,6 +48,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
@@ -344,7 +345,8 @@ public class HeroCommand implements Executable {
 					}
 
 					try {
-						boolean unlock = Utils.confirm(locale.get("question/unlock_skill"), w.getChannel(), n -> {
+						EmbedBuilder skillInfo = HeroSkillCommand.getSkillEmbed(locale, s, h);
+						boolean unlock = Utils.confirm(locale.get("question/unlock_skill"), skillInfo.build(), w.getChannel(), n -> {
 							h.getStats().getUnlockedSkills().add(s.getId());
 							return true;
 						}, m.getAuthor()).join();

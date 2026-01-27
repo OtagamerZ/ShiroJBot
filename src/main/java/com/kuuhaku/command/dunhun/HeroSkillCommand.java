@@ -41,6 +41,7 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
+import org.jspecify.annotations.NonNull;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -78,6 +79,17 @@ public class HeroSkillCommand implements Executable {
 			return;
 		}
 
+		MessageCreateAction ma = event.channel().sendMessageEmbeds(getSkillEmbed(locale, s, h).build());
+
+		File icon = IO.getResourceAsFile("dunhun/icons/type_" + (s.getStats().isSpell() ? "spell" : "martial") + ".png");
+		if (icon != null) {
+			ma.addFiles(FileUpload.fromData(icon, "thumb.png"));
+		}
+
+		ma.queue();
+	}
+
+	public static @NonNull EmbedBuilder getSkillEmbed(I18N locale, Skill s, Hero h) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
 				.setThumbnail("attachment://thumb.png");
 
@@ -137,14 +149,6 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		eb.appendDescription("\n" + s.getDescription(locale, h));
-
-		MessageCreateAction ma = event.channel().sendMessageEmbeds(eb.build());
-
-		File icon = IO.getResourceAsFile("dunhun/icons/type_" + (s.getStats().isSpell() ? "spell" : "martial") + ".png");
-		if (icon != null) {
-			ma.addFiles(FileUpload.fromData(icon, "thumb.png"));
-		}
-
-		ma.queue();
+		return eb;
 	}
 }
