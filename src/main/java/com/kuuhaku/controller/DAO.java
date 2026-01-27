@@ -357,6 +357,7 @@ public abstract class DAO<T extends DAO<T>> {
 		});
 	}
 
+	@SuppressWarnings("unchecked")
 	public void apply(@NotNull Consumer<T> consumer) {
 		Manager.getFactory().runInTransaction(em -> {
 			if (this instanceof Blacklistable lock) {
@@ -365,7 +366,7 @@ public abstract class DAO<T extends DAO<T>> {
 
 			T t = (T) refresh();
 			consumer.accept(t);
-			consumer.accept(this);
+			consumer.accept((T) this);
 			em.merge(t);
 		});
 	}
