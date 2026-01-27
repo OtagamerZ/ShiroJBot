@@ -364,7 +364,7 @@ public abstract class DAO<T extends DAO<T>> {
 				if (lock.isBlacklisted()) return;
 			}
 
-			T t = (T) refresh();
+			T t = refresh();
 			consumer.accept(t);
 			consumer.accept((T) this);
 			em.merge(t);
