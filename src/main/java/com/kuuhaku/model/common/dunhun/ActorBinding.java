@@ -45,7 +45,6 @@ public class ActorBinding {
 	}
 
 	public void unbind() {
-		game = null;
 		team = null;
 	}
 }

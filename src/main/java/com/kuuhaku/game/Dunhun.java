@@ -534,7 +534,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		Set<String> pool = node.getEnemyPool();
 		for (int i = 0; i < 4; i++) {
 			List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
-			if (!Calc.chance(100 - (25d + Math.max(0, 75 - level * 2)) / getPlayers().length * keepers.size(), getNodeRng())) break;
+			if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 			Monster chosen;
 			if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(getNodeRng(), pool));
