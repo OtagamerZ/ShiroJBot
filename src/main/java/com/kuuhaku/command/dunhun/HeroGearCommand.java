@@ -68,11 +68,11 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
-		path = "inspect",
+		path = "gear",
 		category = Category.STAFF
 )
 @Syntax("<gear:number:r>")
-public class HeroInspectCommand implements Executable {
+public class HeroGearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Deck d = data.profile().getAccount().getDeck();
