@@ -125,7 +125,7 @@ public class HeroRacesCommand implements Executable {
 			if (bonus.power() != 0) sb.appendNewLine(locale.get("str/bonus_power", Utils.sign(bonus.power())));
 
 			return new FieldMimic(
-					locale.get("race/" + r.getId().name()),
+					locale.get("race/" + r.getId().name()) + " (`" + r.getId().name() + "`)",
 					sb.toString()
 			).toString();
 		});
