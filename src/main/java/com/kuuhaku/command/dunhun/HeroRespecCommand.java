@@ -69,7 +69,7 @@ public class HeroRespecCommand implements Executable {
 			points += h.getStats().getSkillPoints();
 		}
 
-		int cost = Calc.round(300 * Math.pow(1.075, h.getLevel()));
+		int cost = Calc.round(300 * Math.pow(1.075, points));
 
 		Account acc = data.profile().getAccount();
 		if (!acc.hasEnough(cost, Currency.CR)) {
