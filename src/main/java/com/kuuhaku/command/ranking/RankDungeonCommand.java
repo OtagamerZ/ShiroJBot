@@ -42,7 +42,7 @@ import java.util.List;
 @Command(
 		name = "rank",
 		path = "dungeon",
-		category = Category.STAFF
+		category = Category.INFO
 )
 @Syntax("<dungeon:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)

@@ -39,7 +39,7 @@ import net.dv8tion.jda.api.JDA;
 @Command(
 		name = "hero",
 		path = "respecialize",
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax({
 		"<type:word>[attributes,skills]"

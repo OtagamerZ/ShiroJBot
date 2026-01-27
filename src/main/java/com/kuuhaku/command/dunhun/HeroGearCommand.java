@@ -69,7 +69,7 @@ import java.util.stream.Collectors;
 @Command(
 		name = "hero",
 		path = "gear",
-		category = Category.STAFF
+		category = Category.INFO
 )
 @Syntax("<gear:number:r>")
 public class HeroGearCommand implements Executable {

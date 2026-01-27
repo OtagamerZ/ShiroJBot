@@ -34,7 +34,7 @@ import net.dv8tion.jda.api.JDA;
 @Command(
 		name = "hero",
 		path = "unequip",
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax("<gear:number:r>")
 public class HeroUnequipCommand implements Executable {

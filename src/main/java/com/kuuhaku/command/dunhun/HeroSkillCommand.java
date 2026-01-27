@@ -50,7 +50,7 @@ import java.util.List;
 @Command(
 		name = "hero",
 		path = "skill",
-		category = Category.STAFF
+		category = Category.INFO
 )
 @Syntax("<skill:word:r>")
 public class HeroSkillCommand implements Executable {

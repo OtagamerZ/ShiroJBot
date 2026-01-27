@@ -41,7 +41,7 @@ import net.dv8tion.jda.api.entities.User;
 @Command(
 		name = "transfer",
 		path = "consumable",
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax("<user:user:r> <consumable:word:r> <amount:number>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)

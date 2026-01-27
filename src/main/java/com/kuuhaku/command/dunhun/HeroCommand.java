@@ -66,7 +66,7 @@ import java.util.stream.Collectors;
 
 @Command(
 		name = "hero",
-		category = Category.STAFF
+		category = Category.MISC
 )
 public class HeroCommand implements Executable {
 	@Override

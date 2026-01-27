@@ -40,7 +40,7 @@ import java.util.List;
 @Command(
 		name = "hero",
 		path = "consumables",
-		category = Category.STAFF
+		category = Category.INFO
 )
 public class HeroConsumablesCommand implements Executable {
 	@Override
