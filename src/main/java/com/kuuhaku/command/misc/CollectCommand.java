@@ -52,7 +52,7 @@ public class CollectCommand implements Executable {
 			} else if (Boolean.TRUE.equals(card.peekProperty(kp::hasCard))) {
 				event.channel().sendMessage(locale.get("error/owned")).queue();
 				return;
-			} else if (Boolean.TRUE.equals(card.peekProperty(kc -> !acc.hasEnough(kc.getPrice(), Currency.CR)))) {
+			} else if (Boolean.TRUE.equals(card.peekProperty(sc -> !acc.hasEnough(sc.getCollectPrice(), Currency.CR)))) {
 				event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
 				return;
 			}
@@ -65,7 +65,7 @@ public class CollectCommand implements Executable {
 			}
 			sc.save();
 
-			acc.consumeCR(sc.getPrice(), "Collected " + sc);
+			acc.consumeCR(sc.getCollectPrice(), "Collected " + sc);
 			acc.setDynValue("collected", NumberUtils.toInt(acc.getDynValue("collected", "0")) + 1);
 			event.channel().sendMessage(locale.get("success/collected", event.user().getAsMention(), sc)).queue();
 		} catch (NullPointerException e) {
