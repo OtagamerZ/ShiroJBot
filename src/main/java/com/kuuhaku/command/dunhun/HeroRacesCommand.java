@@ -126,7 +126,7 @@ public class HeroRacesCommand implements Executable {
 
 			return new FieldMimic(
 					locale.get("race/" + r.getId().name()),
-					bonus.toString()
+					sb.toString()
 			).toString();
 		});
 
