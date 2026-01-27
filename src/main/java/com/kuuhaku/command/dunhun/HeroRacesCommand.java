@@ -98,7 +98,16 @@ public class HeroRacesCommand implements Executable {
 		}
 
 		List<RaceBonus> bonuses = Arrays.stream(Race.validValues())
-				.map(r -> DAO.find(RaceBonus.class, r))
+				.map(r -> {
+					if (r.isPure()) {
+						return DAO.find(RaceBonus.class, r);
+					}
+
+					List<Race> races = r.split();
+					RaceValues vs = DAO.find(RaceBonus.class, races.getFirst()).getValues();
+
+					return new RaceBonus(r, vs.mix(DAO.find(RaceBonus.class, races.getLast()).getValues()));
+				})
 				.toList();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()

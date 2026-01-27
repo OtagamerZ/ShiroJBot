@@ -22,6 +22,14 @@ public class RaceBonus extends DAO<RaceBonus> {
 	@Embedded
 	private RaceValues values = new RaceValues();
 
+	public RaceBonus() {
+	}
+
+	public RaceBonus(Race id, RaceValues values) {
+		this.id = id;
+		this.values = values;
+	}
+
 	public Race getId() {
 		return id;
 	}
