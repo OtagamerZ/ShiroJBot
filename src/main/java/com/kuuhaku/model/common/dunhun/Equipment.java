@@ -180,7 +180,7 @@ public class Equipment implements Iterable<Gear> {
 		}
 
 		if (unarmed) {
-			out.add(JSONArray.of("UNARMED", "MELEE", "BLUNT"));
+			out.add(JSONArray.of("UNARMED", "MELEE", "BLUNT", "LIGHT"));
 		}
 
 		return out;
