@@ -507,6 +507,26 @@ public class Combat implements Renderer<BufferedImage> {
 							.filter(a -> !a.isOutOfCombat())
 							.toList();
 
+					AtomicBoolean force = new AtomicBoolean();
+					List<Skill> skills = collectCpuSkills(curr, force);
+
+					if (!skills.isEmpty()) {
+						Skill skill = Utils.getRandomEntry(skills);
+
+						List<Actor<?>> spellTgts = skill.getTargets(curr).stream()
+								.filter(Objects::nonNull)
+								.toList();
+
+						if (!spellTgts.isEmpty()) {
+							Actor<?> t = Utils.getWeightedEntry(rngList, criteria, spellTgts);
+
+							if (force.get() || !canAttack || Calc.chance(50)) {
+								skill(skill, curr, t);
+								return;
+							}
+						}
+					}
+
 					if (curr.getAp() == 1) {
 						double threat = attackTgts.stream()
 								.mapToInt(a -> a.getHp() * a.getThreatScore() / a.getMaxHp())
@@ -526,26 +546,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 							history.add(getLocale().get("str/actor_defend", curr.getName()));
 							return;
-						}
-					}
-
-					AtomicBoolean force = new AtomicBoolean();
-					List<Skill> skills = collectCpuSkills(curr, force);
-
-					if (!skills.isEmpty()) {
-						Skill skill = Utils.getRandomEntry(skills);
-
-						List<Actor<?>> spellTgts = skill.getTargets(curr).stream()
-								.filter(Objects::nonNull)
-								.toList();
-
-						if (!spellTgts.isEmpty()) {
-							Actor<?> t = Utils.getWeightedEntry(rngList, criteria, spellTgts);
-
-							if (force.get() || !canAttack || Calc.chance(50)) {
-								skill(skill, curr, t);
-								return;
-							}
 						}
 					}
 

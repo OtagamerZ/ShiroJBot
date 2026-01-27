@@ -295,6 +295,12 @@ public enum Race {
 		return NONE;
 	}
 
+	public static Race[] pureValues() {
+		return Arrays.stream(values())
+				.filter(Race::isPure)
+				.toArray(Race[]::new);
+	}
+
 	public static Race[] validValues() {
 		return Arrays.stream(values())
 				.filter(r -> r.ordinal() < MIXED.ordinal())
