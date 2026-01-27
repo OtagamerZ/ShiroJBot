@@ -78,7 +78,7 @@ public class HeroRacesCommand implements Executable {
 				return;
 			}
 
-			RaceValues bonus = DAO.find(RaceBonus.class, race.name()).getValues();
+			RaceValues bonus = DAO.find(RaceBonus.class, race).getValues();
 
 			XStringBuilder sb = new XStringBuilder();
 			if (bonus.hp() != 0) sb.appendNewLine(locale.get("str/bonus_hp", Utils.sign(bonus.hp())));
@@ -98,7 +98,7 @@ public class HeroRacesCommand implements Executable {
 		}
 
 		List<RaceBonus> bonuses = Arrays.stream(Race.validValues())
-				.map(r -> DAO.find(RaceBonus.class, r.name()))
+				.map(r -> DAO.find(RaceBonus.class, r))
 				.toList();
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
