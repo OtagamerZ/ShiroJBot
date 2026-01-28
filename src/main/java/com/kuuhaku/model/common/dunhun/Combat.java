@@ -20,6 +20,7 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.Loot;
+import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -396,14 +397,19 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
-					JSONArray req = skill.getRequirements().tags();
-					if (!req.isEmpty()) {
+					Requirements reqs = skill.getRequirements();
+
+					JSONArray reqTags = reqs.tags();
+					if (!reqTags.isEmpty()) {
 						for (JSONArray tags : wpnTags) {
-							if (!tags.containsAll(req)) {
+							if (!tags.containsAll(reqTags)) {
 								game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
 								return;
 							}
 						}
+					} else if (h.getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
+						game.getChannel().sendMessage(getLocale().get("error/insufficient_attributes")).queue();
+						return;
 					}
 
 					addSelector(w.getMessage(), helper, skill.getTargets(h),
@@ -571,8 +577,14 @@ public class Combat implements Renderer<BufferedImage> {
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 		}
 
-		ca.addFile(IO.getBytes(render(getLocale()), "png"), "cards.png")
-				.queue(m -> {
+		ca.addFile(IO.getBytes(
+
+						render(getLocale()), "png"), "cards.png")
+						.
+
+				queue(m ->
+
+				{
 					if (game.getMessage() != null) {
 						game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
 					}
