@@ -34,6 +34,7 @@ SELECT rank() OVER (ORDER BY r.floor DESC, r.sublevel DESC)
 FROM dungeon_run r
          INNER JOIN dungeon_run_player rp ON rp.dungeon_id = r.dungeon_id AND rp.hero_id = r.hero_id
 WHERE r.dungeon_id = $1
+  AND r.floor > 0
 GROUP BY r.hero_id, r.floor, r.sublevel
 HAVING count(rp.player_id) = 1
 ORDER BY r.floor DESC, r.sublevel DESC
