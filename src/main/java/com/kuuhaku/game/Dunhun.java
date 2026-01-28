@@ -671,7 +671,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			message.set(new Pair<>(s, helper));
 		});
 
-		lock.get(5, TimeUnit.MINUTES);
+		lock.join();
 		lock = null;
 
 		message.get().getFirst().delete().queue(null, Utils::doNothing);
@@ -963,6 +963,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 		if (isDuel()) {
 			reportResult(GameReport.GAME_TIMEOUT, "str/versus_end_timeout");
 			return;
+		}
+
+		if (lock != null) {
+			lock.complete(null);
 		}
 
 		if (combat.get() != null && combat.get().getLock() != null) {

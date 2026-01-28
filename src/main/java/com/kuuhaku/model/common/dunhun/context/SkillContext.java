@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun.context;
 
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.ygimenez.json.JSONObject;
 
@@ -57,10 +58,16 @@ public class SkillContext extends EffectContext<Usable> {
 	}
 
 	public List<Actor<?>> getAllies() {
-		return getGame().getCombat().getActors(origin.getTeam());
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return List.of();
+
+		return cbt.getActors(origin.getTeam());
 	}
 
 	public List<Actor<?>> getEnemies() {
-		return getGame().getCombat().getActors(origin.getTeam().getOther());
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return List.of();
+
+		return cbt.getActors(origin.getTeam().getOther());
 	}
 }
