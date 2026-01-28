@@ -69,6 +69,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	private transient JSONObject ctxVar = new JSONObject();
 	private transient ToggledEffect toggle = null;
 	private transient int cd = 0;
+	private transient boolean locked = false;
 
 	public Skill() {
 	}
@@ -189,6 +190,16 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	public void reduceCd() {
 		cd = Math.max(0, cd - 1);
+	}
+
+	@Override
+	public boolean isLocked() {
+		return locked;
+	}
+
+	@Override
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 
 	@Override

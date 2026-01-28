@@ -446,14 +446,20 @@ public class Combat implements Renderer<BufferedImage> {
 
 					addSelector(w.getMessage(), helper, con.getTargets(h),
 							t -> lock.complete(() -> {
-								int lastHistor = history.size();
-								if (con.execute(game, h, t)) {
-									h.consumeAp(1);
-									trigger(Trigger.ON_CONSUMABLE, h, t, con);
+								try {
+									if (con.isLocked()) return;
 
-									history.add(lastHistor, getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
-											h.getName(), con.getName(getLocale()), t.getName())
-									);
+									int lastHistor = history.size();
+									if (con.execute(game, h, t)) {
+										h.consumeAp(1);
+										trigger(Trigger.ON_CONSUMABLE, h, t, con);
+
+										history.add(lastHistor, getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
+												h.getName(), con.getName(getLocale()), t.getName())
+										);
+									}
+								} finally {
+									con.setLocked(false);
 								}
 							})
 					);
@@ -713,24 +719,30 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
-		int lastHistor = history.size();
-		boolean wasToggle = skill.getToggledEffect() != null;
-		if (skill.execute(game, source, target)) {
-			source.consumeAp(skill.getStats().getCost());
-			trigger(Trigger.ON_SPELL, source, target, skill);
+		try {
+			if (skill.isLocked()) return;
 
-			String action = target.equals(source) ? "str/used_self" : "str/used";
-			if (skill.getToggledEffect() == null) {
-				if (wasToggle) action = "str/toggle_deactivate";
+			int lastHistor = history.size();
+			boolean wasToggle = skill.getToggledEffect() != null;
+			if (skill.execute(game, source, target)) {
+				source.consumeAp(skill.getStats().getCost());
+				trigger(Trigger.ON_SPELL, source, target, skill);
 
-				if (skill.getStats().getCooldown() > 0) {
-					skill.setCooldown(skill.getStats().getCooldown());
+				String action = target.equals(source) ? "str/used_self" : "str/used";
+				if (skill.getToggledEffect() == null) {
+					if (wasToggle) action = "str/toggle_deactivate";
+
+					if (skill.getStats().getCooldown() > 0) {
+						skill.setCooldown(skill.getStats().getCooldown());
+					}
+				} else {
+					action = "str/toggle_activate";
 				}
-			} else {
-				action = "str/toggle_activate";
-			}
 
-			history.add(lastHistor, getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
+				history.add(lastHistor, getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
+			}
+		} finally {
+			skill.setLocked(false);
 		}
 	}
 

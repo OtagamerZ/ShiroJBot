@@ -68,6 +68,8 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
+	private transient boolean locked = false;
+
 	public String getId() {
 		return id;
 	}
@@ -125,6 +127,16 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean isLocked() {
+		return locked;
+	}
+
+	@Override
+	public void setLocked(boolean locked) {
+		this.locked = locked;
 	}
 
 	@Override

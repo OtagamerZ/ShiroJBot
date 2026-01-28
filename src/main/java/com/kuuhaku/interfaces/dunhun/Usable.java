@@ -11,5 +11,9 @@ public interface Usable {
 
 	boolean execute(Dunhun game, Actor<?> source, Actor<?> target);
 
+	boolean isLocked();
+
+	void setLocked(boolean locked);
+
 	Usable copyWith(double efficiency, double critical);
 }
