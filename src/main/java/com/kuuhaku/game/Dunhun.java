@@ -521,7 +521,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(new Combat(this, node));
 		initializer.accept(combat.get());
 
-		int level = getAreaLevel();
 		Set<String> pool = node.getEnemyPool();
 		for (int i = 0; i < 4; i++) {
 			List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
