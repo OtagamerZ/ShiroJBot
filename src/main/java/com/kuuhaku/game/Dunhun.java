@@ -966,7 +966,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		if (lock != null) {
-			lock.complete(null);
+			lock.completeExceptionally(new VoidException());
 		}
 
 		if (combat.get() != null && combat.get().getLock() != null) {
