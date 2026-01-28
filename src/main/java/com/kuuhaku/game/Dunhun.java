@@ -319,9 +319,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 						combat.get().process();
 
 						if (combat.get().isDone()) {
-							run.setVisited(nextNode);
 							if (combat.get().isWin()) {
 								grantCombatLoot();
+								run.setVisited(nextNode);
 							} else if (nextNode.getType() != NodeType.EVENT) {
 								try {
 									Collection<Hero> hs = heroes.values();
