@@ -50,7 +50,7 @@ public class Node {
 
 		if (sublevel != null && sublevel.getNumber() == sublevel.getFloor().size() - 1) {
 			DungeonRun run = sublevel.getFloor().getMap().getRun();
-			if (sublevel.getFloor().getNumber() % 5 == 0 && !run.getVisitedNodes().contains(getId())) {
+			if (sublevel.getFloor().getNumber() % 10 == 0 && !run.getVisitedNodes().contains(getId())) {
 				this.type = NodeType.BOSS;
 			} else {
 				this.type = NodeType.DANGER;
