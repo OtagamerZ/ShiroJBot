@@ -488,6 +488,11 @@ public class Combat implements Renderer<BufferedImage> {
 			Actor<?> curr = getCurrent();
 			cpu.schedule(() -> {
 				try {
+					if (!curr.getBinding().isBound()) {
+						curr.setAp(0);
+						return;
+					}
+
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
 					Function<Actor<?>, Integer> criteria = a -> {
