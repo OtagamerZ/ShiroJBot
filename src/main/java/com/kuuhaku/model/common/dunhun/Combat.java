@@ -343,7 +343,7 @@ public class Combat implements Renderer<BufferedImage> {
 		lock = new CompletableFuture<>();
 
 		ClusterAction ca;
-		if (getCurrent() instanceof Hero h) {
+		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 		} else {
 			ca = game.getChannel().sendEmbed(getEmbed());
