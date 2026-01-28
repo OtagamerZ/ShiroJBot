@@ -671,8 +671,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 			message.set(new Pair<>(s, helper));
 		});
 
-		lock.join();
-		lock = null;
+		try {
+			lock.join();
+		} catch (VoidException ignore) {
+		} finally {
+			lock = null;
+		}
 
 		message.get().getFirst().delete().queue(null, Utils::doNothing);
 		message.set(null);
