@@ -333,6 +333,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 								}
 							}
 						}
+
+						combat.set(null);
 					}
 
 					if (dungeon.isInfinite() && run.getFloor() % 10 == 0 && heroes.size() == 1) {
@@ -497,8 +499,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			});
 		}
-
-		combat.set(null);
 	}
 
 	public Supplier<Boolean> runCombat(Node node) {
