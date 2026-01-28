@@ -26,6 +26,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.HeroStats;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
@@ -85,11 +86,13 @@ public class HeroRespecCommand implements Executable {
 						}
 
 						h.apply(n -> {
+							HeroStats stats = n.getStats();
 							if (Utils.equalsAny(type, "attributes", "all")) {
-								n.getStats().setAttributes(new Attributes());
+								stats.setAttributes(new Attributes());
 							}
 							if (Utils.equalsAny(type, "skills", "all")) {
-								n.getStats().getUnlockedSkills().clear();
+								stats.getUnlockedSkills().clear();
+								stats.getSkills().clear();
 							}
 						});
 
