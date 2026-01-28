@@ -290,7 +290,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									* Math.pow(1.2, cbt.getGame().getModifiers().size())
 									* (cbt.getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
 
-							double dropFac = 35 * mult;
+							double dropFac = 30 * mult;
 							while (Calc.chance(dropFac)) {
 								Gear drop = Gear.getRandom(m);
 								if (drop != null) {
@@ -300,7 +300,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 								dropFac /= 2;
 							}
 
-							dropFac = 5 * mult;
+							dropFac = 10 * mult;
 							while (Calc.chance(dropFac)) {
 								GlobalDrop drop = GlobalDrop.getRandom(cbt.getGame());
 								if (drop == null) break;

@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.EffectBase;
@@ -353,6 +354,11 @@ public class Gear extends DAO<Gear> {
 
 		Set<GearAffix> meta = new HashSet<>();
 		for (GearAffix ga : getAllAffixes()) {
+			if (ga == null) {
+				Constants.LOGGER.warn("Null affix found in gear {}!", id);
+				continue;
+			}
+
 			if (ga.getAffix().getTags().contains("META")) {
 				meta.add(ga);
 				continue;

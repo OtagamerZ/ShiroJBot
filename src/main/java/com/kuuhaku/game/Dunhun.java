@@ -271,6 +271,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						requestChoice(eb, bi, helper, choices);
 						if (isClosed()) return;
 					} catch (Exception e) {
+						if (e instanceof VoidException) continue;
+
 						Constants.LOGGER.error("Error during dungeon runtime {}", e.getMessage(), e);
 						continue;
 					}
@@ -696,10 +698,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 					names.add(i.getName(getLocale()) + " (x" + loot.items().getCount(i) + ")");
 				}
 
-				getChannel().buffer(
-						getLocale().get("str/dungeon_loot_single") +
-								"\n```" + Utils.properlyJoin(getLocale(), names) + "```"
-				);
+				String loot = Utils.properlyJoin(getLocale(), names);
+				if (loot.length() > Message.MAX_CONTENT_LENGTH * 0.75) {
+					loot = String.join("\n", names);
+
+					getChannel().sendMessage(getLocale().get("str/dungeon_loot_single"))
+							.addFile(loot.getBytes(StandardCharsets.UTF_8), "loot.txt")
+							.queue();
+				} else {
+					getChannel().buffer(getLocale().get("str/dungeon_loot_single") + "\n```" + loot + "```");
+				}
 			} else {
 				InfiniteList<Hero> robin = new InfiniteList<>(heroes.values());
 				Collections.shuffle(robin);
