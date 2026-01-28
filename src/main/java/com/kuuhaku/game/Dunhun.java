@@ -430,7 +430,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							dungeon.getId(), h.getId()
 					);
 
-					if (rank > 0) {
+					if (rank > 0 && rank <= 3) {
 						Utils.broadcast("loss/dungeon_death", loc -> List.of(
 								h.getName(), rank, run.getFloor() + "-" + run.getSublevel(),
 								dungeon.getInfo(loc).getName()
