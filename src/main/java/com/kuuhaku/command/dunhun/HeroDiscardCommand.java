@@ -129,7 +129,7 @@ public class HeroDiscardCommand implements Executable {
 
 						h.apply(n -> {
 							for (Consumable c : consumables.uniqueSet()) {
-								n.modConsumableCount(c, consumables.getCount(c));
+								n.modConsumableCount(c, -consumables.getCount(c));
 							}
 						});
 
