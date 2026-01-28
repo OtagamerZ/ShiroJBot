@@ -28,6 +28,12 @@ public record Loot(I18N locale, List<Gear> gear, Bag<UserItem> items, AtomicInte
 		xp.addAndGet(lt.xp.get());
 	}
 
+	public void remove(Loot lt) {
+		lt.gear().forEach(gear::remove);
+		lt.items().forEach(items::remove);
+		xp.addAndGet(-lt.xp.get());
+	}
+
 	public List<String> names() {
 		List<String> out = new ArrayList<>();
 		for (Gear g : gear) {
