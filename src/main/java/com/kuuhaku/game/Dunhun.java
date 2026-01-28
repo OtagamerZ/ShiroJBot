@@ -271,7 +271,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						requestChoice(eb, bi, helper, choices);
 						if (isClosed()) return;
 					} catch (Exception e) {
-						if (e instanceof VoidException) continue;
+						if (e.getCause() instanceof VoidException) continue;
 
 						Constants.LOGGER.error("Error during dungeon runtime {}", e.getMessage(), e);
 						continue;
