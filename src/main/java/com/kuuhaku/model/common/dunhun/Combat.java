@@ -91,7 +91,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Loot loot;
 
 	private CompletableFuture<Runnable> lock;
-	private boolean done;
+	private boolean initialized, done;
 	private Boolean win;
 
 	public Combat(Dunhun game, Node node, Actor<?>... enemies) {
@@ -149,7 +149,9 @@ public class Combat implements Renderer<BufferedImage> {
 	public void onRemoveActor(Actor<?> actor) {
 		trigger(Trigger.ON_REMOVE, actor, actor, null);
 		actors.remove(actor);
-		actor.destroy();
+		if (initialized) {
+			actor.destroy();
+		}
 	}
 
 	@Override
@@ -250,6 +252,7 @@ public class Combat implements Renderer<BufferedImage> {
 	public void process() {
 		if (done) return;
 
+		initialized = true;
 		trigger(Trigger.ON_COMBAT);
 
 		rngList.clear();
