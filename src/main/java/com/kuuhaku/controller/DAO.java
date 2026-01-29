@@ -221,16 +221,14 @@ public abstract class DAO<T extends DAO<T>> {
 	}
 
 	public static <T extends DAO<T>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
-		Manager.getFactory().runInTransaction(em -> {
-			T obj = em.find(klass, id);
-			if (obj == null) return;
-			else if (obj instanceof Blacklistable lock) {
-				if (lock.isBlacklisted()) return;
-			}
+		T obj = find(klass, id);
+		if (obj == null) return;
+		else if (obj instanceof Blacklistable lock) {
+			if (lock.isBlacklisted()) return;
+		}
 
-			consumer.accept(obj);
-			obj.save();
-		});
+		consumer.accept(obj);
+		obj.save();
 	}
 
 	@SuppressWarnings("SqlSourceToSinkFlow")
@@ -334,7 +332,12 @@ public abstract class DAO<T extends DAO<T>> {
 					}
 				}
 
-				em.remove(ent);
+				try {
+					ent.beforeDelete();
+					em.remove(ent);
+				} finally {
+					ent.afterDelete();
+				}
 			}
 		});
 	}
