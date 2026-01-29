@@ -38,6 +38,7 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
@@ -94,9 +95,10 @@ public class Event extends DAO<Event> {
 
 		if (script != null) {
 			try {
-				Utils.exec(id, script, Map.of(
-						"ctx", new EventContext(game, this, node)
-				));
+				EventContext ctx = new EventContext(game, this, node, desc);
+				Utils.exec(id, script, Map.of("ctx", ctx));
+
+				desc = ctx.getDescription().get();
 			} catch (Exception e) {
 				Constants.LOGGER.warn("Failed to execute event {}", id, e);
 			}
