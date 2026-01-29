@@ -358,7 +358,7 @@ public abstract class DAO<T extends DAO<T>> {
 	}
 
 	public void apply(@NotNull Consumer<T> consumer) {
-		Manager.getFactory().runInTransaction(em -> {
+		Manager.getFactory().runInTransaction(_ -> {
 			if (this instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
 			}
@@ -384,7 +384,7 @@ public abstract class DAO<T extends DAO<T>> {
 
 	public final void delete() {
 		Manager.getFactory().runInTransaction(em -> {
-			DAO<T> ent;
+			DAO<?> ent;
 			if (em.contains(this)) {
 				ent = this;
 			} else {
