@@ -295,6 +295,24 @@ public class Hero extends Actor<Hero> {
 	}
 
 	@Override
+	public void beforeSave() {
+		Equipment equipCache = getCache().peekEquipment();
+		if (equipCache != null) {
+			equipment = new JSONObject(equipCache.toString());
+		}
+
+		List<Skill> skillCache = getCache().peekSkills();
+		if (skillCache != null) {
+			stats.setSkills(skillCache.stream()
+					.filter(Objects::nonNull)
+					.map(Skill::getId)
+					.filter(id -> stats.getUnlockedSkills().contains(id))
+					.collect(Collectors.toCollection(JSONArray::new))
+			);
+		}
+	}
+
+	@Override
 	public void beforeDelete() {
 		List<Integer> ids = DAO.queryAllNative(Integer.class, """
 				SELECT g.id
