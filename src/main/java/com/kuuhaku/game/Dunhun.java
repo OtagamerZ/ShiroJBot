@@ -941,7 +941,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		if (dungeon.getAreaLevel() == 0) {
 			int floor = fl.getNumber();
-			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 50), 83) + extraLevel;
+			return 1 + Math.min(floor * 83 / 25 * floor / (floor + 25), 83) + extraLevel;
 		}
 
 		return dungeon.getAreaLevel() + extraLevel;
