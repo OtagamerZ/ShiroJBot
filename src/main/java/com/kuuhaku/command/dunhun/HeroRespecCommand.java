@@ -70,6 +70,11 @@ public class HeroRespecCommand implements Executable {
 			points += h.getStats().getSkillPoints();
 		}
 
+		if (points <= 0) {
+			event.channel().sendMessage(locale.get("error/no_respec", data.config().getPrefix())).queue();
+			return;
+		}
+
 		int cost = Calc.round(300 * Math.pow(1.075, points));
 
 		Account acc = data.profile().getAccount();
