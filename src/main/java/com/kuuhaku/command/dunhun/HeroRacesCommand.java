@@ -78,7 +78,15 @@ public class HeroRacesCommand implements Executable {
 				return;
 			}
 
-			RaceValues bonus = DAO.find(RaceBonus.class, race).getValues();
+			RaceValues bonus;
+			if (race.isPure()) {
+				bonus = DAO.find(RaceBonus.class, race).getValues();
+			} else {
+				List<Race> races = race.split();
+				RaceValues vs = DAO.find(RaceBonus.class, races.getFirst()).getValues();
+
+				bonus = new RaceBonus(race, vs.mix(DAO.find(RaceBonus.class, races.getLast()).getValues())).getValues();
+			}
 
 			XStringBuilder sb = new XStringBuilder();
 			if (bonus.hp() != 0) sb.appendNewLine(locale.get("str/bonus_hp", Utils.sign(bonus.hp())));
