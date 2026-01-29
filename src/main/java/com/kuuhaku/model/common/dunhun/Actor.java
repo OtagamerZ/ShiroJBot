@@ -600,14 +600,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		CardExtra stats = senshi.getStats();
 		stats.getAtk().set(new FlatMod(() -> modifiers.getDamage(baseDmg) * mult));
-		stats.getDfs().set(new FlatMod(() -> modifiers.getDefense(baseDef) * mult));
+		stats.getDfs().set(new FlatMod(() -> modifiers.getDefense(baseDef) * mult * 0.75));
 		stats.getDodge().set(new FlatMod(() -> modifiers.getDodge(baseDdg)));
 		stats.getParry().set(new FlatMod(() -> modifiers.getParry(basePry)));
 		stats.getPower().set(new MultMod(() -> modifiers.getPower(pow)));
 
 		CombatCardAttributes base = senshi.getBase();
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
-		base.setMana(1 + (base.getAtk() + base.getDfs()) / 750 + effCost);
+		base.setMana((int) (1 + (base.getAtk() + base.getDfs()) * senshi.getPower() / 750 + effCost));
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);
 
 		if (this instanceof Hero) {
