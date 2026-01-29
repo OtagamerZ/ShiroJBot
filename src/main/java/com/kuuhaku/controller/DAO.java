@@ -222,7 +222,7 @@ public abstract class DAO<T extends DAO<T>> {
 
 	public static <T extends DAO<T>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		Manager.getFactory().runInTransaction(em -> {
-			T obj = find(klass, id);
+			T obj = em.find(klass, id);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
@@ -327,7 +327,7 @@ public abstract class DAO<T extends DAO<T>> {
 				DAO<?> ent = entry;
 				if (!em.contains(entry)) {
 					Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entry);
-					ent = find(entry.getClass(), key);
+					ent = em.find(entry.getClass(), key);
 
 					if (ent == null) {
 						throw new EntityNotFoundException("Could not delete entity of class " + entry.getClass().getSimpleName() + " [" + key + "]");
@@ -389,7 +389,7 @@ public abstract class DAO<T extends DAO<T>> {
 				ent = this;
 			} else {
 				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				ent = find(getClass(), key);
+				ent = em.find(getClass(), key);
 
 				if (ent == null) {
 					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");
