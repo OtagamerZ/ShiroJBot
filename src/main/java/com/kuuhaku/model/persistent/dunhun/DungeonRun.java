@@ -181,6 +181,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return ListUtils.unmodifiableList(modifiers);
 	}
 
+	public void removeModifier(String id) {
+		modifiers.removeIf(mod -> mod.getId().equals(id));
+	}
+
 	public boolean addModifier(RunModifier modifier) {
 		String family = modifier.getModFamily();
 

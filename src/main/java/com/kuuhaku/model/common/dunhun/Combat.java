@@ -128,7 +128,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public boolean onAddActor(Actor<?> actor, Team team) {
 		List<Actor<?>> acts = getActors(team);
-		if (acts.size() >= 6) {
+		if (acts.size() > 5 && !actor.isEssential()) {
 			actor.destroy();
 			return false;
 		}
@@ -848,6 +848,8 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public List<Actor<?>> getActors(Team team, boolean removeDead) {
+		if (team == null) return new ArrayList<>();
+
 		List<Actor<?>> out = switch (team) {
 			case HUNTERS -> hunters;
 			case KEEPERS -> keepers;

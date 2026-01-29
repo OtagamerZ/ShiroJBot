@@ -220,16 +220,16 @@ public abstract class DAO<T extends DAO<T>> {
 		});
 	}
 
-	public static <T extends DAO<?>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
+	public static <T extends DAO<T>, ID> void apply(@NotNull Class<T> klass, @NotNull ID id, @NotNull Consumer<T> consumer) {
 		Manager.getFactory().runInTransaction(em -> {
-			T obj = em.find(klass, id);
+			T obj = find(klass, id);
 			if (obj == null) return;
 			else if (obj instanceof Blacklistable lock) {
 				if (lock.isBlacklisted()) return;
 			}
 
 			consumer.accept(obj);
-			em.merge(obj);
+			obj.save();
 		});
 	}
 
@@ -327,7 +327,7 @@ public abstract class DAO<T extends DAO<T>> {
 				DAO<?> ent = entry;
 				if (!em.contains(entry)) {
 					Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(entry);
-					ent = em.find(entry.getClass(), key);
+					ent = find(entry.getClass(), key);
 
 					if (ent == null) {
 						throw new EntityNotFoundException("Could not delete entity of class " + entry.getClass().getSimpleName() + " [" + key + "]");
@@ -365,7 +365,7 @@ public abstract class DAO<T extends DAO<T>> {
 
 			T t = refresh();
 			consumer.accept(t);
-			em.merge(t);
+			t.save();
 
 			copyFields(t);
 		});
@@ -375,21 +375,21 @@ public abstract class DAO<T extends DAO<T>> {
 	public final T refresh() {
 		return Manager.getFactory().callInTransaction(em -> {
 			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-			T t = (T) em.find(getClass(), key);
+			T t = (T) find(getClass(), key);
 			copyFields(t);
 
-			return (T) t;
+			return t;
 		});
 	}
 
 	public final void delete() {
 		Manager.getFactory().runInTransaction(em -> {
-			DAO<?> ent;
+			DAO<T> ent;
 			if (em.contains(this)) {
 				ent = this;
 			} else {
 				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-				ent = em.find(getClass(), key);
+				ent = find(getClass(), key);
 
 				if (ent == null) {
 					throw new EntityNotFoundException("Could not delete entity of class " + getClass().getSimpleName() + " [" + key + "]");

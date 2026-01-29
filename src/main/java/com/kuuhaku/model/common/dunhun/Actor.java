@@ -58,6 +58,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
 	private transient boolean fleed;
+	private transient boolean essential;
 
 	public Actor() {
 	}
@@ -364,6 +365,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		setAp(0);
 		this.fleed = fleed;
+	}
+
+	public boolean isEssential() {
+		return essential;
+	}
+
+	public void setEssential(boolean essential) {
+		this.essential = essential;
 	}
 
 	public boolean isOutOfCombat() {
