@@ -59,14 +59,13 @@ public class HeroEquipCommand implements Executable {
 			return;
 		}
 
-		GearStats stats = g.getBasetype().getStats();
 		if (!h.getEquipment().equip(g)) {
 			event.channel().sendMessage(locale.get("error/slot_full")).queue();
 			return;
-		} else if (h.getLevel() < g.getReqLevel()) {
+		} else if (h.getLevel() < g.getRequirements().level()) {
 			event.channel().sendMessage(locale.get("error/insufficient_level")).queue();
 			return;
-		} else if (!h.getAttributes().has(stats.requirements().attributes())) {
+		} else if (!h.getAttributes().has(g.getRequirements().attributes())) {
 			event.channel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 			return;
 		}

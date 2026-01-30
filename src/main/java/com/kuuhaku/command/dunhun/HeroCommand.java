@@ -456,11 +456,10 @@ public class HeroCommand implements Executable {
 						w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 						return;
 					} else {
-						GearStats stats = g.getBasetype().getStats();
-						if (h.getLevel() < g.getReqLevel()) {
+						if (h.getLevel() < g.getRequirements().level()) {
 							w.getChannel().sendMessage(locale.get("error/insufficient_level")).queue();
 							return;
-						} else if (!h.getAttributes().has(stats.requirements().attributes())) {
+						} else if (!h.getAttributes().has(g.getRequirements().attributes())) {
 							w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 							return;
 						}

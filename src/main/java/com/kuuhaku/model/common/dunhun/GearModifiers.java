@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.common.shoukan.ValueMod;
+import com.kuuhaku.model.records.dunhun.Requirements;
 
 import java.lang.reflect.Field;
 import java.util.HashSet;
@@ -34,6 +35,7 @@ public class GearModifiers {
 	private final CumValue suffixes = new CumValue();
 
 	private final Set<String> addedTags = new HashSet<>();
+	private final Set<Requirements> addedRequirements = new HashSet<>();
 
 	public static final Field[] fieldCache = GearModifiers.class.getDeclaredFields();
 
@@ -59,6 +61,10 @@ public class GearModifiers {
 
 	public Set<String> getAddedTags() {
 		return addedTags;
+	}
+
+	public Set<Requirements> getAddedRequirements() {
+		return addedRequirements;
 	}
 
 	public void expireMods() {

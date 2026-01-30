@@ -42,6 +42,7 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.GearStats;
+import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -159,18 +160,19 @@ public class HeroGearCommand implements Executable {
 			eb.appendDescription("\n");
 		}
 
-		Attributes reqs = stats.requirements().attributes();
-		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0 || g.getReqLevel() > 1) {
+		Requirements gearReq = g.getRequirements();
+		Attributes gearAttr = gearReq.attributes();
+		if (gearAttr.str() + gearAttr.dex() + gearAttr.wis() + gearAttr.vit() > 0 || gearReq.level() > 1) {
 			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
 		}
 
 		List<String> attrs = new ArrayList<>();
-		if (g.getReqLevel() > 1) attrs.add(locale.get("str/level", g.getReqLevel()));
+		if (gearReq.level() > 1) attrs.add(locale.get("str/level", gearReq.level()));
 
 		for (AttrType t : AttrType.values()) {
 			if (t.ordinal() >= AttrType.LVL.ordinal()) break;
 
-			if (reqs.get(t) > 0) attrs.add(t + ": " + reqs.get(t) + " ");
+			if (gearAttr.get(t) > 0) attrs.add(t + ": " + gearAttr.get(t) + " ");
 		}
 
 		if (!attrs.isEmpty()) {

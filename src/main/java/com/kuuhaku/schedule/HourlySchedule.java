@@ -98,9 +98,13 @@ public class HourlySchedule implements Runnable, PreInitialize {
 							.queue(null, Utils::doNothing);
 				}
 			} finally {
+				System.out.println("1");
 				SCHED_REMINDERS.remove(r.getId());
+				System.out.println("2");
 				r.setReminded(true);
+				System.out.println("3" + r.wasReminded());
 				r.save();
+				System.out.println("4");
 			}
 		}, now.until(r.getDue(), ChronoUnit.MILLIS), TimeUnit.MILLISECONDS);
 	}

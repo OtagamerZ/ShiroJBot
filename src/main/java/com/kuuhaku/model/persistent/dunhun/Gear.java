@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.records.dunhun.Attributes;
+import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -119,8 +120,19 @@ public class Gear extends DAO<Gear> {
 		return basetype;
 	}
 
-	public int getReqLevel() {
-		return basetype.getStats().requirements().level();
+	public Requirements getRequirements() {
+		Requirements reqs = basetype.getStats().requirements();
+
+		int lvl = reqs.level();
+		Attributes att = reqs.attributes();
+		JSONArray tags = new JSONArray(reqs.tags());
+		for (Requirements req : modifiers.getAddedRequirements()) {
+			lvl += req.level();
+			att = att.plus(req.attributes());
+			tags.addAll(req.tags());
+		}
+
+		return new Requirements(lvl, att, tags);
 	}
 
 	public boolean isWeapon() {
