@@ -86,7 +86,6 @@ public class HourlySchedule implements Runnable, PreInitialize {
 		SCHED_REMINDERS.add(r.getId());
 		exec.schedule(() -> {
 			try {
-				Reminder rem =
 				Account acc = r.getAccount();
 				I18N locale = acc.getEstimateLocale();
 				User u = acc.getUser();
