@@ -351,7 +351,16 @@ public abstract class DAO<T extends DAO<T>> {
 
 			try {
 				beforeSave();
-				T t = em.merge((T) this);
+
+				Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
+				T t;
+				if (key == null || em.find(getClass(), key) == null) {
+					em.persist(this);
+					t = (T) this;
+				} else {
+					t = em.merge((T) this);
+				}
+
 				copyFields(t);
 				return t;
 			} finally {
