@@ -360,6 +360,11 @@ public class Combat implements Renderer<BufferedImage> {
 					.setCancellable(false);
 
 			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
+				if (h.getAttackAp() > h.getAp()) {
+					game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
+					return;
+				}
+
 				List<Actor<?>> tgts = new ArrayList<>();
 				for (Actor<?> a : getActors(h.getTeam().getOther())) {
 					Actor<?> actor = a.isOutOfCombat() ? null : a;
@@ -715,7 +720,7 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor<?> source, Actor<?> target) {
-		source.consumeAp(1);
+		source.consumeAp(source.getAttackAp());
 		history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 
 		target.damage(source, Skill.DEFAULT_ATTACK, source.getSenshi().getDmg());

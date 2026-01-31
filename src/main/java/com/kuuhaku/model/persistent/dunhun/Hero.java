@@ -138,6 +138,15 @@ public class Hero extends Actor<Hero> {
 	}
 
 	@Override
+	public int getAttackAp() {
+		for (JSONArray tags : getEquipment().getWeaponTags()) {
+			if (tags.contains("DUAL_WIELD")) return 2;
+		}
+
+		return 1;
+	}
+
+	@Override
 	public int getInitiative() {
 		double flat = getLevel() / 3.0;
 
@@ -146,10 +155,13 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public double getCritical() {
-		double flat = getEquipment().getWeaponList().stream()
-				.filter(Gear::isWeapon)
-				.mapToDouble(Gear::getCritical)
-				.average().orElse(0) + stats.getRaceBonus().critical();
+		double flat = stats.getRaceBonus().critical();
+		for (Gear g : getEquipment().getWeaponList()) {
+			if (!g.isWeapon()) continue;
+			else if (flat == 0) flat = g.getCritical();
+
+			flat = (1 - ((100 - flat / 100) * (100 - g.getCritical() / 100))) * 100;
+		}
 
 		return Calc.clamp(getModifiers().getCritical(flat), 0, 100);
 	}

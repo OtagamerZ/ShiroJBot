@@ -115,6 +115,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract int getApCap();
 
+	public int getAttackAp() {
+		return 1;
+	}
+
 	public abstract int getInitiative();
 
 	public abstract double getCritical();
@@ -556,17 +560,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					mult *= 1 + total.str() * 0.05f;
 				}
 
-				if (g.getTags().contains("OFFHAND")) {
-					dmg += (int) (g.getDmg() * mult);
-				} else {
-					int d = (int) (g.getDmg() * mult);
-					if (wDmg > 0) {
-						wDmg = (int) ((wDmg + d) * 0.6);
-					} else {
-						wDmg += d;
-					}
-				}
-
+				dmg += (int) (g.getDmg() * mult);
 			}
 
 			def += g.getDfs();
