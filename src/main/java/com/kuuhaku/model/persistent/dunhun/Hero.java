@@ -138,15 +138,6 @@ public class Hero extends Actor<Hero> {
 	}
 
 	@Override
-	public int getAttackAp() {
-		for (JSONArray tags : getEquipment().getWeaponTags()) {
-			if (tags.contains("DUAL_WIELD")) return 2;
-		}
-
-		return 1;
-	}
-
-	@Override
 	public int getInitiative() {
 		double flat = getLevel() / 3.0;
 

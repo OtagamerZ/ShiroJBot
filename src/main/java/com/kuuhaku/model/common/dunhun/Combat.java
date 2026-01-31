@@ -360,11 +360,6 @@ public class Combat implements Renderer<BufferedImage> {
 					.setCancellable(false);
 
 			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
-				if (h.getAttackAp() > h.getAp()) {
-					game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
-					return;
-				}
-
 				List<Actor<?>> tgts = new ArrayList<>();
 				for (Actor<?> a : getActors(h.getTeam().getOther())) {
 					Actor<?> actor = a.isOutOfCombat() ? null : a;
@@ -720,9 +715,26 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor<?> source, Actor<?> target) {
-		source.consumeAp(source.getAttackAp());
 		history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
 
+		if (source instanceof Hero h) {
+			List<Gear> wpns = h.getEquipment().getWeaponList().stream()
+					.filter(Gear::isWeapon)
+					.toList();
+
+			if (wpns.size() > 1) {
+				for (int i = 0; i < wpns.size(); i++) {
+					if (h.getAp() <= 0) break;
+
+					source.consumeAp(1);
+					target.damage(source, Skill.DEFAULT_ATTACK, (int) (source.getSenshi().getDmg() * 0.6));
+				}
+			}
+
+			return;
+		}
+
+		source.consumeAp(1);
 		target.damage(source, Skill.DEFAULT_ATTACK, source.getSenshi().getDmg());
 	}
 

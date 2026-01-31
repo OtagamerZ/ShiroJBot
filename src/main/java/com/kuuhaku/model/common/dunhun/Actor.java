@@ -115,10 +115,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract int getApCap();
 
-	public int getAttackAp() {
-		return 1;
-	}
-
 	public abstract int getInitiative();
 
 	public abstract double getCritical();
