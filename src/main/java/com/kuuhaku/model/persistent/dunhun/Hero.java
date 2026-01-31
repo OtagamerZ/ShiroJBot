@@ -146,17 +146,17 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public double getCritical() {
-		double crit = stats.getRaceBonus().critical() / 100d;
+		double crit = getModifiers().getCritical(stats.getRaceBonus().critical()) / 100;
 		for (Gear g : getEquipment().getWeaponList()) {
 			if (!g.isWeapon()) continue;
 
-			double flat = getModifiers().getCritical(g.getCritical() / 100d);
+			double flat = getModifiers().getCritical(g.getCritical()) / 100;
 			if (crit == 0) crit = flat;
 
 			crit = 1 - (1 - crit) * (1 - flat);
 		}
 
-		return Calc.clamp(crit, 0, 100);
+		return Calc.clamp(crit * 100, 0, 100);
 	}
 
 	@Override
