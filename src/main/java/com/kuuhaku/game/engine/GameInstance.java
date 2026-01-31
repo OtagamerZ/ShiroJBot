@@ -87,14 +87,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 			}
 		}
 
-		channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
-		for (String chn : channels) {
-			if (CHANNELS.containsKey(chn)) {
-				channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
-				return CompletableFuture.completedFuture(null);
-			}
-		}
-
 		SimpleMessageListener sml = new SimpleMessageListener(chns) {
 			{
 				turn = 1;
@@ -117,6 +109,14 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		return CompletableFuture.runAsync(() -> {
 			try {
+				channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
+				for (String chn : channels) {
+					if (CHANNELS.containsKey(chn)) {
+						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
+						return;
+					}
+				}
+
 				for (String p : players) {
 					PLAYERS.put(p, this);
 				}
