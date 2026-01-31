@@ -970,10 +970,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 			return;
 		}
 
-		if (lock != null) {
-			lock.completeExceptionally(new VoidException());
-		}
-
 		if (combat.get() != null) {
 			Actor<?> current = combat.get().getCurrent();
 			if (current != null) {
