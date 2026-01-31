@@ -149,9 +149,10 @@ public class Hero extends Actor<Hero> {
 		double flat = stats.getRaceBonus().critical() / 100d;
 		for (Gear g : getEquipment().getWeaponList()) {
 			if (!g.isWeapon()) continue;
-			else if (flat == 0) flat = g.getCritical();
 
 			double crit = g.getCritical() / 100d;
+			if (flat == 0) flat = crit;
+
 			flat = 1 - (1 - flat) * (1 - crit);
 		}
 
