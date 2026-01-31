@@ -597,7 +597,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		CombatCardAttributes base = senshi.getBase();
 		int effCost = (int) Utils.regex(base.getEffect(), "%EFFECT%").results().count();
-		base.setMana((int) (1 + (base.getAtk() + base.getDfs()) * senshi.getPower() / 750 + effCost));
+		base.setMana(1 + (int) stats.getPower().apply((base.getAtk() + base.getDfs())) / 750 + effCost);
 		base.setSacrifices((base.getAtk() + base.getDfs()) / 3000);
 
 		if (this instanceof Hero) {
