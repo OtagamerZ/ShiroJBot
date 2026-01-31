@@ -729,9 +729,9 @@ public class Combat implements Renderer<BufferedImage> {
 					source.consumeAp(1);
 					target.damage(source, Skill.DEFAULT_ATTACK, (int) (source.getSenshi().getDmg() * 0.6));
 				}
-			}
 
-			return;
+				return;
+			}
 		}
 
 		source.consumeAp(1);
