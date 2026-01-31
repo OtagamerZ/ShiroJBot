@@ -32,6 +32,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.channel.concrete.ThreadChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.intellij.lang.annotations.MagicConstant;
@@ -79,6 +80,21 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... chns) {
+		for (GuildMessageChannel chn : chns) {
+			if (chn instanceof ThreadChannel) {
+				channel.sendMessage(locale.get("error/thread_unsupported")).queue();
+				return CompletableFuture.completedFuture(null);
+			}
+		}
+
+		channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
+		for (String chn : channels) {
+			if (CHANNELS.containsKey(chn)) {
+				channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
+				return CompletableFuture.completedFuture(null);
+			}
+		}
+
 		SimpleMessageListener sml = new SimpleMessageListener(chns) {
 			{
 				turn = 1;
@@ -101,14 +117,6 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 		return CompletableFuture.runAsync(() -> {
 			try {
-				channels = getChannel().getChannels().stream().map(GuildMessageChannel::getId).toArray(String[]::new);
-				for (String chn : channels) {
-					if (CHANNELS.containsKey(chn)) {
-						channel.sendMessage(locale.get("error/channel_occupied_self")).queue();
-						return;
-					}
-				}
-
 				for (String p : players) {
 					PLAYERS.put(p, this);
 				}

@@ -90,7 +90,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final Set<EffectBase> effects = new HashSet<>();
 	private final Loot loot;
 
-	private CompletableFuture<Runnable> lock;
+	private CompletableFuture<Runnable> lock = new CompletableFuture<>();
 	private boolean initialized, done;
 	private Boolean win;
 
