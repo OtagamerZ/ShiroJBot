@@ -168,6 +168,8 @@ public class Equipment implements Iterable<Gear> {
 
 		boolean unarmed = true;
 		for (Gear g : weapons) {
+			if (!g.isWeapon()) continue;
+
 			JSONArray tags = g.getTags();
 			if (g.isWeapon()) {
 				if (!tags.contains("UNARMED")) unarmed = false;
