@@ -404,7 +404,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, this, this, null, val);
 		}
 
-		modHp(null, null, val.get(), 0);
+		setHp(getHp() + val.get());
+		if (val.get() < 0) {
+			getSenshi().reduceSleep(999);
+		}
 	}
 
 	public Deque<MonsterBase<?>> getMinions() {
