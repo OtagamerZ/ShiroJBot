@@ -163,6 +163,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void setHp(int value) {
+		if (value < hp) {
+			getSenshi().reduceSleep(999);
+		}
+
 		hp = Utils.clamp(value, 0, getMaxHp());
 	}
 
@@ -328,10 +332,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (val.get() != 0) {
 				cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get())));
 			}
-
-			if (val.get() < 0) {
-				getSenshi().reduceSleep(999);
-			}
 		}
 
 		setHp(getHp() + val.get());
@@ -405,9 +405,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		setHp(getHp() + val.get());
-		if (val.get() < 0) {
-			getSenshi().reduceSleep(999);
-		}
 	}
 
 	public Deque<MonsterBase<?>> getMinions() {
