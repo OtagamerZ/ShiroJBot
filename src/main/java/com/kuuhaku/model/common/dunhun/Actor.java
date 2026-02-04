@@ -101,12 +101,19 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public abstract int getMaxAp();
 
 	public int getReservedAp() {
-		return getSkills().stream()
-				.filter(Objects::nonNull)
-				.filter(s -> s.getToggledEffect() != null)
-				.map(Skill::getStats)
-				.mapToInt(SkillStats::getReservation)
-				.sum();
+		int max = getMaxAp();
+		int total = 0;
+		for (Skill s : getSkills()) {
+			if (s == null || s.getToggledEffect() == null) continue;
+			else if (total >= max) {
+				s.setToggledEffect(this, null);
+				continue;
+			}
+
+			total += s.getStats().getReservation();
+		}
+
+		return total;
 	}
 
 	public int getUsableAp() {
