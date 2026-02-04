@@ -328,12 +328,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (val.get() != 0) {
 				cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get())));
 			}
+
+			if (val.get() < 0) {
+				getSenshi().reduceSleep(999);
+			}
 		}
 
 		setHp(getHp() + val.get());
-		if (val.get() < 0) {
-			getSenshi().reduceSleep(999);
-		}
 
 		return Tuple2.tuple(val.get(), crit);
 	}
@@ -403,7 +404,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, this, this, null, val);
 		}
 
-		setHp(getHp() + val.get());
+		modHp(null, null, val.get(), 0);
 	}
 
 	public Deque<MonsterBase<?>> getMinions() {
