@@ -724,7 +724,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (wpns.size() > 1) {
 				for (int i = 0; i < wpns.size(); i++) {
-					if (h.getAp() <= 0) break;
+					if (h.getAp() <= 0 || target.isOutOfCombat()) break;
 
 					source.consumeAp(1);
 					target.damage(source, Skill.DEFAULT_ATTACK, (int) (source.getSenshi().getDmg() * 0.6));

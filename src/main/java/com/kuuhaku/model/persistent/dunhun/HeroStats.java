@@ -102,6 +102,8 @@ public class HeroStats implements Serializable {
 	}
 
 	public int getLosableXp() {
+		if (getLevel() >= Actor.MAX_LEVEL) return 0;
+
 		return getXpToNext() - getXpToCurrent();
 	}
 
@@ -110,6 +112,8 @@ public class HeroStats implements Serializable {
 	}
 
 	public void addXp(int xp) {
+		if (getLevel() >= Actor.MAX_LEVEL) return;
+
 		this.xp += xp;
 	}
 

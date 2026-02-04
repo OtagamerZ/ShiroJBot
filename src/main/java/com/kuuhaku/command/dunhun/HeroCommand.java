@@ -27,6 +27,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Equipment;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -98,7 +99,7 @@ public class HeroCommand implements Executable {
 					%s
 					%s
 					%s
-					%s (%s/%s)
+					%s%s
 					""".formatted(
 					locale.get("str/bonus_hp", h.getMaxHp()),
 					locale.get("str/ap", h.getMaxAp()),
@@ -106,7 +107,9 @@ public class HeroCommand implements Executable {
 					locale.get("str/initiative", h.getInitiative()),
 					locale.get("str/bonus_critical", Utils.roundToString(locale, h.getCritical(), 2)),
 					locale.get("str/level", h.getLevel()),
-					h.getStats().getXp(), h.getStats().getXpToNext()
+					h.getLevel() < Actor.MAX_LEVEL
+							? " (" + h.getStats().getXp() + "/" + h.getStats().getXpToNext() + ")"
+							: ""
 			), true);
 
 			Attributes attr = h.getAttributes();

@@ -328,13 +328,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (val.get() != 0) {
 				cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get())));
 			}
-
-			if (val.get() < 0) {
-				getSenshi().reduceSleep(999);
-			}
 		}
 
 		setHp(getHp() + val.get());
+		if (val.get() < 0) {
+			getSenshi().reduceSleep(999);
+		}
 
 		return Tuple2.tuple(val.get(), crit);
 	}
