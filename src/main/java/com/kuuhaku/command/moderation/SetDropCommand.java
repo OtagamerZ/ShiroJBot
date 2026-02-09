@@ -34,7 +34,8 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
-		name = "setdrop",
+		name = "set",
+		path = "drop",
 		category = Category.MODERATION
 )
 @Syntax(allowEmpty = true, value = {

@@ -39,7 +39,7 @@ import net.dv8tion.jda.api.JDA;
 		category = Category.MODERATION
 )
 @Syntax("<json:text:r>")
-public class SetEmbedCommand implements Executable {
+public class EmbedSetCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();

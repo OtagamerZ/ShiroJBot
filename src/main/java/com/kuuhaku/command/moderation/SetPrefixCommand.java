@@ -30,7 +30,8 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 
 @Command(
-        name = "setprefix",
+        name = "set",
+        path = "prefix",
         category = Category.MODERATION
 )
 @Syntax("<prefix:any:r>")
