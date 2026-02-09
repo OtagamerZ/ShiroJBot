@@ -450,22 +450,24 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			rollSpawns(config, locale, data.user());
+			rollSpawns(config, data.user());
 			if (!config.getSettings().isFeatureEnabled(GuildFeature.NO_SEASON)) {
 				rollEvents(data.channel(), locale);
 			}
 		});
 	}
 
-	private void rollSpawns(GuildConfig config, I18N locale, User u) {
+	private void rollSpawns(GuildConfig config, User u) {
 		GuildBuff gb = config.getCumBuffs();
 		Set<TextChannelImpl> channels = config.getSettings().getKawaiponChannels();
 		if (!channels.isEmpty() && Calc.chance(100d / channels.size())) {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;
 
-			StashedCard sc = Spawn.getKawaipon(locale, gb, chosen, u);
+			StashedCard sc = Spawn.getKawaipon(gb, chosen, u);
 			if (sc != null) {
+				I18N locale = config.getLocale(chosen);
+
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/card_spawn", locale.get("rarity/" + sc.getCard().getRarity())))
 						.setTitle(sc + " (" + sc.getCard().getAnime() + ")")
@@ -486,9 +488,10 @@ public class GuildListener extends ListenerAdapter {
 			GuildMessageChannel chosen = Utils.getRandomEntry(channels);
 			if (!chosen.canTalk()) return;
 
-			Drop drop = Spawn.getDrop(locale, gb, chosen, u);
+			Drop drop = Spawn.getDrop(gb, chosen, u);
 			if (drop != null) {
 				RandomGenerator rng = drop.getRng();
+				I18N locale = config.getLocale(chosen);
 
 				EmbedBuilder eb = new EmbedBuilder()
 						.setAuthor(locale.get("str/drop_spawn", drop.getRarity().getIndex()))

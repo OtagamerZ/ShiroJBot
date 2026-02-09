@@ -53,7 +53,7 @@ public abstract class Spawn {
 	private static final FixedSizeDeque<Anime> lastAnimes = new FixedSizeDeque<>(3);
 	private static final FixedSizeDeque<Card> lastCards = new FixedSizeDeque<>(15);
 
-	public synchronized static StashedCard getKawaipon(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
+	public synchronized static StashedCard getKawaipon(GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (u == null || spawnedCards.containsKey(channel.getId())) return null;
 
 		double dropRate = 8 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.card()) * getQuantityMult();
@@ -110,7 +110,7 @@ public abstract class Spawn {
 		return card;
 	}
 
-	public synchronized static Drop getDrop(I18N locale, GuildBuff gb, GuildMessageChannel channel, User u) {
+	public synchronized static Drop getDrop(GuildBuff gb, GuildMessageChannel channel, User u) {
 		if (u == null || spawnedDrops.containsKey(channel.getId())) return null;
 
 		double dropRate = 10 * (1.2 * Math.pow(Math.E, -0.001 * Math.min(channel.getGuild().getMemberCount(), 1000))) * (1 + gb.drop()) * getQuantityMult();
