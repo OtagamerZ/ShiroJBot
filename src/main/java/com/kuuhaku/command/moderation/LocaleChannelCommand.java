@@ -35,7 +35,10 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 		path = "channel",
 		category = Category.MODERATION
 )
-@Syntax("<channel:channel> <locale:word>")
+@Syntax({
+		"<channel:channel:r> <locale:word:r>",
+		"<locale:word:r>"
+})
 public class LocaleChannelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
