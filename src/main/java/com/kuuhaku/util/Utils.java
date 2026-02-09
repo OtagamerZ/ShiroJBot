@@ -1391,24 +1391,24 @@ public abstract class Utils {
 		return new String(new char[]{0xD83C, (char) (0xDDE5 + (l - (Character.isUpperCase(l) ? 64 : 96)))});
 	}
 
-	public static void sendLoading(EventData data, String message, Consumer<Message> action) {
-		data.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
+	public static void sendLoading(EventData event, String message, Consumer<Message> action) {
+		event.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
 			try {
 				action.accept(m);
 			} catch (Exception e) {
 				Constants.LOGGER.error(e, e);
-				m.editMessage(data.config().getLocale().get("error/error", e)).queue();
+				m.editMessage(event.config().getLocale(m.getGuildChannel()).get("error/error", e)).queue();
 			}
 		});
 	}
 
-	public static void sendLoading(EventData data, String message, Function<Message, RestAction<?>> action) {
-		data.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
+	public static void sendLoading(EventData event, String message, Function<Message, RestAction<?>> action) {
+		event.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
 			try {
 				action.apply(m).queue(null, Utils::doNothing);
 			} catch (Exception e) {
 				Constants.LOGGER.error(e, e);
-				m.editMessage(data.config().getLocale().get("error/error", e)).queue();
+				m.editMessage(event.config().getLocale(m.getGuildChannel()).get("error/error", e)).queue();
 			}
 		});
 	}

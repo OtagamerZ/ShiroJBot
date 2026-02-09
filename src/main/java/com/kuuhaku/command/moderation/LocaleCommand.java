@@ -42,9 +42,9 @@ public class LocaleCommand implements Executable {
 			return;
 		}
 
-		data.config().setLocale(locale = loc);
+		data.config().setLocale(loc);
 		data.config().save();
 
-		event.channel().sendMessage(locale.get("success/locale_changed")).queue();
+		event.channel().sendMessage(loc.get("success/locale_changed")).queue();
 	}
 }

@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 		path = "channel",
 		category = Category.MODERATION
 )
-@Syntax({
+@Syntax(allowEmpty = true, value = {
 		"<channel:channel:r> <locale:word:r>",
 		"<locale:word:r>"
 })
@@ -62,7 +62,7 @@ public class LocaleChannelCommand implements Executable {
 			}
 
 			settings.getChannelLocales().put(channel.getId(), loc);
-			event.channel().sendMessage(locale.get("success/locale_changed")).queue();
+			event.channel().sendMessage(loc.get("success/locale_changed")).queue();
 		} else {
 			settings.getChannelLocales().remove(channel.getId());
 			event.channel().sendMessage(locale.get("success/channel_locale_reset")).queue();

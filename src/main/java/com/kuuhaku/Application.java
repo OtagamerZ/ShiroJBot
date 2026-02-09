@@ -105,7 +105,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 											GuildConfig gc = DAO.find(GuildConfig.class, i.getGuild().getId());
 
 											h.setEphemeral(true)
-													.sendMessage(gc.getLocale().get("error/event_not_mapped"))
+													.sendMessage(gc.getLocale(m.getGuildChannel()).get("error/event_not_mapped"))
 													.queue();
 										}
 

@@ -185,12 +185,12 @@ public class GuildListener extends ListenerAdapter {
 	private void buildAndSendJLEmbed(GuildConfig config, GuildMessageChannel channel, Member mb, String message, Set<String> headers, boolean join) {
 		GuildSettings settings = config.getSettings();
 
-		I18N locale = config.getLocale();
+		I18N locale = config.getLocale(channel);
 		AutoEmbedBuilder auto = new AutoEmbedBuilder(Utils.replaceTags(locale, mb, mb.getGuild(), settings.getEmbed().toString()));
 
 		EmbedBuilder eb = auto
 				.setDescription(Utils.replaceTags(locale, mb, mb.getGuild(), message))
-				.setTitle(Utils.replaceTags(locale, mb, mb.getGuild(), config.getLocale().get(Utils.getRandomEntry(headers))));
+				.setTitle(Utils.replaceTags(locale, mb, mb.getGuild(), locale.get(Utils.getRandomEntry(headers))));
 
 		MessageEmbed temp = eb.build();
 		if (temp.getThumbnail() == null) {
@@ -525,7 +525,7 @@ public class GuildListener extends ListenerAdapter {
 	}
 
 	private void processCommand(MessageData.Guild data, EventData event, String content) {
-		I18N locale = event.config().getLocale();
+		I18N locale = event.config().getLocale(data.channel());
 		String[] args = content.toLowerCase().split("\\s+");
 		String name = StringUtils.stripAccents(args[0].replaceFirst(Pattern.quote(event.config().getPrefix()), ""));
 
@@ -636,7 +636,7 @@ public class GuildListener extends ListenerAdapter {
 				Exception error = null;
 				Instant start = Instant.now();
 				try {
-					pc.command().execute(data.guild().getJDA(), event.config().getLocale(), event, data, params);
+					pc.command().execute(data.guild().getJDA(), locale, event, data, params);
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 					data.channel().sendMessage(locale.get("error/error", e)).queue();
