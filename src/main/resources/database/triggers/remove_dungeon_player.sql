@@ -28,7 +28,7 @@ BEGIN
 END;
 $$;
 
-DROP TRIGGER IF EXISTS remove_dungeon_player ON card;
+DROP TRIGGER IF EXISTS remove_dungeon_player ON hero;
 CREATE TRIGGER remove_dungeon_player
     BEFORE DELETE
     ON hero
