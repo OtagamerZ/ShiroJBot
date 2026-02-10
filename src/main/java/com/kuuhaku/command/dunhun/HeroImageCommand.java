@@ -35,6 +35,7 @@ import net.dv8tion.jda.api.entities.Message;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 @Command(
 		name = "hero",
@@ -89,7 +90,13 @@ public class HeroImageCommand implements Executable {
 			return;
 		}
 
-		h.setImage(IO.getImage(url));
+		BufferedImage img = IO.getImage(url);
+		if (img == null) {
+			event.channel().sendMessage(locale.get("error/image_invalid")).queue();
+			return;
+		}
+
+		h.setImage(img);
 
 		event.channel().sendMessage(locale.get("success/hero_image", h.getName())).queue();
 	}

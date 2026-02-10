@@ -139,6 +139,11 @@ public class CreateHeroCommand implements Executable {
 			String finalUrl = url;
 			Utils.confirm(locale.get("question/hero_creation", h.getName()), eb.build(), event.channel(), w -> {
 						BufferedImage img = IO.getImage(finalUrl);
+						if (img == null) {
+							event.channel().sendMessage(locale.get("error/image_invalid")).queue();
+							return true;
+						}
+
 						h.setImage(img);
 						h.save();
 
