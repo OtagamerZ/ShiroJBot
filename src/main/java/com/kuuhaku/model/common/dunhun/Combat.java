@@ -374,8 +374,7 @@ public class Combat implements Renderer<BufferedImage> {
 			List<Skill> skills = h.getSkills();
 			if (skills.stream().anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
-					EventHandler handle = Pages.getHandler();
-					Map<String, List<?>> values = handle.getDropdownValues(handle.getEventId(w.getMessage()));
+					Map<String, List<?>> values = w.getDropdownValues();
 					if (values == null) {
 						game.getChannel().sendMessage(getLocale().get("error/no_values")).queue();
 						return;
@@ -423,8 +422,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (h.getConsumableCount() > 0) {
 				helper.addAction(Utils.parseEmoji("🫙"), w -> {
-					EventHandler handle = Pages.getHandler();
-					List<?> selected = handle.getDropdownValues(handle.getEventId(w.getMessage())).get("consumables");
+					List<?> selected = w.getDropdownValues().get("consumables");
 					if (selected == null || selected.isEmpty()) {
 						game.getChannel().sendMessage(getLocale().get("error/no_consumable_selected")).queue();
 						return;

@@ -31,6 +31,7 @@ import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -86,7 +87,7 @@ public class Monster extends MonsterBase<Monster> {
 					.replaceAll(r -> r.group(ending.get()));
 
 			int parts = Calc.rng(1, 3);
-			StringBuilder name = new StringBuilder();
+			StringBuilder sb = new StringBuilder();
 			for (int i = 0; i < parts; i++) {
 				String part = IO.getLine("dunhun/monster/name_parts.dict", Calc.rng(0, 64, SERIAL >> i));
 				if (i == 0) {
@@ -97,10 +98,15 @@ public class Monster extends MonsterBase<Monster> {
 					part = part.toLowerCase();
 				}
 
-				name.append(part);
+				sb.append(part);
 			}
 
-			nameCache = name + ", " + prefix + " " + suffix;
+			String name = sb + ", " + prefix + " " + suffix;
+			if (locale.isUwu()) {
+				name = Uwuifier.INSTANCE.uwu(locale, name);
+			}
+
+			nameCache = name;
 		} else {
 			String template = switch (locale) {
 				case EN, UWU_EN -> "%2$s%1$s%3$s";

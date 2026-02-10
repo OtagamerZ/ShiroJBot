@@ -103,7 +103,7 @@ configurations.configureEach {
 dependencies {
 	//Core
 	implementation "net.dv8tion:JDA:6.3.0"
-	implementation "com.github.ygimenez:Pagination-Utils:7e0a34df93"
+	implementation "com.github.ygimenez:Pagination-Utils:e0478d5dc2"
 	implementation "com.github.ygimenez:Simple-Moshi:1.1.2"
 
 	//Database
@@ -119,7 +119,7 @@ dependencies {
 	implementation "com.github.ben-manes.caffeine:jcache:3.2.3"
 
 	//Compiler
-	implementation "org.apache.groovy:groovy:5.0.3"
+	implementation "org.apache.groovy:groovy:5.0.4"
 
 	//Websocket
 	implementation "org.java-websocket:Java-WebSocket:1.6.0"
@@ -136,7 +136,7 @@ dependencies {
 	implementation "org.apache.commons:commons-compress:1.28.0"
 	implementation "org.apache.httpcomponents.client5:httpclient5:5.6"
 	implementation "commons-validator:commons-validator:1.10.1"
-	implementation "commons-codec:commons-codec:1.20.0"
+	implementation "commons-codec:commons-codec:1.21.0"
 	implementation "commons-cli:commons-cli:1.11.0"
 	implementation "commons-io:commons-io:2.21.0"
 

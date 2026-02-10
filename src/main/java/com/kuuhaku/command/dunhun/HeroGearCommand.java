@@ -306,6 +306,7 @@ public class HeroGearCommand implements Executable {
 					w -> {
 						if (!w.getMessage().isFromGuild()) return;
 
+						g.refresh();
 						try {
 							if (!acc.consumeItem(item)) {
 								w.getChannel().sendMessage(locale.get("error/insufficient_item")).queue();

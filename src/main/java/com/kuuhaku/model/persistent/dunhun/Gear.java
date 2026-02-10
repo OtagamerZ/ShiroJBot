@@ -94,6 +94,8 @@ public class Gear extends DAO<Gear> {
 	private transient final Set<EffectBase> effects = new HashSet<>();
 	private transient Attributes attributes;
 	private transient boolean destroyed;
+	private transient String nameCache;
+	private transient int nameHash = 0;
 
 	public Gear() {
 	}
@@ -275,38 +277,53 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public String getName(I18N locale) {
-		if (unique != null) return unique.getInfo(locale).getName();
-		else if (affixes.isEmpty()) return basetype.getInfo(locale).getName();
-
-		if (getRarityClass() == RarityClass.RARE) {
-			String loc = locale.getParent().name().toLowerCase();
-			String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, seed));
-			String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, -seed));
-
-			AtomicReference<String> ending = new AtomicReference<>("M");
-			prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
-				ending.set(m.group(1));
-				return "";
-			});
-
-			suffix = Utils.regex(suffix, "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
-					.replaceAll(r -> r.group(ending.get()));
-
-			return prefix + " " + suffix;
+		if (nameCache != null) {
+			if (nameHash == affixes.hashCode()) {
+				return nameCache;
+			}
 		}
 
-		String template = switch (locale) {
-			case EN, UWU_EN -> "%2$s%1$s%3$s";
-			case PT, UWU_PT -> "%1$s%2$s%3$s";
-		};
+		if (unique != null) nameCache = unique.getInfo(locale).getName();
+		else if (affixes.isEmpty()) nameCache = basetype.getInfo(locale).getName();
+		else {
+			if (getRarityClass() == RarityClass.RARE) {
+				String loc = locale.getParent().name().toLowerCase();
+				String prefix = IO.getLine("dunhun/item/prefix/" + loc + ".dict", Calc.rng(0, 32, seed));
+				String suffix = IO.getLine("dunhun/item/suffix/" + loc + ".dict", Calc.rng(0, 32, -seed));
 
-		String pref = "", suff = "";
-		for (GearAffix a : affixes) {
-			if (a.getAffix().getType() == AffixType.PREFIX) pref = " " + a.getName(locale);
-			else suff = " " + a.getName(locale);
+				AtomicReference<String> ending = new AtomicReference<>("M");
+				prefix = Utils.regex(prefix, "\\[([FM])]").replaceAll(m -> {
+					ending.set(m.group(1));
+					return "";
+				});
+
+				suffix = Utils.regex(suffix, "\\[(?<F>[^\\[\\]]*?)\\|(?<M>[^\\[\\]]*?)]")
+						.replaceAll(r -> r.group(ending.get()));
+
+				String name = prefix + " " + suffix;
+				if (locale.isUwu()) {
+					name = Uwuifier.INSTANCE.uwu(locale, name);
+				}
+
+				nameCache = name;
+			} else {
+				String template = switch (locale) {
+					case EN, UWU_EN -> "%2$s%1$s%3$s";
+					case PT, UWU_PT -> "%1$s%2$s%3$s";
+				};
+
+				String pref = "", suff = "";
+				for (GearAffix a : affixes) {
+					if (a.getAffix().getType() == AffixType.PREFIX) pref = " " + a.getName(locale);
+					else suff = " " + a.getName(locale);
+				}
+
+				nameCache = template.formatted(basetype.getInfo(locale).getName(), pref, suff);
+			}
 		}
 
-		return template.formatted(basetype.getInfo(locale).getName(), pref, suff);
+		nameHash = affixes.hashCode();
+		return nameCache;
 	}
 
 	public GearModifiers getModifiers() {
