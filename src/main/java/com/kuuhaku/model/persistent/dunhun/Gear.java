@@ -396,6 +396,14 @@ public class Gear extends DAO<Gear> {
 		}
 	}
 
+	public boolean wasModified(Gear g) {
+		return g.getRoll() != roll
+				|| g.getSeed() != seed
+				|| g.getItemLevel() != itemLevel
+				|| g.unique != unique
+				|| !g.getAffixes().equals(affixes);
+	}
+
 	public Gear copy() {
 		Gear clone = new Gear(owner, basetype);
 		clone.unique = unique;

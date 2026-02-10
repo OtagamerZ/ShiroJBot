@@ -307,6 +307,12 @@ public class HeroGearCommand implements Executable {
 						if (!w.getMessage().isFromGuild()) return;
 
 						g.refresh();
+						if (g.wasModified(g)) {
+							w.getChannel().sendMessage(locale.get("error/stale_gear")).queue();
+							update.run();
+							return;
+						}
+
 						try {
 							if (!acc.consumeItem(item)) {
 								w.getChannel().sendMessage(locale.get("error/insufficient_item")).queue();
@@ -316,8 +322,7 @@ public class HeroGearCommand implements Executable {
 							mat.apply(locale, w.getMessage().getGuildChannel(), acc, g);
 							if (g.isDestroyed()) {
 								w.getMessage().delete().queue(null, Utils::doNothing);
-							} else {
-								update.run();
+								return;
 							}
 						} catch (Exception e) {
 							if (e instanceof ItemUseException ex) {
@@ -331,6 +336,8 @@ public class HeroGearCommand implements Executable {
 
 							acc.addItem(item, 1);
 						}
+
+						update.run();
 					}
 			);
 
