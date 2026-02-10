@@ -289,7 +289,7 @@ public class HeroGearCommand implements Executable {
 	private static ButtonizeHelper getButtons(I18N locale, Account acc, Gear g, List<GlobalDrop> mats, Runnable update) {
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(acc.getUid()))
+				.setCanInteract(dt -> dt.getUser().getId().equals(acc.getUid()))
 				.setCancellable(false);
 
 		EmbedBuilder table = new ColorlessEmbedBuilder();

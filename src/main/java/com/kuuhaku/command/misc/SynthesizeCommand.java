@@ -173,7 +173,7 @@ public class SynthesizeCommand implements Executable {
 			AtomicBoolean lock = new AtomicBoolean(false);
 			ButtonizeHelper helper = new ButtonizeHelper(true)
 					.setTimeout(1, TimeUnit.MINUTES)
-					.setCanInteract(event.user()::equals)
+					.setCanInteract(dt -> dt.getUser().equals(event.user()))
 					.setOnFinalization(m -> Utils.unlock(usr))
 					.addAction(Utils.parseEmoji("1103779997317087364"), w -> {
 						Button btn = w.getButton();

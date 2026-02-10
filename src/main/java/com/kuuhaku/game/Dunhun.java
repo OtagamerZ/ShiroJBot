@@ -172,7 +172,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		while (!isClosed()) {
 			try {
 				if (duel) {
-					combat.set(new Combat(this, map.getPlayerNode(), heroes.values()));
+					combat.set(new Combat(this, new Node(null, NodeType.NONE), heroes.values()));
 					combat.get().process();
 
 					Hero winner = heroes.values().stream()
@@ -222,7 +222,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 					BufferedImage bi = map.render(getLocale(), 900, 900);
 					ButtonizeHelper helper = new ButtonizeHelper(true)
 							.setTimeout(5, TimeUnit.MINUTES)
-							.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
+							.setCanInteract(dt -> {
+								User u = dt.getUser();
+								return u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers());
+							})
 							.setCancellable(false);
 
 					Node currNode = map.getPlayerNode();
@@ -552,7 +555,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			ButtonizeHelper helper = new ButtonizeHelper(true)
 					.setTimeout(5, TimeUnit.MINUTES)
-					.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
+					.setCanInteract(dt -> {
+						User u = dt.getUser();
+						return u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers());
+					})
 					.setCancellable(false);
 
 			Set<Choice> choices = new LinkedHashSet<>();
@@ -624,7 +630,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 						ButtonizeHelper fin = new ButtonizeHelper(true)
 								.setTimeout(5, TimeUnit.MINUTES)
-								.setCanInteract(u -> u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers()))
+								.setCanInteract(dt -> {
+									User u = dt.getUser();
+									return u.getId().equals(getModerator()) || Utils.equalsAny(u.getId(), getPlayers());
+								})
 								.setCancellable(false)
 								.addAction(getLocale().get("str/continue"), s -> {
 									lock.complete(null);
@@ -673,8 +682,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		});
 
 		lock.join();
-		message.get().getFirst().delete().queue(null, Utils::doNothing);
-		message.set(null);
+		clearMessage();
 	}
 
 	private void finish(String message, Object... args) {
@@ -872,6 +880,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public void clearMessage() {
+		if (message.get() == null) return;
+
+		message.get().getFirst().delete().queue(null, Utils::doNothing);
 		message.set(null);
 	}
 

@@ -378,7 +378,7 @@ public abstract class Utils {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setSkipAmount(skip)
 				.setFastForward(fast)
-				.setCanInteract(List.of(allowed)::contains);
+				.setCanInteract(dt -> List.of(allowed).contains(dt.getUser()));
 
 		Message msg = Pages.subGet(helper.apply(sendPage(channel, pages.getFirst())));
 		Pages.paginate(msg, helper);
@@ -389,7 +389,7 @@ public abstract class Utils {
 	public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
 		LazyPaginateHelper helper = new LazyPaginateHelper(loader, true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(List.of(allowed)::contains);
+				.setCanInteract(dt -> List.of(allowed).contains(dt.getUser()));
 
 		Message msg = Pages.subGet(helper.apply(sendPage(channel, loader.apply(0))));
 		Pages.lazyPaginate(msg, helper);
@@ -448,7 +448,7 @@ public abstract class Utils {
 		CompletableFuture<Boolean> lock = new CompletableFuture<>();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(List.of(allowed)::contains)
+				.setCanInteract(dt -> List.of(allowed).contains(dt.getUser()))
 				.setOnFinalization(c -> onCancel.andThen(m -> {
 					unlock(allowed);
 					lock.complete(false);

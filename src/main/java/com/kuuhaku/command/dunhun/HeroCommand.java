@@ -86,7 +86,7 @@ public class HeroCommand implements Executable {
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals);
+				.setCanInteract(dt -> dt.getUser().equals(event.user()));
 
 		Consumer<Message> restore = m -> {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -158,7 +158,7 @@ public class HeroCommand implements Executable {
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()));
 
 		int[] attr = new int[4];
 		Attributes alloc = h.getStats().getAttributes();
@@ -242,7 +242,7 @@ public class HeroCommand implements Executable {
 		List<Skill> skills = h.getSkills();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()));
 
 		AtomicInteger i = new AtomicInteger();
 		List<Page> pages = new ArrayList<>();
@@ -427,7 +427,7 @@ public class HeroCommand implements Executable {
 	private void allocGear(I18N locale, Consumer<Message> restore, Hero h, Message msg) {
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()));
 
 		AtomicReference<Runnable> ctx = new AtomicReference<>(() -> viewGear(locale, h, msg, helper));
 
@@ -577,7 +577,7 @@ public class HeroCommand implements Executable {
 
 		ButtonizeHelper newHelper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()));
 
 		helper.getContent().forEach(newHelper::addAction);
 

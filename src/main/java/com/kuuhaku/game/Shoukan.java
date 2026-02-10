@@ -21,6 +21,7 @@ package com.kuuhaku.game;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.ButtonWrapper;
+import com.github.ygimenez.model.InteractionData;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
@@ -2232,7 +2233,10 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper makeSelector(Hand hand, int buttons, int rows, TriConsumer<ButtonizeHelper, Integer, Integer> action, List<Pair<Object, ThrowingConsumer<ButtonWrapper>>> extra) {
-		ButtonizeHelper selector = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(hand, u, b, List.of())).setCancellable(false);
+		ButtonizeHelper selector = new ButtonizeHelper(true)
+				.setTimeout(5, TimeUnit.MINUTES)
+				.setCanInteract(dt -> canInteract(hand, dt, List.of()))
+				.setCancellable(false);
 
 		for (int row = 0; row < rows; row++) {
 			for (int col = 1; col <= buttons; col++) {
@@ -2253,17 +2257,21 @@ public class Shoukan extends GameInstance<Phase> {
 		return selector;
 	}
 
-	private boolean canInteract(Hand current, User u, Button b, List<String> allowed) {
+	private boolean canInteract(Hand current, InteractionData dt, List<String> allowed) {
+		User u = dt.getUser();
 		if (u.getId().equals(getModerator())) return true;
 
-		return !isClosed() && getCurrentSide() == current.getSide() && (u.getId().equals(current.getUid()) || allowed.contains(b.getLabel()));
+		return !isClosed() && getCurrentSide() == current.getSide() && (u.getId().equals(current.getUid()) || allowed.contains(dt.getId()));
 	}
 
 	private ButtonizeHelper getButtons() {
 		List<String> allowed = List.of(getString("str/view_equips"), getString("str/view_history"), getString("str/surrender"));
 
 		Hand curr = getCurrent();
-		ButtonizeHelper helper = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(curr, u, b, allowed)).setCancellable(false);
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(5, TimeUnit.MINUTES)
+				.setCanInteract(dt -> canInteract(curr, dt, allowed))
+				.setCancellable(false);
 
 		helper.addAction(getString("str/next_phase"), w -> {
 			if (isLocked()) return;
@@ -2443,7 +2451,14 @@ public class Shoukan extends GameInstance<Phase> {
 								}
 							};
 
-							ButtonizeHelper mode = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(curr, u, b, List.of())).setCancellable(false).addAction(StringUtils.capitalize(getString("str/attack_mode")), bw -> placeWithMode.accept("a")).addAction(StringUtils.capitalize(getString("str/defense_mode")), bw -> placeWithMode.accept("d")).addAction(StringUtils.capitalize(getString("str/flipped_mode")), bw -> placeWithMode.accept("b")).addAction(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, child, disable));
+							ButtonizeHelper mode = new ButtonizeHelper(true)
+									.setTimeout(5, TimeUnit.MINUTES)
+									.setCanInteract(dt -> canInteract(curr, dt, List.of()))
+									.setCancellable(false)
+									.addAction(StringUtils.capitalize(getString("str/attack_mode")), bw -> placeWithMode.accept("a"))
+									.addAction(StringUtils.capitalize(getString("str/defense_mode")), bw -> placeWithMode.accept("d"))
+									.addAction(StringUtils.capitalize(getString("str/flipped_mode")), bw -> placeWithMode.accept("b"))
+									.addAction(Utils.parseEmoji(Constants.RETURN), bw -> disableOptions(message, child, disable));
 
 							Pages.buttonize(message.get(), mode);
 						} else if (card instanceof Evogear) {
@@ -2739,7 +2754,10 @@ public class Shoukan extends GameInstance<Phase> {
 	}
 
 	private ButtonizeHelper getExtraButtons(ButtonizeHelper parent, Hand curr) {
-		ButtonizeHelper helper = new ButtonizeHelper(true).setTimeout(5, TimeUnit.MINUTES).setCanInteract((u, b) -> canInteract(curr, u, b, List.of())).setCancellable(false);
+		ButtonizeHelper helper = new ButtonizeHelper(true)
+				.setTimeout(5, TimeUnit.MINUTES)
+				.setCanInteract(dt -> canInteract(curr, dt, List.of()))
+				.setCancellable(false);
 
 		if (getPhase() == Phase.PLAN) {
 			List<Pair<Integer, Boolean>> disable = new ArrayList<>();

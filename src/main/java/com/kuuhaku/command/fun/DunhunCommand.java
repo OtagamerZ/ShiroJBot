@@ -139,7 +139,7 @@ public class DunhunCommand implements Executable {
 			AtomicInteger i = new AtomicInteger();
 			ButtonizeHelper helper = new ButtonizeHelper(true)
 					.setTimeout(1, TimeUnit.MINUTES)
-					.setCanInteract(event.user()::equals)
+					.setCanInteract(dt -> dt.getUser().equals(event.user()))
 					.addAction(Utils.parseEmoji("◀️"), w -> {
 						if (i.get() > 0) {
 							setDungeonEmbed(dgs, pages, w, i.decrementAndGet());

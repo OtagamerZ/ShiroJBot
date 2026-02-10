@@ -69,7 +69,7 @@ public class ShoukanHistoryCommand implements Executable {
 
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals)
+				.setCanInteract(dt -> dt.getUser().equals(event.user()))
 				.addAction(Utils.parseEmoji("🗃️"), w -> viewMatches(locale, w.getMessage(), acc))
 				.addAction(Utils.parseEmoji("📊"), w -> viewRaces(locale, w.getMessage(), acc))
 				.addAction(Utils.parseEmoji("📔"), w -> codexTracker(locale, w.getMessage(), acc));
@@ -134,7 +134,7 @@ public class ShoukanHistoryCommand implements Executable {
 
 		PaginateHelper helper = new PaginateHelper(pages, true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(acc.getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(acc.getUid()));
 
 		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst()))).queue(s -> Pages.paginate(s, helper));
 	}
@@ -200,7 +200,7 @@ public class ShoukanHistoryCommand implements Executable {
 
 		PaginateHelper helper = new PaginateHelper(pages, true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(acc.getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(acc.getUid()));
 
 		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst()))).queue(s -> Pages.paginate(s, helper));
 	}
@@ -236,7 +236,7 @@ public class ShoukanHistoryCommand implements Executable {
 
 		PaginateHelper helper = new PaginateHelper(pages, true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(u -> u.getId().equals(acc.getUid()));
+				.setCanInteract(dt -> dt.getUser().getId().equals(acc.getUid()));
 
 		helper.apply(msg.editMessageEmbeds(Utils.getEmbeds(pages.getFirst()))).queue(s -> Pages.paginate(s, helper));
 	}

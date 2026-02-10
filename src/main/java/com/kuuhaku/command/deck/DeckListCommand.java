@@ -123,7 +123,7 @@ public class DeckListCommand implements Executable {
 
 		CategorizeHelper helper = new CategorizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals)
+				.setCanInteract(dt -> dt.getUser().equals(event.user()))
 				.addCategory(Utils.parseEmoji("⚔️"), home)
 				.addCategory(Utils.parseEmoji("🛡️"), Utils.generatePage(eb, Utils.padList(d.getEvogear(), 24), 12,
 						e -> {

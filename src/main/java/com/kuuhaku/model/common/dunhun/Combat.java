@@ -322,10 +322,7 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(win != null && win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
 		done = true;
 
-		if (game.getMessage() != null) {
-			game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
-			game.clearMessage();
-		}
+		game.clearMessage();
 	}
 
 	private boolean checkCombatEnd() {
@@ -356,7 +353,7 @@ public class Combat implements Renderer<BufferedImage> {
 		ButtonizeHelper helper;
 		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
 			helper = new ButtonizeHelper(true)
-					.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+					.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
 
 			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
@@ -475,7 +472,7 @@ public class Combat implements Renderer<BufferedImage> {
 					}))
 					.addAction(Utils.parseEmoji("💨"), w -> {
 						ButtonizeHelper confirm = new ButtonizeHelper(true)
-								.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+								.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
 								.setCancellable(false)
 								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() ->
 										h.setFleed(true)
@@ -786,7 +783,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		Hero h = (Hero) getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setCanInteract(u -> u.getId().equals(h.getAccount().getUid()))
+				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
 				.setCancellable(false);
 
 		for (int i = 0; i < targets.size(); i++) {

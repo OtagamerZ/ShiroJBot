@@ -170,7 +170,7 @@ public class HelpCommand implements Executable {
 		CustomEmoji home = bot.getEmojiById("674261700366827539");
 		CategorizeHelper helper = new CategorizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
-				.setCanInteract(event.user()::equals);
+				.setCanInteract(dt -> dt.getUser().equals(event.user()));
 
 		if (home != null) {
 			index.setThumbnail(home.getImageUrl());
