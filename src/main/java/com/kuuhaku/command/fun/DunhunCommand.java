@@ -215,8 +215,6 @@ public class DunhunCommand implements Executable {
 								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 						case GameReport.UNDERLEVELLED ->
 								event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
-						case GameReport.INVALID_DUEL ->
-								event.channel().sendMessage(locale.get("error/invalid_duel")).queue();
 					}
 				}
 

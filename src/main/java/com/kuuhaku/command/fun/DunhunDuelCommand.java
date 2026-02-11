@@ -105,18 +105,36 @@ public class DunhunDuelCommand implements Executable {
 					return false;
 				}
 
-				Dunhun dun = new Dunhun(locale, Dungeon.DUEL,
-						Stream.concat(Stream.of(event.user()), others.stream())
-								.map(User::getId)
-								.toArray(String[]::new)
-				);
-				dun.start(event.guild(), event.channel())
-						.whenComplete((v, e) -> {
-							if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-								Constants.LOGGER.error(e, e);
-								event.channel().sendMessage(locale.get("error/error", e)).queue();
+				try {
+					Dunhun dun = new Dunhun(locale, Dungeon.DUEL,
+							Stream.concat(Stream.of(event.user()), others.stream())
+									.map(User::getId)
+									.toArray(String[]::new)
+					);
+					dun.start(event.guild(), event.channel())
+							.whenComplete((v, e) -> {
+								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+									Constants.LOGGER.error(e, e);
+									event.channel().sendMessage(locale.get("error/error", e)).queue();
+								}
+							});
+				} catch (GameReport e) {
+					switch (e.getCode()) {
+						case GameReport.NO_HERO -> {
+							if (e.getContent().equals(event.user().getId())) {
+								event.channel().sendMessage(locale.get("error/no_hero")).queue();
+							} else {
+								event.channel().sendMessage(locale.get("error/no_hero_target", "<@" + e.getContent() + ">")).queue();
 							}
-						});
+						}
+						case GameReport.OVERBURDENED ->
+								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+						case GameReport.UNDERLEVELLED ->
+								event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
+						case GameReport.INVALID_DUEL ->
+								event.channel().sendMessage(locale.get("error/invalid_duel")).queue();
+					}
+				}
 
 				return true;
 			};
