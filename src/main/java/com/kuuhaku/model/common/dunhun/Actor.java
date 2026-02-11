@@ -128,6 +128,19 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract int getThreatScore();
 
+	public int getTargetPriority(Usable usable) {
+		int threat = getThreatScore();
+		double hpFac = 1 - (double) getHp() / getMaxHp();
+
+		Senshi s = getSenshi();
+		double missFac = usable != null ? s.getDodge() / 200d : 1;
+		if (usable instanceof Skill sk && sk.getStats().isSpell()) {
+			missFac *= s.getParry() / 200d;
+		}
+
+		return (int) getModifiers().getAggro(threat * (1 + 4 * hpFac) * missFac);
+	}
+
 	public RarityClass getRarityClass() {
 		if (this instanceof Hero || this instanceof Boss) {
 			return RarityClass.UNIQUE;

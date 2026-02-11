@@ -505,17 +505,16 @@ public class Combat implements Renderer<BufferedImage> {
 
 					boolean canAttack = curr.getSenshi().getDmg() > 0;
 					boolean canDefend = curr.getSenshi().getDfs() > 0;
-					Function<Actor<?>, Integer> criteria = a -> {
+					Function<Usable, Function<Actor<?>, Integer>> criteria = u -> a -> {
 						if (a.getTeam() == curr.getTeam()) {
 							if (curr instanceof MonsterBase<?> m && Objects.equals(m.getMaster(), a)) {
-								return a.getThreatScore() * 5;
+								return a.getTargetPriority(null) * 5;
 							}
 
-							return a.getThreatScore();
+							return a.getTargetPriority(null);
 						}
 
-						Senshi sen = a.getSenshi();
-						return (int) (a.getThreatScore() * (1 - sen.getDodge() / 100d) * (1 - sen.getParry() / 100d));
+						return a.getTargetPriority(u);
 					};
 
 					List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther()).stream()
@@ -533,7 +532,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.toList();
 
 						if (!spellTgts.isEmpty()) {
-							Actor<?> t = Utils.getWeightedEntry(rngList, criteria, spellTgts);
+							Actor<?> t = Utils.getWeightedEntry(rngList, criteria.apply(skill), spellTgts);
 
 							if (force.get() || !canAttack || Calc.chance(50)) {
 								skill(skill, curr, t);
@@ -572,7 +571,7 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					attack(curr, Utils.getWeightedEntry(rngList, criteria, attackTgts));
+					attack(curr, Utils.getWeightedEntry(rngList, criteria.apply(Skill.DEFAULT_ATTACK), attackTgts));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
@@ -581,24 +580,17 @@ public class Combat implements Renderer<BufferedImage> {
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
 		}
 
-		ca.addFile(IO.getBytes(
+		ca.addFile(IO.getBytes(render(getLocale()), "png"), "cards.png").queue(m -> {
+			if (game.getMessage() != null) {
+				game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
+			}
 
-						render(getLocale()), "png"), "cards.png")
-						.
+			if (helper != null) {
+				Pages.buttonize(m, helper);
+			}
 
-				queue(m ->
-
-				{
-					if (game.getMessage() != null) {
-						game.getMessage().getFirst().delete().queue(null, Utils::doNothing);
-					}
-
-					if (helper != null) {
-						Pages.buttonize(m, helper);
-					}
-
-					game.setMessage(m, helper);
-				});
+			game.setMessage(m, helper);
+		});
 
 		return lock;
 	}

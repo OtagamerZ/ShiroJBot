@@ -162,7 +162,7 @@ public class Hero extends Actor<Hero> {
 	@Override
 	public int getThreatScore() {
 		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 200;
-		return (int) Math.max(1, getModifiers().getAggro(flat * getLevel() / 2d));
+		return (int) Math.max(1, flat * getLevel() / 2d);
 	}
 
 	public Attributes getAttributes() {

@@ -110,7 +110,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			case UNIQUE -> 10;
 		};
 
-		return (int) Math.max(1, getModifiers().getAggro(flat * (getLevel() + 1) * mult));
+		return (int) Math.max(1, flat * mult * getLevel() / 2d);
 	}
 
 	public int getKillXp() {
