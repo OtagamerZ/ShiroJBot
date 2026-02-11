@@ -103,7 +103,7 @@ public class HeroCommand implements Executable {
 					""".formatted(
 					locale.get("str/bonus_hp", h.getMaxHp()),
 					locale.get("str/ap", h.getMaxAp()),
-					locale.get("str/threat", h.getThreatScore()),
+					locale.get("str/threat", h.getTargetPriority(null)),
 					locale.get("str/initiative", h.getInitiative()),
 					locale.get("str/bonus_critical", Utils.roundToString(locale, h.getCritical(), 2)),
 					locale.get("str/level", h.getLevel()),
