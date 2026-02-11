@@ -220,7 +220,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					double bonus = Math.pow(1.2, getModifiers().size());
 					if (bonus > 1) {
-						eb.addField(Constants.VOID, getLocale().get("str/bonus_loot", bonus), false);
+						eb.addField(Constants.VOID, getLocale().get("str/bonus_loot", (int) (bonus * 100)), false);
 					}
 
 					BufferedImage bi = map.render(getLocale(), 900, 900);
