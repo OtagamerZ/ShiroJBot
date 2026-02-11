@@ -133,9 +133,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double hpFac = 1 - (double) getHp() / getMaxHp();
 
 		Senshi s = getSenshi();
-		double missFac = usable != null ? s.getDodge() / 200d : 1;
-		if (usable instanceof Skill sk && sk.getStats().isSpell()) {
-			missFac *= s.getParry() / 200d;
+		double missFac = 1;
+
+		if (usable != null) {
+			missFac *= 1 - s.getDodge() / 200d;
+
+			if (usable instanceof Skill sk && sk.getStats().isSpell()) {
+				missFac *= 1 - s.getParry() / 200d;
+			}
 		}
 
 		return (int) getModifiers().getAggro(threat * (1 + 4 * hpFac) * missFac);

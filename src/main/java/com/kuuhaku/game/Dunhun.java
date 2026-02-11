@@ -218,8 +218,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 						eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
 					}
 
-					double bonus = Math.pow(1.2, getModifiers().size());
-					if (bonus > 1) {
+					double bonus = Math.pow(1.2, getModifiers().size()) - 1;
+					if (bonus > 0) {
 						eb.addField(Constants.VOID, getLocale().get("str/bonus_loot", (int) (bonus * 100)), false);
 					}
 
