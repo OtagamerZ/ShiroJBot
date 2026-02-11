@@ -7,7 +7,6 @@ import com.github.ygimenez.model.TextId;
 import com.github.ygimenez.model.ThrowingConsumer;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
-import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.VoidException;
 import com.kuuhaku.game.engine.GameInstance;
@@ -217,6 +216,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 
 						eb.addField(getLocale().get("str/dungeon_floor_modifiers"), sb.toString(), false);
+					}
+
+					double bonus = Math.pow(1.2, getModifiers().size());
+					if (bonus > 1) {
+						eb.addField(Constants.VOID, getLocale().get("str/bonus_loot", bonus), false);
 					}
 
 					BufferedImage bi = map.render(getLocale(), 900, 900);
