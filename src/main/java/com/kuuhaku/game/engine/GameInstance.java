@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
@@ -182,7 +183,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 		try {
 			String out = locale.get(key, args);
 			if (out.isBlank() || out.equalsIgnoreCase(key)) {
-				out = LocalizedString.get(getLocale(), key, "").formatted(args);
+				out = LocalizedString.get(locale.getParent(), key, "").formatted(args);
 			}
 
 			return Utils.getOr(out, key);

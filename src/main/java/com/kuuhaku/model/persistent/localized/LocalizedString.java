@@ -21,6 +21,7 @@ package com.kuuhaku.model.persistent.localized;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.id.LocalizedId;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -66,8 +67,11 @@ public class LocalizedString extends DAO<LocalizedString> implements Serializabl
 	public static String get(I18N locale, String key, String def) {
 		if (key == null) return def;
 
-		LocalizedString ls = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale));
+		LocalizedString ls = DAO.find(LocalizedString.class, new LocalizedId(key.toLowerCase(), locale.getParent()));
 		if (ls == null) return def;
+		else if (locale.isUwu()) {
+			return Uwuifier.INSTANCE.uwu(locale, ls.getValue());
+		}
 
 		return ls.getValue();
 	}
