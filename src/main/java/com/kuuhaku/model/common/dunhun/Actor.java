@@ -283,7 +283,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									cbt.trigger(Trigger.ON_PARRY, this, source, usable);
 
 									outcome = cbt.getLocale().get("str/actor_parry", this.getName());
-									cbt.attack(this, source);
+									source.damage(this, Skill.DEFAULT_ATTACK, getSenshi().getDmg());
 								}
 							}
 
