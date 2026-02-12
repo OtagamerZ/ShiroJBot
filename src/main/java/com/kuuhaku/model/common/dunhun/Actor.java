@@ -370,7 +370,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		Senshi sen = getSenshi();
 		double fac = sen.isDefending() ? 3 : 1;
-		double mit = (raw << 1) / (sen.getDfs() * fac + raw);
+		double mit = Math.pow(raw, 2) / (sen.getDfs() * fac + raw);
 
 		return (int) Math.ceil(Math.max(raw / 10d, mit));
 	}
