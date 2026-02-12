@@ -23,8 +23,7 @@ AS
 $$
 BEGIN
     DELETE FROM dungeon_run_player WHERE hero_id = OLD.id;
-
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$;
 
