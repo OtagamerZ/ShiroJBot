@@ -46,7 +46,7 @@ public class ActorModifiers {
 
 	private double accumulate(double base, Function<EffectProperties<?>, ValueMod> extractor) {
 		Set<EffectProperties<?>> inherited = Set.of();
-		if (parent.isMinion()) {
+		if (parent instanceof MonsterBase<?> m && m.isMinion()) {
 			inherited = parent.getMaster().getModifiers().summon.effects;
 		}
 
