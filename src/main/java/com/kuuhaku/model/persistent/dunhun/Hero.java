@@ -36,9 +36,8 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.bag.TreeBag;
 import org.apache.commons.text.WordUtils;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.*;
+import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 
 import javax.imageio.ImageIO;
@@ -49,6 +48,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "hero", schema = "dunhun")
 public class Hero extends Actor<Hero> {
 	public static final long MAX_IMG_SIZE = 4 * 1024 * 1024;

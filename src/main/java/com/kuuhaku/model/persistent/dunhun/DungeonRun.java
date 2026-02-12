@@ -12,6 +12,8 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.ListUtils;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -22,6 +24,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon_run", schema = "dunhun")
 public class DungeonRun extends DAO<DungeonRun> {
 	@EmbeddedId

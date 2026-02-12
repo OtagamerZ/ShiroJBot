@@ -8,6 +8,8 @@ import com.kuuhaku.model.common.dunhun.context.NodeContext;
 import com.kuuhaku.model.records.id.DungeonRunOutcomeId;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -16,6 +18,8 @@ import java.util.Map;
 import java.util.Objects;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon_run_outcome", schema = "dunhun")
 public class DungeonRunOutcome extends DAO<DungeonRunOutcome> {
 	@EmbeddedId

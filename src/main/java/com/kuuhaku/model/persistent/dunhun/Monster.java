@@ -32,9 +32,12 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -43,6 +46,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "monster", schema = "dunhun")
 public class Monster extends MonsterBase<Monster> {
 	@Column(name = "weight", nullable = false)

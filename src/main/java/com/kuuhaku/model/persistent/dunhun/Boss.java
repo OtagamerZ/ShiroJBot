@@ -9,9 +9,12 @@ import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.util.Utils;
+import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.intellij.lang.annotations.Language;
 
 import java.util.List;
@@ -20,6 +23,8 @@ import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "boss", schema = "dunhun")
 public class Boss extends MonsterBase<Boss> {
 	@Language("Groovy")

@@ -3,12 +3,16 @@ package com.kuuhaku.model.persistent.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.records.id.DungeonRunPlayerId;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.Objects;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "dungeon_run_player", schema = "dunhun")
 public class DungeonRunPlayer extends DAO<DungeonRunPlayer> {
 	@EmbeddedId

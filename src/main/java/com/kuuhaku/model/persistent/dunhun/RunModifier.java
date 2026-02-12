@@ -13,6 +13,8 @@ import com.kuuhaku.model.persistent.localized.LocalizedRunModifier;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
@@ -22,6 +24,8 @@ import java.util.*;
 import static jakarta.persistence.CascadeType.ALL;
 
 @Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "run_modifier", schema = "dunhun")
 public class RunModifier extends DAO<RunModifier> {
 	@Id
