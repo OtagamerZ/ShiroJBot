@@ -319,8 +319,21 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public void beforeDelete() {
-		DAO.apply("DELETE FROM Gear WHERE owner.id = ?1", getId());
-		DAO.apply("DELETE FROM DungeonRun WHERE hero.id = ?1", getId());
+		List<Integer> gear = DAO.queryAllNative(Integer.class, """
+				SELECT g.id
+				FROM gear g
+				INNER JOIN hero h ON h.id = g.owner_id
+				WHERE h.id = ?1
+				ORDER BY g.id DESC
+				""", getId());
+
+		DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", gear);
+		DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", gear);
+
+		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run_modifier WHERE hero_id = ?1", getId());
+		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run_outcome WHERE hero_id = ?1", getId());
+		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run_player WHERE hero_id = ?1", getId());
+		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run WHERE hero_id = ?1", getId());
 	}
 
 	@Override
