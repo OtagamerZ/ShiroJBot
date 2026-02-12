@@ -344,14 +344,9 @@ public class Combat implements Renderer<BufferedImage> {
 		lock = new CompletableFuture<>();
 
 		ClusterAction ca;
-		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
-			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
-		} else {
-			ca = game.getChannel().sendEmbed(getEmbed());
-		}
-
 		ButtonizeHelper helper;
 		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
+			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
@@ -493,6 +488,7 @@ public class Combat implements Renderer<BufferedImage> {
 				return ma;
 			});
 		} else {
+			ca = game.getChannel().sendEmbed(getEmbed());
 			helper = null;
 
 			Actor<?> curr = getCurrent();
