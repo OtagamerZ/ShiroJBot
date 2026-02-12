@@ -288,10 +288,6 @@ public class Combat implements Renderer<BufferedImage> {
 					while (actor == getCurrent()) {
 						if (checkCombatEnd()) break combat;
 						else if (!sen.isAvailable() || actor.isOutOfCombat()) {
-							if (actor.isOutOfCombat() && actor instanceof MonsterBase<?> m && m.isMinion()) {
-								actors.remove(actor);
-							}
-
 							break;
 						} else if (actor.getAp() <= 0) {
 							break;
@@ -544,7 +540,7 @@ public class Combat implements Renderer<BufferedImage> {
 								.orElse(1);
 
 						double risk = (1 - (double) curr.getHp() / curr.getMaxHp()) * (threat / curr.getThreatScore());
-						if (curr instanceof Monster m && !m.isMinion() && risk > 1 && Calc.chance(20)) {
+						if (!curr.isMinion() && risk > 1 && Calc.chance(20)) {
 							curr.setFleed(true);
 							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
 							return;

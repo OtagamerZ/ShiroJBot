@@ -37,7 +37,6 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	@Fetch(FetchMode.SUBSELECT)
 	protected Set<LocalizedMonster> infos = new HashSet<>();
 
-	private transient Actor<?> master;
 	private transient boolean droppedLoot;
 
 	public MonsterBase() {
@@ -67,7 +66,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	@Override
 	public int getLevel() {
 		if (isMinion()) {
-			return master.getLevel();
+			return getMaster().getLevel();
 		}
 
 		return getGame().getAreaLevel();
@@ -131,32 +130,6 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	public Loot generateLoot() {
 		return stats.generateLoot(this);
-	}
-
-	public Actor<?> getMaster() {
-		return master;
-	}
-
-	public void setMaster(Actor<?> master) {
-		if (master instanceof MonsterBase<?> m && equals(m.getMaster())) {
-			m.master = null;
-		}
-
-		this.master = master;
-		if (master != null) {
-			while (master.getMinions().size() >= master.getModifiers().getMaxSummons(1)) {
-				MonsterBase<?> old = master.getMinions().removeFirst();
-				old.destroy();
-			}
-
-			getBinding().bind(master.getBinding());
-			master.getMinions().add(this);
-			getGame().getCombat().trigger(Trigger.ON_SUMMON, master, this, null);
-		}
-	}
-
-	public boolean isMinion() {
-		return master != null;
 	}
 
 	public boolean didDropLoot() {

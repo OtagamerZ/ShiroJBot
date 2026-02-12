@@ -52,8 +52,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient final ActorBinding binding = new ActorBinding();
 	private transient final ActorCache cache = new ActorCache(this);
 	private transient final RegDeg regDeg = new RegDeg(null);
-	private transient final Deque<MonsterBase<?>> minions = new ArrayDeque<>();
+	private transient final Deque<Actor<?>> minions = new ArrayDeque<>();
 	private transient final Map<String, Object> props = new HashMap<>();
+	private transient Actor<?> master;
 	private transient Actor<?> killer;
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
@@ -304,8 +305,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 
 						Actor<?> killer = source;
-						if (killer instanceof MonsterBase<?> m && m.isMinion()) {
-							killer = m.getMaster();
+						if (source.isMinion()) {
+							killer = source.getMaster();
 						}
 						setKiller(killer);
 
@@ -376,8 +377,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public boolean hasFleed() {
-		if (this instanceof MonsterBase<?> m && m.isMinion()) {
-			return m.getMaster().fleed;
+		if (master != null) {
+			return master.fleed;
 		}
 
 		return fleed;
@@ -402,8 +403,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public boolean isOutOfCombat() {
 		if (!binding.isBound()) return true;
-		else if (this instanceof MonsterBase<?> m && m.isMinion()) {
-			if (m.getMaster().isOutOfCombat()) return true;
+		else if (master != null && master.isOutOfCombat()) {
+			return true;
 		}
 
 		return hasFleed() || getHp() <= 0;
@@ -432,8 +433,34 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		setHp(getHp() + val.get());
 	}
 
-	public Deque<MonsterBase<?>> getMinions() {
+	public boolean isMinion() {
+		return master != null;
+	}
+
+	public Deque<Actor<?>> getMinions() {
 		return minions;
+	}
+
+	public Actor<?> getMaster() {
+		return master;
+	}
+
+	public void setMaster(Actor<?> master) {
+		if (equals(master.master)) {
+			master = null;
+		}
+
+		this.master = master;
+		if (master != null) {
+			while (master.getMinions().size() >= master.getModifiers().getMaxSummons(1)) {
+				Actor<?> old = master.getMinions().removeFirst();
+				old.destroy();
+			}
+
+			getBinding().bind(master.getBinding());
+			master.getMinions().add(this);
+			getGame().getCombat().trigger(Trigger.ON_SUMMON, master, this, null);
+		}
 	}
 
 	public Map<String, Object> getProps() {
@@ -665,11 +692,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void destroy() {
-		if (this instanceof MonsterBase<?> m && m.isMinion()) {
-			m.setMaster(null);
+		if (master != null) {
+			master = null;
 		}
 
-		for (MonsterBase<?> m : getMinions()) {
+		for (Actor<?> m : minions) {
 			m.destroy();
 		}
 
