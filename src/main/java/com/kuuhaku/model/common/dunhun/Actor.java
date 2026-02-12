@@ -685,12 +685,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	@Override
-	public void beforeDelete() {
-		DAO.apply("DELETE FROM Gear WHERE owner.id = ?1", id);
-		DAO.apply("DELETE FROM DungeonRun WHERE hero.id = ?1", id);
-	}
-
-	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
 		Actor<?> actor = (Actor<?>) o;
