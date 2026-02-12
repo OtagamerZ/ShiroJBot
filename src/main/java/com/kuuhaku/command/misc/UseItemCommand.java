@@ -18,6 +18,7 @@
 
 package com.kuuhaku.command.misc;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.exceptions.ItemUseException;
 import com.kuuhaku.exceptions.PassiveItemException;
 import com.kuuhaku.exceptions.PendingConfirmationException;
@@ -95,6 +96,7 @@ public class UseItemCommand implements Executable {
 							event.channel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
 							return true;
 						} catch (Exception e) {
+							Constants.LOGGER.warn("Failed to apply crafting item {}", e, e);
 							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
 							return true;
 						}
