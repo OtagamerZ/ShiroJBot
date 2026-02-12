@@ -119,6 +119,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					new DungeonRun(leader, dungeon), 1,
 					(_, map) -> map.newRoot()
 			);
+			this.map.generate(this);
 		} else {
 			DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 			if (run == null) {

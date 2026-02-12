@@ -380,10 +380,14 @@ public abstract class Utils {
 				.setFastForward(fast)
 				.setCanInteract(dt -> List.of(allowed).contains(dt.getUser()));
 
-		Message msg = Pages.subGet(helper.apply(sendPage(channel, pages.getFirst())));
-		Pages.paginate(msg, helper);
+		try {
+			Message msg = helper.apply(sendPage(channel, pages.getFirst())).submit().get(5, TimeUnit.SECONDS);
+			Pages.paginate(msg, helper);
 
-		return msg;
+			return msg;
+		} catch (ExecutionException | InterruptedException | TimeoutException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static Message paginate(ThrowingFunction<Integer, Page> loader, MessageChannel channel, User... allowed) {
@@ -391,10 +395,14 @@ public abstract class Utils {
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(dt -> List.of(allowed).contains(dt.getUser()));
 
-		Message msg = Pages.subGet(helper.apply(sendPage(channel, loader.apply(0))));
-		Pages.lazyPaginate(msg, helper);
+		try {
+			Message msg = helper.apply(sendPage(channel, loader.apply(0))).submit().get(5, TimeUnit.SECONDS);
+			Pages.lazyPaginate(msg, helper);
 
-		return msg;
+			return msg;
+		} catch (ExecutionException | InterruptedException | TimeoutException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public static void lock(User... users) {
