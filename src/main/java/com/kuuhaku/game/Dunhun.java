@@ -113,11 +113,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 			heroes.put(p, h);
 		}
 
+		Hero leader = heroes.get(players[0]);
 		if (duel) {
-			this.map = null;
+			this.map = new AreaMap(
+					new DungeonRun(leader, dungeon), 1,
+					(_, map) -> map.newRoot()
+			);
 		} else {
-			Hero leader = heroes.get(players[0]);
-
 			DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 			if (run == null) {
 				run = new DungeonRun(leader, dungeon);
