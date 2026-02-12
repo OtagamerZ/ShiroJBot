@@ -372,7 +372,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double fac = sen.isDefending() ? 3 : 1;
 		double mit = (raw << 1) / (sen.getDfs() * fac + raw);
 
-		return (int) Math.ceil(Math.max(raw / 10d, raw * mit));
+		return (int) Math.ceil(Math.max(raw / 10d, mit));
 	}
 
 	public boolean hasFleed() {
