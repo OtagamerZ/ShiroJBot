@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.dunhun.Affix;
 import com.kuuhaku.model.persistent.dunhun.Monster;
@@ -62,7 +63,12 @@ public class SenshiActor extends Monster {
 			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1 AND spell");
 		}
 
-		stats.getSkills().addAll(Utils.getRandomN(skills, 3, 1, getId().hashCode()));
+		int maxSkill = 3;
+		if (parent.getCard().getRarity() == Rarity.FUSION) {
+			maxSkill = 5;
+		}
+
+		stats.getSkills().addAll(Utils.getRandomN(skills,  maxSkill, 1, getId().hashCode()));
 	}
 
 	@Override
