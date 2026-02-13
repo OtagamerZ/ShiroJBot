@@ -40,6 +40,7 @@ public class AreaMap {
 		this.generator = generator;
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
+		this.renderFloor.set(run.getFloor());
 	}
 
 	public AreaMap(DungeonRun run) {
