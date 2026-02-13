@@ -321,7 +321,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 						case BOSS -> {
 							Actor<?> boss = nextNode.generateEnemy();
-							if (boss == null) {
+							if (!(boss instanceof Boss)) {
 								boss = Boss.getRandom(nextNode, dungeon.getMonsterPool());
 							}
 

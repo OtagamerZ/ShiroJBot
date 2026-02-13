@@ -33,9 +33,11 @@ import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.SenshiActor;
+import com.kuuhaku.model.common.dunhun.SenshiBoss;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
+import com.kuuhaku.model.persistent.dunhun.Boss;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.DeferredTrigger;
@@ -1700,6 +1702,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 	public Actor<?> createActor() {
 		return new SenshiActor(this);
+	}
+
+	public Boss createBoss() {
+		return new SenshiBoss(this);
 	}
 
 	@Override
