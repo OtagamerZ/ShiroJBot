@@ -339,7 +339,12 @@ public class AreaMap {
 	}
 
 	public static void generateRandom(Dunhun game, AreaMap m) {
-		for (int i = -RENDER_FLOORS; i <= RENDER_FLOORS; i++) {
+		int distance = RENDER_FLOORS;
+		if (m.areasPerFloor < 10) {
+			distance += 1;
+		}
+
+		for (int i = -distance; i <= distance; i++) {
 			int depth = m.renderFloor.get() + i;
 			if (depth < -1) continue;
 
