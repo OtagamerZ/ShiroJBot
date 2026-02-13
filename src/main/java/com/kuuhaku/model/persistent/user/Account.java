@@ -601,7 +601,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		});
 	}
 
-	public boolean hasVoted() {
+	public boolean checkVote() {
 		ZonedDateTime now = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		boolean voted = false;
 		if (lastVote != null) {
@@ -609,7 +609,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		}
 
 		if (voted && !voteAwarded) {
-			addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue() ? 2 : 1);
+			addVote(lastVote.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue() ? 2 : 1);
 		}
 
 		return voted;

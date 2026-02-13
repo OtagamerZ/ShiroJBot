@@ -33,10 +33,8 @@ import net.dv8tion.jda.api.entities.User;
 import org.apache.hc.client5.http.classic.methods.HttpPost;
 import org.apache.hc.core5.http.HttpHeaders;
 
-import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
@@ -64,9 +62,7 @@ public class HourlySchedule implements Runnable, PreInitialize {
 		List<Account> accs = DAO.queryAll(Account.class, "SELECT a FROM Account a WHERE NOT a.voteAwarded AND a.lastVote IS NOT NULL");
 		for (Account a : accs) {
 			a.refresh();
-			if (a.hasVoted()) {
-				a.addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue() ? 2 : 1);
-			}
+			a.checkVote();
 		}
 
 		int guilds = (int) Main.getApp().getShiro().getGuildCache().size();

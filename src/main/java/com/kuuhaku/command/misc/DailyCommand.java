@@ -37,7 +37,7 @@ public class DailyCommand implements Executable {
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
 
-		if (acc.hasVoted()) {
+		if (acc.checkVote()) {
 			event.channel().sendMessage(locale.get("error/daily_collected")).queue();
 			return;
 		}
