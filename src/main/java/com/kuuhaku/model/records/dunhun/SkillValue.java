@@ -1,6 +1,7 @@
 package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -39,13 +40,17 @@ public record SkillValue(int min, int max, boolean withAdded) {
 		int added = 0;
 		if (withAdded && eff > 0) {
 			if (skill.getStats().isSpell()) {
-				added = (int) (source.getModifiers().getSpellDamage() * eff);
+				added = (int) source.getModifiers().getSpellDamage();
 			} else {
-				added = (int) (source.getSenshi().getDmg() * eff);
+				added = source.getSenshi().getDmg();
+			}
+
+			if (source instanceof MonsterBase<?> m && source.getSenshi().getDmg() <= 0) {
+				added += 25 * m.getKillXp();
 			}
 		}
 
-		return (int) ((withLevel(lvl) + added) * mult);
+		return (int) ((withLevel(lvl) + added * eff) * mult);
 	}
 
 	@Override
