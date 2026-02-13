@@ -565,7 +565,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		return lastVote;
 	}
 
-	public void addVote(boolean weekend) {
+	public void addVote(int multiplier) {
 		apply(a -> {
 			if (a.isVoteAwarded()) return;
 
@@ -573,7 +573,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 			a.setStreak(streak);
 			a.setVoteAwarded(true);
 
-			int cr = (int) (((weekend ? 1500 : 1000) - Math.min((balance + getTransferred()) / 2000, 800)) * streak);
+			int cr = (int) (((1000 * multiplier) - Math.min((balance + getTransferred()) / 2000, 800)) * streak);
 			a.addCR(cr, "Daily");
 
 			int gems = 0;
@@ -609,7 +609,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		}
 
 		if (voted && !voteAwarded) {
-			addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue());
+			addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue() ? 2 : 1);
 		}
 
 		return voted;

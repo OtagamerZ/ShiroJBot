@@ -56,9 +56,9 @@ public class WalletCommand implements Executable {
 			dt = ZonedDateTime.now(ZoneId.of("GMT-3"));
 		}
 
-		boolean weekend = dt.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.FRIDAY.getValue();
+		int multiplier = dt.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.FRIDAY.getValue() ? 2 : 1;
 		int streak = acc.getStreak() + 1;
-		int cr = (int) (((weekend ? 1500 : 1000) - Math.min((acc.getBalance() + acc.getTransferred()) / 2000, 800)) * streak);
+		int cr = (int) (((1000 * multiplier) - Math.min((acc.getBalance() + acc.getTransferred()) / 2000, 800)) * streak);
 
 		int gems = 0;
 		if (streak > 0 && streak % 7 == 0) {

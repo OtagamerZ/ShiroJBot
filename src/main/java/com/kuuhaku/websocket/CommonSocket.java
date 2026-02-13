@@ -138,11 +138,11 @@ public class CommonSocket extends WebSocketClient {
 							.queue(s -> Pages.categorize(s, helper), Utils::doNothing);
 				}
 				case "vote" -> {
-					String id = payload.getString("user");
+					String id = payload.getJSONObject("user").getString("platform_id");
 					Account acc = DAO.find(Account.class, id);
 					if (acc == null || acc.getUser() == null) return;
 
-					acc.addVote(payload.getBoolean("isWeekend"));
+					acc.addVote(payload.getInt("weight"));
 				}
 			}
 		} catch (WebsocketNotConnectedException ignore) {

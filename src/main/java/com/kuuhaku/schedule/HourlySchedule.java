@@ -65,7 +65,7 @@ public class HourlySchedule implements Runnable, PreInitialize {
 		for (Account a : accs) {
 			a.refresh();
 			if (a.hasVoted()) {
-				a.addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue());
+				a.addVote(now.get(ChronoField.DAY_OF_WEEK) >= DayOfWeek.SATURDAY.getValue() ? 2 : 1);
 			}
 		}
 
