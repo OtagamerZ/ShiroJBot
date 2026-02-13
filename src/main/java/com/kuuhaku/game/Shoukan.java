@@ -2273,48 +2273,8 @@ public class Shoukan extends GameInstance<Phase> {
 				.setCanInteract(dt -> canInteract(curr, dt, allowed))
 				.setCancellable(false);
 
-		helper.addAction(getString("str/next_phase"), w -> {
-			if (isLocked()) return;
-
-			if (curr.selectionPending()) {
-				getChannel().sendMessage(getString("error/pending_choice")).queue();
-				return;
-			} else if (curr.selectionPending()) {
-				getChannel().sendMessage(getString("error/pending_action")).queue();
-				return;
-			} else if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
-				if (curr.getLockTime(Lock.TAUNT) > 0) {
-					List<SlotColumn> yours = getSlots(curr.getSide());
-					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						getChannel().sendMessage(getString("error/taunt_locked", curr.getLockTime(Lock.TAUNT))).queue();
-						return;
-					}
-				}
-
-				nextTurn();
-				return;
-			}
-
-			setPhase(Phase.COMBAT);
-
-			List<Senshi> allCards = getCards();
-			for (SlotColumn slt : getSlots(curr.getSide())) {
-				for (Senshi s : slt.getCards()) {
-					if (s != null && s.getIndex() != -1 && s.isBerserk()) {
-						List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
-						if (!valid.isEmpty()) {
-							attack(s, Utils.getRandomEntry(getRng(), valid));
-							s.setAvailable(false);
-						}
-					}
-				}
-			}
-
-			reportEvent("str/game_combat_phase", true, false, true);
-		});
-
 		if (getPhase() == Phase.PLAN && curr.canAttack()) {
-			helper.addAction(getString("str/next_turn"), w -> {
+			helper.addAction(getString("str/next_phase"), w -> {
 				if (isLocked()) return;
 
 				if (curr.selectionPending()) {
@@ -2323,17 +2283,57 @@ public class Shoukan extends GameInstance<Phase> {
 				} else if (curr.selectionPending()) {
 					getChannel().sendMessage(getString("error/pending_action")).queue();
 					return;
-				} else if (curr.getLockTime(Lock.TAUNT) > 0) {
-					List<SlotColumn> yours = getSlots(curr.getSide());
-					if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
-						getChannel().sendMessage(getString("error/taunt_locked", curr.getLockTime(Lock.TAUNT))).queue();
-						return;
+				} else if (getPhase() == Phase.COMBAT || !curr.canAttack()) {
+					if (curr.getLockTime(Lock.TAUNT) > 0) {
+						List<SlotColumn> yours = getSlots(curr.getSide());
+						if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+							getChannel().sendMessage(getString("error/taunt_locked", curr.getLockTime(Lock.TAUNT))).queue();
+							return;
+						}
+					}
+
+					nextTurn();
+					return;
+				}
+
+				setPhase(Phase.COMBAT);
+
+				List<Senshi> allCards = getCards();
+				for (SlotColumn slt : getSlots(curr.getSide())) {
+					for (Senshi s : slt.getCards()) {
+						if (s != null && s.getIndex() != -1 && s.isBerserk()) {
+							List<Senshi> valid = allCards.stream().filter(d -> !d.equals(s)).toList();
+							if (!valid.isEmpty()) {
+								attack(s, Utils.getRandomEntry(getRng(), valid));
+								s.setAvailable(false);
+							}
+						}
 					}
 				}
 
-				nextTurn();
+				reportEvent("str/game_combat_phase", true, false, true);
 			});
 		}
+
+		helper.addAction(getString("str/next_turn"), w -> {
+			if (isLocked()) return;
+
+			if (curr.selectionPending()) {
+				getChannel().sendMessage(getString("error/pending_choice")).queue();
+				return;
+			} else if (curr.selectionPending()) {
+				getChannel().sendMessage(getString("error/pending_action")).queue();
+				return;
+			} else if (curr.getLockTime(Lock.TAUNT) > 0) {
+				List<SlotColumn> yours = getSlots(curr.getSide());
+				if (yours.stream().anyMatch(sc -> sc.getTop() != null && sc.getTop().canAttack())) {
+					getChannel().sendMessage(getString("error/taunt_locked", curr.getLockTime(Lock.TAUNT))).queue();
+					return;
+				}
+			}
+
+			nextTurn();
+		});
 
 		helper.addAction(getString("str/view_hand"), w -> {
 			Hand h;
