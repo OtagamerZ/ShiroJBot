@@ -55,7 +55,13 @@ public class SenshiActor extends Monster {
 		);
 
 
-		List<String> skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1");
+		List<String> skills;
+		if (stats.getAttack() > 0) {
+			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1");
+		} else {
+			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1 AND spell");
+		}
+
 		stats.getSkills().addAll(Utils.getRandomN(skills, 3, 1, getId().hashCode()));
 	}
 
