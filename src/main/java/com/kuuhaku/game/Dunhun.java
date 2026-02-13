@@ -127,6 +127,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 				run.save();
 			}
 
+			run.setGame(this);
+
 			Map<String, Integer> hps = new HashMap<>();
 			for (DungeonRunPlayer p : run.getPlayers()) {
 				hps.put(p.getId().playerId(), p.getHp());
@@ -148,8 +150,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 			if (run.getPath() >= sub.size()) {
 				run.setPath(sub.size() - 1);
 			}
-
-			run.setGame(this);
 		}
 
 		setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
