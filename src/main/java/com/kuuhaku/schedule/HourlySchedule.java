@@ -61,7 +61,6 @@ public class HourlySchedule implements Runnable, PreInitialize {
 
 		List<Account> accs = DAO.queryAll(Account.class, "SELECT a FROM Account a WHERE NOT a.voteAwarded AND a.lastVote IS NOT NULL");
 		for (Account a : accs) {
-			a.refresh();
 			a.checkVote();
 		}
 
