@@ -566,39 +566,38 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public void addVote(int multiplier) {
-		apply(a -> {
-			if (a.isVoteAwarded()) return;
+		if (isVoteAwarded()) return;
 
-			int streak = a.getStreak() + 1;
-			a.setStreak(streak);
-			a.setVoteAwarded(true);
+		int streak = voteStreak + 1;
+		int cr = (int) (((1000 * multiplier) - Math.min((balance + getTransferred()) / 2000, 800)) * voteStreak);
+		addCR(cr, "Daily");
 
-			int cr = (int) (((1000 * multiplier) - Math.min((balance + getTransferred()) / 2000, 800)) * streak);
-			a.addCR(cr, "Daily");
+		int gems = 0;
+		if (streak > 0 && streak % 7 == 0) {
+			gems = Math.min((int) Calc.getFibonacci(streak / 7), 3);
+			addGems(gems, "Vote streak " + streak);
+		}
 
-			int gems = 0;
-			if (streak > 0 && streak % 7 == 0) {
-				gems = Math.min((int) Calc.getFibonacci(streak / 7), 3);
-				a.addGems(gems, "Vote streak " + a.getStreak());
-			}
+		setStreak(streak);
+		setVoteAwarded(true);
+		save();
 
-			EmbedBuilder eb = new EmbedBuilder()
-					.setColor(gems > 0 ? Color.red : Color.orange)
-					.setThumbnail(Constants.ORIGIN_RESOURCES + "assets/" + (gems > 0 ? "gem_icon.png" : "cr_icon.png"))
-					.setDescription(getEstimateLocale().get("str/daily_message", cr, gems, streak))
-					.setTimestamp(a.getLastVote());
+		EmbedBuilder eb = new EmbedBuilder()
+				.setColor(gems > 0 ? Color.red : Color.orange)
+				.setThumbnail(Constants.ORIGIN_RESOURCES + "assets/" + (gems > 0 ? "gem_icon.png" : "cr_icon.png"))
+				.setDescription(getEstimateLocale().get("str/daily_message", cr, gems, streak))
+				.setTimestamp(getLastVote());
 
-			User user = getUser();
-			if (user == null) return;
+		User user = getUser();
+		if (user == null) return;
 
-			user.openPrivateChannel()
-					.flatMap(c -> c.sendMessageEmbeds(eb.build()))
-					.queue(null, Utils::doNothing);
+		user.openPrivateChannel()
+				.flatMap(c -> c.sendMessageEmbeds(eb.build()))
+				.queue(null, Utils::doNothing);
 
-			if (getSettings().isRemindVote()) {
-				new Reminder(this, null, getEstimateLocale().get("str/vote_reminder"), 12 * Constants.MILLIS_IN_HOUR).save();
-			}
-		});
+		if (getSettings().isRemindVote()) {
+			new Reminder(this, null, getEstimateLocale().get("str/vote_reminder"), 12 * Constants.MILLIS_IN_HOUR).save();
+		}
 	}
 
 	public boolean checkVote() {
