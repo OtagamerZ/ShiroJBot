@@ -17,7 +17,6 @@ import java.util.Set;
 
 public class SenshiActor extends Monster {
 	private final Senshi parent;
-	private final MonsterStats stats;
 
 	public SenshiActor(Senshi parent) {
 		super(parent.getId());
@@ -58,11 +57,6 @@ public class SenshiActor extends Monster {
 
 		List<String> skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1");
 		stats.getSkills().addAll(Utils.getRandomN(skills, 3, 1, getId().hashCode()));
-	}
-
-	@Override
-	public MonsterStats getStats() {
-		return stats;
 	}
 
 	@Override
