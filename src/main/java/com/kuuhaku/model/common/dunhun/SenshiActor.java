@@ -9,6 +9,7 @@ import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 
 import java.util.HashSet;
@@ -23,13 +24,13 @@ public class SenshiActor extends Monster {
 
 		this.parent = parent;
 		stats = new MonsterStats(
-				switch (parent.getCard().getRarity()) {
+				(int) (switch (parent.getCard().getRarity()) {
 					case UNCOMMON -> 400;
 					case RARE -> 500;
 					case EPIC -> 725;
 					case LEGENDARY -> 850;
 					default -> 350;
-				},
+				} * Calc.rng(0.9, 1.25, getId().hashCode())),
 				parent.getRace(),
 				(int) (parent.getDmg() * 0.60),
 				(int) (parent.getDfs() * 0.60),
@@ -58,7 +59,7 @@ public class SenshiActor extends Monster {
 			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1 AND spell");
 		}
 
-		stats.getSkills().addAll(Utils.getRandomN(skills,  3, 1, getId().hashCode()));
+		stats.getSkills().addAll(Utils.getRandomN(skills, 3, 1, getId().hashCode()));
 	}
 
 	@Override
