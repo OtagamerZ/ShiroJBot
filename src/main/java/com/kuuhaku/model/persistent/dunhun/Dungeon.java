@@ -125,12 +125,14 @@ public class Dungeon extends DAO<Dungeon> {
 	}
 
 	public AreaMap init(Dunhun game, DungeonRun run) {
-		if (script == null) return null;
+		if (script == null || script.isBlank()) return run.getMap();
 
 		try {
 			return new AreaMap(
 					run, areasPerFloor,
-					(_, m) -> Utils.exec(id, script, Map.of("ctx", new DungeonContext(game, this, m)))
+					(_, m) -> Utils.exec(id, script, Map.of(
+							"ctx", new DungeonContext(game, this, m)
+					))
 			);
 		} catch (Exception e) {
 			Constants.LOGGER.warn("Failed to process dungeon {}", id, e);

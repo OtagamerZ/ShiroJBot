@@ -162,7 +162,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		map.getRenderFloor().set(floor);
 
 		nodeRng.setSeed(node.getSeed());
-		if (prevFloor != floor && dungeon.isInfinite()) {
+		if (prevFloor != floor) {
 			map.generate(game);
 		}
 	}

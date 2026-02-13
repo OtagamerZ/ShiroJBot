@@ -127,31 +127,26 @@ public class Dunhun extends GameInstance<NullPhase> {
 				run.save();
 			}
 
-			if (dungeon.isInfinite()) {
-				Map<String, Integer> hps = new HashMap<>();
-				for (DungeonRunPlayer p : run.getPlayers()) {
-					hps.put(p.getId().playerId(), p.getHp());
-				}
+			Map<String, Integer> hps = new HashMap<>();
+			for (DungeonRunPlayer p : run.getPlayers()) {
+				hps.put(p.getId().playerId(), p.getHp());
+			}
 
-				for (Hero h : heroes.values()) {
-					h.setHp(hps.getOrDefault(h.getId(), h.getMaxHp()));
-				}
+			for (Hero h : heroes.values()) {
+				h.setHp(hps.getOrDefault(h.getId(), h.getMaxHp()));
+			}
 
-				this.map = run.getMap();
-				this.map.generate(this);
+			this.map = dungeon.init(this, run);
+			this.map.generate(this);
 
-				Floor fl = this.map.getFloor();
-				if (run.getSublevel() >= fl.size()) {
-					run.setSublevel(fl.size() - 1);
-				}
+			Floor fl = this.map.getFloor();
+			if (run.getSublevel() >= fl.size()) {
+				run.setSublevel(fl.size() - 1);
+			}
 
-				Sublevel sub = fl.getSublevel(run.getSublevel());
-				if (run.getPath() >= sub.size()) {
-					run.setPath(sub.size() - 1);
-				}
-			} else {
-				this.map = dungeon.init(this, run);
-				this.map.generate(this);
+			Sublevel sub = fl.getSublevel(run.getSublevel());
+			if (run.getPath() >= sub.size()) {
+				run.setPath(sub.size() - 1);
 			}
 
 			run.setGame(this);
@@ -349,7 +344,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						combat.set(null);
 					}
 
-					if (dungeon.isInfinite() && run.getFloor() % 10 == 0 && heroes.size() == 1) {
+					if (run.getFloor() % 10 == 0 && heroes.size() == 1) {
 						Hero h = heroes.values().iterator().next();
 
 						try {
@@ -373,26 +368,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 					Constants.LOGGER.error(e, e);
 				}
 
-				Node pNode = map.getPlayerNode();
-				boolean deadEnd = pNode.getBlocked().containsAll(pNode.getChildren());
-				if (dungeon.isInfinite()) {
-					DungeonRun run = map.getRun();
-
-					Set<DungeonRunPlayer> pls = run.getPlayers();
-					for (Hero h : heroes.values()) {
-						DungeonRunPlayer p = new DungeonRunPlayer(run, h);
-						pls.remove(p);
-						pls.add(p);
-					}
-
-					if (deadEnd) {
-						run.delete();
-					} else {
-						run.save();
-					}
+				DungeonRun run = map.getRun();
+				Set<DungeonRunPlayer> pls = run.getPlayers();
+				for (Hero h : heroes.values()) {
+					DungeonRunPlayer p = new DungeonRunPlayer(run, h);
+					pls.remove(p);
+					pls.add(p);
 				}
 
+				Node pNode = map.getPlayerNode();
+				boolean deadEnd = pNode.getBlocked().containsAll(pNode.getChildren());
 				if (deadEnd) {
+					run.delete();
+
 					if (pNode.isFinalNode()) {
 						for (Hero h : heroes.values()) {
 							h.apply(n -> n.getCompletedDungeons().add(dungeon));
@@ -404,6 +392,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					finish("str/dungeon_lost", getHeroNames());
 					return;
+				} else {
+					run.save();
 				}
 			} catch (Exception e) {
 				Constants.LOGGER.error(e, e);
