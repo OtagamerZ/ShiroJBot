@@ -2,8 +2,11 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
-import com.kuuhaku.util.*;
+import com.kuuhaku.model.persistent.dunhun.Event;
+import com.kuuhaku.util.Bit32;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.awt.*;
@@ -11,6 +14,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class Node {
 	public static final int NODE_RADIUS = 64;
@@ -24,10 +28,11 @@ public class Node {
 	private final LinkedHashSet<Node> parents;
 	private final LinkedHashSet<Node> children = new LinkedHashSet<>();
 
-	private final Set<String> eventPool = new HashSet<>();
-	private final Set<String> enemyPool = new HashSet<>();
 	private final Set<Node> blocked = new HashSet<>();
 	private final Point renderPos = new Point();
+
+	private Supplier<Event> eventGenerator = null;
+	private Supplier<Actor<?>> enemyGenerator = null;
 	private byte renderState = 0b1;
 	/*
 	0xF
@@ -90,12 +95,22 @@ public class Node {
 		return seed;
 	}
 
-	public Set<String> getEventPool() {
-		return eventPool;
+	public void setEventGenerator(Supplier<Event> generator) {
+		this.eventGenerator = generator;
 	}
 
-	public Set<String> getEnemyPool() {
-		return enemyPool;
+	public Event generateEvent() {
+		if (eventGenerator == null) return null;
+		return eventGenerator.get();
+	}
+
+	public void setEnemyGenerator(Supplier<Actor<?>> generator) {
+		this.enemyGenerator = generator;
+	}
+
+	public Actor<?> generateEnemy() {
+		if (enemyGenerator == null) return null;
+		return enemyGenerator.get();
 	}
 
 	public void addParents(Node... nodes) {

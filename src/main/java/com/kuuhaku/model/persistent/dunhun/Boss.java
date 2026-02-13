@@ -17,9 +17,9 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.intellij.lang.annotations.Language;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Entity
@@ -122,9 +122,11 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	public static Boss getRandom(Node node) {
-		List<String> bosses = DAO.queryAllNative(String.class, "SELECT id FROM boss");
+		return getRandom(node, List.of());
+	}
 
-		Set<String> pool = node.getEnemyPool();
+	public static Boss getRandom(Node node, Collection<?> pool) {
+		List<String> bosses = DAO.queryAllNative(String.class, "SELECT id FROM boss");
 		if (!pool.isEmpty()) {
 			bosses.removeIf(a -> !pool.contains(a));
 		}

@@ -38,7 +38,6 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.regex.Matcher;
 
@@ -133,6 +132,9 @@ public class Event extends DAO<Event> {
 	}
 
 	public static Event getRandom(Node node) {
+		Event out = node.generateEvent();
+		if (out != null) return out;
+
 		List<Object[]> evts = DAO.queryAllUnmapped("""
 				SELECT id
 				     , weight
@@ -140,11 +142,6 @@ public class Event extends DAO<Event> {
 				WHERE weight > 0
 				  AND min_paths <= ?1
 				""", node.getChildren().size());
-
-		Set<String> pool = node.getEventPool();
-		if (!pool.isEmpty()) {
-			evts.removeIf(a -> !pool.contains(String.valueOf(a[0])));
-		}
 
 		if (evts.isEmpty()) return null;
 
