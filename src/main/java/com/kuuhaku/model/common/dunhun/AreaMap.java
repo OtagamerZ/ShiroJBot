@@ -233,21 +233,23 @@ public class AreaMap {
 				for (Sublevel sub : fl.getSublevels()) {
 					sub.placeNodes(width / 2, y + ((fl.getNumber() == 0 ? 25 : 0)));
 
-					List<Hero> runsHere = runs.get(sub.getNumber());
-					if (runsHere != null) {
-						runsHere.removeIf(h -> run.getGame().getHeroes().containsKey(h.getAccount().getUid()));
+					if (sub.getFloor().getNumber() == run.getFloor()) {
+						List<Hero> runsHere = runs.get(sub.getNumber());
+						if (runsHere != null) {
+							runsHere.removeIf(h -> run.getGame().getHeroes().containsKey(h.getAccount().getUid()));
 
-						for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
-							Hero hero = runsHere.get(i);
-							Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
-								BufferedImage avatar = hero.getImage();
-								if (avatar != null) {
-									g.drawImage(avatar, 0, 0,
-											AVATAR_RADIUS * avatar.getWidth() / 350, AVATAR_RADIUS,
-											null
-									);
-								}
-							});
+							for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
+								Hero hero = runsHere.get(i);
+								Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {
+									BufferedImage avatar = hero.getImage();
+									if (avatar != null) {
+										g.drawImage(avatar, 0, 0,
+												AVATAR_RADIUS * avatar.getWidth() / 350, AVATAR_RADIUS,
+												null
+										);
+									}
+								});
+							}
 						}
 					}
 
