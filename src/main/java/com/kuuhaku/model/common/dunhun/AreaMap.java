@@ -466,7 +466,7 @@ public class AreaMap {
 				rests = 3;
 			}
 
-			fl.generateEvents(m.getRun(), 1 / 4d, rests);
+			fl.generateEvents(1 / 4d, rests);
 		}
 
 		m.getFloor().generateModifiers(game);

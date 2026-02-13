@@ -2,7 +2,6 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.dunhun.NodeType;
-import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
@@ -60,7 +59,7 @@ public class Floor {
 		return modifiers;
 	}
 
-	public void generateEvents(DungeonRun run, double eventRatio, int restSpots) {
+	public void generateEvents(double eventRatio, int restSpots) {
 		if (sublevels.length < 3) return;
 
 		Utils.withUnsafeRng(rng -> {
