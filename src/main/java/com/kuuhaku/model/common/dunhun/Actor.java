@@ -80,8 +80,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract Race getRace();
 
+	public Card getCard() {
+		return new Card(this);
+	}
+
 	public BufferedImage getImage() {
-		return new Card(this).drawCardNoBorder();
+		return getCard().drawCardNoBorder();
 	}
 
 	public abstract int getLevel();

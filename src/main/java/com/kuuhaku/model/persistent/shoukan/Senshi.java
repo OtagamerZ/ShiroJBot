@@ -32,6 +32,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.dunhun.SenshiActor;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -192,7 +193,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	public Senshi(Actor<?> actor) {
-		this.card = new Card(actor);
+		this.card = actor.getCard();
 		this.id = card.getId();
 		this.race = actor.getRace();
 		this.base = new CombatCardAttributes();
@@ -1695,6 +1696,10 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		clone.state = state & (0b1_1111 | 0xF_FFFFF_00);
 
 		return clone;
+	}
+
+	public Actor<?> createActor() {
+		return new SenshiActor(this);
 	}
 
 	@Override
