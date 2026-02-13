@@ -52,14 +52,16 @@ public class Boss extends MonsterBase<Boss> {
 	@Override
 	public void setHp(int value) {
 		int half = getMaxHp() / 2;
-		if (value <= half && !enraged && onEnrage != null) {
+		if (value <= half && !enraged) {
 			value = half;
 
 			try {
 				enraged = true;
-				Utils.exec(getId(), onEnrage, Map.of(
-						"ctx", new ActorContext(this, null)
-				));
+				if (onEnrage != null) {
+					Utils.exec(getId(), onEnrage, Map.of(
+							"ctx", new ActorContext(this, null)
+					));
+				}
 
 				EffectProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
 				props.setDamageTaken(new MultMod(-1));

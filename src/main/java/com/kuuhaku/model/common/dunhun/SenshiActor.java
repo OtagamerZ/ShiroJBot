@@ -2,7 +2,6 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.persistent.dunhun.Affix;
 import com.kuuhaku.model.persistent.dunhun.Monster;
@@ -29,7 +28,6 @@ public class SenshiActor extends Monster {
 					case RARE -> 500;
 					case EPIC -> 725;
 					case LEGENDARY -> 850;
-					case FUSION -> 2000;
 					default -> 350;
 				},
 				parent.getRace(),
@@ -39,18 +37,15 @@ public class SenshiActor extends Monster {
 				parent.getParry(),
 				switch (parent.getCard().getRarity()) {
 					case EPIC, LEGENDARY -> 1;
-					case FUSION -> 2;
 					default -> 0;
 				},
 				switch (parent.getCard().getRarity()) {
 					case EPIC, LEGENDARY -> 4;
-					case FUSION -> 8;
 					default -> 0;
 				},
 				switch (parent.getCard().getRarity()) {
 					case RARE, EPIC -> 10;
 					case LEGENDARY -> 12;
-					case FUSION -> 20;
 					default -> 8;
 				}
 		);
@@ -63,12 +58,7 @@ public class SenshiActor extends Monster {
 			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE req_attributes <> -1 AND spell");
 		}
 
-		int maxSkill = 3;
-		if (parent.getCard().getRarity() == Rarity.FUSION) {
-			maxSkill = 5;
-		}
-
-		stats.getSkills().addAll(Utils.getRandomN(skills,  maxSkill, 1, getId().hashCode()));
+		stats.getSkills().addAll(Utils.getRandomN(skills,  3, 1, getId().hashCode()));
 	}
 
 	@Override
