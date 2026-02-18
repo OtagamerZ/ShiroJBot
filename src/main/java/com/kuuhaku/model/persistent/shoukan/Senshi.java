@@ -548,7 +548,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return Calc.round(Math.max(0, stats.getMana().apply(flat) * getCostMult()));
+		return Calc.round(Calc.clamp(stats.getMana().apply(flat) * getCostMult(), 0, 99));
 	}
 
 	@Override

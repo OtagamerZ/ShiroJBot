@@ -654,7 +654,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		CombatCardAttributes base = senshi.getBase();
 		int effects = base.getSubEffects().size();
 		double attr = stats.getPower().apply(senshi.getDmg() + senshi.getDfs());
-		double avoid = 1 + senshi.getDodge() + senshi.getParry() / 200d;
+		double avoid = 1 + (senshi.getDodge() + senshi.getParry()) / 200d;
 
 		base.setMana((int) (1 + effects + attr / 750 * stats.getPower().multiplier() * avoid));
 		base.setSacrifices((int) (attr / 3000));

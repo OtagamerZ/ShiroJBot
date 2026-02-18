@@ -45,8 +45,8 @@ public record SkillValue(int min, int max, boolean withAdded) {
 				added = source.getSenshi().getDmg();
 			}
 
-			if (source instanceof MonsterBase<?> m && source.getSenshi().getDmg() <= 0) {
-				added += m.getKillXp() * m.getLevel();
+			if (source instanceof MonsterBase<?> m) {
+				added += (int) (m.getKillXp() * MonsterBase.STAT_TABLE[m.getLevel()]);
 			}
 		}
 
