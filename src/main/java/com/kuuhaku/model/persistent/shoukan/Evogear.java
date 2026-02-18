@@ -30,6 +30,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -55,6 +56,7 @@ import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -496,6 +498,14 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
 
+		ep = ep.forSide(getSide());
+		for (Consumer<ShoukanContext> e : base.getSubEffects()) {
+			e.accept(new ShoukanContext(
+					this, ep.trigger(), ep, getGame(),
+					getEquipper(), getSide(), stats.getData()
+			));
+		}
+
 		if (!getEffect().contains(ep.trigger().name())) {
 			if (!isSpell() || !Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP)) {
 				return false;
@@ -520,7 +530,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					.withConst("evo", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
-					.withVar("ep", ep.forSide(getSide()))
+					.withVar("ep", ep)
 					.withVar("side", getSide())
 					.withVar("trigger", ep.trigger());
 

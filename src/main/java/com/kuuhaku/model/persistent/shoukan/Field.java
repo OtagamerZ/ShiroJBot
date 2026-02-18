@@ -293,6 +293,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
 
+		ep = ep.forSide(getSide());
 		if (!getEffect().contains(ep.trigger().name())) {
 			return false;
 		}
@@ -312,7 +313,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 					.withConst("field", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
-					.withVar("ep", ep.forSide(getSide()))
+					.withVar("ep", ep)
 					.withVar("side", getSide())
 					.withVar("trigger", ep.trigger());
 

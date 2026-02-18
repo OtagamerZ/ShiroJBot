@@ -21,6 +21,7 @@ package com.kuuhaku.model.common;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.shoukan.Props;
 import com.kuuhaku.util.Utils;
+import org.apache.commons.collections4.MapUtils;
 import org.intellij.lang.annotations.Language;
 
 import java.util.HashMap;
@@ -70,6 +71,10 @@ public class CachedScriptManager {
 
 	public void run() {
 		Utils.exec(owner.toString(), code, context);
+	}
+
+	public Map<String, Object> getContext() {
+		return MapUtils.unmodifiableMap(context);
 	}
 
 	public Props getStoredProps() {

@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.persistent.shoukan;
 
-import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
@@ -35,7 +35,7 @@ import org.intellij.lang.annotations.Language;
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.Consumer;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -63,7 +63,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
 
 	@Transient
-	private transient Set<String> effects = new HashSet<>();
+	private transient Set<Consumer<ShoukanContext>> subEffects = new HashSet<>();
 
 	public JSONArray getTags() {
 		return tags;
@@ -93,50 +93,15 @@ public class CardAttributes implements Serializable, Cloneable {
 	}
 
 	public String getEffect() {
-		if (!effects.isEmpty()) {
-			Set<String> imports = new HashSet<>();
-
-			XStringBuilder sb = new XStringBuilder();
-			for (String e : effects) {
-				String code = e.lines()
-						.dropWhile(l -> {
-							String trim = l.trim();
-
-							if (trim.isBlank()) return true;
-							else if (trim.startsWith("import")) {
-								imports.add(trim);
-								return true;
-							}
-
-							return false;
-						})
-						.map(l -> "\t" + l)
-						.collect(Collectors.joining("\n"));
-
-				sb.appendNewLine("{\n" + code + "\n}");
-				if (this instanceof CombatCardAttributes cca) {
-					cca.setMana(cca.getMana() + 1);
-				}
-			}
-
-			if (imports.isEmpty()) {
-				effect = sb.toString();
-			} else {
-				effect = String.join("\n", imports) + "\n" + sb;
-			}
-
-			effects.clear();
-		}
-
 		return Utils.getOr(effect, "");
+	}
+
+	public Set<Consumer<ShoukanContext>> getSubEffects() {
+		return subEffects;
 	}
 
 	public void setEffect(@Language("Groovy") String effect) {
 		this.effect = effect;
-	}
-
-	public void appendEffect(@Language("Groovy") String effect) {
-		effects.add(effect);
 	}
 
 	public EnumSet<Trigger> getLocks() {

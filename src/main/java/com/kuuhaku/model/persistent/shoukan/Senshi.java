@@ -34,6 +34,7 @@ import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.SenshiActor;
 import com.kuuhaku.model.common.dunhun.SenshiBoss;
+import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
@@ -1262,7 +1263,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			return false;
 		}
 
-		Trigger trigger = null;
+		Trigger trigger = ep.trigger();
 		boolean targeted = false;
 
 		if (ep.trigger().name().startsWith("ON_DEFER")) {
@@ -1276,10 +1277,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						trigger = target.trigger();
 						break;
 					}
-				}
-
-				if (trigger == null) {
-					trigger = ep.trigger();
 				}
 
 				targeted = true;
@@ -1333,8 +1330,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
+			ep = ep.forSide(getSide()).withTrigger(trigger);
 			for (Evogear e : List.copyOf(equipments)) {
-				e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
+				e.execute(ep);
 			}
 
 			if (hand.getOrigins().hasSynergy(Race.EX_MACHINA)) {
@@ -1344,24 +1342,31 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					e.setEquipper(this);
 					e.setHand(hand);
 
-					e.execute(new EffectParameters(trigger, getSide(), ep.source(), ep.targets()));
+					e.execute(ep);
 				}
 			}
 
+			for (Consumer<ShoukanContext> e : base.getSubEffects()) {
+				e.accept(new ShoukanContext(
+						this, trigger, ep, game,
+						this, getSide(), stats.getData()
+				));
+			}
+
 			if (hasEffect() && getEffect().contains(trigger.name())) {
-				if (isStunned() && getGame().chance(25)) {
+				if (isStunned() && game.chance(25)) {
 					if (Trigger.getAnnounceable().contains(trigger) && !ep.isDeferred(Trigger.getAnnounceable())) {
 						game.getChannel().buffer(game.getString("str/effect_stunned", this));
 					}
 				} else {
 					CachedScriptManager csm = getCSM();
-					csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+					csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
 							.forScript(getEffect())
 							.withConst("me", this)
 							.withConst("self", this)
-							.withConst("game", getGame())
+							.withConst("game", game)
 							.withConst("data", stats.getData())
-							.withVar("ep", ep.forSide(getSide()))
+							.withVar("ep", ep)
 							.withVar("side", getSide())
 							.withVar("trigger", trigger);
 
@@ -1398,7 +1403,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 				Utils.exec(toString(), curse, Map.of(
 						"self", this,
-						"game", getGame(),
+						"game", game,
 						"data", stats.getData(),
 						"ep", ep,
 						"side", hand.getSide(),
