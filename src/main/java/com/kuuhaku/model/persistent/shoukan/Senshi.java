@@ -37,6 +37,7 @@ import com.kuuhaku.model.common.dunhun.SenshiBoss;
 import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.dunhun.Boss;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -50,6 +51,8 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -1432,6 +1435,9 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 			String name = source.getVanity().getName();
+			if (Utils.equalsAny(card.getRarity(), Rarity.HERO, Rarity.MONSTER)) {
+				name += " (" + StringUtils.capitalize(card.getRarity().name()) + ")";
+			}
 
 			game.getChannel().sendMessage(game.getString("error/effect")).queue();
 			Constants.LOGGER.warn("Failed to execute {} effect\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);

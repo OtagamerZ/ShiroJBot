@@ -33,6 +33,7 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -46,6 +47,7 @@ import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
@@ -579,6 +581,9 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 			String name = source.getVanity().getName();
+			if (Utils.equalsAny(card.getRarity(), Rarity.HERO, Rarity.MONSTER)) {
+				name += " (" + StringUtils.capitalize(card.getRarity().name()) + ")";
+			}
 
 			game.getChannel().sendMessage(game.getString("error/effect")).queue();
 			Constants.LOGGER.warn("Failed to execute {} effect\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
