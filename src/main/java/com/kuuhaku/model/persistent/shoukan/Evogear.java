@@ -498,20 +498,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
 		}
 
-		ep = ep.forSide(getSide());
-		for (Consumer<ShoukanContext> e : base.getSubEffects()) {
-			e.accept(new ShoukanContext(
-					this, ep.trigger(), ep, getGame(),
-					getEquipper(), getSide(), stats.getData()
-			));
-		}
-
-		if (!getEffect().contains(ep.trigger().name())) {
-			if (!isSpell() || !Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP)) {
-				return false;
-			}
-		}
-
 		Shoukan game = getGame();
 		if (base.isLocked(ep.trigger()) || ep.trigger() == NONE) {
 			return false;
@@ -524,44 +510,55 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 
 			currentTrigger = ep.trigger();
-			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
-					.forScript(getEffect())
-					.withConst("evo", this)
-					.withConst("game", getGame())
-					.withConst("data", stats.getData())
-					.withVar("ep", ep)
-					.withVar("side", getSide())
-					.withVar("trigger", ep.trigger());
 
-			if (!isSpell()) {
-				if (this instanceof EquippableSenshi s) {
-					csm.withVar("me", s.getOriginal());
-				} else if (stats.getSource() instanceof Senshi s) {
-					csm.withVar("me", s);
+			ep = ep.forSide(getSide());
+
+			if (hasEffect() || !base.getSubEffects().isEmpty()) {
+				CachedScriptManager csm = getCSM();
+				csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+						.forScript(getEffect())
+						.withConst("evo", this)
+						.withConst("game", getGame())
+						.withConst("data", stats.getData())
+						.withVar("ep", ep)
+						.withVar("side", getSide())
+						.withVar("trigger", ep.trigger());
+
+				if (!isSpell()) {
+					if (this instanceof EquippableSenshi s) {
+						csm.withVar("me", s.getOriginal());
+					} else if (stats.getSource() instanceof Senshi s) {
+						csm.withVar("me", s);
+					}
+
+					if (stats.getSource() instanceof Senshi s && equipper == null) {
+						csm.withVar("self", s);
+					} else {
+						csm.withVar("self", equipper);
+					}
 				}
 
-				if (stats.getSource() instanceof Senshi s && equipper == null) {
-					csm.withVar("self", s);
-				} else {
-					csm.withVar("self", equipper);
+				if (getEffect().contains(ep.trigger().name()) || (isSpell() && Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP))) {
+					csm.run();
 				}
-			}
 
-			csm.run();
-
-			if (isSpell()) {
-				hand.getData().put("last_spell", this);
-				hand.getData().put("last_evogear", this);
-				trigger(ON_SPELL, getSide());
-
-				if (hand.getOrigins().isPure(Race.MYSTICAL)) {
-					hand.modMP(1);
+				for (Consumer<ShoukanContext> e : base.getSubEffects()) {
+					e.accept(csm.toContext());
 				}
-			}
 
-			if (ep.trigger() != ON_TICK) {
-				hasFlag(Flag.EMPOWERED, true);
+				if (isSpell()) {
+					hand.getData().put("last_spell", this);
+					hand.getData().put("last_evogear", this);
+					trigger(ON_SPELL, getSide());
+
+					if (hand.getOrigins().isPure(Race.MYSTICAL)) {
+						hand.modMP(1);
+					}
+				}
+
+				if (ep.trigger() != ON_TICK) {
+					hasFlag(Flag.EMPOWERED, true);
+				}
 			}
 
 			return true;
@@ -781,8 +778,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		if (o == null || getClass() != o.getClass()) return false;
 		Evogear evogear = (Evogear) o;
 		return SERIAL == evogear.SERIAL
-			   && Objects.equals(id, evogear.id)
-			   && Objects.equals(card, evogear.card);
+				&& Objects.equals(id, evogear.id)
+				&& Objects.equals(card, evogear.card);
 	}
 
 	public int posHash() {

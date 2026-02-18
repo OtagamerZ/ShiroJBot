@@ -1346,35 +1346,34 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 				}
 			}
 
-			for (Consumer<ShoukanContext> e : base.getSubEffects()) {
-				e.accept(new ShoukanContext(
-						this, trigger, ep, game,
-						this, getSide(), stats.getData()
-				));
-			}
+			if (hasEffect() || !base.getSubEffects().isEmpty()) {
+				CachedScriptManager csm = getCSM();
+				csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
+						.forScript(getEffect())
+						.withConst("me", this)
+						.withConst("self", this)
+						.withConst("game", game)
+						.withConst("data", stats.getData())
+						.withVar("ep", ep)
+						.withVar("side", getSide())
+						.withVar("trigger", trigger);
 
-			if (hasEffect() && getEffect().contains(trigger.name())) {
+				if (this instanceof PlaceableEvogear pe) {
+					csm.withConst("evo", pe.getOriginal());
+				}
+
 				if (isStunned() && game.chance(25)) {
 					if (Trigger.getAnnounceable().contains(trigger) && !ep.isDeferred(Trigger.getAnnounceable())) {
 						game.getChannel().buffer(game.getString("str/effect_stunned", this));
 					}
 				} else {
-					CachedScriptManager csm = getCSM();
-					csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
-							.forScript(getEffect())
-							.withConst("me", this)
-							.withConst("self", this)
-							.withConst("game", game)
-							.withConst("data", stats.getData())
-							.withVar("ep", ep)
-							.withVar("side", getSide())
-							.withVar("trigger", trigger);
-
-					if (this instanceof PlaceableEvogear pe) {
-						csm.withConst("evo", pe.getOriginal());
+					if (getEffect().contains(trigger.name())) {
+						csm.run();
 					}
 
-					csm.run();
+					for (Consumer<ShoukanContext> e : base.getSubEffects()) {
+						e.accept(csm.toContext());
+					}
 
 					if (trigger != ON_TICK) {
 						hasFlag(Flag.EMPOWERED, true);

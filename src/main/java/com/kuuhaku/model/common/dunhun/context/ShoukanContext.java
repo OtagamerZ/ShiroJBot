@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun.context;
 
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.shoukan.Props;
 import com.kuuhaku.model.enums.shoukan.Side;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
@@ -16,8 +17,9 @@ public class ShoukanContext extends EffectContext<Drawable<?>> {
 	private final Senshi self;
 	private final Side side;
 	private final Map<String, Object> data;
+	private final Props props;
 
-	public ShoukanContext(Drawable<?> source, Trigger trigger, EffectParameters params, Shoukan game, Senshi self, Side side, Map<String, Object> data) {
+	public ShoukanContext(Drawable<?> source, Trigger trigger, EffectParameters params, Shoukan game, Senshi self, Side side, Map<String, Object> data, Props props) {
 		super(null, source);
 		this.trigger = trigger;
 		this.params = params;
@@ -25,6 +27,7 @@ public class ShoukanContext extends EffectContext<Drawable<?>> {
 		this.self = self;
 		this.side = side;
 		this.data = data;
+		this.props = props;
 	}
 
 	public Trigger getTrigger() {
@@ -49,5 +52,9 @@ public class ShoukanContext extends EffectContext<Drawable<?>> {
 
 	public Map<String, Object> getData() {
 		return data;
+	}
+
+	public Props getProps() {
+		return props;
 	}
 }

@@ -18,9 +18,16 @@
 
 package com.kuuhaku.model.common;
 
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
+import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.Props;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.Trigger;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONObject;
 import org.apache.commons.collections4.MapUtils;
 import org.intellij.lang.annotations.Language;
 
@@ -30,7 +37,7 @@ import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class CachedScriptManager {
-	private final Map<String, Object> context = new HashMap<>();
+	private final JSONObject context = new JSONObject();
 	private final Props storedProps = new Props();
 	private final AtomicInteger propHash = new AtomicInteger();
 
@@ -73,15 +80,25 @@ public class CachedScriptManager {
 		Utils.exec(owner.toString(), code, context);
 	}
 
-	public Map<String, Object> getContext() {
-		return MapUtils.unmodifiableMap(context);
-	}
-
 	public Props getStoredProps() {
 		return storedProps;
 	}
 
 	public AtomicInteger getPropHash() {
 		return propHash;
+	}
+
+	@SuppressWarnings("unchecked")
+	public ShoukanContext toContext() {
+		return new ShoukanContext(
+				owner,
+				context.get(Trigger.class, "trigger"),
+				context.get(EffectParameters.class, "ep"),
+				context.get(Shoukan.class, "game"),
+				context.get(Senshi.class, "self"),
+				context.get(Side.class, "side"),
+				context.get(Map.class, "data"),
+				storedProps
+		);
 	}
 }
