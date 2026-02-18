@@ -94,6 +94,10 @@ public class Affix extends DAO<Affix> {
 		return id;
 	}
 
+	public Set<LocalizedAffix> getInfos() {
+		return infos;
+	}
+
 	public LocalizedAffix getInfo(I18N locale) {
 		return infos.parallelStream()
 				.filter(ld -> ld.getLocale().is(locale))
