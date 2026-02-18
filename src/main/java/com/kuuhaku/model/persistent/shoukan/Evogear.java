@@ -45,6 +45,7 @@ import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
+import groovy.lang.Closure;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
@@ -544,8 +545,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					csm.run();
 				}
 
-				for (Consumer<ShoukanContext> e : base.getSubEffects()) {
-					e.accept(csm.toContext());
+				for (Closure<ShoukanContext> e : base.getSubEffects()) {
+					e.call(csm.toContext());
 				}
 
 				if (isSpell()) {

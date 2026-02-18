@@ -25,6 +25,7 @@ import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedDescription;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
+import groovy.lang.Closure;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -63,7 +64,7 @@ public class CardAttributes implements Serializable, Cloneable {
 	private transient EnumSet<Trigger> lock = EnumSet.noneOf(Trigger.class);
 
 	@Transient
-	private transient Set<Consumer<ShoukanContext>> subEffects = new HashSet<>();
+	private transient Set<Closure<ShoukanContext>> subEffects = new HashSet<>();
 
 	public JSONArray getTags() {
 		return tags;
@@ -96,7 +97,7 @@ public class CardAttributes implements Serializable, Cloneable {
 		return Utils.getOr(effect, "");
 	}
 
-	public Set<Consumer<ShoukanContext>> getSubEffects() {
+	public Set<Closure<ShoukanContext>> getSubEffects() {
 		return subEffects;
 	}
 
