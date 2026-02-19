@@ -130,10 +130,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 				GuildListener.addHandler(guild, sml);
 				initialized = true;
 				while (!isClosed() && runtime()) {
-					nextTurn();
 					Thread.onSpinWait();
 				}
-				exec.join();
 				dispose();
 			} catch (GameReport e) {
 				initialized = true;
@@ -173,7 +171,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	}
 
 	protected boolean runtime() {
-		return false;
+		return !exec.isDone();
 	}
 
 	protected void dispose() {

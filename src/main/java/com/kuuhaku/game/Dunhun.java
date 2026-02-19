@@ -405,6 +405,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				run.save();
 			}
 
+			nextTurn();
 			return true;
 		} catch (Exception e) {
 			Constants.LOGGER.error(e, e);
