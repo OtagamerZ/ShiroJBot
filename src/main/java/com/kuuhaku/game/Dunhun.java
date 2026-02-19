@@ -825,12 +825,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 				Team team = args.getEnum(Team.class, "team");
 
 				if (combat.get() == null) {
-					runCombat(map.getPlayerNode(), mob).get();
+					runCombat(map.getPlayerNode(), c -> c.getActors(team).add(mob)).get();
 				} else {
 					combat.get().getActors(team).add(mob);
 				}
-
-				reload(args, u);
 			}
 		}
 	}
