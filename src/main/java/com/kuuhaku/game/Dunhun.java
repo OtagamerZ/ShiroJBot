@@ -468,6 +468,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	protected void onMessage(User user, String value) throws InvocationTargetException, IllegalAccessException {
 		Pair<Method, JSONObject> action = toAction(StringUtils.stripAccents(value).toLowerCase());
 		if (action != null) {
+			action.getSecond().put("is_mod", user.getId().equals(getModerator()));
 			action.getFirst().invoke(this, action.getSecond(), user);
 		}
 	}
@@ -817,7 +818,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@PlayerAction("spawn,(?<name>\\S+),(?<team>\\S+)(?:,(?<rarity>\\S+))?")
 	private void debSpawn(JSONObject args, User u) {
 		if (args.getBoolean("is_mod", false) || Account.hasRole(u.getId(), false, Role.TESTER)) {
-			Monster mob = Monster.getRandom(this, args.getString("name"), args.getEnum(RarityClass.class, "rarity"));
+			Monster mob = Monster.getRandom(this, args.getString("name").toUpperCase(), args.getEnum(RarityClass.class, "rarity"));
 			if (mob != null) {
 				Team team = args.getEnum(Team.class, "team");
 
@@ -825,6 +826,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					runCombat(map.getPlayerNode(), mob);
 				} else {
 					combat.get().getActors(team).add(mob);
+					combat.get().getLock().complete(null);
 				}
 
 				lock.complete(null);
