@@ -535,25 +535,27 @@ public class Dunhun extends GameInstance<NullPhase> {
 		combat.set(new Combat(this, node));
 		initializer.accept(combat.get());
 
-		if (combat.get().getActors(Team.KEEPERS).isEmpty()) { {
-			List<String> pool = dungeon.getMonsterPool().stream()
-					.map(String::valueOf)
-					.toList();
+		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
+			{
+				List<String> pool = dungeon.getMonsterPool().stream()
+						.map(String::valueOf)
+						.toList();
 
-			for (int i = 0; i < 4; i++) {
-				List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
-				if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
+				for (int i = 0; i < 4; i++) {
+					List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
+					if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
-				Actor<?> chosen = node.generateEnemy();
-				if (chosen == null) {
-					if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(getNodeRng(), pool));
-					else chosen = Monster.getRandom(this);
+					Actor<?> chosen = node.generateEnemy();
+					if (chosen == null) {
+						if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(getNodeRng(), pool));
+						else chosen = Monster.getRandom(this);
+					}
+
+					if (chosen != null) {
+						keepers.add(chosen);
+					}
 				}
-
-				if (chosen != null) {
-					keepers.add(chosen);
-				}
-			}}
+			}
 		}
 
 		return () -> {
@@ -820,16 +822,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 	@PlayerAction("spawn,(?<name>\\w+),(?<team>\\w+)(?:,(?<rarity>\\w+))?")
 	private void debSpawn(JSONObject args, User u) {
 		if (args.getBoolean("is_mod", false) || Account.hasRole(u.getId(), false, Role.TESTER)) {
+			if (combat.get() == null) return;
+
 			Monster mob = Monster.getRandom(this, args.getString("name").toUpperCase(), args.getEnum(RarityClass.class, "rarity"));
 			if (mob != null) {
 				Team team = args.getEnum(Team.class, "team");
-
-				if (combat.get() == null) {
-					runCombat(map.getPlayerNode(), c -> c.getActors(team).add(mob)).get();
-				} else {
-					combat.get().getActors(team).add(mob);
-					reload(args, u);
-				}
+				combat.get().getActors(team).add(mob);
+				reload(args, u);
 			}
 		}
 	}
