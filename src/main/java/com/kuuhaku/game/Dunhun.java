@@ -828,6 +828,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					runCombat(map.getPlayerNode(), c -> c.getActors(team).add(mob)).get();
 				} else {
 					combat.get().getActors(team).add(mob);
+					reload(args, u);
 				}
 			}
 		}
