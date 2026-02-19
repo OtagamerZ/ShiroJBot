@@ -883,6 +883,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	public void reportResult(@MagicConstant(valuesFromClass = GameReport.class) byte code, String msg, Object... args) {
+		if (combat.get() != null) {
+			combat.get().getLock().complete(null);
+		}
+
 		getChannel().sendMessage(parsePlural(getString(msg, args)))
 				.queue(_ -> {
 					if (message.get() != null) {
