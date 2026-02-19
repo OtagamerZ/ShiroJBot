@@ -256,7 +256,7 @@ public class Shoukan extends GameInstance<Phase> {
 	// DEBUG START
 
 	@PhaseConstraint({"PLAN", "COMBAT"})
-	@PlayerAction("set_name,(?<name>\\S+)")
+	@PlayerAction("set_name,(?<name>\\S+?)")
 	private boolean debSetName(Side side, JSONObject args) {
 		Hand curr = hands.get(side);
 		if (args.getBoolean("is_mod", false) || Account.hasRole(curr.getUid(), false, Role.TESTER)) {
