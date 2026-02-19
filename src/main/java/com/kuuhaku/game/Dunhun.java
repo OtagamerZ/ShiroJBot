@@ -815,7 +815,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		info(Team.KEEPERS);
 	}
 
-	@PlayerAction("spawn,(?<name>\\S+?),(?<team>\\S+?)(?:,(?<rarity>\\S+?))?")
+	@PlayerAction("spawn,(?<name>\\w+),(?<team>\\w+)(?:,(?<rarity>\\w+))?")
 	private void debSpawn(JSONObject args, User u) {
 		if (args.getBoolean("is_mod", false) || Account.hasRole(u.getId(), false, Role.TESTER)) {
 			Monster mob = Monster.getRandom(this, args.getString("name").toUpperCase(), args.getEnum(RarityClass.class, "rarity"));
