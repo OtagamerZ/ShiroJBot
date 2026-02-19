@@ -167,7 +167,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	@Override
-	protected void runtime() {
+	protected boolean runtime() {
 		try {
 			if (duel) {
 				combat.set(new Combat(this, new Node(null, NodeType.NONE), heroes.values()));
@@ -183,7 +183,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					reportResult(GameReport.SUCCESS, "str/versus_end_draw");
 				}
 
-				return;
+				return false;
 			}
 
 			try {
@@ -275,13 +275,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				try {
 					requestChoice(eb, bi, helper, choices);
-					if (isClosed()) return;
+					if (isClosed()) return false;
 				} catch (Exception e) {
 					if (!(e.getCause() instanceof VoidException)) {
 						Constants.LOGGER.error("Error during dungeon runtime {}", e.getMessage(), e);
 					}
 
-					return;
+					return true;
 				}
 
 				int floor = run.getFloor();
@@ -342,7 +342,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							try {
 								Collection<Hero> hs = heroes.values();
 								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
-									if (!defeat()) return;
+									if (!defeat()) return false;
 								}
 							} finally {
 								run.setNode(currNode);
@@ -396,21 +396,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 
 					finish("str/dungeon_end", getHeroNames());
-					return;
+					return false;
 				}
 
 				finish("str/dungeon_lost", getHeroNames());
-				return;
+				return false;
 			} else {
 				run.save();
 			}
 
-			nextTurn();
+			return true;
 		} catch (Exception e) {
 			Constants.LOGGER.error(e, e);
 			getChannel().sendMessage(getLocale().get("error/error", e)).queue();
 			close(GameReport.OTHER);
 		}
+
+		return false;
 	}
 
 	private boolean defeat() {
