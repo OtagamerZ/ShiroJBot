@@ -301,6 +301,8 @@ public class Combat implements Renderer<BufferedImage> {
 						if (actor instanceof MonsterBase<?> || action != null) {
 							trigger(Trigger.ON_TICK);
 						}
+
+						game.nextTurn();
 					}
 				} finally {
 					trigger(Trigger.ON_TURN_END, actor, actor, null);
