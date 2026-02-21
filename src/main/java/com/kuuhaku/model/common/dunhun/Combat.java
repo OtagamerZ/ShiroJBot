@@ -901,14 +901,14 @@ public class Combat implements Renderer<BufferedImage> {
 		CombatContext context = new CombatContext(this, t);
 		triggerGlobalEffects(t, context);
 
-		for (Actor<?> a : actors.values()) {
-			a.trigger(t, a, null, null);
-		}
-
 		if (t == Trigger.ON_TICK) {
 			for (Actor<?> a : getActors()) {
 				a.getModifiers().removeIf(ValueMod::isExpired);
 			}
+		}
+
+		for (Actor<?> a : actors.values()) {
+			a.trigger(t, a, null, null);
 		}
 	}
 
