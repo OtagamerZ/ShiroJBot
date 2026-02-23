@@ -29,57 +29,46 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.Deck;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import net.dv8tion.jda.api.entities.User;
 
 @Command(
 		name = "transfer",
 		path = "gear",
 		category = Category.MISC
 )
-@Syntax("<user:user:r> <gear:number:r>")
+@Syntax("<hero:word:r> <gear:number:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class TransferGearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		User target = event.users(0);
-		if (target == null) {
-			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
-			return;
-		} else if (target.equals(event.user())) {
-			event.channel().sendMessage(locale.get("error/self_not_allowed")).queue();
-			return;
-		}
-
 		Deck d = data.profile().getAccount().getDeck();
 		if (d == null) {
 			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
 			return;
 		}
 
-		Deck tgt = DAO.find(Account.class, target.getId()).getDeck();
-		if (tgt == null) {
-			event.channel().sendMessage(locale.get("error/no_deck_target", target.getAsMention(), data.config().getPrefix())).queue();
-			return;
-		}
-
-		Hero from = d.getHero(locale);
+		Hero from = data.profile().getAccount().getHero(locale);
 		if (from == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
 		}
 
-		Hero to = tgt.getHero(locale);
+		Hero to = DAO.find(Hero.class, args.getString("hero").toUpperCase());
 		if (to == null) {
-			event.channel().sendMessage(locale.get("error/no_hero_target", target.getAsMention(), data.config().getPrefix())).queue();
+			event.channel().sendMessage(locale.get("error/unknown_hero")).queue();
 			return;
-		} else if (to.getInventory().size() > to.getInventoryCapacity()) {
+		} else if (from.isRetired() != to.isRetired()) {
+			event.channel().sendMessage(locale.get("error/hero_transfer_forbidden")).queue();
+			return;
+		}
+
+		to.getBinding().setLocale(locale);
+		if (to.getInventory().size() > to.getInventoryCapacity()) {
 			event.channel().sendMessage(locale.get("error/overburdened", to.getName())).queue();
 			return;
 		}
@@ -91,7 +80,7 @@ public class TransferGearCommand implements Executable {
 		}
 
 		try {
-			Utils.confirm(locale.get("question/transfer", g.getName(locale), target.getName()), event.channel(), w -> {
+			Utils.confirm(locale.get("question/transfer", g.getName(locale), to.getName()), event.channel(), w -> {
 						g.setOwner(to);
 						g.save();
 

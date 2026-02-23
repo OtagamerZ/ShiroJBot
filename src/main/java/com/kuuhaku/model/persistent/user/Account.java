@@ -28,6 +28,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.converter.RoleFlagConverter;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shoukan.DailyDeck;
 import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.shoukan.MatchHistory;
@@ -94,6 +95,10 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<Deck> decks = new HashSet<>();
+
+	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
+	private Set<Hero> heroes = new HashSet<>();
 
 	@OneToMany(mappedBy = "account", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
@@ -353,6 +358,25 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 		}
 
 		return decks.getFirst();
+	}
+
+	public List<Hero> getHeroes(I18N locale) {
+		return heroes.stream()
+				.peek(h -> h.getBinding().setLocale(locale))
+				.sorted(Comparator.comparing(Hero::getId))
+				.toList();
+	}
+
+	public Hero getHero(I18N locale) {
+		List<Hero> heroes = getHeroes(locale);
+		for (Hero h : heroes) {
+			if (h.isCurrent()) {
+				h.getSenshi();
+				return h;
+			}
+		}
+
+		return heroes.getFirst();
 	}
 
 	public void addTransaction(long value, boolean input, String reason, Currency currency) {

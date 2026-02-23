@@ -35,7 +35,6 @@ import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
@@ -76,13 +75,7 @@ import java.util.stream.Collectors;
 public class HeroGearCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
-		Hero h = d.getHero(locale);
+		Hero h = data.profile().getAccount().getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;

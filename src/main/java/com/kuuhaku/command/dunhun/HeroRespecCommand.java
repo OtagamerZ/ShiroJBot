@@ -27,7 +27,6 @@ import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.HeroStats;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
@@ -48,13 +47,7 @@ import net.dv8tion.jda.api.JDA;
 public class HeroRespecCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
-		Hero h = d.getHero(locale);
+		Hero h = data.profile().getAccount().getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;

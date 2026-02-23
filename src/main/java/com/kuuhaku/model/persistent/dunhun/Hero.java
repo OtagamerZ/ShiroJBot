@@ -76,6 +76,9 @@ public class Hero extends Actor<Hero> {
 	)
 	private Set<Dungeon> completedDungeons = new HashSet<>();
 
+	@Column(name = "retired", nullable = false)
+	private boolean retired = false;
+
 	public Hero() {
 	}
 
@@ -183,6 +186,10 @@ public class Hero extends Actor<Hero> {
 		return account;
 	}
 
+	public boolean isCurrent() {
+		return account.getSettings().getCurrentHero().equals(getId());
+	}
+
 	public JSONObject getEquipmentRefs() {
 		return equipment;
 	}
@@ -217,6 +224,10 @@ public class Hero extends Actor<Hero> {
 
 	public boolean canEnter(Dungeon dungeon) {
 		return remainingDungeonsFor(dungeon).isEmpty();
+	}
+
+	public boolean isRetired() {
+		return retired;
 	}
 
 	public int getInventoryCapacity() {

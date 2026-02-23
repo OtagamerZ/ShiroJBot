@@ -29,7 +29,6 @@ import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
@@ -56,13 +55,7 @@ import java.util.List;
 public class HeroSkillCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
-		Hero h = d.getHero(locale);
+		Hero h = data.profile().getAccount().getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;

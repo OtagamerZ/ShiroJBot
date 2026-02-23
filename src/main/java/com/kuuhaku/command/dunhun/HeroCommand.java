@@ -34,12 +34,10 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AttrType;
 import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.persistent.dunhun.*;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -47,9 +45,7 @@ import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.components.buttons.Button;
 import net.dv8tion.jda.api.entities.Message;
-import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.StringUtils;
@@ -72,13 +68,7 @@ import java.util.stream.Collectors;
 public class HeroCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
-		Hero h = d.getHero(locale);
+		Hero h = data.profile().getAccount().getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
@@ -93,24 +83,23 @@ public class HeroCommand implements Executable {
 					.setAuthor(locale.get("str/hero_info", h.getName()))
 					.setImage("attachment://card.png");
 
-			eb.addField(Constants.VOID, """
-					%s
-					%s
-					%s
-					%s
-					%s
-					%s%s
-					""".formatted(
-					locale.get("str/bonus_hp", h.getMaxHp()),
-					locale.get("str/ap", h.getMaxAp()),
-					locale.get("str/threat", h.getTargetPriority(null)),
-					locale.get("str/initiative", h.getInitiative()),
-					locale.get("str/bonus_critical", Utils.roundToString(locale, h.getCritical(), 2)),
-					locale.get("str/level", h.getLevel()),
-					h.getLevel() < Actor.MAX_LEVEL
-							? " (" + h.getStats().getXp() + "/" + h.getStats().getXpToNext() + ")"
-							: ""
-			), true);
+			XStringBuilder sb = new XStringBuilder()
+					.appendNewLine(locale.get("str/bonus_hp", h.getMaxHp()))
+					.appendNewLine(locale.get("str/ap", h.getMaxAp()))
+					.appendNewLine(locale.get("str/threat", h.getTargetPriority(null)))
+					.appendNewLine(locale.get("str/initiative", h.getInitiative()))
+					.appendNewLine(locale.get("str/bonus_critical", Utils.roundToString(locale, h.getCritical(), 2)))
+					.appendNewLine(locale.get("str/level", h.getLevel()));
+
+			if (h.getLevel() < Actor.MAX_LEVEL) {
+				sb.append(" (" + h.getStats().getXp() + "/" + h.getStats().getXpToNext() + ")");
+			}
+
+			if (h.isRetired()) {
+				sb.appendNewLine("**" + locale.get("str/retired") + "**");
+			}
+
+			eb.addField(Constants.VOID, sb.toString(), true);
 
 			Attributes attr = h.getAttributes();
 			Attributes extra = new Attributes();

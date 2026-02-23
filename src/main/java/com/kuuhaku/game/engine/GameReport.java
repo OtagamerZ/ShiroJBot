@@ -26,10 +26,11 @@ public class GameReport extends RuntimeException {
 	public static final byte INVALID_DECK = 4;
 	public static final byte DICT_NOT_FOUND = 5;
 	public static final byte NO_HERO = 6;
-	public static final byte OVERBURDENED = 7;
-	public static final byte UNDERLEVELLED = 8;
-	public static final byte STACK_OVERFLOW = 9;
-	public static final byte INVALID_DUEL = 10;
+	public static final byte RETIRED_HERO = 7;
+	public static final byte OVERBURDENED = 8;
+	public static final byte UNDERLEVELLED = 9;
+	public static final byte STACK_OVERFLOW = 10;
+	public static final byte INVALID_DUEL = 11;
 	public static final byte OTHER = Byte.MAX_VALUE;
 
 	private final byte code;

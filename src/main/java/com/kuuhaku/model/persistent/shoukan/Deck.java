@@ -127,16 +127,6 @@ public class Deck extends DAO<Deck> {
 		this.variant = variant;
 	}
 
-	public Hero getHero(I18N locale) {
-		Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", account.getUid());
-		if (h != null) {
-			h.getBinding().setLocale(locale);
-			h.getSenshi();
-		}
-
-		return h;
-	}
-
 	public FrameSkin getFrame() {
 		FrameSkin defFrame = DAO.find(FrameSkin.class, "PINK");
 		if (styling.getFrame() == null || !styling.getFrame().canUse(account)) {
@@ -627,7 +617,7 @@ public class Deck extends DAO<Deck> {
 				}
 			});
 
-			Hero h = getHero(locale);
+			Hero h = account.getHero(locale);
 			if (h != null) {
 				g2d.drawImage(h.render(locale), 1237, 834, null);
 			} else {

@@ -16,7 +16,7 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.command.deck;
+package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.model.Page;
 import com.kuuhaku.interfaces.Executable;
@@ -26,7 +26,7 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.EventData;
@@ -39,19 +39,17 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 @Command(
-		name = "deck",
+		name = "hero",
 		path = "use",
 		category = Category.INFO
 )
 @Syntax(allowEmpty = true, value = {
-		"<id:number:r>",
-		"<name:word:r>"
+		"<hero:word:r>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class DeckUseCommand implements Executable {
+public class HeroUseCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
@@ -59,13 +57,14 @@ public class DeckUseCommand implements Executable {
 
 		if (args.isEmpty()) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
-					.setTitle(locale.get("str/decks"));
+					.setTitle(locale.get("str/heroes"));
 
-			AtomicInteger idx = new AtomicInteger();
-			List<Page> pages = Utils.generatePages(eb, acc.getDecks(), 9, 3,
-					deck -> new FieldMimic(
-							(deck.isCurrent() ? "✅ " : "") + "`" + idx.getAndIncrement() + " | " + deck.getName() + "`",
-							deck.toString(locale)
+			List<Page> pages = Utils.generatePages(eb, acc.getHeroes(locale), 9, 3,
+					hero -> new FieldMimic(
+							(hero.isCurrent() ? "✅ " : "") + "`" + hero.getId() + "` " + hero.getName(),
+							locale.get("str/level", hero.getLevel()) + (
+									hero.isRetired() ? "**" + locale.get("str/retired") + "**" : ""
+							)
 					).toString()
 			);
 
@@ -73,28 +72,18 @@ public class DeckUseCommand implements Executable {
 			return;
 		}
 
-		List<Deck> decks = acc.getDecks();
-		int id = args.getInt("id", -1);
-		if (Utils.between(id, 0, decks.size() - 1)) {
-			Deck d = decks.get(id);
-			settings.setCurrentDeck(d.getId());
-			settings.save();
-
-			event.channel().sendMessage(locale.get("success/switch", d.getName())).queue();
-			return;
-		}
-
-		String name = args.getString("name");
-		for (Deck deck : decks) {
-			if (deck.getName().equalsIgnoreCase(name)) {
-				settings.setCurrentDeck(deck.getId());
+		List<Hero> heroes = acc.getHeroes(locale);
+		String hero = args.getString("hero");
+		for (Hero h : heroes) {
+			if (h.getName().equalsIgnoreCase(hero)) {
+				settings.setCurrentHero(h.getId());
 				settings.save();
 
-				event.channel().sendMessage(locale.get("success/switch", deck.getName())).queue();
+				event.channel().sendMessage(locale.get("success/switch", h.getName())).queue();
 				return;
 			}
 		}
 
-		event.channel().sendMessage(locale.get("error/deck_not_found")).queue();
+		event.channel().sendMessage(locale.get("error/unknown_hero")).queue();
 	}
 }

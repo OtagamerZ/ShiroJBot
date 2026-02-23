@@ -39,7 +39,6 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
 import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.shoukan.Deck;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -77,15 +76,12 @@ import java.util.stream.Stream;
 public class DunhunCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Deck d = data.profile().getAccount().getDeck();
-		if (d == null) {
-			event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-			return;
-		}
-
-		Hero h = d.getHero(locale);
+		Hero h = data.profile().getAccount().getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
+			return;
+		} else if (h.isRetired()) {
+			event.channel().sendMessage(locale.get("error/retired_hero")).queue();
 			return;
 		}
 
@@ -211,6 +207,7 @@ public class DunhunCommand implements Executable {
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
+						case GameReport.RETIRED_HERO -> event.channel().sendMessage(locale.get("error/retired_hero")).queue();
 						case GameReport.OVERBURDENED ->
 								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 						case GameReport.UNDERLEVELLED ->
@@ -256,6 +253,7 @@ public class DunhunCommand implements Executable {
 										event.channel().sendMessage(locale.get("error/no_hero_target", "<@" + e.getContent() + ">")).queue();
 									}
 								}
+								case GameReport.RETIRED_HERO -> event.channel().sendMessage(locale.get("error/retired_hero")).queue();
 								case GameReport.OVERBURDENED ->
 										event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 								case GameReport.UNDERLEVELLED ->

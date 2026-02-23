@@ -69,6 +69,9 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "current_deck", nullable = false)
 	private int currentDeck;
 
+	@Column(name = "current_hero", nullable = false)
+	private String currentHero;
+
 	@Column(name = "current_title", nullable = false)
 	private int currentTitle;
 
@@ -139,6 +142,14 @@ public class AccountSettings extends DAO<AccountSettings> {
 
 	public void setCurrentDeck(int id) {
 		this.currentDeck = id;
+	}
+
+	public String getCurrentHero() {
+		return currentHero;
+	}
+
+	public void setCurrentHero(String id) {
+		this.currentHero = id;
 	}
 
 	public int getCurrentTitle() {
