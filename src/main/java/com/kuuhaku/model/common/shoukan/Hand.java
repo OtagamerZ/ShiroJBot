@@ -380,7 +380,7 @@ public class Hand {
 		BondedList<Drawable<?>> stack = getMainStack();
 		stack.addAll(toAdd);
 
-		Hero h = account.getHero(game.getLocale());
+		Hero h = getAccount().getHero(game.getLocale());
 		if (h != null) {
 			Senshi hero = h.createSenshi();
 			hero.getStats().getPower().set(new MultMod(h.getAttributes().wis() * 0.05));
