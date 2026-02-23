@@ -49,7 +49,6 @@ import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
-import groovy.lang.Closure;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
@@ -472,15 +471,12 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 	}
 
-	public Senshi getFront() {
+	public List<Senshi> getFront() {
 		return getFront((Boolean) null);
 	}
 
-	public Senshi getFront(Boolean top) {
-		List<Senshi> tgts = getFront(top, getIndex());
-		if (tgts.isEmpty()) return null;
-
-		return tgts.getFirst();
+	public List<Senshi> getFront(Boolean top) {
+		return getFront(top, getIndex());
 	}
 
 	public List<Senshi> getFront(int... indexes) {
