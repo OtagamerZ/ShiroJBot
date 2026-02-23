@@ -369,6 +369,8 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public Hero getHero(I18N locale) {
 		List<Hero> heroes = getHeroes(locale);
+		if (heroes.isEmpty()) return null;
+
 		for (Hero h : heroes) {
 			if (h.isCurrent()) {
 				h.getSenshi();
