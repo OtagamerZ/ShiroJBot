@@ -69,7 +69,7 @@ public class AccountSettings extends DAO<AccountSettings> {
 	@Column(name = "current_deck", nullable = false)
 	private int currentDeck;
 
-	@Column(name = "current_hero", nullable = false)
+	@Column(name = "current_hero")
 	private String currentHero;
 
 	@Column(name = "current_title", nullable = false)

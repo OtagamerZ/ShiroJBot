@@ -187,7 +187,7 @@ public class Hero extends Actor<Hero> {
 	}
 
 	public boolean isCurrent() {
-		return account.getSettings().getCurrentHero().equals(getId());
+		return Objects.equals(account.getSettings().getCurrentHero(), getId());
 	}
 
 	public JSONObject getEquipmentRefs() {
