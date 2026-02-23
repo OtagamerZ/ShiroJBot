@@ -557,7 +557,7 @@ public interface Drawable<T extends Drawable<T>> {
 			addTarget(tgt, tgts, empower);
 		}
 
-		return tgts.stream().sorted(Comparator.comparingInt(Senshi::getIndex)).toList();
+		return tgts.stream().toList();
 	}
 
 	default List<Evogear> getEquipments(Side side) {
