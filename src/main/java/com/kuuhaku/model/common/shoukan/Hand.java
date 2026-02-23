@@ -482,6 +482,7 @@ public class Hand {
 		List<Drawable<?>> out = new ArrayList<>();
 		for (int i = 0; i < Math.min(value, getMainStack().size()); i++) {
 			Drawable<?> d = manualDraw(false);
+			System.out.println("(" + side + ") draw " + out);
 			if (d != null) {
 				out.add(d);
 			}
@@ -686,7 +687,6 @@ public class Hand {
 		out.setAvailable(true);
 		cards.add(out);
 
-		System.out.println("(" + side + ") draw " + out);
 		if (manual) {
 			consumeDraw();
 		}
