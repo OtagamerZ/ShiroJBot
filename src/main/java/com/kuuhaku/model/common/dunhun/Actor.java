@@ -9,6 +9,7 @@ import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
@@ -553,6 +554,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Senshi createSenshi() {
+		return createSenshi(false);
+	}
+
+	public Senshi createSenshi(boolean shoukan) {
 		Senshi senshi = new Senshi(this);
 		cache.setSenshi(senshi);
 
@@ -598,6 +603,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		int wDmg = 0;
 		for (Gear g : equip) {
 			if (g == null) continue;
+			else if (g.getBasetype().getStats().gearType().getSlot() == GearSlot.GRIMOIRE) {
+				if (!shoukan) continue;
+			}
+
 			g.load(this);
 
 			if (!g.isWeapon()) {
