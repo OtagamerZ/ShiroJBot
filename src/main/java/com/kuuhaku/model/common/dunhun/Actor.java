@@ -641,7 +641,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		int baseDmg = dmg + wDmg;
 		int baseDef = (int) (def * (1 + total.str() * 0.01));
-		int baseDdg = ddg + total.dex() / 2;
+		int baseDdg = ddg + total.dex() / 5;
 		int basePry = pry;
 
 		CardExtra stats = senshi.getStats();
