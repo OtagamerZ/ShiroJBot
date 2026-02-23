@@ -645,8 +645,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		int basePry = pry;
 
 		CardExtra stats = senshi.getStats();
-		stats.getAtk().set(new FlatMod(() -> modifiers.getDamage(baseDmg) * mult));
-		stats.getDfs().set(new FlatMod(() -> modifiers.getDefense(baseDef) * mult * 0.75));
+		stats.getAtk().set(new FlatMod(() -> modifiers.getDamage(baseDmg)));
+		stats.getDfs().set(new FlatMod(() -> modifiers.getDefense(baseDef) * 0.75));
+		stats.getAttr().set(new MultMod(mult));
 		stats.getDodge().set(new FlatMod(() -> modifiers.getDodge(baseDdg)));
 		stats.getParry().set(new FlatMod(() -> modifiers.getParry(basePry)));
 		stats.getPower().set(new MultMod(() -> modifiers.getPower(pow)));
