@@ -102,6 +102,10 @@ public class CardAttributes implements Serializable, Cloneable {
 		return subEffects;
 	}
 
+	public void addEffect(Consumer<ShoukanContext> effect) {
+		subEffects.add(effect);
+	}
+
 	public void setEffect(@Language("Groovy") String effect) {
 		this.effect = effect;
 	}
