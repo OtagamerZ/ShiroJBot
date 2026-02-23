@@ -480,9 +480,9 @@ public class Hand {
 		if (value <= 0) return List.of();
 
 		List<Drawable<?>> out = new ArrayList<>();
-		for (int i = 0; i < Math.min(value, getMainStack().size()); i++) {
+		int size = Math.min(value, getMainStack().size());
+		for (int i = 0; i < size; i++) {
 			Drawable<?> d = manualDraw(false);
-			System.out.println("(" + side + ") draw " + out);
 			if (d != null) {
 				out.add(d);
 			}
