@@ -59,6 +59,7 @@ import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.Consumer;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -544,8 +545,8 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 					exec.run();
 				}
 
-				for (Closure<ShoukanContext> e : base.getSubEffects()) {
-					e.call(exec.toContext());
+				for (Consumer<ShoukanContext> e : base.getSubEffects()) {
+					e.accept(exec.toContext());
 				}
 
 				if (isSpell()) {

@@ -1375,8 +1375,8 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 						exec.run();
 					}
 
-					for (Closure<ShoukanContext> e : base.getSubEffects()) {
-						e.call(exec.toContext());
+					for (Consumer<ShoukanContext> e : base.getSubEffects()) {
+						e.accept(exec.toContext());
 					}
 
 					if (trigger != ON_TICK) {
