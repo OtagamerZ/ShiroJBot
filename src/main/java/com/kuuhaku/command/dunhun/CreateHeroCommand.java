@@ -144,6 +144,9 @@ public class CreateHeroCommand implements Executable {
 						h.setImage(img);
 						h.save();
 
+						acc.getSettings().setCurrentHero(h.getId());
+						acc.save();
+
 						event.channel().sendMessage(locale.get("success/hero_created"))
 								.addFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "hero.png"))
 								.queue();
