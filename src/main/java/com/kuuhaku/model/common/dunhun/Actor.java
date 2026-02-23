@@ -666,7 +666,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double attr = senshi.getDmg() + senshi.getDfs();
 		double avoid = 1 + (senshi.getDodge() + senshi.getParry()) / 200d;
 
-		base.setMana((int) (1 + effects + attr / 750 * stats.getPower().multiplier() * avoid));
+		base.setMana((int) (1 + effects + attr / 750 * Math.max(1, stats.getPower().multiplier()) * avoid));
 		base.setSacrifices((int) (attr / 3000));
 
 		if (this instanceof Hero) {
