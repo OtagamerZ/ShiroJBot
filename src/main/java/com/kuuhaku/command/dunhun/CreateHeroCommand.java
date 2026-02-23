@@ -57,10 +57,7 @@ public class CreateHeroCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
-		if (acc.getHero(locale) != null) {
-			event.channel().sendMessage(locale.get("error/has_hero", data.config().getPrefix())).queue();
-			return;
-		} else if (acc.getHeroes(locale).size() >= 3) {
+		if (acc.getHeroes(locale).size() >= 3) {
 			event.channel().sendMessage(locale.get("error/max_heroes")).queue();
 			return;
 		}
