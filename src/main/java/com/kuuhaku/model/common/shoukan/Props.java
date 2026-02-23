@@ -21,4 +21,5 @@ package com.kuuhaku.model.common.shoukan;
 import java.util.HashMap;
 
 public class Props extends HashMap<String, PropValue> {
+
 }

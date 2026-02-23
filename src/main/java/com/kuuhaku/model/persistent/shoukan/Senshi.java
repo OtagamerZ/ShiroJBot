@@ -24,7 +24,6 @@ import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.exceptions.SelectionException;
 import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
-import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
@@ -32,6 +31,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.SenshiActor;
 import com.kuuhaku.model.common.dunhun.SenshiBoss;
 import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
@@ -53,7 +53,6 @@ import groovy.lang.Closure;
 import jakarta.persistence.*;
 import org.apache.commons.collections4.set.ListOrderedSet;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
@@ -1352,12 +1351,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 
 			if (hasEffect() || !base.getSubEffects().isEmpty()) {
 				CachedScriptManager csm = getCSM();
-				csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
+				CachedScriptExecutor exec = csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
 						.forScript(getEffect())
 						.withConst("me", this)
 						.withConst("self", this)
 						.withConst("game", game)
 						.withConst("data", stats.getData())
+						.toExecutor()
 						.withVar("ep", ep)
 						.withVar("side", getSide())
 						.withVar("trigger", trigger);
@@ -1372,11 +1372,11 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 					}
 				} else {
 					if (getEffect().contains(trigger.name())) {
-						csm.run();
+						exec.run();
 					}
 
 					for (Closure<ShoukanContext> e : base.getSubEffects()) {
-						e.call(csm.toContext());
+						e.call(exec.toContext());
 					}
 
 					if (trigger != ON_TICK) {
@@ -1465,22 +1465,19 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		}
 
 		try {
-			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
+			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
 					.forScript(getEffect())
 					.withConst("me", this)
 					.withConst("self", this)
+					.withConst("evo", this instanceof PlaceableEvogear pe ? pe.getOriginal() : null)
 					.withConst("game", game)
 					.withConst("data", stats.getData())
+					.toExecutor()
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
 					.withVar("trigger", trigger);
 
-			if (this instanceof PlaceableEvogear pe) {
-				csm.withConst("evo", pe.getOriginal());
-			}
-
-			csm.run();
+			exec.run();
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 			String name = source.getVanity().getName();

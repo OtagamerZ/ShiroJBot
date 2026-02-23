@@ -18,21 +18,12 @@
 
 package com.kuuhaku.model.common;
 
-import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
+import com.kuuhaku.model.common.shoukan.CachedScriptExecutor;
 import com.kuuhaku.model.common.shoukan.Props;
-import com.kuuhaku.model.enums.shoukan.Side;
-import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.shoukan.Senshi;
-import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import org.apache.commons.collections4.MapUtils;
 import org.intellij.lang.annotations.Language;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -59,11 +50,6 @@ public class CachedScriptManager {
 		return this;
 	}
 
-	public CachedScriptManager withVar(String key, Object value) {
-		context.put(key, value);
-		return this;
-	}
-
 	public CachedScriptManager assertOwner(Drawable<?> owner, Runnable elseDo) {
 		if (!Objects.equals(this.owner, owner)) {
 			storedProps.clear();
@@ -76,8 +62,8 @@ public class CachedScriptManager {
 		return this;
 	}
 
-	public void run() {
-		Utils.exec(owner.toString(), code, context);
+	public CachedScriptExecutor toExecutor() {
+		return new CachedScriptExecutor(owner, context, storedProps, code);
 	}
 
 	public Props getStoredProps() {
@@ -86,19 +72,5 @@ public class CachedScriptManager {
 
 	public AtomicInteger getPropHash() {
 		return propHash;
-	}
-
-	@SuppressWarnings("unchecked")
-	public ShoukanContext toContext() {
-		return new ShoukanContext(
-				owner,
-				context.get(Trigger.class, "trigger"),
-				context.get(EffectParameters.class, "ep"),
-				context.get(Shoukan.class, "game"),
-				context.get(Senshi.class, "self"),
-				context.get(Side.class, "side"),
-				context.get(Map.class, "data"),
-				storedProps
-		);
 	}
 }

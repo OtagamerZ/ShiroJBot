@@ -59,7 +59,6 @@ import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -517,36 +516,36 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			ep = ep.forSide(getSide());
 
 			if (hasEffect() || !base.getSubEffects().isEmpty()) {
-				CachedScriptManager csm = getCSM();
-				csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+				CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 						.forScript(getEffect())
 						.withConst("evo", this)
 						.withConst("game", getGame())
 						.withConst("data", stats.getData())
+						.toExecutor()
 						.withVar("ep", ep)
 						.withVar("side", getSide())
 						.withVar("trigger", ep.trigger());
 
 				if (!isSpell()) {
 					if (this instanceof EquippableSenshi s) {
-						csm.withVar("me", s.getOriginal());
+						exec.withVar("me", s.getOriginal());
 					} else if (stats.getSource() instanceof Senshi s) {
-						csm.withVar("me", s);
+						exec.withVar("me", s);
 					}
 
 					if (stats.getSource() instanceof Senshi s && equipper == null) {
-						csm.withVar("self", s);
+						exec.withVar("self", s);
 					} else {
-						csm.withVar("self", equipper);
+						exec.withVar("self", equipper);
 					}
 				}
 
 				if (getEffect().contains(ep.trigger().name()) || (isSpell() && Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP))) {
-					csm.run();
+					exec.run();
 				}
 
 				for (Closure<ShoukanContext> e : base.getSubEffects()) {
-					e.call(csm.toContext());
+					e.call(exec.toContext());
 				}
 
 				if (isSpell()) {
@@ -606,31 +605,31 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		}
 
 		try {
-			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
+			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
 					.forScript(getEffect())
 					.withConst("evo", this)
 					.withConst("game", game)
 					.withConst("data", stats.getData())
+					.toExecutor()
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
 					.withVar("trigger", trigger);
 
 			if (!isSpell()) {
 				if (this instanceof EquippableSenshi s) {
-					csm.withVar("me", s.getOriginal());
+					exec.withVar("me", s.getOriginal());
 				} else if (stats.getSource() instanceof Senshi s) {
-					csm.withVar("me", s);
+					exec.withVar("me", s);
 				}
 
 				if (stats.getSource() instanceof Senshi s && equipper == null) {
-					csm.withVar("self", s);
+					exec.withVar("self", s);
 				} else {
-					csm.withVar("self", equipper);
+					exec.withVar("self", equipper);
 				}
 			}
 
-			csm.run();
+			exec.run();
 		} catch (ActivationException e) {
 			game.getChannel().sendMessage(game.getString("error/spell", game.getString(e.getMessage()))).queue();
 		} catch (Exception e) {

@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
+import com.kuuhaku.model.common.shoukan.CachedScriptExecutor;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.TagBundle;
@@ -307,21 +308,21 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 			base.lock(ep.trigger());
 
 			currentTrigger = ep.trigger();
-			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 					.forScript(getEffect())
 					.withConst("field", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
+					.toExecutor()
 					.withVar("ep", ep)
 					.withVar("side", getSide())
 					.withVar("trigger", ep.trigger());
 
 			if (stats.getSource() instanceof Senshi s) {
-				csm.withVar("me", s);
+				exec.withVar("me", s);
 			}
 
-			csm.run();
+			exec.run();
 
 			if (ep.trigger() != ON_TICK) {
 				hasFlag(Flag.EMPOWERED, true);
@@ -351,21 +352,21 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 		}
 
 		try {
-			CachedScriptManager csm = getCSM();
-			csm.assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
+			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
 					.forScript(getEffect())
 					.withConst("field", this)
 					.withConst("game", getGame())
 					.withConst("data", stats.getData())
+					.toExecutor()
 					.withVar("ep", new EffectParameters(trigger, getSide()))
 					.withVar("side", getSide())
 					.withVar("trigger", trigger);
 
 			if (stats.getSource() instanceof Senshi s) {
-				csm.withVar("me", s);
+				exec.withVar("me", s);
 			}
 
-			csm.run();
+			exec.run();
 		} catch (Exception e) {
 			Drawable<?> source = Utils.getOr(stats.getSource(), this);
 			String name = source.getVanity().getName();
