@@ -686,6 +686,7 @@ public class Hand {
 		out.setAvailable(true);
 		cards.add(out);
 
+		System.out.println("(" + side + ") draw " + out);
 		if (manual) {
 			consumeDraw();
 		}

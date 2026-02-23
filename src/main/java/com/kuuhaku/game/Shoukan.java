@@ -154,7 +154,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (Hand h : hands.values()) {
 			h.loadCards();
-			h.manualDraw(h.getBase().handCapacity().get());
+			h.resetDraws();
+			h.manualDraw(h.getRemainingDraws());
 
 			if (isNotVoided()) {
 				boolean allChrome = true;
