@@ -37,7 +37,6 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	@Fetch(FetchMode.SUBSELECT)
 	protected Set<LocalizedMonster> infos = new HashSet<>();
 
-	private transient boolean applyLevelScaling;
 	private transient boolean droppedLoot;
 
 	public MonsterBase() {
@@ -139,14 +138,6 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	public void setDroppedLoot(boolean droppedLoot) {
 		this.droppedLoot = droppedLoot;
-	}
-
-	public boolean isApplyingLevelScaling() {
-		return applyLevelScaling;
-	}
-
-	public void setApplyLevelScaling(boolean applyLevelScaling) {
-		this.applyLevelScaling = applyLevelScaling;
 	}
 
 	public void load() {
