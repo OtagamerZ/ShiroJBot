@@ -45,17 +45,17 @@ public class ActorModifiers {
 	}
 
 	private double accumulate(double base, Function<EffectProperties<?>, ValueMod> extractor) {
-		List<Set<EffectProperties<?>>> inherited = new ArrayList<>();
+		List<EffectProperties<?>> inherited = new ArrayList<>();
 
 		Actor<?> parent = this.parent;
 		while (parent.isMinion()) {
-			inherited.add(parent.getModifiers().summon.effects);
 			parent = parent.getMaster();
+			inherited.addAll(parent.getModifiers().summon.effects);
 		}
 
 		Iterator<EffectProperties<?>> it = IteratorUtils.chainedIterator(
 				effects.iterator(),
-				inherited.stream().flatMap(Collection::stream).iterator()
+				inherited.iterator()
 		);
 
 		double flat = 0, inc = 0, mult = 1;
