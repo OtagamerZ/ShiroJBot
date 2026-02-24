@@ -687,7 +687,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public int getHighestLevel() {
 		return DAO.queryNative(Integer.class,
-				"SELECT greatest(1, cast(sqrt(xp / 100.0) AS INT) + 1) FROM profile WHERE uid = ?1", uid
+				"SELECT greatest(1, cast(sqrt(max(xp) / 100.0) AS INT) + 1) FROM profile WHERE uid = ?1", uid
 		);
 	}
 
