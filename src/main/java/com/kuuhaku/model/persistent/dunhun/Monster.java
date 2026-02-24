@@ -139,7 +139,7 @@ public class Monster extends MonsterBase<Monster> {
 			case MAGIC -> 1.5;
 			case RARE -> 2.25;
 			default -> 1;
-		} * (isApplyingLevelScaling() ? HP_TABLE[getLevel() - 1] : 1);
+		} * HP_TABLE[getLevel() - 1];
 
 		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
 			mult *= 1 + getGame().getPartySize() * 0.5;
