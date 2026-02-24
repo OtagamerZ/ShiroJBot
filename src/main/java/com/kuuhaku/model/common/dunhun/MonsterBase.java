@@ -69,7 +69,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			return getMaster().getLevel();
 		}
 
-		return getGame().getAreaLevel();
+		return getGame() != null ? getGame().getAreaLevel() : 1;
 	}
 
 	@Override
