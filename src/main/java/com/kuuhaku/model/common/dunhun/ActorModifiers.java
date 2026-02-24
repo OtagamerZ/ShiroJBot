@@ -49,8 +49,8 @@ public class ActorModifiers {
 
 		Actor<?> parent = this.parent;
 		while (parent.isMinion()) {
-			parent = parent.getMaster();
 			inherited.add(parent.getModifiers().summon.effects);
+			parent = parent.getMaster();
 		}
 
 		Iterator<EffectProperties<?>> it = IteratorUtils.chainedIterator(
