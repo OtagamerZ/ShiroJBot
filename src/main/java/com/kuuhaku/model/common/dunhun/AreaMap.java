@@ -343,50 +343,47 @@ public class AreaMap {
 	}
 
 	public static void generateRandom(Dunhun game, AreaMap m) {
-		generateRandom(game, m, (idxFloor, idxSub) -> {
-			Floor fl = m.getFloor(idxFloor);
+		generateRandom(game, m, (fl, sub) -> {
 			List<Sublevel> sublevels = fl.getSublevels();
-
-			Sublevel sub = sublevels.get(idxSub);
 			if (sublevels.size() == 1) {
 				sub.addNode(NodeType.NONE);
 				return;
 			}
 
-			Sublevel prev;
+			Sublevel prevSub;
 			if (sub.getNumber() == 0) {
-				Floor floor = m.getFloor(fl.getNumber() - 1);
-				if (floor != null) {
-					prev = floor.getSublevel(floor.size() - 1);
+				Floor prevFloor = m.getFloor(fl.getNumber() - 1);
+				if (prevFloor != null) {
+					prevSub = prevFloor.getSublevel(prevFloor.size() - 1);
 				} else {
-					prev = null;
+					prevSub = null;
 				}
 			} else {
-				prev = sublevels.get(sub.getNumber() - 1);
+				prevSub = sublevels.get(sub.getNumber() - 1);
 			}
 
-			if (prev != null) {
+			if (prevSub != null) {
 				int nodeCount;
 				if (sub.getNumber() == 0 || sub.getNumber() == fl.size() - 1) {
 					nodeCount = 1;
 				} else {
 					int min = Math.min(1 + fl.getNumber() / 20, Sublevel.MAX_NODES / 3);
 					int max = Math.min(3 + fl.getNumber() / 10, Sublevel.MAX_NODES);
-					if (max > 5 && 5d / prev.size() > 1) {
+					if (max > 5 && 5d / prevSub.size() > 1) {
 						max = 5;
 					}
 
 					nodeCount = fl.getRng().nextInt(min, max + 1);
 				}
 
-				float part = ((float) prev.size() / nodeCount);
+				float part = ((float) prevSub.size() / nodeCount);
 				for (int k = 0; k < nodeCount; k++) {
-					Node last = prev.getNodes().stream()
+					Node last = prevSub.getNodes().stream()
 							.filter(Node::isFinalNode)
 							.findFirst().orElse(null);
 
 					if (last == null) {
-						List<Node> parents = new ArrayList<>(prev.getNodes().subList(
+						List<Node> parents = new ArrayList<>(prevSub.getNodes().subList(
 								(int) (part * k),
 								(int) Math.ceil(part * (k + 1))
 						));
@@ -402,13 +399,13 @@ public class AreaMap {
 							}
 						}
 
-						if (sub.getNumber() > 1 && idxSub > 0) {
+						if (sub.getNumber() > 1 && sub.getNumber() > 0) {
 							Sublevel leap = sublevels.get(sub.getNumber() - 2);
-							if (leap.size() > 0 && !prev.hasLeapNode()) {
+							if (leap.size() > 0 && !prevSub.hasLeapNode()) {
 								double leapRoll = fl.getRng().nextDouble();
 								if (leapRoll < 0.33) {
 									Node leapNode = null;
-									if (nodeCount > prev.size() && leap.size() > prev.size()) {
+									if (nodeCount > prevSub.size() && leap.size() > prevSub.size()) {
 										if (k == 0) {
 											leapNode = leap.getNode(0);
 										} else if (k == nodeCount - 1) {
@@ -417,7 +414,7 @@ public class AreaMap {
 									}
 
 									if (nodeCount % 2 == 1 && k == nodeCount / 2 && leap.size() % 2 == 1) {
-										if (prev.size() % 2 != leap.size() % 2) {
+										if (prevSub.size() % 2 != leap.size() % 2) {
 											leapNode = leap.getNode(leap.size() / 2);
 										}
 									}
@@ -438,7 +435,7 @@ public class AreaMap {
 		});
 	}
 
-	public static void generateRandom(Dunhun game, AreaMap m, BiConsumer<Integer, Integer> levelGenerator) {
+	public static void generateRandom(Dunhun game, AreaMap m, BiConsumer<Floor, Sublevel> levelGenerator) {
 		int distance = RENDER_FLOORS;
 		if (m.areasPerFloor < 10) {
 			distance += 1;
@@ -453,7 +450,7 @@ public class AreaMap {
 
 			List<Sublevel> sublevels = fl.getSublevels();
 			for (int j = 0; j < sublevels.size(); j++) {
-				levelGenerator.accept(depth, j);
+				levelGenerator.accept(fl, sublevels.get(j));
 			}
 
 			if (sublevels.size() > 1) {
