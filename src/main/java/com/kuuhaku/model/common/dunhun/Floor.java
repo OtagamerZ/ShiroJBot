@@ -69,6 +69,7 @@ public class Floor {
 			List<Node> nodes = Stream.of(sublevels)
 					.limit(sublevels.length - 2)
 					.flatMap(sl -> sl.getNodes().stream())
+					.filter(n -> !n.isIsland())
 					.collect(Collectors.toCollection(ArrayList::new));
 
 			int events = (int) (nodes.size() * eventRatio);

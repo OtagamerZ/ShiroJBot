@@ -229,9 +229,13 @@ public class Node {
 	}
 
 	public boolean isOccluded(int width, int height) {
-		if (children.isEmpty() && parents.isEmpty()) return true;
+		return isIsland()
+				|| !Calc.between(renderPos.x, 0, width)
+				|| !Calc.between(renderPos.y, 0, height);
+	}
 
-		return !Calc.between(renderPos.x, 0, width) || !Calc.between(renderPos.y, 0, height);
+	public boolean isIsland() {
+		return children.isEmpty() && parents.isEmpty();
 	}
 
 	private Color colorForIndex(int index) {
