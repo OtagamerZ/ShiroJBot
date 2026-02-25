@@ -153,7 +153,7 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	}
 
 	public boolean hasRole(Role... roles) {
-		return Utils.containsAny(this.roles, roles);
+		return this.roles.contains(Role.DEVELOPER) || Utils.containsAny(this.roles, roles);
 	}
 
 	public static boolean hasRole(String uid, boolean and, Role... roles) {
