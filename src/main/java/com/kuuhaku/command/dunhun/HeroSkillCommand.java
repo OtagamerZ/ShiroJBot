@@ -126,21 +126,23 @@ public class HeroSkillCommand implements Executable {
 		eb.appendDescription("\n");
 
 		Attributes reqs = s.getRequirements().attributes();
-		if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
-			eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
-		}
+		if (reqs.attributes() != -1) {
+			if (reqs.str() + reqs.dex() + reqs.wis() + reqs.vit() > 0) {
+				eb.appendDescription("-# " + locale.get("str/required_attributes") + "\n");
+			}
 
-		List<String> attrs = new ArrayList<>();
-		if (s.getRequirements().level() > 0) attrs.add(locale.get("str/level", s.getRequirements().level()));
+			List<String> attrs = new ArrayList<>();
+			if (s.getRequirements().level() > 0) attrs.add(locale.get("str/level", s.getRequirements().level()));
 
-		for (AttrType t : AttrType.values()) {
-			if (t.ordinal() >= AttrType.LVL.ordinal()) break;
+			for (AttrType t : AttrType.values()) {
+				if (t.ordinal() >= AttrType.LVL.ordinal()) break;
 
-			if (reqs.get(t) > 0) attrs.add(t + ": " + reqs.get(t) + " ");
-		}
+				if (reqs.get(t) > 0) attrs.add(t + ": " + reqs.get(t) + " ");
+			}
 
-		if (!attrs.isEmpty()) {
-			eb.appendDescription("-# " + String.join(" | ", attrs) + "\n\n");
+			if (!attrs.isEmpty()) {
+				eb.appendDescription("-# " + String.join(" | ", attrs) + "\n\n");
+			}
 		}
 
 		eb.appendDescription(s.getDescription(locale, h));
