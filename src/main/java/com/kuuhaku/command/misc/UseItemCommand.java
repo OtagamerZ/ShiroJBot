@@ -96,7 +96,7 @@ public class UseItemCommand implements Executable {
 							event.channel().sendMessage(Utils.getOr(out, e.getMessage())).queue();
 							return true;
 						} catch (Exception e) {
-							Constants.LOGGER.warn("Failed to apply crafting item {}", e, e);
+							Constants.LOGGER.warn("Failed to apply crafting item {}", item.getId(), e);
 							event.channel().sendMessage(locale.get("error/item_invalid_args")).queue();
 							return true;
 						}
