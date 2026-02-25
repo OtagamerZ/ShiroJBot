@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
@@ -342,6 +343,102 @@ public class AreaMap {
 	}
 
 	public static void generateRandom(Dunhun game, AreaMap m) {
+		generateRandom(game, m, (idxFloor, idxSub) -> {
+			Floor fl = m.getFloor(idxFloor);
+			List<Sublevel> sublevels = fl.getSublevels();
+
+			Sublevel sub = sublevels.get(idxSub);
+			if (sublevels.size() == 1) {
+				sub.addNode(NodeType.NONE);
+				return;
+			}
+
+			Sublevel prev;
+			if (sub.getNumber() == 0) {
+				Floor floor = m.getFloor(fl.getNumber() - 1);
+				if (floor != null) {
+					prev = floor.getSublevel(floor.size() - 1);
+				} else {
+					prev = null;
+				}
+			} else {
+				prev = sublevels.get(sub.getNumber() - 1);
+			}
+
+			if (prev != null) {
+				int nodeCount;
+				if (sub.getNumber() == 0 || sub.getNumber() == fl.size() - 1) {
+					nodeCount = 1;
+				} else {
+					int min = Math.min(1 + fl.getNumber() / 20, Sublevel.MAX_NODES / 3);
+					int max = Math.min(3 + fl.getNumber() / 10, Sublevel.MAX_NODES);
+					if (max > 5 && 5d / prev.size() > 1) {
+						max = 5;
+					}
+
+					nodeCount = fl.getRng().nextInt(min, max + 1);
+				}
+
+				float part = ((float) prev.size() / nodeCount);
+				for (int k = 0; k < nodeCount; k++) {
+					Node last = prev.getNodes().stream()
+							.filter(Node::isFinalNode)
+							.findFirst().orElse(null);
+
+					if (last == null) {
+						List<Node> parents = new ArrayList<>(prev.getNodes().subList(
+								(int) (part * k),
+								(int) Math.ceil(part * (k + 1))
+						));
+
+						List<Node> blkPar = parents.stream()
+								.filter(p -> !p.getChildren().isEmpty())
+								.toList();
+
+						if (!blkPar.isEmpty()) {
+							while (parents.size() > 1 && fl.getRng().nextDouble() > 1d / (parents.size() + 1)) {
+								Node parent = blkPar.get(fl.getRng().nextInt(0, blkPar.size()));
+								parents.remove(parent);
+							}
+						}
+
+						if (sub.getNumber() > 1 && idxSub > 0) {
+							Sublevel leap = sublevels.get(sub.getNumber() - 2);
+							if (leap.size() > 0 && !prev.hasLeapNode()) {
+								double leapRoll = fl.getRng().nextDouble();
+								if (leapRoll < 0.33) {
+									Node leapNode = null;
+									if (nodeCount > prev.size() && leap.size() > prev.size()) {
+										if (k == 0) {
+											leapNode = leap.getNode(0);
+										} else if (k == nodeCount - 1) {
+											leapNode = leap.getNode(leap.size() - 1);
+										}
+									}
+
+									if (nodeCount % 2 == 1 && k == nodeCount / 2 && leap.size() % 2 == 1) {
+										if (prev.size() % 2 != leap.size() % 2) {
+											leapNode = leap.getNode(leap.size() / 2);
+										}
+									}
+
+									if (leapNode != null && leapNode.getChildren().size() < 5) {
+										parents.add(leapNode);
+									}
+								}
+							}
+						}
+
+						sub.addNode(parents);
+					} else {
+						sub.addNode(last);
+					}
+				}
+			}
+		});
+	}
+
+	public static void generateRandom(Dunhun game, AreaMap m, BiConsumer<Integer, Integer> levelGenerator) {
 		int distance = RENDER_FLOORS;
 		if (m.areasPerFloor < 10) {
 			distance += 1;
@@ -356,94 +453,7 @@ public class AreaMap {
 
 			List<Sublevel> sublevels = fl.getSublevels();
 			for (int j = 0; j < sublevels.size(); j++) {
-				Sublevel sub = sublevels.get(j);
-				if (sublevels.size() == 1) {
-					sub.addNode(NodeType.NONE);
-					continue;
-				}
-
-				Sublevel prev;
-				if (sub.getNumber() == 0) {
-					Floor floor = m.getFloor(fl.getNumber() - 1);
-					if (floor != null) {
-						prev = floor.getSublevel(floor.size() - 1);
-					} else {
-						prev = null;
-					}
-				} else {
-					prev = sublevels.get(sub.getNumber() - 1);
-				}
-
-				if (prev != null) {
-					int nodeCount;
-					if (sub.getNumber() == 0 || sub.getNumber() == fl.size() - 1) {
-						nodeCount = 1;
-					} else {
-						int min = Math.min(1 + fl.getNumber() / 20, Sublevel.MAX_NODES / 3);
-						int max = Math.min(3 + fl.getNumber() / 10, Sublevel.MAX_NODES);
-						if (max > 5 && 5d / prev.size() > 1) {
-							max = 5;
-						}
-
-						nodeCount = fl.getRng().nextInt(min, max + 1);
-					}
-
-					float part = ((float) prev.size() / nodeCount);
-					for (int k = 0; k < nodeCount; k++) {
-						Node last = prev.getNodes().stream()
-								.filter(Node::isFinalNode)
-								.findFirst().orElse(null);
-
-						if (last == null) {
-							List<Node> parents = new ArrayList<>(prev.getNodes().subList(
-									(int) (part * k),
-									(int) Math.ceil(part * (k + 1))
-							));
-
-							List<Node> blkPar = parents.stream()
-									.filter(p -> !p.getChildren().isEmpty())
-									.toList();
-
-							if (!blkPar.isEmpty()) {
-								while (parents.size() > 1 && fl.getRng().nextDouble() > 1d / (parents.size() + 1)) {
-									Node parent = blkPar.get(fl.getRng().nextInt(0, blkPar.size()));
-									parents.remove(parent);
-								}
-							}
-
-							if (sub.getNumber() > 1 && j > 0) {
-								Sublevel leap = sublevels.get(sub.getNumber() - 2);
-								if (leap.size() > 0 && !prev.hasLeapNode()) {
-									double leapRoll = fl.getRng().nextDouble();
-									if (leapRoll < 0.33) {
-										Node leapNode = null;
-										if (nodeCount > prev.size() && leap.size() > prev.size()) {
-											if (k == 0) {
-												leapNode = leap.getNode(0);
-											} else if (k == nodeCount - 1) {
-												leapNode = leap.getNode(leap.size() - 1);
-											}
-										}
-
-										if (nodeCount % 2 == 1 && k == nodeCount / 2 && leap.size() % 2 == 1) {
-											if (prev.size() % 2 != leap.size() % 2) {
-												leapNode = leap.getNode(leap.size() / 2);
-											}
-										}
-
-										if (leapNode != null && leapNode.getChildren().size() < 5) {
-											parents.add(leapNode);
-										}
-									}
-								}
-							}
-
-							sub.addNode(parents);
-						} else {
-							sub.addNode(last);
-						}
-					}
-				}
+				levelGenerator.accept(depth, j);
 			}
 
 			if (sublevels.size() > 1) {
