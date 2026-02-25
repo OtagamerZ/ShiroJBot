@@ -229,7 +229,7 @@ public class Node {
 	}
 
 	public boolean isOccluded(int width, int height) {
-		if (children.isEmpty() && parents.isEmpty()) return false;
+		if (children.isEmpty() && parents.isEmpty()) return true;
 
 		return !Calc.between(renderPos.x, 0, width) || !Calc.between(renderPos.y, 0, height);
 	}
