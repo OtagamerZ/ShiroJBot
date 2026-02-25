@@ -10,6 +10,7 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
+import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.WobbleStroke;
 import kotlin.Pair;
 
@@ -449,15 +450,15 @@ public class AreaMap {
 			m.addFloor(fl);
 
 			List<Sublevel> sublevels = fl.getSublevels();
-			for (int j = 0; j < sublevels.size(); j++) {
-				levelGenerator.accept(fl, sublevels.get(j));
+			for (Sublevel sub : sublevels) {
+				levelGenerator.accept(fl, sub);
 			}
 
 			if (sublevels.size() > 1) {
 				Sublevel last = sublevels.getLast();
 				if (last.size() == 1) {
 					Node n = last.getNode(0);
-					if (n.isFinalNode()) {
+					if (n.isFinalNode() && Utils.equalsAny(n.getType(), NodeType.DANGER, NodeType.BOSS)) {
 						Node ret = last.newNode(NodeType.RETURN, List.of(n));
 						ret.setOffsetNode(true);
 					}
