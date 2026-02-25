@@ -77,8 +77,11 @@ public class Dungeon extends DAO<Dungeon> {
 	@Column(name = "areas_per_floor", nullable = false)
 	private int areasPerFloor = AreaMap.LEVELS_PER_FLOOR;
 
-	@Column(name = "hardcore")
+	@Column(name = "hardcore", nullable = false)
 	private boolean hardcore;
+
+	@Column(name = "hidden", nullable = false)
+	private boolean hidden;
 
 	public Dungeon() {
 	}
@@ -122,6 +125,10 @@ public class Dungeon extends DAO<Dungeon> {
 
 	public boolean isInfinite() {
 		return script == null || script.isBlank();
+	}
+
+	public boolean isHidden() {
+		return hidden;
 	}
 
 	public AreaMap init(Dunhun game, DungeonRun run) {

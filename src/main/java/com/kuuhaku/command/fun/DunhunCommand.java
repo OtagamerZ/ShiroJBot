@@ -37,8 +37,10 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
 import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
@@ -76,7 +78,8 @@ import java.util.stream.Stream;
 public class DunhunCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		Hero h = data.profile().getAccount().getHero(locale);
+		Account acc = data.profile().getAccount();
+		Hero h = acc.getHero(locale);
 		if (h == null) {
 			event.channel().sendMessage(locale.get("error/no_hero", data.config().getPrefix())).queue();
 			return;
@@ -86,7 +89,7 @@ public class DunhunCommand implements Executable {
 		}
 
 		if (!args.has("dungeon")) {
-			List<Dungeon> dgs = DAO.queryAll(Dungeon.class, "SELECT d FROM Dungeon d ORDER BY d.areaLevel, d.id");
+			List<Dungeon> dgs = DAO.queryAll(Dungeon.class, "SELECT d FROM Dungeon d WHERE d.hidden = FALSE ORDER BY d.areaLevel, d.id");
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/dungeons"))
 					.setImage("attachment://image.png");
@@ -182,8 +185,8 @@ public class DunhunCommand implements Executable {
 		}
 
 		Dungeon dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
-		if (dungeon == null) {
-			String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon");
+		if (dungeon == null || (dungeon.isHidden() && !acc.hasRole(Role.TESTER))) {
+			String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon WHERE NOT hidden");
 			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_dungeon_none")).queue();
 			} else {
