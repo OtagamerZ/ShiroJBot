@@ -291,11 +291,7 @@ public class Node {
 			boolean leap = child.depth() - depth() > 1;
 			boolean blocked = this.blocked.contains(child);
 
-			Color color = colorForIndex(child.pathColor);
-			if (leap || (child.getParents().size() > 1 && children.size() == 1)) {
-				color = colorForIndex(pathColor);
-			}
-
+			Color color = Color.GRAY;
 			int strokeWidth = blocked ? 2 : 8;
 			if (blocked) {
 				color = new Color(255, 0, 0, 128);
