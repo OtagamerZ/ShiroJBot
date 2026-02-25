@@ -26,7 +26,9 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.rank.RankDungeonEntry;
@@ -49,8 +51,10 @@ import java.util.List;
 public class RankDungeonCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		Account acc = data.profile().getAccount();
+
 		Dungeon dungeon = DAO.find(Dungeon.class, args.getString("dungeon").toUpperCase());
-		if (dungeon == null) {
+		if (dungeon == null || (dungeon.isHidden() && !acc.hasRole(Role.TESTER))) {
 			String sug = Utils.didYouMean(args.getString("dungeon"), "SELECT id AS value FROM dungeon");
 			if (sug == null) {
 				event.channel().sendMessage(locale.get("error/unknown_dungeon_none")).queue();
