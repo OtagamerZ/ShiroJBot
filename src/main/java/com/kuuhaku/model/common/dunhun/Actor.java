@@ -428,7 +428,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void applyRegDeg() {
-		AtomicInteger val = new AtomicInteger(getRegDeg().next());
+		AtomicInteger val = new AtomicInteger(applyMitigation(getRegDeg().next()));
 
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
