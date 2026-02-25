@@ -338,7 +338,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 					if (combat.get().isDone()) {
 						if (combat.get().isWin()) {
-							grantCombatLoot();
+							if (!dungeon.isHidden()) {
+								grantCombatLoot();
+							}
+
 							run.setVisited(nextNode);
 						} else if (nextNode.getType() != NodeType.EVENT) {
 							try {
@@ -355,7 +358,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					combat.set(null);
 				}
 
-				if (run.getFloor() % 10 == 0 && heroes.size() == 1) {
+				if (run.getFloor() % 10 == 0 && isRanked()) {
 					Hero h = heroes.values().iterator().next();
 
 					try {
@@ -439,7 +442,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		if (dungeon.isHardcore()) {
 			try {
-				if (hs.size() == 1) {
+				if (isRanked()) {
 					Hero h = hs.iterator().next();
 					int rank = DAO.queryNative(Integer.class,
 							"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
@@ -463,6 +466,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 
 		return true;
+	}
+
+	public boolean isRanked() {
+		return map.getRun().getPlayers().size() == 1 && !dungeon.isHidden();
 	}
 
 	@Override
