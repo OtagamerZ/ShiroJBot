@@ -115,7 +115,7 @@ public class Sublevel {
 
 	public Sublevel getPrevious() {
 		if (number == 0) {
-			floor.getPrevious().getSublevels().getLast();
+			return floor.getPrevious().getSublevels().getLast();
 		}
 
 		return floor.getSublevel(number - 1);
@@ -123,7 +123,7 @@ public class Sublevel {
 
 	public Sublevel getNext() {
 		if (number == floor.size() - 1) {
-			floor.getNext().getSublevels().getFirst();
+			return floor.getNext().getSublevels().getFirst();
 		}
 
 		return floor.getSublevel(number + 1);
