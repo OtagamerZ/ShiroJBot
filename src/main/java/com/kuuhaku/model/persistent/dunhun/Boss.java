@@ -67,11 +67,6 @@ public class Boss extends MonsterBase<Boss> {
 				props.setDamageTaken(new MultMod(-1));
 				getModifiers().addEffect(props);
 
-				props = new PermanentProperties<>(null);
-				props.setDamageTaken(new MultMod(-0.5));
-				props.setMaxAp(new MultMod(0.5));
-				getModifiers().addEffect(props);
-
 				Combat comb = getGame().getCombat();
 				int idx = comb.getTurns().indexOf(this);
 				if (idx > -1) {
