@@ -206,8 +206,8 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
-		Skill affix = (Skill) o;
-		return Objects.equals(id, affix.id);
+		Skill skill = (Skill) o;
+		return Objects.equals(id, skill.id);
 	}
 
 	@Override
