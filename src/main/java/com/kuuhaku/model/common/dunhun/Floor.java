@@ -186,6 +186,14 @@ public class Floor {
 		return (number - 1) * map.getAreasPerFloor();
 	}
 
+	public Floor getPrevious() {
+		return map.getFloor(number - 1);
+	}
+
+	public Floor getNext() {
+		return map.getFloor(number + 1);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;

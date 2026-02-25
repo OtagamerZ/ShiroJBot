@@ -113,6 +113,22 @@ public class Sublevel {
 		}
 	}
 
+	public Sublevel getPrevious() {
+		if (number == 0) {
+			floor.getPrevious().getSublevels().getLast();
+		}
+
+		return floor.getSublevel(number - 1);
+	}
+
+	public Sublevel getNext() {
+		if (number == floor.size() - 1) {
+			floor.getNext().getSublevels().getFirst();
+		}
+
+		return floor.getSublevel(number + 1);
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (o == null || getClass() != o.getClass()) return false;
