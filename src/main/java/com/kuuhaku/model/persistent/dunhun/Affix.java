@@ -119,6 +119,10 @@ public class Affix extends DAO<Affix> {
 		return minLevel;
 	}
 
+	public int getWeight() {
+		return weight;
+	}
+
 	public String getGroup() {
 		return group;
 	}

@@ -26,11 +26,13 @@ import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
@@ -71,20 +73,32 @@ public class HeroGearShopCommand implements Executable {
 					.setAuthor(locale.get("str/items_available"));
 
 			Random rng = new Random(LocalDate.now().toEpochDay());
-			Gear.getRandom(h, rng);
+			List<Gear> catalogue = Utils.generate(6, _ -> Gear.getRandom(h, rng));
 
-			List<Consumable> catalogue = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.price > 0 ORDER BY c.id");
+			List<Page> pages = Utils.generatePages(eb, catalogue, 6, 3,
+					g -> {
+						FieldMimic fm = new FieldMimic(g.getName(locale),
+								locale.get("str/price", locale.get("currency/cr", g.getPrice()))
+						);
 
-			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
-					c -> {
-						FieldMimic fm = new FieldMimic(c.getName(locale), "");
-						if (c.getPrice() > 0) {
-							fm.appendLine(locale.get("str/price", locale.get("currency/cr", c.getPrice())));
+						fm.appendLine("`" + g.getId() + "` - " + g.getName(locale));
+
+						GearAffix imp = g.getImplicit();
+						if (imp != null) {
+							imp.getDescription(locale).lines()
+									.map(l -> "-# " + l)
+									.forEach(fm::appendLine);
+
+							if (!g.getAffixes().isEmpty()) {
+								fm.appendLine("-# ────────────────");
+							}
 						}
 
-						fm.appendLine(locale.get("str/item_has", h.getConsumableCount(c)));
-						fm.appendLine(c.getDescription(locale));
-						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.buy " + c.getId()));
+						for (String l : g.getAffixLines(locale)) {
+							fm.appendLine("-# " + l);
+						}
+
+						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.buy " + g.getId()));
 
 						return fm.toString();
 					},

@@ -195,6 +195,18 @@ public class Gear extends DAO<Gear> {
 		else return RarityClass.NORMAL;
 	}
 
+	public int getPrice() {
+		double base = 500 * getRarityClass().ordinal() * (1 + itemLevel / 10d);
+		if (!affixes.isEmpty()) {
+			double max = (double) DAO.queryNative(Integer.class, "SELECT max(weight) FROM affix WHERE type NOT LIKE 'MON_%'");
+			for (GearAffix ga : affixes) {
+				base *= 1 + 4 * (1 - ga.getAffix().getWeight() / max);
+			}
+		}
+
+		return (int) base;
+	}
+
 	public void reroll() {
 		this.roll = Calc.rng(Integer.MAX_VALUE);
 	}
@@ -512,6 +524,8 @@ public class Gear extends DAO<Gear> {
 
 		Gear out = new Gear(null, base);
 		out.setItemLevel(dropLevel);
+		out.roll = Calc.rng(Integer.MAX_VALUE, rng);
+		out.seed = Calc.rng(Integer.MAX_VALUE, rng);
 
 		if (rarity == RarityClass.NORMAL) return out;
 
