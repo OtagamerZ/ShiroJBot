@@ -80,6 +80,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	private final Map<String, Hero> heroes = new LinkedHashMap<>();
 	private final AtomicReference<Combat> combat = new AtomicReference<>();
 	private final AtomicReference<Pair<Message, ButtonizeHelper>> message = new AtomicReference<>();
+	private final Map<String, Object> props = new HashMap<>();
 	private final Loot loot;
 	private final AreaMap map;
 	private final boolean duel;
@@ -930,6 +931,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		message.get().getFirst().delete().queue(null, Utils::doNothing);
 		message.set(null);
+	}
+
+	public Map<String, Object> getProps() {
+		return props;
 	}
 
 	public Combat getCombat() {
