@@ -65,7 +65,7 @@ public class HeroShopCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			List<Consumable> catalogue = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.price IS NOT NULL ORDER BY c.id");
+			List<Consumable> catalogue = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.price > 0 ORDER BY c.id");
 
 			List<Page> pages = Utils.generatePages(eb, catalogue, 10, 5,
 					c -> {

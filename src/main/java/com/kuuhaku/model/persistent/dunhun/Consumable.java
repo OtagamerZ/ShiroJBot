@@ -63,7 +63,7 @@ public class Consumable extends DAO<Consumable> implements Usable, Cloneable {
 	private JSONArray reqTags = new JSONArray();
 
 	@Column(name = "price")
-	private Integer price;
+	private int price;
 
 	@Column(name = "weight", nullable = false)
 	private int weight;
