@@ -139,7 +139,7 @@ public class SynthesizeFastCommand implements Executable {
 		if (Calc.chance(field)) {
 			Field f = Utils.getRandomEntry(DAO.queryAll(Field.class, "SELECT f FROM Field f WHERE f.effectOnly = FALSE"));
 			StashedCard sc = new StashedCard(kp, f);
-			if (Calc.chance(0.05 * chromas)) {
+			if (Calc.chance(5 * chromas)) {
 				sc.setChrome(true);
 			}
 			sc.save();
@@ -154,7 +154,7 @@ public class SynthesizeFastCommand implements Executable {
 		} else {
 			Evogear e = SynthesizeCommand.rollSynthesis(event.user(), mult, false);
 			StashedCard sc = new StashedCard(kp, e);
-			if (Calc.chance(0.05 * chromas)) {
+			if (Calc.chance(5 * chromas)) {
 				sc.setChrome(true);
 			}
 			sc.save();
