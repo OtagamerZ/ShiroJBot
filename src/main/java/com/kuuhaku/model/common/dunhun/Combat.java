@@ -95,34 +95,31 @@ public class Combat implements Renderer<BufferedImage> {
 	private Boolean win;
 
 	public Combat(Dunhun game, Node node, Actor<?>... enemies) {
-		this.game = game;
-		this.node = node;
-		this.loot = new Loot(game.getLocale());
-
-		hunters.addAll(game.getHeroes().values());
-		keepers.addAll(Stream.of(enemies)
-				.filter(Objects::nonNull)
-				.toList()
+		this(game, node, game.getHeroes().values(),
+				Stream.of(enemies)
+						.filter(Objects::nonNull)
+						.toList()
 		);
-
-		for (Actor<?> a : hunters) {
-			a.setAp(0);
-			if (a.getHp() <= 0) {
-				a.setHp(1);
-			}
-		}
 	}
 
 	public Combat(Dunhun game, Node node, Collection<Hero> duelists) {
+		List<List<Hero>> sides = ListUtils.partition(List.copyOf(duelists), duelists.size() / 2);
+		this(game, node, sides.getFirst(), sides.getLast());
+	}
+
+	public Combat(Dunhun game, Node node, Collection<? extends Actor<?>> hunters, Collection<? extends Actor<?>> keepers) {
 		this.game = game;
 		this.node = node;
 		this.loot = new Loot(game.getLocale());
 
-		List<Hero> sides = List.copyOf(duelists);
-		List<Actor<?>> team = hunters;
-		for (List<Hero> hs : ListUtils.partition(sides, sides.size() / 2)) {
-			team.addAll(hs);
-			team = keepers;
+		this.hunters.addAll(hunters);
+		this.keepers.addAll(keepers);
+
+		for (Actor<?> a : getActors()) {
+			a.setAp(0);
+			if (a instanceof Hero && a.getHp() <= 0) {
+				a.setHp(1);
+			}
 		}
 	}
 
