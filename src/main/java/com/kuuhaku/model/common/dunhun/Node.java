@@ -95,6 +95,10 @@ public class Node {
 		return seed;
 	}
 
+	public boolean hasEventGenerator() {
+		return eventGenerator != null;
+	}
+
 	public void setEventGenerator(Supplier<Event> generator) {
 		this.eventGenerator = generator;
 	}
@@ -102,6 +106,10 @@ public class Node {
 	public Event generateEvent() {
 		if (eventGenerator == null) return null;
 		return eventGenerator.get();
+	}
+
+	public boolean hasEnemyGenerator() {
+		return enemyGenerator != null;
 	}
 
 	public void setEnemyGenerator(Supplier<Actor<?>> generator) {
