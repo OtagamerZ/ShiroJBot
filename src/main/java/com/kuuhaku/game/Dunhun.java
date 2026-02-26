@@ -351,7 +351,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							}
 
 							run.setVisited(nextNode);
-						} else if (nextNode.getType() != NodeType.EVENT) {
+						} else if (!nextNode.isFinalNode() && nextNode.getType() != NodeType.EVENT) {
 							try {
 								Collection<Hero> hs = heroes.values();
 								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
