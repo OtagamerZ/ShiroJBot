@@ -115,8 +115,16 @@ public class Dungeon extends DAO<Dungeon> {
 		return areaLevel;
 	}
 
+	public void setAreaLevel(int areaLevel) {
+		this.areaLevel = areaLevel;
+	}
+
 	public int getAreasPerFloor() {
 		return areasPerFloor;
+	}
+
+	public void setAreasPerFloor(int areasPerFloor) {
+		this.areasPerFloor = areasPerFloor;
 	}
 
 	public boolean isHardcore() {
