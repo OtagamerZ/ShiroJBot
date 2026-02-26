@@ -21,6 +21,7 @@ import org.hibernate.type.SqlTypes;
 
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.random.RandomGenerator;
 
 
 @Entity
@@ -139,7 +140,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return Objects.hash(floor, sublevel, path);
 	}
 
-	public Random getNodeRng() {
+	public RandomGenerator getNodeRng() {
 		return nodeRng;
 	}
 

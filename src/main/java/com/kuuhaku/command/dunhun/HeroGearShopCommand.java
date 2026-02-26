@@ -30,6 +30,7 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.dunhun.Consumable;
+import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
@@ -41,16 +42,20 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
+import java.time.LocalDate;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Random;
+import java.util.random.RandomGenerator;
 
 @Command(
 		name = "hero",
-		path = "buy",
-		category = Category.MISC
+		path = {"gear", "buy"},
+		category = Category.DEV
 )
-@Syntax(allowEmpty = true, value = "<id:word:r> <amount:number>")
+@Syntax(allowEmpty = true, value = "<id:word:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class HeroShopCommand implements Executable {
+public class HeroGearShopCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		Account acc = data.profile().getAccount();
@@ -64,6 +69,9 @@ public class HeroShopCommand implements Executable {
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
+
+			Random rng = new Random(LocalDate.now().toEpochDay());
+			Gear.getRandom(h, rng);
 
 			List<Consumable> catalogue = DAO.queryAll(Consumable.class, "SELECT c FROM Consumable c WHERE c.price > 0 ORDER BY c.id");
 

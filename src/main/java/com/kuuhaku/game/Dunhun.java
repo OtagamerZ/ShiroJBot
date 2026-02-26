@@ -59,6 +59,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.random.RandomGenerator;
 import java.util.stream.Collectors;
 
 public class Dunhun extends GameInstance<NullPhase> {
@@ -946,7 +947,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return combat.get();
 	}
 
-	public Random getNodeRng() {
+	public RandomGenerator getNodeRng() {
 		return map.getRun().getNodeRng();
 	}
 

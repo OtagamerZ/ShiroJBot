@@ -46,10 +46,12 @@ public class CollectCommand implements Executable {
 
 		SingleUseReference<StashedCard> card = Spawn.getSpawnedCard(event.channel());
 		try {
+			boolean hasSpice = acc.getItemCount("special_spice") > 0;
+
 			if (!card.isValid()) {
 				event.channel().sendMessage(locale.get("error/no_card")).queue();
 				return;
-			} else if (Boolean.TRUE.equals(card.peekProperty(kp::hasCard))) {
+			} else if (Boolean.TRUE.equals(card.peekProperty(c -> kp.hasCard(c.getCard(), hasSpice)))) {
 				event.channel().sendMessage(locale.get("error/owned")).queue();
 				return;
 			} else if (Boolean.TRUE.equals(card.peekProperty(sc -> !acc.hasEnough(sc.getCollectPrice(), Currency.CR)))) {

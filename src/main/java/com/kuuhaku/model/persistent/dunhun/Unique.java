@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.persistent.dunhun;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
@@ -31,10 +32,8 @@ import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+import java.util.random.RandomGenerator;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -116,11 +115,19 @@ public class Unique extends DAO<Unique> {
 	}
 
 	public static Unique getRandom(Actor<?> source) {
-		Dunhun game = null;
+		if (source != null && source.getGame() != null) {
+			return getRandom(source, source.getGame().getNodeRng());
+		}
+
+		return getRandom(source, Constants.DEFAULT_RNG.get());
+	}
+
+	public static Unique getRandom(Actor<?> source, RandomGenerator rng) {
 		int dropLevel = Actor.MAX_LEVEL;
 		if (source != null && source.getGame() != null) {
-			game = source.getGame();
 			dropLevel = source.getDropLevel();
+		} else if (source instanceof Hero h) {
+			dropLevel = Math.max(1, h.getLevel() / 2);
 		}
 
 		List<Object[]> uqs = DAO.queryAllUnmapped("""
@@ -133,12 +140,7 @@ public class Unique extends DAO<Unique> {
 				""", dropLevel);
 		if (uqs.isEmpty()) return null;
 
-		RandomList<String> rl;
-		if (game != null) {
-			rl = new RandomList<>(game.getNodeRng());
-		} else {
-			rl = new RandomList<>();
-		}
+		RandomList<String> rl = new RandomList<>(rng);
 
 		for (Object[] a : uqs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());

@@ -44,6 +44,7 @@ import org.hibernate.annotations.FetchMode;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Predicate;
+import java.util.random.RandomGenerator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -452,7 +453,19 @@ public class Gear extends DAO<Gear> {
 		return getRandom(source, Basetype.getRandom(source), rarity);
 	}
 
+	public static Gear getRandom(Actor<?> source, RandomGenerator rng) {
+		return getRandom(source, Basetype.getRandom(source, rng), null, rng);
+	}
+
 	public static Gear getRandom(Actor<?> source, Basetype base, RarityClass rarity) {
+		if (source != null && source.getGame() != null) {
+			return getRandom(source, base, rarity, source.getGame().getNodeRng());
+		}
+
+		return getRandom(source, base, rarity, Constants.DEFAULT_RNG.get());
+	}
+
+	public static Gear getRandom(Actor<?> source, Basetype base, RarityClass rarity, RandomGenerator rng) {
 		if (base == null) return null;
 
 		double mult = 1;
@@ -474,17 +487,19 @@ public class Gear extends DAO<Gear> {
 					case UNIQUE -> 2.5;
 				};
 			}
+		} else if (source instanceof Hero h) {
+			dropLevel = Math.max(1, h.getLevel() / 2);
 		}
 
 		if (rarity == null) {
-			if (Calc.chance(1 * mult)) rarity = RarityClass.UNIQUE;
-			else if (Calc.chance(10 * mult)) rarity = RarityClass.RARE;
-			else if (Calc.chance(30 * mult)) rarity = RarityClass.MAGIC;
+			if (Calc.chance(1 * mult, rng)) rarity = RarityClass.UNIQUE;
+			else if (Calc.chance(10 * mult, rng)) rarity = RarityClass.RARE;
+			else if (Calc.chance(30 * mult, rng)) rarity = RarityClass.MAGIC;
 			else rarity = RarityClass.NORMAL;
 		}
 
 		if (rarity == RarityClass.UNIQUE) {
-			Unique u = Unique.getRandom(source);
+			Unique u = Unique.getRandom(source, rng);
 			if (u != null) {
 				Gear out = u.asGear();
 				out.setItemLevel(dropLevel);
@@ -500,9 +515,9 @@ public class Gear extends DAO<Gear> {
 
 		if (rarity == RarityClass.NORMAL) return out;
 
-		int mods = Calc.rng(1, rarity.getMaxMods());
+		int mods = Calc.rng(1, rarity.getMaxMods(), rng);
 		for (int i = 0; i < mods; i++) {
-			Affix af = Affix.getRandom(out, null, rarity);
+			Affix af = Affix.getRandom(out, null, rarity, rng);
 			if (af == null) break;
 
 			out.getAffixes().add(new GearAffix(out, af));

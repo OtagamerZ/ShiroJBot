@@ -39,6 +39,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.random.RandomGenerator;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -192,6 +193,10 @@ public class Affix extends DAO<Affix> {
 	}
 
 	public static Affix getRandom(Gear gear, AffixType type, RarityClass maxRarity) {
+		return getRandom(gear, type, maxRarity, Constants.DEFAULT_RNG.get());
+	}
+
+	public static Affix getRandom(Gear gear, AffixType type, RarityClass maxRarity, RandomGenerator rng) {
 		Basetype base = gear.getBasetype();
 
 		JSONArray tags = new JSONArray(base.getStats().allTags());
@@ -261,11 +266,11 @@ public class Affix extends DAO<Affix> {
 
 			if (left.isEmpty()) return null;
 
-			AffixType chosen = Utils.getRandomEntry(left);
+			AffixType chosen = Utils.getRandomEntry(rng, left);
 			affs.removeIf(o -> !o[2].equals(chosen.name()));
 		}
 
-		RandomList<String> rl = new RandomList<>();
+		RandomList<String> rl = new RandomList<>(rng);
 		for (Object[] a : affs) {
 			rl.add((String) a[0], ((Number) a[1]).intValue());
 		}
