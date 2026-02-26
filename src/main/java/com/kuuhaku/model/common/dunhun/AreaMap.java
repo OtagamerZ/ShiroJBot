@@ -351,18 +351,7 @@ public class AreaMap {
 				return;
 			}
 
-			Sublevel prevSub;
-			if (sub.getNumber() == 0) {
-				Floor prevFloor = m.getFloor(fl.getNumber() - 1);
-				if (prevFloor != null) {
-					prevSub = prevFloor.getSublevel(prevFloor.size() - 1);
-				} else {
-					prevSub = null;
-				}
-			} else {
-				prevSub = sublevels.get(sub.getNumber() - 1);
-			}
-
+			Sublevel prevSub = sub.getPrevious();
 			if (prevSub != null) {
 				int nodeCount;
 				if (sub.getNumber() == 0 || sub.getNumber() == fl.size() - 1) {
@@ -454,17 +443,6 @@ public class AreaMap {
 				levelGenerator.accept(fl, sub);
 			}
 
-			if (sublevels.size() > 1) {
-				Sublevel last = sublevels.getLast();
-				if (last.size() == 1) {
-					Node n = last.getNode(0);
-					if (n.isFinalNode()) {
-						Node ret = last.newNode(NodeType.RETURN, List.of(n));
-						ret.setOffsetNode(true);
-					}
-				}
-			}
-
 			int rests;
 			int areaLevel = game.getAreaLevel(fl);
 			if (areaLevel > Dunhun.LEVEL_BRUTAL) {
@@ -476,6 +454,19 @@ public class AreaMap {
 			}
 
 			fl.generateEvents(1 / 4d, rests);
+		}
+
+		for (Floor fl : m.getFloors()) {
+			if (fl.size() > 1) {
+				Sublevel last = fl.getSublevel(fl.size() - 1);
+				if (last.size() == 1) {
+					Node n = last.getNode(0);
+					if (n.isFinalNode() && Utils.equalsAny(n.getType(), NodeType.DANGER, NodeType.BOSS)) {
+						Node ret = last.newNode(NodeType.RETURN, List.of(n));
+						ret.setOffsetNode(true);
+					}
+				}
+			}
 		}
 
 		m.getFloor().generateModifiers(game);
