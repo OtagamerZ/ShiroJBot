@@ -141,7 +141,7 @@ public class Monster extends MonsterBase<Monster> {
 			default -> 1;
 		} * HP_TABLE[getLevel() - 1];
 
-		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
+		if (getGame().getPartySize() > 1 && !isMinion()) {
 			mult *= 1 + getGame().getPartySize() * 0.5;
 		}
 

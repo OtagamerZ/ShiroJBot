@@ -75,7 +75,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	@Override
 	public int getMaxAp() {
 		int flat = 1 + getStats().getMaxAp() + getLevel() / 5;
-		if (getGame().getPartySize() > 1 && getTeam() == Team.KEEPERS) {
+		if (getGame().getPartySize() > 1 && !isMinion()) {
 			flat += getGame().getPartySize() / 2;
 		}
 
