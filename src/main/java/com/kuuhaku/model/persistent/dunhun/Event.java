@@ -85,13 +85,6 @@ public class Event extends DAO<Event> {
 		String desc = getInfo(game.getLocale()).getDescription();
 
 		List<EventAction> out = new ArrayList<>();
-		desc = Utils.regex(desc, "\\[([^\\[\\]]+?)]\\{([^{}]+?)}").replaceAll(m -> {
-			boolean hide = m.group(1).startsWith("!");
-			out.add(new EventAction(WordUtils.capitalizeFully(m.group(1).replaceFirst("^!", "")), m.group(2)));
-
-			return Matcher.quoteReplacement(hide ? "" : "**" + m.group(1) + "**");
-		});
-
 		if (script != null) {
 			try {
 				EventContext ctx = new EventContext(game, this, node, desc);
@@ -102,6 +95,13 @@ public class Event extends DAO<Event> {
 				Constants.LOGGER.warn("Failed to execute event {}", id, e);
 			}
 		}
+
+		desc = Utils.regex(desc, "\\[([^\\[\\]]+?)]\\{([^{}]+?)}").replaceAll(m -> {
+			boolean hide = m.group(1).startsWith("!");
+			out.add(new EventAction(WordUtils.capitalizeFully(m.group(1).replaceFirst("^!", "")), m.group(2)));
+
+			return Matcher.quoteReplacement(hide ? "" : "**" + m.group(1) + "**");
+		});
 
 		return new EventDescription(game.parsePlural(desc), out);
 	}
