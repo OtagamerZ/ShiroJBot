@@ -221,7 +221,10 @@ public class Node {
 	}
 
 	public boolean isFinalNode() {
-		return sublevel.getNumber() == sublevel.getFloor().size() - 1;
+		int floor = sublevel.getFloor().getNumber();
+		return sublevel.getNumber() == sublevel.getFloor().size() - 1 && (
+				children.isEmpty() || children.stream().anyMatch(n -> n.getSublevel().getFloor().getNumber() > floor)
+		);
 	}
 
 	public boolean isSafeNode() {
