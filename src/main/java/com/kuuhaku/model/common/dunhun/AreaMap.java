@@ -458,7 +458,7 @@ public class AreaMap {
 				Sublevel last = sublevels.getLast();
 				if (last.size() == 1) {
 					Node n = last.getNode(0);
-					if (n.isFinalNode() && Utils.equalsAny(n.getType(), NodeType.DANGER, NodeType.BOSS)) {
+					if (n.isFinalNode()) {
 						Node ret = last.newNode(NodeType.RETURN, List.of(n));
 						ret.setOffsetNode(true);
 					}
