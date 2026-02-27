@@ -76,7 +76,7 @@ public class HeroConsumablesShopCommand implements Executable {
 
 						fm.appendLine(locale.get("str/item_has", h.getConsumableCount(c)));
 						fm.appendLine(c.getDescription(locale));
-						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.buy " + c.getId()));
+						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.consumables.buy " + c.getId()));
 
 						return fm.toString();
 					},
