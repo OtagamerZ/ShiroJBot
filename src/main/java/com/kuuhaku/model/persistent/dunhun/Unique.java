@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedUnique;
@@ -61,6 +62,11 @@ public class Unique extends DAO<Unique> {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray affixes = new JSONArray();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "req_tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray reqTags = new JSONArray();
+
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
@@ -86,6 +92,10 @@ public class Unique extends DAO<Unique> {
 		if (affixCache != null) return affixCache;
 
 		return affixCache = DAO.queryAll(Affix.class, "SELECT a FROM Affix a WHERE a.id IN ?1", affixes);
+	}
+
+	public JSONArray getReqTags() {
+		return reqTags;
 	}
 
 	public Gear asGear() {
@@ -123,11 +133,20 @@ public class Unique extends DAO<Unique> {
 	}
 
 	public static Unique getRandom(Actor<?> source, RandomGenerator rng) {
+		JSONArray tags = new JSONArray();
 		int dropLevel = Actor.MAX_LEVEL;
-		if (source != null && source.getGame() != null) {
-			dropLevel = source.getDropLevel();
-		} else if (source instanceof Hero h) {
-			dropLevel = Math.max(1, h.getLevel() / 2);
+		if (source != null) {
+			if (source instanceof MonsterBase<?> m) {
+				tags.addAll(m.getStats().getTags());
+			}
+
+			Dunhun game = source.getGame();
+			if (game != null) {
+				tags.addAll(game.getDungeon().getTags());
+				dropLevel = source.getDropLevel();
+			} else if (source instanceof Hero h) {
+				dropLevel = Math.max(1, h.getLevel() / 2);
+			}
 		}
 
 		List<Object[]> uqs = DAO.queryAllUnmapped("""
@@ -137,7 +156,9 @@ public class Unique extends DAO<Unique> {
 				INNER JOIN basetype b ON u.basetype_id = b.id
 				WHERE u.weight > 0
 				  AND b.req_level <= ?1
-				""", dropLevel);
+				  AND req_tags <@ cast(?2 AS JSONB)
+				""", dropLevel, tags.toString()
+		);
 		if (uqs.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>(rng);
