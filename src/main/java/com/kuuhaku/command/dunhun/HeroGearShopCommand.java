@@ -48,6 +48,7 @@ import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.random.RandomGenerator;
 
 @Command(
@@ -68,20 +69,20 @@ public class HeroGearShopCommand implements Executable {
 			return;
 		}
 
+		Random rng = new Random(LocalDate.now().toEpochDay());
+		List<Gear> catalogue = Utils.generate(6, _ -> Gear.getRandom(h, rng));
+
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/items_available"));
 
-			Random rng = new Random(LocalDate.now().toEpochDay());
-			List<Gear> catalogue = Utils.generate(6, _ -> Gear.getRandom(h, rng));
-
+			AtomicInteger i = new AtomicInteger();
 			List<Page> pages = Utils.generatePages(eb, catalogue, 6, 3,
 					g -> {
-						FieldMimic fm = new FieldMimic(g.getName(locale),
+						int idx = i.getAndIncrement();
+						FieldMimic fm = new FieldMimic("`" + idx + "` - " + g.getName(locale),
 								locale.get("str/price", locale.get("currency/cr", g.getPrice()))
 						);
-
-						fm.appendLine("`" + g.getId() + "` - " + g.getName(locale));
 
 						GearAffix imp = g.getImplicit();
 						if (imp != null) {
@@ -98,7 +99,7 @@ public class HeroGearShopCommand implements Executable {
 							fm.appendLine("-# " + l);
 						}
 
-						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.buy " + g.getId()));
+						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.gear.buy " + idx));
 
 						return fm.toString();
 					},

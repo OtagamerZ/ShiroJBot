@@ -203,7 +203,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getPrice() {
-		double base = 500 * getRarityClass().ordinal() * (1 + itemLevel / 10d);
+		double base = 500 * (1 + getRarityClass().ordinal()) * (1 + itemLevel / 10d);
 		if (!affixes.isEmpty()) {
 			double max = (double) DAO.queryNative(Integer.class, "SELECT max(weight) FROM affix WHERE type NOT LIKE 'MON_%'");
 			for (GearAffix ga : affixes) {
@@ -541,7 +541,7 @@ public class Gear extends DAO<Gear> {
 			Affix af = Affix.getRandom(out, null, rarity, rng);
 			if (af == null) break;
 
-			out.getAffixes().add(new GearAffix(out, af));
+			out.getAffixes().add(new GearAffix(out, af, Calc.rng(Integer.MAX_VALUE, rng)));
 
 			if (i == mods - 1 && mods < rarity.getMaxMods() && out.getRarityClass() != rarity) {
 				mods++;
