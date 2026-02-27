@@ -60,9 +60,6 @@ public class Gear extends DAO<Gear> {
 	@Column(name = "id", nullable = false)
 	private int id;
 
-	@Column(name = "uuid", nullable = false, unique = true, length = 36)
-	private String uuid = UUID.randomUUID().toString();
-
 	@ManyToOne(optional = false)
 	@PrimaryKeyJoinColumn(name = "basetype_id")
 	@Fetch(FetchMode.JOIN)
@@ -120,10 +117,6 @@ public class Gear extends DAO<Gear> {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public String getUuid() {
-		return uuid;
 	}
 
 	public Basetype getBasetype() {
