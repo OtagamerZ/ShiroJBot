@@ -53,7 +53,7 @@ public class RankCurrencyCommand implements Executable {
 						     , x.gems
 						FROM (
 						     SELECT a.uid
-						          , iif(s.private, '*****', a.name) AS name
+						          , iif(s.private, '∗∗∗∗∗', a.name) AS name
 						          , a.balance
 						          , a.gems
 						          , (a.balance + a.gems * 20000) AS score

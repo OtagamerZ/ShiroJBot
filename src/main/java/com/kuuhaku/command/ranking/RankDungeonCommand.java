@@ -67,7 +67,7 @@ public class RankDungeonCommand implements Executable {
 		List<RankDungeonEntry> rank = DAO.queryAllUnmapped("""
 						SELECT r.rank
 							 , h.account_uid
-						     , iif(s.private, '*****', a.name) AS name
+						     , iif(s.private, '∗∗∗∗∗', a.name) AS name
 							 , h.id
 						     , r.floor
 						     , r.sublevel

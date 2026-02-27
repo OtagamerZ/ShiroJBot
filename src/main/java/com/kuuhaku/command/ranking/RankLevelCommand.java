@@ -53,7 +53,7 @@ public class RankLevelCommand implements Executable {
 						     , cast(sqrt(x.xp / 100) AS INT) + 1 AS level
 						FROM (
 						     SELECT a.uid
-						          , iif(s.private, '*****', a.name) AS name
+						          , iif(s.private, '∗∗∗∗∗', a.name) AS name
 						          , p.xp
 						     FROM profile p
 						              INNER JOIN account a ON a.uid = p.uid

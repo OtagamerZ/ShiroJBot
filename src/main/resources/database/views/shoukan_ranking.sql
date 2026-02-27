@@ -32,7 +32,7 @@ FROM (
           , x.penalty
      FROM (
           SELECT a.uid
-               , iif(s.private, '*****', a.name)                                AS name
+               , iif(s.private, '∗∗∗∗∗', a.name)                                AS name
                , count(nullif(hp.side = hi.winner, FALSE))                      AS wins
                , count(1)                                                       AS match_count
                , coalesce(cast(a.inventory -> 'LEAVER_TICKET' AS INT), 0) * 250 AS penalty
