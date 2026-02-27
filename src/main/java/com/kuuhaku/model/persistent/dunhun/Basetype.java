@@ -23,9 +23,11 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedBasetype;
 import com.kuuhaku.model.records.dunhun.GearStats;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
@@ -99,9 +101,20 @@ public class Basetype extends DAO<Basetype> {
 	}
 
 	public static Basetype getRandom(Actor<?> source, RandomGenerator rng) {
+		JSONArray tags = new JSONArray();
 		int dropLevel = Actor.MAX_LEVEL;
-		if (source != null && source.getGame() != null) {
-			dropLevel = source.getDropLevel();
+		if (source != null) {
+			if (source instanceof MonsterBase<?> m) {
+				tags.addAll(m.getStats().getTags());
+			}
+
+			Dunhun game = source.getGame();
+			if (game != null) {
+				tags.addAll(game.getDungeon().getTags());
+				dropLevel = source.getDropLevel();
+			} else if (source instanceof Hero h) {
+				dropLevel = Math.max(1, h.getLevel() / 2);
+			}
 		}
 
 		List<Object[]> bases = DAO.queryAllUnmapped("""
@@ -110,7 +123,8 @@ public class Basetype extends DAO<Basetype> {
 				FROM basetype
 				WHERE weight > 0
 				  AND req_level <= ?1
-				""", dropLevel
+				  AND req_tags <@ cast(?2 AS JSONB)
+				""", dropLevel, tags.toString()
 		);
 		if (bases.isEmpty()) return null;
 
