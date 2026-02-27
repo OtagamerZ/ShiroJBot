@@ -41,7 +41,7 @@ FROM (
                    INNER JOIN account a ON hp.uid = a.uid
                    INNER JOIN account_settings s ON a.uid = s.uid
           WHERE hi.winner IS NOT NULL
-          GROUP BY a.uid, a.name, penalty
+          GROUP BY a.uid, a.name, s.private, penalty
           ) x
      ) x
 WHERE x.winrate IS NOT NULL
