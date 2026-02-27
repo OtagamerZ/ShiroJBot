@@ -31,18 +31,17 @@ FROM (
           , x.match_count
           , x.penalty
      FROM (
-          SELECT acc.uid
-               , acc.name
-               , count(nullif(hp.side = hi.winner, FALSE))                        AS wins
-               , count(1)                                                         AS match_count
-               , coalesce(cast(acc.inventory -> 'LEAVER_TICKET' AS INT), 0) * 250 AS penalty
+          SELECT a.uid
+               , iif(s.private, '*****', a.name)                                AS name
+               , count(nullif(hp.side = hi.winner, FALSE))                      AS wins
+               , count(1)                                                       AS match_count
+               , coalesce(cast(a.inventory -> 'LEAVER_TICKET' AS INT), 0) * 250 AS penalty
           FROM history_info hi
                    INNER JOIN history_player hp ON hi.match_id = hp.match_id
-                   INNER JOIN account acc ON hp.uid = acc.uid
-                   INNER JOIN account_settings s ON acc.uid = s.uid
+                   INNER JOIN account a ON hp.uid = a.uid
+                   INNER JOIN account_settings s ON a.uid = s.uid
           WHERE hi.winner IS NOT NULL
-            AND NOT s.private
-          GROUP BY acc.uid, acc.name, penalty
+          GROUP BY a.uid, a.name, penalty
           ) x
      ) x
 WHERE x.winrate IS NOT NULL

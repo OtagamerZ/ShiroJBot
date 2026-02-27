@@ -56,11 +56,10 @@ public class RankCandiesCommand implements Executable {
 						     , x.candies
 						FROM (
 						     SELECT a.uid
-						          , a.name
+						          , iif(s.private, '*****', a.name) AS name
 						          , coalesce(cast(a.inventory -> 'SPOOKY_CANDY' AS INT), 0) AS candies
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
-						     WHERE NOT s.private
 						     ) x
 						WHERE x.candies > 0
 						ORDER BY x.candies DESC

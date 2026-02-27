@@ -53,14 +53,14 @@ public class RankCurrencyCommand implements Executable {
 						     , x.gems
 						FROM (
 						     SELECT a.uid
-						          , a.name
+						          , iif(s.private, '*****', a.name) AS name
 						          , a.balance
 						          , a.gems
 						          , (a.balance + a.gems * 20000) AS score
+						          , s.private
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
-						     WHERE NOT s.private
-						       AND a.balance > 0
+						     WHERE a.balance > 0
 						     ) x
 						ORDER BY x.score DESC
 						LIMIT 10
