@@ -19,18 +19,15 @@
 package com.kuuhaku.command.dunhun;
 
 import com.github.ygimenez.model.Page;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.PendingConfirmationException;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
-import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.Currency;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.dunhun.Consumable;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 import com.kuuhaku.model.persistent.dunhun.Hero;
@@ -38,25 +35,25 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.FieldMimic;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 
 import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.random.RandomGenerator;
 
 @Command(
 		name = "hero",
 		path = {"gear", "buy"},
-		category = Category.DEV
+		category = Category.STAFF
 )
-@Syntax(allowEmpty = true, value = "<id:word:r>")
+@Syntax(allowEmpty = true, value = "<id:number:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class HeroGearShopCommand implements Executable {
 	@Override
@@ -69,8 +66,27 @@ public class HeroGearShopCommand implements Executable {
 			return;
 		}
 
-		Random rng = new Random(LocalDate.now().toEpochDay());
-		List<Gear> catalogue = Utils.generate(6, _ -> Gear.getRandom(h, rng));
+		long shopDay = LocalDate.now().toEpochDay();
+		Random rng = new Random(shopDay);
+		List<Gear> catalogue = Utils.generate(6 * 3, _ -> Gear.getRandom(h, rng));
+
+		JSONObject dt = h.getExtraData();
+		if (dt.has("shop")) {
+			dt = dt.getJSONObject("shop");
+			long recDt = dt.getLong("record_date");
+
+			if (recDt != shopDay) {
+				JSONArray bought = dt.getJSONArray("bought");
+				for (int i = 0; i < bought.size(); i++) {
+					int id = bought.getInt(i, -1);
+					if (id > -1) catalogue.set(id, null);
+				}
+			} else if (dt.has("bought")) {
+				dt.remove("bought");
+			}
+		} else {
+			dt = new JSONObject();
+		}
 
 		if (!args.has("id")) {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
@@ -80,26 +96,36 @@ public class HeroGearShopCommand implements Executable {
 			List<Page> pages = Utils.generatePages(eb, catalogue, 6, 3,
 					g -> {
 						int idx = i.getAndIncrement();
-						FieldMimic fm = new FieldMimic("`" + idx + "` - " + g.getName(locale),
-								locale.get("str/price", locale.get("currency/cr", g.getPrice()))
-						);
 
-						GearAffix imp = g.getImplicit();
-						if (imp != null) {
-							imp.getDescription(locale).lines()
-									.map(l -> "-# " + l)
-									.forEach(fm::appendLine);
+						FieldMimic fm;
+						if (g != null) {
+							fm = new FieldMimic(
+									"`" + idx + "` - " + g.getName(locale),
+									locale.get("str/price", locale.get("currency/cr", g.getPrice()))
+							);
 
-							if (!g.getAffixes().isEmpty()) {
-								fm.appendLine("-# ────────────────");
+							GearAffix imp = g.getImplicit();
+							if (imp != null) {
+								imp.getDescription(locale).lines()
+										.map(l -> "-# " + l)
+										.forEach(fm::appendLine);
+
+								if (!g.getAffixes().isEmpty()) {
+									fm.appendLine("-# ────────────────");
+								}
 							}
-						}
 
-						for (String l : g.getAffixLines(locale)) {
-							fm.appendLine("-# " + l);
-						}
+							for (String l : g.getAffixLines(locale)) {
+								fm.appendLine("-# " + l);
+							}
 
-						fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.gear.buy " + idx));
+							fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.gear.buy " + idx));
+						} else {
+							fm = new FieldMimic(
+									"`" + idx + "` - *" + locale.get("str/purchased") + "*",
+									""
+							);
+						}
 
 						return fm.toString();
 					},
@@ -115,43 +141,43 @@ public class HeroGearShopCommand implements Executable {
 			return;
 		}
 
-		Consumable item = DAO.find(Consumable.class, args.getString("id").toUpperCase());
-		int amount = args.getInt("amount", 1);
+		int idx = args.getInt("id", -1);
+		if (!Calc.between(idx, 0, catalogue.size())) {
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 0, catalogue.size() - 1)).queue();
+			return;
+		}
 
-		if (item == null) {
-			String sug = Utils.didYouMean(args.getString("id"), "SELECT id AS value FROM consumable WHERE price IS NOT NULL");
-			if (sug == null) {
-				event.channel().sendMessage(locale.get("error/unknown_consumable_none")).queue();
-			} else {
-				event.channel().sendMessage(locale.get("error/unknown_consumable", sug)).queue();
-			}
-			return;
-		} else if (h.getConsumableCount() + amount > 10) {
-			event.channel().sendMessage(locale.get("error/consumables_full")).queue();
-			return;
-		} else if (!acc.hasEnough(amount * item.getPrice(), Currency.CR)) {
+		Gear gear = catalogue.get(idx);
+		int value = gear.getPrice();
+		if (!acc.hasEnough(gear.getPrice(), Currency.CR)) {
 			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
-			return;
-		} else if (amount <= 0) {
-			event.channel().sendMessage(locale.get("error/invalid_value_low", 0)).queue();
 			return;
 		}
 
 		try {
-			int value = amount * item.getPrice();
 			String price = locale.get("currency/cr", value);
 
-			Utils.confirm(locale.get("question/item_buy", amount + " " + item.getName(locale), price), event.channel(), w -> {
+			JSONObject finalDt = dt;
+			Utils.confirm(locale.get("question/item_buy", gear.getName(locale), price), event.channel(), w -> {
 						if (acc.hasChanged()) {
 							event.channel().sendMessage(locale.get("error/account_state_changed")).queue();
 							return true;
 						}
 
-				h.apply(n -> n.modConsumableCount(item, amount));
+						gear.setOwner(h);
+						gear.save();
 
-						acc.consumeCR(value, "Consumable " + amount + "x " + item.getName(locale));
+						acc.consumeCR(value, "Gear " + gear.getName(locale));
 
-						event.channel().sendMessage(locale.get("success/item_buy", amount, item.getName(locale))).queue();
+						JSONArray bought = finalDt.getJSONArray("bought");
+						bought.add(idx);
+						finalDt.put("bought", bought);
+						finalDt.put("record_date", shopDay);
+
+						h.getExtraData().put("shop", finalDt);
+						h.save();
+
+						event.channel().sendMessage(locale.get("success/item_buy_single", gear.getName(locale))).queue();
 						return true;
 					}, event.user()
 			);

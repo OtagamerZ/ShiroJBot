@@ -76,6 +76,11 @@ public class Hero extends Actor<Hero> {
 	)
 	private Set<Dungeon> completedDungeons = new HashSet<>();
 
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "extra_data", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONObjectConverter.class)
+	private JSONObject extraData = new JSONObject();
+
 	@Column(name = "retired", nullable = false)
 	private boolean retired = false;
 
@@ -224,6 +229,10 @@ public class Hero extends Actor<Hero> {
 
 	public boolean canEnter(Dungeon dungeon) {
 		return remainingDungeonsFor(dungeon).isEmpty();
+	}
+
+	public JSONObject getExtraData() {
+		return extraData;
 	}
 
 	public boolean isRetired() {
