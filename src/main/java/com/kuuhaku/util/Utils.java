@@ -386,7 +386,8 @@ public abstract class Utils {
 
 			return msg;
 		} catch (ExecutionException | InterruptedException | TimeoutException e) {
-			throw new RuntimeException(e);
+			Constants.LOGGER.warn(e, e);
+			return null;
 		}
 	}
 
@@ -401,7 +402,8 @@ public abstract class Utils {
 
 			return msg;
 		} catch (ExecutionException | InterruptedException | TimeoutException e) {
-			throw new RuntimeException(e);
+			Constants.LOGGER.warn(e, e);
+			return null;
 		}
 	}
 
