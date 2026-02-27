@@ -75,7 +75,7 @@ public class HeroGearShopCommand implements Executable {
 			dt = dt.getJSONObject("shop");
 			long recDt = dt.getLong("record_date");
 
-			if (recDt != shopDay) {
+			if (recDt == shopDay) {
 				JSONArray bought = dt.getJSONArray("bought");
 				for (int i = 0; i < bought.size(); i++) {
 					int id = bought.getInt(i, -1);
