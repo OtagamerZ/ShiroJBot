@@ -97,9 +97,8 @@ public class HeroGearShopCommand implements Executable {
 					g -> {
 						int idx = i.getAndIncrement();
 
-						FieldMimic fm;
 						if (g != null) {
-							fm = new FieldMimic(
+							FieldMimic fm = new FieldMimic(
 									"`" + idx + "` - " + g.getName(locale),
 									locale.get("str/price", locale.get("currency/cr", g.getPrice()))
 							);
@@ -120,14 +119,13 @@ public class HeroGearShopCommand implements Executable {
 							}
 
 							fm.appendLine("`%s%s`".formatted(data.config().getPrefix(), "hero.gear.buy " + idx));
+							return fm.toString();
 						} else {
-							fm = new FieldMimic(
+							return "-# " + new FieldMimic(
 									"`" + idx + "` - *" + locale.get("str/purchased") + "*",
 									""
 							);
 						}
-
-						return fm.toString();
 					},
 					(p, t) -> eb.setFooter(acc.getBalanceFooter(locale) + "\n" + locale.get("str/page", p + 1, t))
 			);
@@ -148,6 +146,11 @@ public class HeroGearShopCommand implements Executable {
 		}
 
 		Gear gear = catalogue.get(idx);
+		if (gear == null) {
+			event.channel().sendMessage(locale.get("error/item_purchased")).queue();
+			return;
+		}
+
 		int value = gear.getPrice();
 		if (!acc.hasEnough(gear.getPrice(), Currency.CR)) {
 			event.channel().sendMessage(locale.get("error/insufficient_cr")).queue();
