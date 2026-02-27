@@ -534,7 +534,7 @@ public class Gear extends DAO<Gear> {
 			Affix af = Affix.getRandom(out, null, rarity, rng);
 			if (af == null) break;
 
-			out.getAffixes().add(new GearAffix(out, af));
+			out.getAffixes().add(new GearAffix(out, af, Calc.rng(Integer.MAX_VALUE, rng)));
 
 			if (i == mods - 1 && mods < rarity.getMaxMods() && out.getRarityClass() != rarity) {
 				mods++;
