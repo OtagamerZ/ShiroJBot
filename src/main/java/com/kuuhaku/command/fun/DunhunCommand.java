@@ -304,7 +304,7 @@ public class DunhunCommand implements Executable {
 
 	private static boolean setFloor(I18N locale, MessageData.Guild event, JSONObject args, Dungeon dungeon, Dunhun dun) {
 		if (args.has("floor")) {
-			if (dungeon.isInfinite()) {
+			if (!dungeon.isInfinite()) {
 				event.channel().sendMessage(locale.get("error/cannot_return")).queue();
 				return true;
 			}
