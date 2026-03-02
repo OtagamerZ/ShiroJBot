@@ -63,6 +63,8 @@ public class CommandManager {
 
 			if (!names.contains(parent) && !surrogate.containsKey(parent)) {
 				surrogate.put(parent, new PreparedCommand(parent, params.category(), null, null, params.beta()));
+				names.add(parent);
+
 				Constants.LOGGER.info("Mapped surrogate command parent: {}", parent);
 			}
 		}
@@ -96,9 +98,6 @@ public class CommandManager {
 
 	public PreparedCommand getCommand(String name) {
 		name = name.toLowerCase();
-		if (!names.contains(name)) {
-			return surrogate.get(name);
-		}
 
 		if (mapped.containsKey(name)) return mapped.get(name);
 		else {
