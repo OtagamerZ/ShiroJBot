@@ -39,10 +39,12 @@ import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.persistent.dunhun.Dungeon;
+import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.model.records.id.DungeonRunId;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -52,6 +54,7 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -70,8 +73,8 @@ import java.util.stream.Stream;
 		allowEmpty = true,
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
-				"<dungeon:word:r> <users:custom:r>[users]",
-				"<dungeon:word:r>"
+				"<dungeon:word:r> <floor:number> <users:custom>[users]",
+				"<dungeon:word:r> <action:word>[reset]"
 		}
 )
 @Requires(Permission.MESSAGE_ATTACH_FILES)
@@ -195,11 +198,33 @@ public class DunhunCommand implements Executable {
 			return;
 		}
 
+		if (args.has("action")) {
+			try {
+				Utils.confirm(locale.get("question/dungeon_reset", dungeon.getInfo(locale).getName()), event.channel(),
+						w -> {
+							DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(acc.getUid(), dungeon.getId()));
+							if (run != null) {
+								run.delete();
+							}
+
+							event.channel().sendMessage(locale.get("success/dungeon_reset")).queue();
+							return true;
+						}, event.user()
+				);
+			} catch (PendingConfirmationException e) {
+				event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
+			}
+
+			return;
+		}
+
 		Set<User> pending = new HashSet<>(others);
 		try {
 			if (others.isEmpty()) {
 				try {
 					Dunhun dun = new Dunhun(locale, dungeon, event.user());
+					if (!setFloor(locale, event, args, dungeon, dun)) return;
+
 					dun.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -210,7 +235,8 @@ public class DunhunCommand implements Executable {
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
-						case GameReport.RETIRED_HERO -> event.channel().sendMessage(locale.get("error/retired_hero")).queue();
+						case GameReport.RETIRED_HERO ->
+								event.channel().sendMessage(locale.get("error/retired_hero")).queue();
 						case GameReport.OVERBURDENED ->
 								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 						case GameReport.UNDERLEVELLED ->
@@ -240,6 +266,9 @@ public class DunhunCommand implements Executable {
 											.map(User::getId)
 											.toArray(String[]::new)
 							);
+
+							if (!setFloor(locale, event, args, dungeon, dun)) return true;
+
 							dun.start(event.guild(), event.channel())
 									.whenComplete((v, e) -> {
 										if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -256,7 +285,8 @@ public class DunhunCommand implements Executable {
 										event.channel().sendMessage(locale.get("error/no_hero_target", "<@" + e.getContent() + ">")).queue();
 									}
 								}
-								case GameReport.RETIRED_HERO -> event.channel().sendMessage(locale.get("error/retired_hero")).queue();
+								case GameReport.RETIRED_HERO ->
+										event.channel().sendMessage(locale.get("error/retired_hero")).queue();
 								case GameReport.OVERBURDENED ->
 										event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
 								case GameReport.UNDERLEVELLED ->
@@ -270,6 +300,28 @@ public class DunhunCommand implements Executable {
 		} catch (PendingConfirmationException e) {
 			event.channel().sendMessage(locale.get("error/pending_confirmation")).queue();
 		}
+	}
+
+	private static boolean setFloor(I18N locale, MessageData.Guild event, JSONObject args, Dungeon dungeon, Dunhun dun) {
+		if (args.has("floor")) {
+			if (dungeon.isInfinite()) {
+				event.channel().sendMessage(locale.get("error/cannot_return")).queue();
+				return true;
+			}
+
+			int floor = args.getInt("floor");
+			if (floor < 1) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+				return true;
+			} else if (floor > dun.getMap().getRun().getMaxFloor()) {
+				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+				return true;
+			}
+
+			dun.getMap().getRun().setFloor(floor);
+		}
+
+		return true;
 	}
 
 	private void setDungeonEmbed(List<Dungeon> dgs, List<Page> pages, ButtonWrapper w, int it) {

@@ -88,6 +88,8 @@ public class Dungeon extends DAO<Dungeon> {
 	@Column(name = "hidden", nullable = false)
 	private boolean hidden;
 
+	private transient boolean infinite = false;
+
 	public Dungeon() {
 	}
 
@@ -140,12 +142,16 @@ public class Dungeon extends DAO<Dungeon> {
 		return hardcore;
 	}
 
-	public boolean isInfinite() {
-		return script == null || script.isBlank();
-	}
-
 	public boolean isHidden() {
 		return hidden;
+	}
+
+	public boolean isInfinite() {
+		return infinite;
+	}
+
+	public void setInfinite(boolean infinite) {
+		this.infinite = infinite;
 	}
 
 	public AreaMap init(Dunhun game, DungeonRun run) {

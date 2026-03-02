@@ -50,6 +50,9 @@ public class DungeonRun extends DAO<DungeonRun> {
 	@Column(name = "floor", nullable = false)
 	private int floor = 0;
 
+	@Column(name = "max_floor", nullable = false)
+	private int maxFloor = 0;
+
 	@Column(name = "sublevel", nullable = false)
 	private int sublevel = 0;
 
@@ -118,6 +121,13 @@ public class DungeonRun extends DAO<DungeonRun> {
 
 	public void setFloor(int floor) {
 		this.floor = floor;
+		maxFloor = Math.max(this.floor, maxFloor);
+		sublevel = 0;
+		path = 0;
+	}
+
+	public int getMaxFloor() {
+		return maxFloor;
 	}
 
 	public int getSublevel() {
@@ -156,6 +166,7 @@ public class DungeonRun extends DAO<DungeonRun> {
 		int prevFloor = floor;
 
 		floor = node.getSublevel().getFloor().getNumber();
+		maxFloor = Math.max(floor, maxFloor);
 		sublevel = node.getSublevel().getNumber();
 		path = node.getPath();
 

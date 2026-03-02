@@ -344,6 +344,7 @@ public class AreaMap {
 	}
 
 	public static void generateRandom(Dunhun game, AreaMap m) {
+		game.getDungeon().setInfinite(true);
 		generateRandom(game, m, (fl, sub) -> {
 			List<Sublevel> sublevels = fl.getSublevels();
 			if (sublevels.size() == 1) {

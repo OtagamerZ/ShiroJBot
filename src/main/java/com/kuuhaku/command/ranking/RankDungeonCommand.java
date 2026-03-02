@@ -75,6 +75,7 @@ public class RankDungeonCommand implements Executable {
 						INNER JOIN hero h ON h.id = r.hero_id
 						INNER JOIN account a ON a.uid = h.account_uid
 						INNER JOIN account_settings s ON s.uid = a.uid
+						WHERE NOT h.retired
 						""", dungeon.getId()).stream()
 				.map(o -> Utils.map(RankDungeonEntry.class, o))
 				.toList();
