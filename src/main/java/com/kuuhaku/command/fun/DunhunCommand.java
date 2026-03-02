@@ -324,6 +324,7 @@ public class DunhunCommand implements Executable {
 			}
 
 			dun.getMap().getRun().setFloor(floor);
+			dun.getMap().getRenderFloor().set(floor);
 		}
 
 		return true;
