@@ -223,7 +223,10 @@ public class DunhunCommand implements Executable {
 			if (others.isEmpty()) {
 				try {
 					Dunhun dun = new Dunhun(locale, dungeon, event.user());
-					if (!setFloor(locale, event, args, dungeon, dun)) return;
+					if (!setFloor(locale, event, args, dungeon, dun)) {
+						dun.close(GameReport.OTHER);
+						return;
+					}
 
 					dun.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
@@ -267,7 +270,10 @@ public class DunhunCommand implements Executable {
 											.toArray(String[]::new)
 							);
 
-							if (!setFloor(locale, event, args, dungeon, dun)) return true;
+							if (!setFloor(locale, event, args, dungeon, dun)) {
+								dun.close(GameReport.OTHER);
+								return false;
+							}
 
 							dun.start(event.guild(), event.channel())
 									.whenComplete((v, e) -> {
@@ -306,16 +312,16 @@ public class DunhunCommand implements Executable {
 		if (args.has("floor")) {
 			if (!dungeon.isInfinite()) {
 				event.channel().sendMessage(locale.get("error/cannot_return")).queue();
-				return true;
+				return false;
 			}
 
 			int floor = args.getInt("floor");
 			if (floor < 1) {
 				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
-				return true;
+				return false;
 			} else if (floor > dun.getMap().getRun().getMaxFloor()) {
 				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
-				return true;
+				return false;
 			}
 
 			dun.getMap().getRun().setFloor(floor);
