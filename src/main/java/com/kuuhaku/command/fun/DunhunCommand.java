@@ -45,6 +45,7 @@ import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.id.DungeonRunId;
+import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -316,11 +317,9 @@ public class DunhunCommand implements Executable {
 			}
 
 			int floor = args.getInt("floor");
-			if (floor < 1) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
-				return false;
-			} else if (floor > dun.getMap().getRun().getMaxFloor()) {
-				event.channel().sendMessage(locale.get("error/invalid_value_low", 1)).queue();
+			int max = dun.getMap().getRun().getMaxFloor();
+			if (Calc.between(floor, 1, max + 1)) {
+				event.channel().sendMessage(locale.get("error/invalid_value_range", 1, max)).queue();
 				return false;
 			}
 
