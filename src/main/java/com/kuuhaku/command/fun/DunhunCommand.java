@@ -35,6 +35,7 @@ import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.SigPattern;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.common.dunhun.AreaMap;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
@@ -318,13 +319,15 @@ public class DunhunCommand implements Executable {
 
 			int floor = args.getInt("floor");
 			int max = dun.getMap().getRun().getMaxFloor();
-			if (Calc.between(floor, 1, max + 1)) {
+			if (!Calc.between(floor, 1, max + 1)) {
 				event.channel().sendMessage(locale.get("error/invalid_value_range", 1, max)).queue();
 				return false;
 			}
 
-			dun.getMap().getRun().setFloor(floor);
-			dun.getMap().getRenderFloor().set(floor);
+			AreaMap map = dun.getMap();
+			map.getRun().setFloor(floor);
+			map.getRenderFloor().set(floor);
+			map.generate(dun);
 		}
 
 		return true;
