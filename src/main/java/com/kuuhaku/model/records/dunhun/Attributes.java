@@ -37,10 +37,10 @@ public record Attributes(@Column(name = "attributes", nullable = false) int attr
 	}
 
 	public Attributes(int str, int dex, int wis, int vit) {
-		this((Calc.clamp(str, 0, 127) & 0xFF)
-				| (Calc.clamp(dex, 0, 127) & 0xFF) << 8
-				| (Calc.clamp(wis, 0, 127) & 0xFF) << 16
-				| (Calc.clamp(vit, 0, 127) & 0xFF) << 24
+		this((Calc.clamp(str, 0, 255) & 0xFF)
+				| (Calc.clamp(dex, 0, 255) & 0xFF) << 8
+				| (Calc.clamp(wis, 0, 255) & 0xFF) << 16
+				| (Calc.clamp(vit, 0, 255) & 0xFF) << 24
 		);
 	}
 	/*
