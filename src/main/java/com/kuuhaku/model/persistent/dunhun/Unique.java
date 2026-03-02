@@ -156,7 +156,8 @@ public class Unique extends DAO<Unique> {
 				INNER JOIN basetype b ON u.basetype_id = b.id
 				WHERE u.weight > 0
 				  AND b.req_level <= ?1
-				  AND req_tags <@ cast(?2 AS JSONB)
+				  AND u.req_tags <@ cast(?2 AS JSONB)
+				  AND b.req_tags <@ cast(?2 AS JSONB)
 				""", dropLevel, tags.toString()
 		);
 		if (uqs.isEmpty()) return null;
