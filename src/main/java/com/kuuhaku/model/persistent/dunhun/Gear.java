@@ -348,7 +348,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public Attributes getAttributes() {
-		if (attributes == null) load(null);
+		if (attributes == null) load(null, false);
 
 		return attributes;
 	}
@@ -382,7 +382,7 @@ public class Gear extends DAO<Gear> {
 		return destroyed;
 	}
 
-	public void load(Actor<?> owner) {
+	public void load(Actor<?> owner, boolean shoukan) {
 		attributes = new Attributes();
 		modifiers.clear();
 		effects.clear();
@@ -399,12 +399,12 @@ public class Gear extends DAO<Gear> {
 				continue;
 			}
 
-			ga.apply(this, owner);
+			ga.apply(this, owner, shoukan);
 		}
 
 		if (!meta.isEmpty()) {
 			for (GearAffix ga : meta) {
-				ga.apply(this, owner);
+				ga.apply(this, owner, shoukan);
 			}
 		}
 	}
@@ -432,7 +432,7 @@ public class Gear extends DAO<Gear> {
 
 	@PostLoad
 	private void onPostLoad() {
-		load(null);
+		load(null, false);
 	}
 
 	@Override

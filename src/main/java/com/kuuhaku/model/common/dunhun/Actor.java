@@ -37,6 +37,7 @@ import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 
 @MappedSuperclass
 public abstract class Actor<T extends Actor<T>> extends DAO<T> {
@@ -236,23 +237,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, Usable usable, int value) {
-		AtomicInteger val = new AtomicInteger(value);
-
 		double crit = 0;
 		if (usable instanceof Skill s && source != null) {
 			if (s.getStats().isSpell()) {
 				crit = source.getModifiers().getCritical(s.getStats().getCritical());
 			} else {
-				Combat cbt = source.getGame().getCombat();
-				if (cbt != null) {
-					cbt.trigger(Trigger.ON_ATTACK, source, this, usable, val);
-				}
-
 				crit = source.getCritical();
 			}
 		}
 
-		return modHp(source, usable, -Math.max(0, applyMitigation(val.get())), crit);
+		return modHp(source, usable, -Math.max(0, applyMitigation(value)), crit);
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
@@ -288,7 +282,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 									cbt.trigger(Trigger.ON_PARRY, this, source, usable);
 
 									outcome = cbt.getLocale().get("str/actor_parry", this.getName());
-									source.damage(this, Skill.DEFAULT_ATTACK, getSenshi().getDmg());
+									cbt.attack(this, source);
 								}
 							}
 
@@ -499,6 +493,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
+		trigger(trigger, new AtomicReference<>(target), usable, value);
+	}
+
+	public void trigger(Trigger trigger, AtomicReference<Actor<?>> target, Usable usable, AtomicInteger value) {
 		if (!binding.isBound()) return;
 
 		CombatContext context = new CombatContext(getGame().getCombat(), trigger, this, target, usable, value);
@@ -607,7 +605,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				if (!shoukan) continue;
 			}
 
-			g.load(this);
+			g.load(this, shoukan);
 
 			if (!g.isWeapon()) {
 				dmg += g.getDmg();

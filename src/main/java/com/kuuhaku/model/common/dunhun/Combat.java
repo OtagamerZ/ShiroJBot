@@ -1,6 +1,5 @@
 package com.kuuhaku.model.common.dunhun;
 
-import com.github.ygimenez.listener.EventHandler;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
@@ -49,13 +48,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
+import static com.kuuhaku.model.enums.shoukan.Trigger.ON_CONSUMABLE;
+
 public class Combat implements Renderer<BufferedImage> {
 	private final ScheduledExecutorService cpu = Executors.newSingleThreadScheduledExecutor();
-
 	private final Dunhun game;
 	private final Node node;
 	private final InfiniteList<Actor<?>> actors = new InfiniteList<>();
@@ -440,7 +441,7 @@ public class Combat implements Renderer<BufferedImage> {
 									int lastHistor = history.size();
 									if (con.execute(game, h, t)) {
 										h.consumeAp(1);
-										trigger(Trigger.ON_CONSUMABLE, h, t, con);
+										trigger(ON_CONSUMABLE, h, t, con);
 
 										history.add(lastHistor, getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
 												h.getName(), con.getName(getLocale()), t.getName())
@@ -693,8 +694,6 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor<?> source, Actor<?> target) {
-		history.add(getLocale().get("str/actor_combat", source.getName(), target.getName()));
-
 		if (source instanceof Hero h) {
 			List<Gear> wpns = h.getEquipment().getWeaponList().stream()
 					.filter(Gear::isWeapon)
@@ -704,29 +703,39 @@ public class Combat implements Renderer<BufferedImage> {
 				for (int i = 0; i < wpns.size(); i++) {
 					if (h.getAp() <= 0 || target.isOutOfCombat()) break;
 
-					source.consumeAp(1);
-					target.damage(source, Skill.DEFAULT_ATTACK, (int) (source.getSenshi().getDmg() * 0.6));
+					skill(Skill.DUAL_ATTACK, source, target);
 				}
 
 				return;
 			}
 		}
 
-		source.consumeAp(1);
-		target.damage(source, Skill.DEFAULT_ATTACK, source.getSenshi().getDmg());
+		skill(Skill.DEFAULT_ATTACK, source, target);
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
 		try {
 			if (skill.isLocked()) return;
+			boolean spell = skill.getStats().isSpell();
+			boolean isCurrent = source == getCurrent();
+
+			AtomicReference<Actor<?>> tgt = new AtomicReference<>(target);
+			trigger(spell ? Trigger.ON_SPELL_TARGET : Trigger.ON_ATTACK_TARGET, source, tgt, skill);
+			target = tgt.get();
 
 			int lastHistor = history.size();
 			boolean wasToggle = skill.getToggledEffect() != null;
 			if (skill.execute(game, source, target)) {
-				source.consumeAp(skill.getStats().getCost());
-				trigger(Trigger.ON_SPELL, source, target, skill);
+				if (isCurrent) {
+					source.consumeAp(skill.getStats().getCost());
+				}
 
-				String action = target.equals(source) ? "str/used_self" : "str/used";
+				trigger(spell ? Trigger.ON_SPELL : Trigger.ON_ATTACK, source, target, skill);
+
+				String type = spell ? "str/used" : "str/actor_combat";
+				String suffix = target.equals(source) ? "_self" : "";
+
+				String action = type + suffix;
 				if (skill.getToggledEffect() == null) {
 					if (wasToggle) action = "str/toggle_deactivate";
 
@@ -910,16 +919,24 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable) {
+		trigger(t, source, new AtomicReference<>(target), usable);
+	}
+
+	public void trigger(Trigger t, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable) {
 		trigger(t, source, target, usable, new AtomicInteger());
 	}
 
 	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
+		trigger(t, source, new AtomicReference<>(target), usable, value);
+	}
+
+	public void trigger(Trigger t, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable, AtomicInteger value) {
 		if (source == null || !source.getBinding().isBound()) return;
 
 		CombatContext context = new CombatContext(this, t, source, target, usable, value);
 		triggerGlobalEffects(t, context);
 
-		source.trigger(t, Utils.getOr(target, source), usable, context.value());
+		source.trigger(t, Utils.getOr(target, new AtomicReference<>(source)), usable, context.value());
 	}
 
 	private void triggerGlobalEffects(Trigger t, CombatContext context) {

@@ -12,16 +12,18 @@ public class GearContext extends EffectContext<Gear> {
 	private final GearAffix affix;
 	private final Actor<?> actor;
 	private final List<Integer> values;
+	private final boolean shoukan;
 
-	public GearContext(Gear gear, GearAffix affix) {
-		this(gear, affix, null, List.of());
+	public GearContext(Gear gear, GearAffix affix, boolean shoukan) {
+		this(gear, affix, null, List.of(), shoukan);
 	}
 
-	public GearContext(Gear gear, GearAffix affix, Actor<?> owner, List<Integer> values) {
+	public GearContext(Gear gear, GearAffix affix, Actor<?> owner, List<Integer> values, boolean shoukan) {
 		super(owner != null ? owner.getGame() : null, gear);
 		this.affix = affix;
 		this.actor = owner;
 		this.values = values;
+		this.shoukan = shoukan;
 	}
 
 	public GearAffix getAffix() {
@@ -36,6 +38,10 @@ public class GearContext extends EffectContext<Gear> {
 
 	public List<Integer> getValues() {
 		return values;
+	}
+
+	public boolean isShoukan() {
+		return shoukan;
 	}
 
 	@Override

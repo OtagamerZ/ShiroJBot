@@ -296,7 +296,14 @@ public enum Trigger {
 	ON_FLAG_ALTER,
 
 	/**
+	 * When targeted by an attack<br>
+	 * <i>Only in DunHun</i>
+	 **/
+	ON_ATTACK_TARGET,
+
+	/**
 	 * When targeted by a spell<br>
+	 * <i>Implemented in DunHun</i>
 	 **/
 	ON_SPELL_TARGET,
 

@@ -49,6 +49,7 @@ import static jakarta.persistence.CascadeType.ALL;
 @Table(name = "skill", schema = "dunhun")
 public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	public static final Skill DEFAULT_ATTACK = new Skill(1, 0, 1, 0, false);
+	public static final Skill DUAL_ATTACK = new Skill(1, 0, 0.6, 0, false);
 
 	@Id
 	@Column(name = "id", nullable = false)
