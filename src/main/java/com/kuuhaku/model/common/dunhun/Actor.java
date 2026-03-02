@@ -38,6 +38,7 @@ import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 @MappedSuperclass
 public abstract class Actor<T extends Actor<T>> extends DAO<T> {
@@ -490,6 +491,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		sb.appendNewLine("-# " + bar);
+
+		String icons = modifiers.getEffects().stream()
+				.map(EffectProperties::getIcon)
+				.filter(Objects::nonNull)
+				.distinct()
+				.collect(Collectors.joining());
+
+		if (!icons.isBlank()) {
+			sb.appendNewLine("-# `" + icons + "`");
+		}
 	}
 
 	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {

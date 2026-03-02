@@ -27,6 +27,7 @@ public class EffectProperties<T> {
 	public static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
 	private int priority;
 	private int expiration;
+	private String icon;
 
 	public EffectProperties(EffectContext<T> owner) {
 		this(owner, -1);
@@ -220,5 +221,13 @@ public class EffectProperties<T> {
 		}
 
 		return true;
+	}
+
+	public String getIcon() {
+		return icon;
+	}
+
+	public void setIcon(String icon) {
+		this.icon = icon;
 	}
 }
