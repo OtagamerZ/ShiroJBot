@@ -34,6 +34,7 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -91,6 +92,15 @@ public class HeroSkillCommand implements Executable {
 		tags.addAll(s.getRequirements().tags().stream()
 				.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 				.toList());
+
+		JSONArray tgs = s.getStats().getTags();
+		if (!tags.isEmpty()) {
+			tgs.addAll(tags.stream()
+					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
+					.filter(t -> !t.isEmpty())
+					.toList()
+			);
+		}
 
 		eb.setTitle(s.getName(locale))
 				.appendDescription("-# " + String.join(", ", tags) + "\n");
