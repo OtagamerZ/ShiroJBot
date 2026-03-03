@@ -260,7 +260,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				Set<ElementType> inters = SetUtils.intersection(elements, resists);
 				if (!inters.isEmpty()) {
 					crit = 0;
-					val.set((int) (value * (1 - 1d / resists.size())));
+					val.set((int) (val.get() * (1 - 1d / resists.size())));
 				}
 			}
 		}
