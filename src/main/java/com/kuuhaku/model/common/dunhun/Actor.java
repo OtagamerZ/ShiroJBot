@@ -500,7 +500,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				.collect(Collectors.joining());
 
 		if (!icons.isBlank()) {
-			sb.appendNewLine("-# " + icons + "");
+			sb.appendNewLine("-# " + icons);
 		}
 	}
 

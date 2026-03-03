@@ -279,6 +279,7 @@ public class HeroCommand implements Executable {
 
 						return new FieldMimic(title, "-# ID: `" + s.getId() + "`" + req + "\n" +
 								s.getDescription(locale, h).lines()
+										.filter(l -> !l.startsWith("-#"))
 										.map(l -> "-# " + l)
 										.collect(Collectors.joining("\n"))
 						).toString();
