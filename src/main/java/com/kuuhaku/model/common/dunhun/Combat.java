@@ -12,6 +12,7 @@ import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -51,6 +52,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.ON_CONSUMABLE;
@@ -233,7 +235,15 @@ public class Combat implements Renderer<BufferedImage> {
 			sb.clear();
 			for (Actor<?> a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
+
 				sb.appendNewLine(a.getName());
+				if (a instanceof MonsterBase<?> m) {
+					sb.append(m.getStats().getElements().stream()
+							.map(e -> "\\" + e)
+							.collect(Collectors.joining())
+					);
+				}
+
 				a.addHpBar(getLocale(), sb);
 				a.addApBar(sb);
 			}

@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.SkillValue;
 import com.kuuhaku.util.Calc;
@@ -35,9 +36,7 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Embeddable
 public class SkillStats extends UsableStats {
@@ -67,6 +66,13 @@ public class SkillStats extends UsableStats {
 	@Column(name = "values", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray values = new JSONArray();
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
+	@Convert(converter = JSONArrayConverter.class)
+	private JSONArray tags = new JSONArray();
+
+	private transient Set<ElementType> elements;
 
 	public SkillStats() {
 	}
@@ -128,6 +134,23 @@ public class SkillStats extends UsableStats {
 		}
 
 		return out;
+	}
+
+	public JSONArray getTags() {
+		return tags;
+	}
+
+	public Set<ElementType> getElements() {
+		if (elements == null) {
+			elements = new HashSet<>();
+			for (ElementType e : ElementType.values()) {
+				if (tags.contains(e.name())) {
+					elements.add(e);
+				}
+			}
+		}
+
+		return elements;
 	}
 
 	public SkillStats copyWith(double efficiency, double critical) {

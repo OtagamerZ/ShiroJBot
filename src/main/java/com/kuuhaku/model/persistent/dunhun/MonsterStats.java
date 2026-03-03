@@ -23,6 +23,7 @@ import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.common.dunhun.context.LootContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -34,7 +35,9 @@ import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Embeddable
 public class MonsterStats implements Serializable {
@@ -79,6 +82,8 @@ public class MonsterStats implements Serializable {
 	@Column(name = "tags", nullable = false, columnDefinition = "JSONB")
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
+
+	private transient Set<ElementType> elements;
 
 	public MonsterStats() {
 	}
@@ -163,5 +168,18 @@ public class MonsterStats implements Serializable {
 
 	public JSONArray getTags() {
 		return tags;
+	}
+
+	public Set<ElementType> getElements() {
+		if (elements == null) {
+			elements = new HashSet<>();
+			for (ElementType e : ElementType.values()) {
+				if (tags.contains(e.name())) {
+					elements.add(e);
+				}
+			}
+		}
+
+		return elements;
 	}
 }

@@ -13,6 +13,7 @@ import com.kuuhaku.model.enums.dunhun.GearSlot;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.enums.shoukan.Trigger;
@@ -32,6 +33,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import jakarta.persistence.Transient;
+import org.apache.commons.collections4.SetUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.*;
@@ -244,6 +246,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				crit = source.getModifiers().getCritical(s.getStats().getCritical());
 			} else {
 				crit = source.getCritical();
+			}
+
+			Set<ElementType> elements = s.getStats().getElements();
+			if (this instanceof MonsterBase<?> m) {
+				Set<ElementType> resists = m.getStats().getElements();
+				Set<ElementType> inters = SetUtils.intersection(elements, resists);
+				if (!inters.isEmpty()) {
+					crit = 0;
+					value = (int) (value * (1 - 1d / resists.size()));
+				}
 			}
 		}
 
