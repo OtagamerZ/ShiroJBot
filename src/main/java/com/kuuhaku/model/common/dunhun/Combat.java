@@ -739,12 +739,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 			int lastHistor = history.size();
 			boolean wasToggle = skill.getToggledEffect() != null;
+			trigger(spell ? Trigger.ON_SPELL : Trigger.ON_ATTACK, source, target, skill);
+
 			if (skill.execute(game, source, target)) {
 				if (isCurrent) {
 					source.consumeAp(skill.getStats().getCost());
 				}
-
-				trigger(spell ? Trigger.ON_SPELL : Trigger.ON_ATTACK, source, target, skill);
 
 				String type = spell ? "str/used" : "str/actor_combat";
 				String suffix = target.equals(source) ? "_self" : "";

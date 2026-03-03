@@ -243,11 +243,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double crit = 0;
 		AtomicInteger val = new AtomicInteger(value);
 		if (usable instanceof Skill s && source != null) {
-			Combat cbt = binding.getGame().getCombat();
-			if (cbt != null) {
-				cbt.trigger(s.getStats().isSpell() ? Trigger.ON_SPELL : Trigger.ON_ATTACK, source, this, usable, val);
-			}
-
 			if (s.getStats().isSpell()) {
 				crit = source.getModifiers().getCritical(s.getStats().getCritical());
 			} else {
