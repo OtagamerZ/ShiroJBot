@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.dunhun.Skill;
@@ -23,6 +24,7 @@ public class ActorCache {
 	private List<Skill> skills;
 	private Deck deck;
 	private Senshi senshi;
+	private Set<ElementType> resists;
 
 	public ActorCache(Actor<?> actor) {
 		this.actor = actor;
@@ -130,10 +132,31 @@ public class ActorCache {
 		this.senshi = senshi;
 	}
 
+	public Set<ElementType> getResists() {
+		if (resists == null) {
+			resists = new HashSet<>();
+
+			if (actor instanceof MonsterBase<?> m) {
+				for (ElementType e : ElementType.values()) {
+					if (m.getStats().getTags().contains(e.name())) {
+						resists.add(e);
+					}
+				}
+			}
+		}
+
+		return resists;
+	}
+
+	public void setResists(Set<ElementType> resists) {
+		this.resists = resists;
+	}
+
 	public void reset() {
 		equipment = null;
 		skills = null;
 		deck = null;
 		senshi = null;
+		resists = null;
 	}
 }

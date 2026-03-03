@@ -83,8 +83,6 @@ public class MonsterStats implements Serializable {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
-	private transient Set<ElementType> elements;
-
 	public MonsterStats() {
 	}
 
@@ -168,18 +166,5 @@ public class MonsterStats implements Serializable {
 
 	public JSONArray getTags() {
 		return tags;
-	}
-
-	public Set<ElementType> getElements() {
-		if (elements == null) {
-			elements = new HashSet<>();
-			for (ElementType e : ElementType.values()) {
-				if (tags.contains(e.name())) {
-					elements.add(e);
-				}
-			}
-		}
-
-		return elements;
 	}
 }

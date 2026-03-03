@@ -250,13 +250,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 
 			Set<ElementType> elements = s.getStats().getElements();
-			if (this instanceof MonsterBase<?> m) {
-				Set<ElementType> resists = m.getStats().getElements();
-				Set<ElementType> inters = SetUtils.intersection(elements, resists);
-				if (!inters.isEmpty()) {
-					crit = 0;
-					val.set((int) (val.get() * (1 - 1d / resists.size())));
-				}
+			Set<ElementType> resists = getResists();
+			Set<ElementType> inters = SetUtils.intersection(elements, resists);
+			if (!inters.isEmpty()) {
+				crit = 0;
+				val.set((int) (val.get() * (1 - 1d / resists.size())));
 			}
 		}
 
@@ -579,6 +577,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				.filter(Objects::nonNull)
 				.filter(s -> s.getId().equalsIgnoreCase(id))
 				.findFirst().orElse(null);
+	}
+
+	public Set<ElementType> getResists() {
+		return SetUtils.union(
+				cache.getResists(),
+				modifiers.getEffects().stream()
+						.map(EffectProperties::getResist)
+						.collect(Collectors.toSet())
+		);
 	}
 
 	public Senshi createSenshi() {

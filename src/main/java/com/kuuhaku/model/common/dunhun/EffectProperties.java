@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.common.shoukan.ValueMod;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 
 import java.lang.reflect.Field;
 
@@ -28,6 +29,7 @@ public class EffectProperties<T> {
 	private int priority;
 	private int expiration;
 	private String icon;
+	private ElementType resist;
 
 	public EffectProperties(EffectContext<T> owner) {
 		this(owner, -1);
@@ -205,6 +207,7 @@ public class EffectProperties<T> {
 	public boolean isSafeToRemove() {
 		if (expiration == 0) return true;
 		else if (effect != null && !effect.isClosed()) return false;
+		else if (resist != null) return false;
 
 		for (Field f : fieldCache) {
 			try {
@@ -229,5 +232,13 @@ public class EffectProperties<T> {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public ElementType getResist() {
+		return resist;
+	}
+
+	public void setResist(ElementType resist) {
+		this.resist = resist;
 	}
 }
