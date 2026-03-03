@@ -300,7 +300,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					}
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
-					if (hp + val.get() <= 0) {
+					if (source != this && hp + val.get() <= 0) {
 						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 
@@ -360,7 +360,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 		}
 
-		setHp(getHp() + val.get());
+		setHp(Math.max(source == this ? 1 : 0, getHp() + val.get()));
 
 		return Tuple2.tuple(val.get(), crit);
 	}
