@@ -85,24 +85,19 @@ public class HeroSkillCommand implements Executable {
 
 	public static @NonNull EmbedBuilder getSkillEmbed(I18N locale, Skill s, Hero h) {
 		EmbedBuilder eb = new ColorlessEmbedBuilder()
-				.setThumbnail("attachment://thumb.png");
+				.setThumbnail("attachment://thumb.png")
+				.setTitle(s.getName(locale));
 
-		List<String> tags = new ArrayList<>();
-		tags.add(locale.get("str/type_" + (s.getStats().isSpell() ? "spell" : "martial")));
-		tags.addAll(s.getRequirements().tags().stream()
-				.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
-				.toList());
-
-		JSONArray tgs = s.getStats().getTags();
+		List<String> tags = s.getTags();
 		if (!tags.isEmpty()) {
-			tgs.addAll(tags.stream()
+			List<String> tgs = tags.stream()
 					.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
-					.toList()
-			);
-		}
+					.toList();
 
-		eb.setTitle(s.getName(locale))
-				.appendDescription("-# " + String.join(", ", tags) + "\n");
+			eb.appendDescription("-# " + String.join(", ", tgs) + "\n");
+		} else {
+			eb.appendDescription("\n");
+		}
 
 		if (s.getStats().getCost() > 0) {
 			eb.appendDescription("-# " + locale.get("str/cost", StringUtils.repeat('◈', s.getStats().getCost())) + "\n");

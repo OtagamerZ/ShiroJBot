@@ -31,6 +31,7 @@ import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
+import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -162,6 +163,21 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	public Requirements getRequirements() {
 		return requirements;
+	}
+
+	public List<String> getTags() {
+		List<String> tags = new ArrayList<>();
+		tags.add(stats.isSpell() ? "SPELL" : "MARTIAL");
+		tags.addAll(requirements.tags().stream()
+				.map(String::valueOf)
+				.toList()
+		);
+		tags.addAll(stats.getTags().stream()
+				.map(String::valueOf)
+				.toList()
+		);
+
+		return tags;
 	}
 
 	public EffectProperties<?> getToggledEffect() {

@@ -33,7 +33,7 @@ public record CombatContext(
 		this(combat, trigger, source, target, usable, value, new HashSet<>());
 
 		if (usable instanceof Skill s) {
-			for (Object tag : s.getStats().getTags()) {
+			for (Object tag : s.getTags()) {
 				tags.add(tag.toString());
 			}
 		}
