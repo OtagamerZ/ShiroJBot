@@ -168,10 +168,14 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	public List<String> getTags() {
 		List<String> tags = new ArrayList<>();
 		tags.add(stats.isSpell() ? "SPELL" : "MARTIAL");
-		tags.addAll(requirements.tags().stream()
-				.map(String::valueOf)
-				.toList()
-		);
+
+		if (requirements != null) {
+			tags.addAll(requirements.tags().stream()
+					.map(String::valueOf)
+					.toList()
+			);
+		}
+
 		tags.addAll(stats.getTags().stream()
 				.map(String::valueOf)
 				.toList()
