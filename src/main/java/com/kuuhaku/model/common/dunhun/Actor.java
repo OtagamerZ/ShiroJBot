@@ -584,6 +584,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				cache.getResists(),
 				modifiers.getEffects().stream()
 						.map(EffectProperties::getResist)
+						.filter(Objects::nonNull)
 						.collect(Collectors.toSet())
 		);
 	}
