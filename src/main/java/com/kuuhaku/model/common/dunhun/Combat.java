@@ -237,10 +237,15 @@ public class Combat implements Renderer<BufferedImage> {
 				if (!sb.isEmpty()) sb.nextLine();
 
 				sb.appendNewLine(a.getName());
-				sb.append(a.getResists().stream()
-						.map(e -> "\\" + e)
-						.collect(Collectors.joining())
-				);
+
+				Set<ElementType> resists = a.getResists();
+				if (!resists.isEmpty()) {
+					sb.append(' ');
+					sb.append(a.getResists().stream()
+							.map(e -> "\\" + e)
+							.collect(Collectors.joining())
+					);
+				}
 
 				a.addHpBar(getLocale(), sb);
 				a.addApBar(sb);
