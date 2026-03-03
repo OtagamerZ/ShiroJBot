@@ -51,7 +51,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Command(
 		name = "hero",
 		path = {"gear", "buy"},
-		category = Category.STAFF
+		category = Category.MISC
 )
 @Syntax(allowEmpty = true, value = "<id:number:r>")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
