@@ -24,6 +24,7 @@ import com.kuuhaku.exceptions.ActivationException;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.EffectBase;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
@@ -68,7 +69,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	@Transient
 	private transient JSONObject ctxVar = new JSONObject();
-	private transient ToggledEffect toggle = null;
+	private transient EffectBase toggle = null;
 	private transient int cd = 0;
 	private transient boolean locked = false;
 
@@ -162,20 +163,18 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 		return requirements;
 	}
 
-	public ToggledEffect getToggledEffect() {
+	public EffectBase getToggledEffect() {
 		return toggle;
 	}
 
-	public void setToggledEffect(Actor<?> holder, ToggledEffect effect) {
+	public void setToggledEffect(Actor<?> holder, EffectBase effect) {
 		if (toggle == null) {
 			if (holder.getUsableAp() <= stats.getReservation()) {
 				throw new ActivationException("error/not_enough_ap_reserve");
 			}
 
 			toggle = effect;
-			toggle.onEnable().run();
 		} else {
-			toggle.onDisable().run();
 			toggle = null;
 			setCooldown(stats.getCooldown());
 		}

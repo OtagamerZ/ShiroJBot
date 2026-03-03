@@ -1,4 +1,6 @@
 package com.kuuhaku.model.records.dunhun;
 
-public record ToggledEffect(Runnable onEnable, Runnable onDisable) {
+import com.kuuhaku.model.common.dunhun.EffectBase;
+
+public record ToggledEffect(EffectBase effect) {
 }
