@@ -79,6 +79,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	}
 
 	public Skill(int cost, int cooldown, double efficiency, double critical, boolean spell) {
+		this.id = "DEFAULT_ATTACK";
 		this.stats = new SkillStats(cost, cooldown, efficiency, critical, spell);
 	}
 
