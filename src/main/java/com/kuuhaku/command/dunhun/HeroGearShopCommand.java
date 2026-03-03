@@ -67,7 +67,7 @@ public class HeroGearShopCommand implements Executable {
 		}
 
 		long shopDay = LocalDate.now().toEpochDay();
-		Random rng = new Random(shopDay);
+		Random rng = new Random(shopDay ^ h.getId().hashCode());
 		List<Gear> catalogue = Utils.generate(6 * 3, _ -> Gear.getRandom(h, rng));
 
 		JSONObject dt = h.getExtraData();
