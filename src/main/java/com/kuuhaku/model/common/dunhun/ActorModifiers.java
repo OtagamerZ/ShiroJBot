@@ -205,7 +205,7 @@ public class ActorModifiers {
 		}
 
 		for (Skill s : parent.getSkills()) {
-			if (s.getToggledEffect() == null) continue;
+			if (s == null || s.getToggledEffect() == null) continue;
 			
 			effects.add(s.getToggledEffect());
 		}
