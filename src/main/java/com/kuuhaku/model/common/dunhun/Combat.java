@@ -237,12 +237,10 @@ public class Combat implements Renderer<BufferedImage> {
 				if (!sb.isEmpty()) sb.nextLine();
 
 				sb.appendNewLine(a.getName());
-				if (a instanceof MonsterBase<?> m) {
-					sb.append(m.getStats().getElements().stream()
-							.map(e -> "\\" + e)
-							.collect(Collectors.joining())
-					);
-				}
+				sb.append(a.getResists().stream()
+						.map(e -> "\\" + e)
+						.collect(Collectors.joining())
+				);
 
 				a.addHpBar(getLocale(), sb);
 				a.addApBar(sb);
