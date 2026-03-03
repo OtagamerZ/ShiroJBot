@@ -5,6 +5,8 @@ import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 
+import java.util.Objects;
+
 public class DerivedEffect extends TriggeredEffect {
 	private final EffectBase parent;
 
@@ -20,5 +22,18 @@ public class DerivedEffect extends TriggeredEffect {
 	@Override
 	public boolean isClosed() {
 		return super.isClosed() || parent.isClosed();
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		if (!super.equals(o)) return false;
+		DerivedEffect that = (DerivedEffect) o;
+		return Objects.equals(parent, that.parent);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(super.hashCode(), parent);
 	}
 }
