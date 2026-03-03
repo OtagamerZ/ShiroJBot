@@ -97,6 +97,10 @@ public class SkillStats extends UsableStats {
 		return cooldown;
 	}
 
+	public double getEfficiency() {
+		return efficiency;
+	}
+
 	public double getEfficiency(int level) {
 		return efficiency * (1 + Calc.clamp(level, 0, 100) * 0.003);
 	}
