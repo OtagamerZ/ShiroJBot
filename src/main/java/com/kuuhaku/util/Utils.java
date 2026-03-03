@@ -100,6 +100,7 @@ import java.util.zip.CRC32;
 
 public abstract class Utils {
 	public static final Set<String> CONFIMATIONS = ConcurrentHashMap.newKeySet();
+	public static final String[] SUPERSCRIPTS = {"⁰", "¹", "²", "³", "⁴", "⁵", "⁶", "⁷", "⁸", "⁹"};
 
 	public static String toStringDuration(I18N locale, long millis) {
 		long days = millis / Constants.MILLIS_IN_DAY;
@@ -1399,6 +1400,16 @@ public abstract class Utils {
 
 	public static String fancyLetter(char l) {
 		return new String(new char[]{0xD83C, (char) (0xDDE5 + (l - (Character.isUpperCase(l) ? 64 : 96)))});
+	}
+
+	public static String superscript(int n) {
+		StringBuilder sb = new StringBuilder(String.valueOf(n));
+		for (int i = 0; i < sb.length(); i++) {
+			sb.replace(i, i + 1, SUPERSCRIPTS[n % 10]);
+			n /= 10;
+		}
+
+		return sb.toString();
 	}
 
 	public static void sendLoading(EventData event, String message, Consumer<Message> action) {

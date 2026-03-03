@@ -300,7 +300,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					}
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
-					if (source != this && hp + val.get() <= 0) {
+					if (equals(source) && hp + val.get() <= 0) {
 						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 
@@ -360,7 +360,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 		}
 
-		setHp(Math.max(source == this ? 1 : 0, getHp() + val.get()));
+		setHp(Math.max(equals(source) ? 1 : 0, getHp() + val.get()));
 
 		return Tuple2.tuple(val.get(), crit);
 	}
@@ -492,14 +492,19 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		sb.appendNewLine("-# " + bar);
 
-		String icons = modifiers.getEffects().stream()
-				.map(EffectProperties::getIcon)
-				.filter(Objects::nonNull)
-				.distinct()
-				.map(i -> "\\" + i)
-				.collect(Collectors.joining());
+		StringBuilder icons = new StringBuilder();
+		for (EffectProperties<?> e : modifiers.getEffects()) {
+			String icon = e.getIcon();
+			if (icon != null) {
+				icons.append('\\').append(icon);
+				if (e.getExpiration() > 0) {
+					icons.append(Utils.superscript(e.getExpiration()));
+				}
+				icons.append(' ');
+			}
+		}
 
-		if (!icons.isBlank()) {
+		if (!icons.isEmpty()) {
 			sb.appendNewLine("-# " + icons);
 		}
 	}
