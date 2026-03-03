@@ -656,10 +656,14 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
+				String desc = s.getDescription(getLocale(), h).replace("*", "").lines()
+						.filter(l -> !l.startsWith("-#"))
+						.collect(Collectors.joining("\n"));
+
 				b.addOption(
 						s.getInfo(getLocale()).getName() + cost + extra,
 						s.getId(),
-						StringUtils.abbreviate(s.getDescription(getLocale(), h).replace("*", ""), 100)
+						StringUtils.abbreviate(desc, 100)
 				);
 			}
 
