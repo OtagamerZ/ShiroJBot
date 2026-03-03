@@ -521,12 +521,6 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			);
 		}
 
-		for (Skill s : getSkills()) {
-			if (s.getToggledEffect() == null) continue;
-
-			queue.add(s.getToggledEffect());
-		}
-
 		queue.addAll(getModifiers().getEffects().stream()
 				.map(EffectProperties::getEffect)
 				.filter(Objects::nonNull)
