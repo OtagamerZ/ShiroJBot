@@ -288,14 +288,19 @@ public class AreaMap {
 									g2d.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_OVER, 0.25f));
 									g2d.setColor(Color.DARK_GRAY);
 								} else {
-									float hue = switch (node.getType()) {
-										case EVENT -> 50;
-										case REST -> 100;
-										case RETURN -> 250;
-										case DANGER -> 20;
-										case BOSS -> 360;
-										default -> 0;
-									} / 360f;
+									float hue;
+									if (fl.areNodesHidden()) {
+										hue = 0;
+									} else {
+										hue = switch (node.getType()) {
+											case EVENT -> 50;
+											case REST -> 100;
+											case RETURN -> 250;
+											case DANGER -> 20;
+											case BOSS -> 360;
+											default -> 0;
+										} /360f;
+									}
 
 									g2d.setColor(Color.getHSBColor(hue, hue == 0 ? 0 : 0.8f, 0.2f));
 								}
