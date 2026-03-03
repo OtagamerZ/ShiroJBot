@@ -32,7 +32,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Requirements;
-import com.kuuhaku.model.records.dunhun.ToggledEffect;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
