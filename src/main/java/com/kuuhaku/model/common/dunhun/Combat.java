@@ -760,7 +760,11 @@ public class Combat implements Renderer<BufferedImage> {
 					action = "str/toggle_activate";
 				}
 
-				history.add(lastHistor, getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
+				if (action.startsWith("str/actor_combat")) {
+					history.add(lastHistor, getLocale().get(action, source.getName(), target.getName()));
+				} else {
+					history.add(lastHistor, getLocale().get(action, source.getName(), skill.getInfo(getLocale()).getName(), target.getName()));
+				}
 			}
 		} finally {
 			skill.setLocked(false);
