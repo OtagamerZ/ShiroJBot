@@ -119,8 +119,7 @@ public class HeroGearCommand implements Executable {
 		JSONArray tags = g.getTags();
 		if (!tags.isEmpty()) {
 			List<String> tgs = tags.stream()
-					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
-					.filter(t -> !t.isEmpty())
+					.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 					.toList();
 
 			eb.appendDescription("-# " + String.join(", ", tgs) + "\n\n");
@@ -207,7 +206,7 @@ public class HeroGearCommand implements Executable {
 			JSONArray tgs = ga.getAffix().getTags();
 			if (!tgs.isEmpty()) {
 				sb.append(" - " + tgs.stream()
-						.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
+						.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 						.collect(Collectors.joining(", "))
 				);
 			}

@@ -96,8 +96,7 @@ public class HeroSkillCommand implements Executable {
 		JSONArray tgs = s.getStats().getTags();
 		if (!tags.isEmpty()) {
 			tgs.addAll(tags.stream()
-					.map(t -> LocalizedString.get(locale, "tag/" + t, ""))
-					.filter(t -> !t.isEmpty())
+					.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
 					.toList()
 			);
 		}
