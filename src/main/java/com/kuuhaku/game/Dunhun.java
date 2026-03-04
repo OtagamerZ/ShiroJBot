@@ -142,6 +142,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			for (Hero h : heroes.values()) {
 				h.setHp(hps.getOrDefault(h.getId(), h.getMaxHp()));
+				if (h.getHp() <= 0) {
+					h.setHp(h.getMaxHp() / 3);
+				}
 			}
 
 			this.map = dungeon.init(this, run);
