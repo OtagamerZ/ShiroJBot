@@ -36,11 +36,12 @@ public class Node {
 	private byte renderState = 0b1;
 	/*
 	0xF
-	  └ 000 1111
-	        │││└─ will not be rendered
-	        ││└── path rendered
-	        │└─── node rendered
-	        └──── offset node
+	  └ 001 1111
+	      │ │││└─ will not be rendered
+	      │ ││└── path rendered
+	      │ │└─── node rendered
+	      │ └──── offset node
+	      └──── override leap
 	 */
 
 	private NodeType type;
@@ -201,6 +202,14 @@ public class Node {
 		renderState = (byte) Bit32.set(renderState, 3, offset);
 	}
 
+	public boolean isOverrideLeap() {
+		return Bit32.on(renderState, 3);
+	}
+
+	public void setOverrideLeap(boolean override) {
+		renderState = (byte) Bit32.set(renderState, 4, override);
+	}
+
 	public NodeType getType() {
 		if (sublevel != null) {
 			DungeonRun run = sublevel.getFloor().getMap().getRun();
@@ -261,7 +270,7 @@ public class Node {
 
 		boolean split = children.size() > 1;
 		for (Node child : children) {
-			boolean leap = child.depth() - depth() > 1;
+			boolean leap = !isOverrideLeap() && child.depth() - depth() > 1;
 			if (leap || child.pathColor != -1) continue;
 
 			int colorAdd = split ? child.path - this.path : 0;
@@ -303,7 +312,7 @@ public class Node {
 		Composite comp = g2d.getComposite();
 		for (Node child : children) {
 			Point to = child.getRenderPos();
-			boolean leap = child.depth() - depth() > 1;
+			boolean leap = !isOverrideLeap() && child.depth() - depth() > 1;
 			boolean blocked = this.blocked.contains(child);
 
 			Color color = Color.GRAY;
