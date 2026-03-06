@@ -203,7 +203,7 @@ public class Node {
 	}
 
 	public boolean isOverrideLeap() {
-		return Bit32.on(renderState, 3);
+		return Bit32.on(renderState, 4);
 	}
 
 	public void setOverrideLeap(boolean override) {
