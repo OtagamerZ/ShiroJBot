@@ -354,7 +354,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ClusterAction ca;
 		ButtonizeHelper helper;
-		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
+		if (getCurrent() instanceof Hero h && game.getHeroes().containsKey(h.getAccount().getUid())) {
 			Senshi sen = h.getSenshi();
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 			helper = new ButtonizeHelper(true)
