@@ -859,9 +859,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 		for (Actor<?> a : combat.get().getActors()) {
 			if (a.getTeam() != team) continue;
 
-			XStringBuilder sb = new XStringBuilder("#-# " + a.getName());
+			XStringBuilder sb = new XStringBuilder();
 
 			if (a instanceof Monster m) {
+				sb.appendNewLine("#-# " + m.getInfo(getLocale()).getName());
+
 				List<String> affs = m.getAffixes().stream()
 						.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
 						.toList();
