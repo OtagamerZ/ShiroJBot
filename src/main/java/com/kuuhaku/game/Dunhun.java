@@ -970,7 +970,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		return heroes.size();
 	}
 
-	public Set<RunModifier> getModifiers() {
+	public Collection<RunModifier> getModifiers() {
 		Map<String, RunModifier> modifiers = new HashMap<>();
 
 		for (RunModifier mod : map.getRun().getModifiers()) {
@@ -984,7 +984,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			modifiers.put(mod.getModFamily(), mod);
 		}
 
-		return Set.copyOf(modifiers.values());
+		return modifiers.values();
 	}
 
 	public NodeType getAreaType() {

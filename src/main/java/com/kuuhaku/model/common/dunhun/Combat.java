@@ -976,20 +976,25 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void triggerGlobalEffects(Trigger t, CombatContext context) {
+		effects.removeIf(EffectBase::isClosed);
+
 		Set<EffectBase> effects = new HashSet<>(this.effects);
 		for (RunModifier mod : game.getModifiers()) {
 			EffectBase e = mod.getEffect();
-			if (e != null) {
+			if (e != null && !e.isClosed()) {
 				effects.add(e);
 			}
 		}
-		effects.removeIf(EffectBase::isClosed);
 
 		for (EffectBase e : effects) {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
 				if (!Utils.equalsAny(t, te.getTriggers())) continue;
 				te.decLimit();
+
+				if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
+					ge.decTurn();
+				}
 			}
 
 			try {
