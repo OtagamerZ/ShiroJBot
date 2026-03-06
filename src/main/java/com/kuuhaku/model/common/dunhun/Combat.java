@@ -355,22 +355,25 @@ public class Combat implements Renderer<BufferedImage> {
 		ClusterAction ca;
 		ButtonizeHelper helper;
 		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
+			Senshi sen = h.getSenshi();
 			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
 			helper = new ButtonizeHelper(true)
 					.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
 					.setCancellable(false);
 
-			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
-				List<Actor<?>> tgts = new ArrayList<>();
-				for (Actor<?> a : getActors(h.getTeam().getOther())) {
-					Actor<?> actor = a.isOutOfCombat() ? null : a;
-					tgts.add(actor);
-				}
+			if (sen.getDmg() > 0) {
+				helper.addAction(Utils.parseEmoji("🗡️"), w -> {
+					List<Actor<?>> tgts = new ArrayList<>();
+					for (Actor<?> a : getActors(h.getTeam().getOther())) {
+						Actor<?> actor = a.isOutOfCombat() ? null : a;
+						tgts.add(actor);
+					}
 
-				addSelector(w.getMessage(), helper, tgts,
-						t -> lock.complete(() -> attack(h, t))
-				);
-			});
+					addSelector(w.getMessage(), helper, tgts,
+							t -> lock.complete(() -> attack(h, t))
+					);
+				});
+			}
 
 			List<Skill> skills = h.getSkills();
 			if (skills.stream().anyMatch(Objects::nonNull)) {
@@ -468,27 +471,29 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			helper.addAction(Utils.parseEmoji("🛡️"), w -> lock.complete(() -> {
-						h.getSenshi().setDefending(true);
-						h.setAp(0);
+			if (sen.getDfs() > 0) {
+				helper.addAction(Utils.parseEmoji("🛡️"), w -> lock.complete(() -> {
+							h.getSenshi().setDefending(true);
+							h.setAp(0);
 
-						history.add(getLocale().get("str/actor_defend", h.getName()));
-					}))
-					.addAction(Utils.parseEmoji("💨"), w -> {
-						ButtonizeHelper confirm = new ButtonizeHelper(true)
-								.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
-								.setCancellable(false)
-								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() ->
-										h.setFleed(true)
-								))
-								.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
-									MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
-									addDropdowns(h, ma);
-									ma.queue(s -> Pages.buttonize(s, helper));
-								});
+							history.add(getLocale().get("str/actor_defend", h.getName()));
+						}))
+						.addAction(Utils.parseEmoji("💨"), w -> {
+							ButtonizeHelper confirm = new ButtonizeHelper(true)
+									.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
+									.setCancellable(false)
+									.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() ->
+											h.setFleed(true)
+									))
+									.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
+										MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
+										addDropdowns(h, ma);
+										ma.queue(s -> Pages.buttonize(s, helper));
+									});
 
-						confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
-					});
+							confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
+						});
+			}
 
 			ca.apply(a -> {
 				MessageCreateAction ma = helper.apply(a);
