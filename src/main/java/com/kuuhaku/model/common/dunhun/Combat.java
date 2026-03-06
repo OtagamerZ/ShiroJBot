@@ -993,7 +993,9 @@ public class Combat implements Renderer<BufferedImage> {
 				te.decLimit();
 
 				if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
-					ge.decTurn();
+					if (ge.getOwner() == null || Objects.equals(ge.getOwner(), getCurrent())) {
+						ge.decTurn();
+					}
 				}
 			}
 
