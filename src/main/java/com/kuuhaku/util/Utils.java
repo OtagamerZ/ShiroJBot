@@ -1404,7 +1404,7 @@ public abstract class Utils {
 
 	public static String superscript(int n) {
 		StringBuilder sb = new StringBuilder(String.valueOf(n));
-		for (int i = 0; i < sb.length(); i++) {
+		for (int i = sb.length() - 1; i >= 0; i--) {
 			sb.replace(i, i + 1, SUPERSCRIPTS[n % 10]);
 			n /= 10;
 		}

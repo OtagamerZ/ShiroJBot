@@ -120,8 +120,12 @@ public class Combat implements Renderer<BufferedImage> {
 
 		for (Actor<?> a : getActors()) {
 			a.setAp(0);
-			if (a instanceof Hero && a.getHp() <= 0) {
+			if (a.getHp() <= 0) {
 				a.setHp(1);
+			}
+
+			if (a instanceof Hero h && game.getHeroes().containsValue(h)) {
+				h.setController(h.getAccount().getUid());
 			}
 		}
 	}
@@ -354,25 +358,32 @@ public class Combat implements Renderer<BufferedImage> {
 
 		ClusterAction ca;
 		ButtonizeHelper helper;
-		if (getCurrent() instanceof Hero h && game.getHeroes().containsValue(h)) {
-			ca = game.getChannel().sendMessage("<@" + h.getAccount().getUid() + ">").embed(getEmbed());
+		Actor<?> curr = getCurrent();
+		Senshi sen = curr.getSenshi();
+		boolean canAttack = sen.getDmg() > 0;
+		boolean canDefend = sen.getDfs() > 0;
+
+		if (game.getHeroes().containsKey(curr.getController())) {
+			ca = game.getChannel().sendMessage("<@" + curr.getController() + ">").embed(getEmbed());
 			helper = new ButtonizeHelper(true)
-					.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
+					.setCanInteract(dt -> dt.getUser().getId().equals(curr.getController()))
 					.setCancellable(false);
 
-			helper.addAction(Utils.parseEmoji("🗡️"), w -> {
-				List<Actor<?>> tgts = new ArrayList<>();
-				for (Actor<?> a : getActors(h.getTeam().getOther())) {
-					Actor<?> actor = a.isOutOfCombat() ? null : a;
-					tgts.add(actor);
-				}
+			if (canAttack) {
+				helper.addAction(Utils.parseEmoji("🗡️"), w -> {
+					List<Actor<?>> tgts = new ArrayList<>();
+					for (Actor<?> a : getActors(curr.getTeam().getOther())) {
+						Actor<?> actor = a.isOutOfCombat() ? null : a;
+						tgts.add(actor);
+					}
 
-				addSelector(w.getMessage(), helper, tgts,
-						t -> lock.complete(() -> attack(h, t))
-				);
-			});
+					addSelector(w.getMessage(), helper, tgts,
+							t -> lock.complete(() -> attack(curr, t))
+					);
+				});
+			}
 
-			List<Skill> skills = h.getSkills();
+			List<Skill> skills = curr.getSkills();
 			if (skills.stream().anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					Map<String, List<?>> values = w.getDropdownValues();
@@ -387,11 +398,11 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					Skill skill = h.getSkill(String.valueOf(selected.getFirst()));
+					Skill skill = curr.getSkill(String.valueOf(selected.getFirst()));
 					if (skill == null) {
 						game.getChannel().sendMessage(getLocale().get("error/invalid_skill")).queue();
 						return;
-					} else if (skill.getStats().getCost() > h.getAp()) {
+					} else if (skill.getStats().getCost() > curr.getAp()) {
 						game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
 						return;
 					} else if (skill.getRemainingCooldown() > 0) {
@@ -399,29 +410,31 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
-					Requirements reqs = skill.getRequirements();
+					if (curr instanceof Hero h) {
+						List<JSONArray> wpnTags = curr.getEquipment().getWeaponTags();
+						Requirements reqs = skill.getRequirements();
 
-					JSONArray reqTags = reqs.tags();
-					if (!reqTags.isEmpty()) {
-						for (JSONArray tags : wpnTags) {
-							if (!tags.containsAll(reqTags)) {
-								game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
-								return;
+						JSONArray reqTags = reqs.tags();
+						if (!reqTags.isEmpty()) {
+							for (JSONArray tags : wpnTags) {
+								if (!tags.containsAll(reqTags)) {
+									game.getChannel().sendMessage(getLocale().get("error/invalid_weapon")).queue();
+									return;
+								}
 							}
+						} else if (h.getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
+							game.getChannel().sendMessage(getLocale().get("error/insufficient_attributes")).queue();
+							return;
 						}
-					} else if (h.getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
-						game.getChannel().sendMessage(getLocale().get("error/insufficient_attributes")).queue();
-						return;
 					}
 
-					addSelector(w.getMessage(), helper, skill.getTargets(h),
-							t -> lock.complete(() -> skill(skill, h, t))
+					addSelector(w.getMessage(), helper, skill.getTargets(curr),
+							t -> lock.complete(() -> skill(skill, curr, t))
 					);
 				});
 			}
 
-			if (h.getConsumableCount() > 0) {
+			if (curr instanceof Hero h && h.getConsumableCount() > 0) {
 				helper.addAction(Utils.parseEmoji("🫙"), w -> {
 					List<?> selected = w.getDropdownValues().get("consumables");
 					if (selected == null || selected.isEmpty()) {
@@ -468,31 +481,34 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			helper.addAction(Utils.parseEmoji("🛡️"), w -> lock.complete(() -> {
-						h.getSenshi().setDefending(true);
-						h.setAp(0);
+			if (canDefend) {
+				helper.addAction(Utils.parseEmoji("🛡️"), w -> lock.complete(() -> {
+					sen.setDefending(true);
+					curr.setAp(0);
 
-						history.add(getLocale().get("str/actor_defend", h.getName()));
-					}))
-					.addAction(Utils.parseEmoji("💨"), w -> {
-						ButtonizeHelper confirm = new ButtonizeHelper(true)
-								.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
-								.setCancellable(false)
-								.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() ->
-										h.setFleed(true)
-								))
-								.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
-									MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
-									addDropdowns(h, ma);
-									ma.queue(s -> Pages.buttonize(s, helper));
-								});
+					history.add(getLocale().get("str/actor_defend", curr.getName()));
+				}));
+			}
 
-						confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
-					});
+			helper.addAction(Utils.parseEmoji("💨"), w -> {
+				ButtonizeHelper confirm = new ButtonizeHelper(true)
+						.setCanInteract(dt -> dt.getUser().getId().equals(curr.getController()))
+						.setCancellable(false)
+						.addAction(Utils.parseEmoji("💨"), s -> lock.complete(() ->
+								curr.setFleed(true)
+						))
+						.addAction(Utils.parseEmoji(Constants.RETURN), v -> {
+							MessageEditAction ma = helper.apply(v.getMessage().editMessageComponents());
+							addDropdowns(curr, ma);
+							ma.queue(s -> Pages.buttonize(s, helper));
+						});
+
+				confirm.apply(w.getMessage().editMessageComponents()).queue(s -> Pages.buttonize(s, confirm));
+			});
 
 			ca.apply(a -> {
 				MessageCreateAction ma = helper.apply(a);
-				addDropdowns(h, ma);
+				addDropdowns(curr, ma);
 
 				return ma;
 			});
@@ -500,7 +516,6 @@ public class Combat implements Renderer<BufferedImage> {
 			ca = game.getChannel().sendEmbed(getEmbed());
 			helper = null;
 
-			Actor<?> curr = getCurrent();
 			cpu.schedule(() -> {
 				try {
 					if (!curr.getBinding().isBound()) {
@@ -508,8 +523,6 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					boolean canAttack = curr.getSenshi().getDmg() > 0;
-					boolean canDefend = curr.getSenshi().getDfs() > 0;
 					Function<Usable, Function<Actor<?>, Integer>> criteria = u -> a -> {
 						if (a.getTeam() == curr.getTeam()) {
 							if (curr instanceof MonsterBase<?> m && Objects.equals(m.getMaster(), a)) {
@@ -620,11 +633,11 @@ public class Combat implements Renderer<BufferedImage> {
 		return skills;
 	}
 
-	private void addDropdowns(Hero h, MessageRequest<?> ma) {
+	private void addDropdowns(Actor<?> act, MessageRequest<?> ma) {
 		List<MessageTopLevelComponent> comps = new ArrayList<>(ma.getComponents());
-		List<JSONArray> wpnTags = h.getEquipment().getWeaponTags();
+		List<JSONArray> wpnTags = act.getEquipment().getWeaponTags();
 
-		List<Skill> skills = h.getSkills();
+		List<Skill> skills = act.getSkills();
 		if (skills.stream().anyMatch(Objects::nonNull)) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
 					.setPlaceholder(getLocale().get("str/use_a_skill"))
@@ -659,7 +672,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
-				String desc = s.getDescription(getLocale(), h).replace("*", "").lines()
+				String desc = s.getDescription(getLocale(), act).replace("*", "").lines()
 						.filter(l -> !l.startsWith("-#"))
 						.collect(Collectors.joining("\n"));
 
@@ -673,38 +686,40 @@ public class Combat implements Renderer<BufferedImage> {
 			comps.add(ActionRow.of(b.build()));
 		}
 
-		Set<Consumable> cons = h.getConsumables().uniqueSet();
-		if (!cons.isEmpty()) {
-			StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
-					.setPlaceholder(getLocale().get("str/use_a_consumable"))
-					.setMaxValues(1);
+		if (act instanceof Hero h) {
+			Set<Consumable> cons = h.getConsumables().uniqueSet();
+			if (!cons.isEmpty()) {
+				StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
+						.setPlaceholder(getLocale().get("str/use_a_consumable"))
+						.setMaxValues(1);
 
-			for (Consumable c : cons) {
-				String extra = " (x" + h.getConsumableCount(c) + ")";
+				for (Consumable c : cons) {
+					String extra = " (x" + h.getConsumableCount(c) + ")";
 
-				JSONArray req = c.getReqTags();
-				if (!req.isEmpty()) {
-					for (JSONArray tags : wpnTags) {
-						if (!tags.containsAll(req)) {
-							String reqTags = Utils.properlyJoin(getLocale(), req.stream()
-									.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
-									.toList()
-							);
+					JSONArray req = c.getReqTags();
+					if (!req.isEmpty()) {
+						for (JSONArray tags : wpnTags) {
+							if (!tags.containsAll(req)) {
+								String reqTags = Utils.properlyJoin(getLocale(), req.stream()
+										.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
+										.toList()
+								);
 
-							extra += " [" + getLocale().get("str/requires", reqTags) + "]";
-							break;
+								extra += " [" + getLocale().get("str/requires", reqTags) + "]";
+								break;
+							}
 						}
 					}
+
+					b.addOption(
+							c.getName(getLocale()) + extra,
+							c.getId(),
+							StringUtils.abbreviate(c.getDescription(getLocale()), 100)
+					);
 				}
 
-				b.addOption(
-						c.getName(getLocale()) + extra,
-						c.getId(),
-						StringUtils.abbreviate(c.getDescription(getLocale()), 100)
-				);
+				comps.add(ActionRow.of(b.build()));
 			}
-
-			comps.add(ActionRow.of(b.build()));
 		}
 
 		ma.setComponents(comps);
@@ -961,20 +976,27 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	private void triggerGlobalEffects(Trigger t, CombatContext context) {
+		effects.removeIf(EffectBase::isClosed);
+
 		Set<EffectBase> effects = new HashSet<>(this.effects);
 		for (RunModifier mod : game.getModifiers()) {
 			EffectBase e = mod.getEffect();
-			if (e != null) {
+			if (e != null && !e.isClosed()) {
 				effects.add(e);
 			}
 		}
-		effects.removeIf(EffectBase::isClosed);
 
 		for (EffectBase e : effects) {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
 				if (!Utils.equalsAny(t, te.getTriggers())) continue;
 				te.decLimit();
+
+				if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
+					if (ge.getOwner() == null || Objects.equals(ge.getOwner(), getCurrent())) {
+						ge.decTurn();
+					}
+				}
 			}
 
 			try {
