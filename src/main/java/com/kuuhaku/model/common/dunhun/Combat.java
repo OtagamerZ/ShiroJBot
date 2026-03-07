@@ -989,14 +989,17 @@ public class Combat implements Renderer<BufferedImage> {
 		for (EffectBase e : effects) {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
-				if (!Utils.equalsAny(t, te.getTriggers())) continue;
-				te.decLimit();
-
 				if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
 					if (ge.getOwner() == null || Objects.equals(ge.getOwner(), getCurrent())) {
 						ge.decTurn();
+					} else {
+						continue;
 					}
+				} else if (!Utils.equalsAny(t, te.getTriggers())) {
+					continue;
 				}
+
+				te.decLimit();
 			}
 
 			try {
