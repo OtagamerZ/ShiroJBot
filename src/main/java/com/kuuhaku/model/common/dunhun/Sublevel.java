@@ -40,6 +40,10 @@ public class Sublevel {
 		return newNode(type, List.of());
 	}
 
+	public Node newNode(NodeType type, Node... parents) {
+		return newNode(type, List.of(parents));
+	}
+
 	public Node newNode(NodeType type, List<Node> parents) {
 		Node node = new Node(this, type, parents);
 		nodes.add(node);
