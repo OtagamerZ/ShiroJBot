@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
@@ -895,7 +896,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
 					.collect(Collectors.joining("\n"));
 
-			eb.addField(a.getName(), desc, true);
+			String name = a.getName();
+			Set<ElementType> resists = a.getResists();
+			if (!resists.isEmpty()) {
+				sb.append(' ');
+				sb.append(resists.stream()
+						.map(ElementType::name)
+						.collect(Collectors.joining())
+				);
+			}
+
+			eb.addField(name, desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();

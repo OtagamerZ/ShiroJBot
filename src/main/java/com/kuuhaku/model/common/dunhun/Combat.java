@@ -240,17 +240,17 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor<?> a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
 
-				sb.appendNewLine(a.getName());
-
+				String name = a.getName();
 				Set<ElementType> resists = a.getResists();
 				if (!resists.isEmpty()) {
 					sb.append(' ');
-					sb.append(a.getResists().stream()
-							.map(e -> "\\" + e)
+					sb.append(resists.stream()
+							.map(ElementType::name)
 							.collect(Collectors.joining())
 					);
 				}
 
+				sb.appendNewLine(name);
 				a.addHpBar(getLocale(), sb);
 				a.addApBar(sb);
 			}
