@@ -243,11 +243,9 @@ public class Combat implements Renderer<BufferedImage> {
 				String name = a.getName();
 				Set<ElementType> resists = a.getResists();
 				if (!resists.isEmpty()) {
-					sb.append(' ');
-					sb.append(resists.stream()
-							.map(ElementType::name)
-							.collect(Collectors.joining())
-					);
+					name += " " + resists.stream()
+							.map(ElementType::toString)
+							.collect(Collectors.joining());
 				}
 
 				sb.appendNewLine(name);
