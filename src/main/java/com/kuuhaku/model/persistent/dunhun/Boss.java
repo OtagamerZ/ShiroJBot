@@ -2,7 +2,9 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
+import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.dunhun.*;
 import com.kuuhaku.model.common.dunhun.context.ActorContext;
 import com.kuuhaku.model.common.shoukan.MultMod;
@@ -34,6 +36,9 @@ public class Boss extends MonsterBase<Boss> {
 	@Language("Groovy")
 	@Column(name = "on_enrage", columnDefinition = "TEXT")
 	private String onEnrage;
+
+	@Column(name = "weight", nullable = false)
+	private int weight;
 
 	private transient boolean enraged;
 
@@ -118,18 +123,19 @@ public class Boss extends MonsterBase<Boss> {
 		return clone;
 	}
 
-	public static Boss getRandom(Node node) {
-		return getRandom(node, List.of());
+	public static Boss getRandom(Dunhun game) {
+		return getRandom(game, List.of());
 	}
 
-	public static Boss getRandom(Node node, Collection<?> pool) {
-		List<String> bosses = DAO.queryAllNative(String.class, "SELECT id FROM boss");
-		if (!pool.isEmpty()) {
-			bosses.removeIf(a -> !pool.contains(a));
-		}
-
+	public static Boss getRandom(Dunhun game, Collection<?> pool) {
+		List<Object[]> bosses = DAO.queryAllUnmapped("SELECT id, weight FROM boss WHERE weight > 0");
 		if (bosses.isEmpty()) return null;
 
-		return DAO.find(Boss.class, Utils.getRandomEntry(node.getSeed(), bosses));
+		RandomList<String> rl = new RandomList<>(game.getNodeRng());
+		for (Object[] a : bosses) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		return DAO.find(Boss.class, rl.get());
 	}
 }
