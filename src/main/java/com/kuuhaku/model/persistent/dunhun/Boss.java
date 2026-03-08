@@ -11,6 +11,7 @@ import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.util.Utils;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -124,11 +125,13 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	public static Boss getRandom(Dunhun game) {
-		return getRandom(game, List.of());
-	}
-
-	public static Boss getRandom(Dunhun game, Collection<?> pool) {
 		List<Object[]> bosses = DAO.queryAllUnmapped("SELECT id, weight FROM boss WHERE weight > 0");
+
+		JSONArray pool = game.getDungeon().getMonsterPool();
+		if (!pool.isEmpty()) {
+			bosses.removeIf(a -> pool.contains(a[0]));
+		}
+
 		if (bosses.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>(game.getNodeRng());

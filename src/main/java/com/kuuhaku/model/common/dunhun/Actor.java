@@ -312,7 +312,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					}
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
-					if (equals(source) && hp + val.get() <= 0) {
+					if (!equals(source) && hp + val.get() <= 0) {
 						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
 						cbt.trigger(Trigger.ON_KILL, source, this, usable);
 

@@ -32,6 +32,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import com.kuuhaku.util.text.Uwuifier;
+import com.ygimenez.json.JSONArray;
 import jakarta.persistence.Cacheable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -190,6 +191,12 @@ public class Monster extends MonsterBase<Monster> {
 
 	public static String getRandomId(Dunhun game) {
 		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
+
+		JSONArray pool = game.getDungeon().getMonsterPool();
+		if (!pool.isEmpty()) {
+			mons.removeIf(a -> pool.contains(a[0]));
+		}
+
 		if (mons.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>(game.getNodeRng());

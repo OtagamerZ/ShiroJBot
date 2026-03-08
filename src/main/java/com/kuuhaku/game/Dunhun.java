@@ -339,7 +339,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 					case BOSS -> {
 						Actor<?> boss = nextNode.generateEnemy();
 						if (!(boss instanceof Boss)) {
-							boss = Boss.getRandom(nextNode, dungeon.getMonsterPool());
+							boss = Boss.getRandom(this);
 						}
 
 						runCombat(nextNode, boss);
@@ -557,18 +557,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		initializer.accept(combat.get());
 
 		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
-			List<String> pool = dungeon.getMonsterPool().stream()
-					.map(String::valueOf)
-					.toList();
-
 			for (int i = 0; i < 4; i++) {
 				List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
 				if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
-					if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(getNodeRng(), pool));
-					else chosen = Monster.getRandom(this);
+					chosen = Monster.getRandom(this);
 				}
 
 				if (chosen != null) {
