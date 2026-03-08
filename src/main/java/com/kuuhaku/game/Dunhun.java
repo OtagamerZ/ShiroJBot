@@ -337,12 +337,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					}
 					case BOSS -> {
-						Actor<?> boss = nextNode.generateEnemy();
-						if (!(boss instanceof Boss)) {
-							boss = Boss.getRandom(this);
-						}
+						Event evt = nextNode.generateEvent();
+						if (evt != null) {
+							runEvent(nextNode, evt);
+						} else {
+							Actor<?> boss = nextNode.generateEnemy();
+							if (!(boss instanceof Boss)) {
+								boss = Boss.getRandom(this);
+							}
 
-						runCombat(nextNode, boss);
+							runCombat(nextNode, boss);
+						}
 					}
 				}
 
