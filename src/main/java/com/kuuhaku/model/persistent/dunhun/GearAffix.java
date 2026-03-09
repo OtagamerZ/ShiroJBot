@@ -42,6 +42,7 @@ import org.slf4j.helpers.MessageFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 @Entity
@@ -132,40 +133,52 @@ public class GearAffix extends DAO<GearAffix> {
 		String desc = affix.getInfo(locale).getDescription();
 		List<ValueRange> values = getRanges();
 
-		if (desc.contains("{}%")) {
-			@Language("RegExp") String pat = locale.get("str/inc_red_pattern");
-			String[] types = Objects.requireNonNull(Utils.extract(pat, "\\w+\\|\\w+")).split("\\|");
+		@Language("RegExp")
+		String[] patterns = {
+				"(?<more>" + locale.get("str/more_less_pattern") + ")",
+				"(?<inc>" + locale.get("str/inc_red_pattern") + ")",
+				"(?<none>(?<sign>[+-]?)\\{})"
+		};
 
-			desc = Utils.regex(desc, pat).replaceAll(m -> {
-				ValueRange r = values.removeFirst();
+		return Utils.regex(desc, String.join("|", patterns)).replaceAll(m -> {
+			ValueRange r = values.removeFirst();
 
-				String line = m.group();
-				int val = r.withRoll(Calc.rng(1d, roll));
+			String line = m.group("more");
+			if (line != null) {
+				return fixNegativeMod(format, m, r, line, patterns[0]);
+			}
 
-				if (val < 0) {
-					String type = m.group("type");
-					line = line.replace(type, types[ArrayUtils.indexOf(types, type) - 1 % types.length]);
-					val = -val;
+			line = m.group("inc");
+			if (line != null) {
+				return fixNegativeMod(format, m, r, line, patterns[1]);
+			}
+
+			line = m.group("none");
+			if (line != null) {
+				if (m.group("sign") != null) {
+					return Pattern.quote(format.formatted(Utils.sign(r.withRoll(Calc.rng(1d, roll))), r));
 				}
 
-				return Pattern.quote(MessageFormatter.basicArrayFormat(line, new Integer[]{val}));
-			});
+				return Pattern.quote(format.formatted(r.withRoll(Calc.rng(1d, roll)), r));
+			}
+
+			return Pattern.quote("???");
+		});
+	}
+
+	private String fixNegativeMod(String format, MatchResult m, ValueRange r, String line, String pat) {
+		String[] types = Objects.requireNonNull(Utils.extract(pat, "\\w+\\|\\w+")).split("\\|");
+
+		int val = r.withRoll(Calc.rng(1d, roll));
+		if (val < 0) {
+			String type = m.group("type");
+			line = line.replace(type, types[ArrayUtils.indexOf(types, type) - 1 % types.length]);
+			val = -val;
 		}
 
-		desc = Utils.regex(desc, "[+-]\\{}").replaceAll(m -> {
-			ValueRange r = values.removeFirst();
-			return Pattern.quote(format.formatted(
-					Utils.sign(r.withRoll(Calc.rng(1d, roll))), r
-			));
-		});
-
-		return MessageFormatter.basicArrayFormat(desc,
-				values.stream()
-						.map(r -> "**%s (%s)**".formatted(
-								r.withRoll(Calc.rng(1d, roll)), r
-						))
-						.toArray()
-		);
+		return Pattern.quote(MessageFormatter.basicArrayFormat(line, new String[]{
+				format.formatted(val, r)
+		}));
 	}
 
 	public List<ValueRange> getRanges() {
