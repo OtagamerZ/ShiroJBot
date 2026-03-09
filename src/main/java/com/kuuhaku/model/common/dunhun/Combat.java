@@ -338,10 +338,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private boolean checkCombatEnd() {
 		if (win != null || game.isClosed()) return true;
-		else if (hunters.stream().allMatch(Actor::isOutOfCombat)) {
+		else if (hunters.isEmpty() || hunters.stream().allMatch(Actor::isOutOfCombat)) {
 			win = false;
 			return true;
-		} else if (keepers.stream().allMatch(Actor::isOutOfCombat)) {
+		} else if (keepers.isEmpty() || keepers.stream().allMatch(Actor::isOutOfCombat)) {
 			win = true;
 			return true;
 		}
