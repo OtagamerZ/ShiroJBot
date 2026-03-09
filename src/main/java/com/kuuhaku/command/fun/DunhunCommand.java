@@ -201,12 +201,15 @@ public class DunhunCommand implements Executable {
 
 		if (args.has("action")) {
 			try {
+				DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(h.getId(), dungeon.getId()));
+				if (run == null) {
+					event.channel().sendMessage(locale.get("error/no_run")).queue();
+					return;
+				}
+
 				Utils.confirm(locale.get("question/dungeon_reset", dungeon.getInfo(locale).getName()), event.channel(),
-						w -> {
-							DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(acc.getUid(), dungeon.getId()));
-							if (run != null) {
-								run.delete();
-							}
+						_ -> {
+							run.delete();
 
 							event.channel().sendMessage(locale.get("success/dungeon_reset")).queue();
 							return true;
