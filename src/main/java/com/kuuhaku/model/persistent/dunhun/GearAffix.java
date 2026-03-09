@@ -158,7 +158,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 			line = m.group("none");
 			if (line != null) {
-				if (m.group("sign") != null) {
+				if (!m.group("sign").isEmpty()) {
 					return Matcher.quoteReplacement(format.formatted(Utils.sign(r.withRoll(Calc.rng(1d, roll))), r));
 				}
 
