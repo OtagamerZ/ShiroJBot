@@ -39,10 +39,12 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 import org.slf4j.helpers.MessageFormatter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Entity
 @Cacheable
@@ -188,7 +190,7 @@ public class GearAffix extends DAO<GearAffix> {
 						modifiers.getMinMult().multiplier() * mult,
 						modifiers.getMaxMult().multiplier() * mult
 				))
-				.toList();
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	public List<Integer> getValues() {
