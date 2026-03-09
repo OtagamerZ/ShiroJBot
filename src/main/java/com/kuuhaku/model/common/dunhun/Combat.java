@@ -131,30 +131,24 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public boolean onAddActor(Actor<?> actor, Team team) {
-		System.out.println(1);
 		List<Actor<?>> acts = getActors(team);
-		System.out.println(2);
 		if (acts.size() > 5 && !actor.isEssential()) {
 			actor.destroy();
 			return false;
 		}
 
 		getActors(team.getOther()).remove(actor);
-		System.out.println(3);
-
 		actor.getBinding().bind(getGame(), team);
-		System.out.println(4);
+		System.out.println(1);
 		actors.add(actor);
+		System.out.println(2);
 
 		actor.setFleed(false);
-		System.out.println(5);
+		System.out.println(3);
 		actor.getSenshi().setAvailable(true);
-		System.out.println(6);
 		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
-		System.out.println(7);
 
 		acts.addAll(actor.getMinions());
-		System.out.println(8);
 		return true;
 	}
 

@@ -589,13 +589,13 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public List<Skill> getSkills() {
 		List<Skill> skills = new ArrayList<>(cache.getSkills());
-		if (getGame() != null) {
-			for (EffectProperties<?> e : modifiers.getEffects()) {
-				if (e.getSkill() != null && !skills.contains(e.getSkill())) {
-					skills.add(e.getSkill());
-				}
-			}
-		}
+//		if (getGame() != null) {
+//			for (EffectProperties<?> e : modifiers.getEffects()) {
+//				if (e.getSkill() != null && !skills.contains(e.getSkill())) {
+//					skills.add(e.getSkill());
+//				}
+//			}
+//		}
 
 		return skills;
 	}
