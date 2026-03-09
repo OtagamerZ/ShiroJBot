@@ -33,8 +33,6 @@ public abstract class EffectBase {
 	}
 
 	public ThrowingBiConsumer<EffectBase, CombatContext> getEffect() {
-		if (isClosed()) return NOTHING;
-
 		return effect;
 	}
 
