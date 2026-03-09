@@ -558,7 +558,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public Supplier<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
 		if (combat.get() != null) return () -> true;
 
-		System.out.println(1);
 		combat.set(new Combat(this, node));
 		initializer.accept(combat.get());
 

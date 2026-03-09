@@ -139,12 +139,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 		getActors(team.getOther()).remove(actor);
 		actor.getBinding().bind(getGame(), team);
-		System.out.println(1);
 		actors.add(actor);
-		System.out.println(2);
 
 		actor.setFleed(false);
-		System.out.println(3);
 		actor.getSenshi().setAvailable(true);
 		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
 
