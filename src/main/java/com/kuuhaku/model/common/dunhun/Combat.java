@@ -114,9 +114,12 @@ public class Combat implements Renderer<BufferedImage> {
 		this.game = game;
 		this.node = node;
 		this.loot = new Loot(game.getLocale());
+		System.out.println(1);
 
 		this.hunters.addAll(hunters);
+		System.out.println(2);
 		this.keepers.addAll(keepers);
+		System.out.println(3);
 
 		for (Actor<?> a : getActors()) {
 			a.setAp(0);
@@ -128,6 +131,7 @@ public class Combat implements Renderer<BufferedImage> {
 				h.setController(h.getAccount().getUid());
 			}
 		}
+		System.out.println(4);
 	}
 
 	public boolean onAddActor(Actor<?> actor, Team team) {
