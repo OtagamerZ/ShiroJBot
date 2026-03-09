@@ -601,7 +601,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Skill getSkill(String id) {
-		return cache.getSkills().stream()
+		return getSkills().stream()
 				.filter(Objects::nonNull)
 				.filter(s -> s.getId().equalsIgnoreCase(id))
 				.findFirst().orElse(null);

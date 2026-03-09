@@ -114,12 +114,9 @@ public class Combat implements Renderer<BufferedImage> {
 		this.game = game;
 		this.node = node;
 		this.loot = new Loot(game.getLocale());
-		System.out.println(1);
 
 		this.hunters.addAll(hunters);
-		System.out.println(2);
 		this.keepers.addAll(keepers);
-		System.out.println(3);
 
 		for (Actor<?> a : getActors()) {
 			a.setAp(0);
@@ -131,26 +128,33 @@ public class Combat implements Renderer<BufferedImage> {
 				h.setController(h.getAccount().getUid());
 			}
 		}
-		System.out.println(4);
 	}
 
 	public boolean onAddActor(Actor<?> actor, Team team) {
+		System.out.println(1);
 		List<Actor<?>> acts = getActors(team);
+		System.out.println(2);
 		if (acts.size() > 5 && !actor.isEssential()) {
 			actor.destroy();
 			return false;
 		}
 
 		getActors(team.getOther()).remove(actor);
+		System.out.println(3);
 
 		actor.getBinding().bind(getGame(), team);
+		System.out.println(4);
 		actors.add(actor);
 
 		actor.setFleed(false);
+		System.out.println(5);
 		actor.getSenshi().setAvailable(true);
+		System.out.println(6);
 		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
+		System.out.println(7);
 
 		acts.addAll(actor.getMinions());
+		System.out.println(8);
 		return true;
 	}
 
