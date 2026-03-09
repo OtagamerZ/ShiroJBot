@@ -988,16 +988,12 @@ public class Combat implements Renderer<BufferedImage> {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
 				if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
-					if (ge.getOwner() == null || Objects.equals(ge.getOwner(), getCurrent())) {
-						ge.decTurn();
-					} else {
+					if (ge.getOwner() != null && !Objects.equals(ge.getOwner(), getCurrent())) {
 						continue;
 					}
 				} else if (!Utils.equalsAny(t, te.getTriggers())) {
 					continue;
 				}
-
-				te.decLimit();
 			}
 
 			try {
@@ -1006,6 +1002,14 @@ public class Combat implements Renderer<BufferedImage> {
 			} catch (Exception ex) {
 				Constants.LOGGER.warn("Failed to execute {} persistent effect", e.getSource().getSource(), ex);
 			} finally {
+				if (e instanceof TriggeredEffect te) {
+					if (e instanceof GlobalEffect ge) {
+						ge.decTurn();
+					}
+
+					te.decLimit();
+				}
+
 				e.unlock();
 			}
 		}
