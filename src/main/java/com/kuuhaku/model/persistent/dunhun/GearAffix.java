@@ -43,7 +43,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.Pattern;
+import java.util.regex.Matcher;
 import java.util.stream.Collectors;
 
 @Entity
@@ -159,13 +159,13 @@ public class GearAffix extends DAO<GearAffix> {
 			line = m.group("none");
 			if (line != null) {
 				if (m.group("sign") != null) {
-					return Pattern.quote(format.formatted(Utils.sign(r.withRoll(Calc.rng(1d, roll))), r));
+					return Matcher.quoteReplacement(format.formatted(Utils.sign(r.withRoll(Calc.rng(1d, roll))), r));
 				}
 
-				return Pattern.quote(format.formatted(r.withRoll(Calc.rng(1d, roll)), r));
+				return Matcher.quoteReplacement(format.formatted(r.withRoll(Calc.rng(1d, roll)), r));
 			}
 
-			return Pattern.quote("???");
+			return Matcher.quoteReplacement("???");
 		});
 	}
 
@@ -178,7 +178,7 @@ public class GearAffix extends DAO<GearAffix> {
 			val = -val;
 		}
 
-		return Pattern.quote(MessageFormatter.basicArrayFormat(line, new String[]{
+		return Matcher.quoteReplacement(MessageFormatter.basicArrayFormat(line, new String[]{
 				format.formatted(val, r)
 		}));
 	}
