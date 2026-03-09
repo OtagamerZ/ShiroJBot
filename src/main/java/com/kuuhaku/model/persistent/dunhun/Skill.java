@@ -199,8 +199,9 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 				throw new ActivationException("error/not_enough_ap_reserve");
 			}
 
-			toggle = effect;
+			holder.getModifiers().addEffect(toggle = effect);
 		} else {
+			holder.getModifiers().removeEffect(toggle);
 			toggle = null;
 			setCooldown(stats.getCooldown());
 		}

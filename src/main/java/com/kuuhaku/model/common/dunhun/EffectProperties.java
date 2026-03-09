@@ -6,8 +6,12 @@ import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class EffectProperties<T> {
+	private final long SERIAL = ThreadLocalRandom.current().nextLong();
+
 	private final EffectContext<T> owner;
 	private ValueMod maxHp;
 	private ValueMod maxAp;
@@ -250,5 +254,17 @@ public class EffectProperties<T> {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null || getClass() != o.getClass()) return false;
+		EffectProperties<?> that = (EffectProperties<?>) o;
+		return SERIAL == that.SERIAL;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(SERIAL);
 	}
 }

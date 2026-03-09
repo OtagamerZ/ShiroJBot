@@ -23,8 +23,6 @@ import com.kuuhaku.model.common.shoukan.IncMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
-import com.kuuhaku.model.persistent.dunhun.Skill;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.IteratorUtils;
 
 import java.util.*;
@@ -204,12 +202,6 @@ public class ActorModifiers {
 			effects.addAll(parent.getMaster().getModifiers().summon.effects);
 		}
 
-		for (Skill s : parent.getSkills()) {
-			if (s == null || s.getToggledEffect() == null) continue;
-			
-			effects.add(s.getToggledEffect());
-		}
-
 		return effects;
 	}
 
@@ -234,6 +226,10 @@ public class ActorModifiers {
 		} else {
 			effects.add(effect);
 		}
+	}
+
+	public void removeEffect(EffectProperties<?> effect) {
+		effects.remove(effect);
 	}
 
 	public void expireMods() {
