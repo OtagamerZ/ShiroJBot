@@ -18,11 +18,13 @@
 
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.model.common.ListenableList;
 import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.IncMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
+import com.kuuhaku.model.persistent.dunhun.Skill;
 import org.apache.commons.collections4.IteratorUtils;
 
 import java.util.*;
@@ -31,7 +33,32 @@ import java.util.function.Predicate;
 
 public class ActorModifiers {
 	private final Actor<?> parent;
-	private final Set<EffectProperties<?>> effects = new HashSet<>();
+	private final ListenableList<EffectProperties<?>> effects = new ListenableList<>(
+			new ListenableList.ListEvent<>() {
+				@Override
+				public boolean beforeAdd(EffectProperties<?> effect) {
+					Iterator<EffectProperties<?>> it = effects.iterator();
+					while (it.hasNext()) {
+						EffectProperties<?> curr = it.next();
+						if (Objects.equals(curr, effect)) {
+							if (curr.getPriority() > effect.getPriority()) return false;
+
+							it.remove();
+						}
+					}
+
+					return true;
+				}
+
+				@Override
+				public void afterRemove(EffectProperties<?> effect) {
+					Skill skill = effect.getSkill();
+					if (skill != null && skill.getToggledEffect() != null) {
+						effects.remove(skill.getToggledEffect());
+					}
+				}
+			}
+	);
 	private final ActorModifiers summon;
 
 	public ActorModifiers(Actor<?> parent) {
