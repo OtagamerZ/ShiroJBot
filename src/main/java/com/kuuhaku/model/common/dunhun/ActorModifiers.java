@@ -237,26 +237,7 @@ public class ActorModifiers {
 	}
 
 	public void leftShift(EffectProperties<?> effect) {
-		addEffect(effect);
-	}
-
-	public void addEffect(EffectProperties<?> effect) {
-		EffectProperties<?> curr = effects.stream()
-				.filter(e -> Objects.equals(e, effect))
-				.findFirst().orElse(null);
-
-		if (curr != null) {
-			if (curr.getPriority() > effect.getPriority()) return;
-
-			effects.remove(effect);
-			effects.add(effect);
-		} else {
-			effects.add(effect);
-		}
-	}
-
-	public void removeEffect(EffectProperties<?> effect) {
-		effects.remove(effect);
+		effects.add(effect);
 	}
 
 	public void expireMods() {
