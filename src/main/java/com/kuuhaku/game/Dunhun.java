@@ -900,7 +900,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			Set<ElementType> resists = a.getResists();
 			if (!resists.isEmpty()) {
 				name += " " + resists.stream()
-						.map(ElementType::toString)
+						.map(e -> "\\" + e)
 						.collect(Collectors.joining());
 			}
 
