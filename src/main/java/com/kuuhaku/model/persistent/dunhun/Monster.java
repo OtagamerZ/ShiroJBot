@@ -191,7 +191,7 @@ public class Monster extends MonsterBase<Monster> {
 	public static String getRandomId(Dunhun game) {
 		JSONArray pool = game.getDungeon().getMonsterPool();
 
-		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster" + (pool.isEmpty() ? " WHERE weight > 0" : ""));
+		List<Object[]> mons = new ArrayList<>(DAO.queryAllUnmapped("SELECT id, weight FROM monster" + (pool.isEmpty() ? " WHERE weight > 0" : "")));
 		if (!pool.isEmpty()) {
 			mons.removeIf(a -> pool.contains(a[0]));
 		}
