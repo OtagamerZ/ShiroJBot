@@ -174,7 +174,7 @@ public class GearAffix extends DAO<GearAffix> {
 
 		int val = r.withRoll(Calc.rng(1d, roll));
 		if (val < 0) {
-			line = line.replace(type, types[ArrayUtils.indexOf(types, type) - 1 % types.length]);
+			line = line.replace(type, types[ArrayUtils.indexOf(types, type) + 1 % types.length]);
 			val = -val;
 		}
 
