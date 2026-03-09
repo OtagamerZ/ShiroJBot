@@ -22,6 +22,7 @@ import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.shiro.GlobalProperty;
 import com.kuuhaku.model.persistent.user.Account;
@@ -336,12 +337,17 @@ public class Dunhun extends GameInstance<NullPhase> {
 						}
 					}
 					case BOSS -> {
-						Actor<?> boss = nextNode.generateEnemy();
-						if (!(boss instanceof Boss)) {
-							boss = Boss.getRandom(nextNode, dungeon.getMonsterPool());
-						}
+						Event evt = nextNode.generateEvent();
+						if (evt != null) {
+							runEvent(nextNode, evt);
+						} else {
+							Actor<?> boss = nextNode.generateEnemy();
+							if (!(boss instanceof Boss)) {
+								boss = Boss.getRandom(this);
+							}
 
-						runCombat(nextNode, boss);
+							runCombat(nextNode, boss);
+						}
 					}
 				}
 
@@ -556,18 +562,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		initializer.accept(combat.get());
 
 		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
-			List<String> pool = dungeon.getMonsterPool().stream()
-					.map(String::valueOf)
-					.toList();
-
 			for (int i = 0; i < 4; i++) {
 				List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
 				if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
-					if (!pool.isEmpty()) chosen = Monster.getRandom(this, Utils.getRandomEntry(getNodeRng(), pool));
-					else chosen = Monster.getRandom(this);
+					chosen = Monster.getRandom(this);
 				}
 
 				if (chosen != null) {
@@ -895,7 +896,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
 					.collect(Collectors.joining("\n"));
 
-			eb.addField(a.getName(), desc, true);
+			String name = a.getName();
+			Set<ElementType> resists = a.getResists();
+			if (!resists.isEmpty()) {
+				name += " " + resists.stream()
+						.map(ElementType::toString)
+						.collect(Collectors.joining());
+			}
+
+			eb.addField(name, desc, true);
 		}
 
 		getChannel().sendEmbed(eb.build()).queue();

@@ -240,17 +240,15 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor<?> a : acts) {
 				if (!sb.isEmpty()) sb.nextLine();
 
-				sb.appendNewLine(a.getName());
-
+				String name = a.getName();
 				Set<ElementType> resists = a.getResists();
 				if (!resists.isEmpty()) {
-					sb.append(' ');
-					sb.append(a.getResists().stream()
-							.map(e -> "\\" + e)
-							.collect(Collectors.joining())
-					);
+					name += " " + resists.stream()
+							.map(ElementType::toString)
+							.collect(Collectors.joining());
 				}
 
+				sb.appendNewLine(name);
 				a.addHpBar(getLocale(), sb);
 				a.addApBar(sb);
 			}
@@ -989,14 +987,17 @@ public class Combat implements Renderer<BufferedImage> {
 		for (EffectBase e : effects) {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
-				if (!Utils.equalsAny(t, te.getTriggers())) continue;
-				te.decLimit();
-
 				if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
 					if (ge.getOwner() == null || Objects.equals(ge.getOwner(), getCurrent())) {
 						ge.decTurn();
+					} else {
+						continue;
 					}
+				} else if (!Utils.equalsAny(t, te.getTriggers())) {
+					continue;
 				}
+
+				te.decLimit();
 			}
 
 			try {

@@ -123,6 +123,10 @@ public class Node {
 	}
 
 	public void addParents(Node... nodes) {
+		addParents(List.of(nodes));
+	}
+
+	public void addParents(Collection<Node> nodes) {
 		for (Node node : nodes) {
 			parents.add(node);
 			node.children.add(this);
@@ -134,6 +138,10 @@ public class Node {
 	}
 
 	public void addChildren(Node... nodes) {
+		addChildren(List.of(nodes));
+	}
+
+	public void addChildren(Collection<Node> nodes) {
 		for (Node node : nodes) {
 			children.add(node);
 			node.parents.add(this);
