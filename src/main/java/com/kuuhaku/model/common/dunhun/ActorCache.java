@@ -11,7 +11,6 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.Account;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
-import org.apache.commons.collections4.list.FixedSizeList;
 
 import java.util.*;
 import java.util.function.Function;
@@ -91,7 +90,7 @@ public class ActorCache {
 			}
 
 			List<Skill> alloc = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", ids);
-			skills = Arrays.asList(new Skill[5]);
+			skills = Arrays.asList(new Skill[actor.getGame() == null ? 5 : alloc.size()]);
 			for (int i = 0; i < alloc.size(); i++) {
 				skills.set(i, alloc.get(i));
 			}

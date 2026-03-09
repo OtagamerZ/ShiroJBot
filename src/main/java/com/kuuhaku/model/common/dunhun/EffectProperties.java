@@ -3,6 +3,7 @@ package com.kuuhaku.model.common.dunhun;
 import com.kuuhaku.model.common.dunhun.context.EffectContext;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.shoukan.ElementType;
+import com.kuuhaku.model.persistent.dunhun.Skill;
 
 import java.lang.reflect.Field;
 
@@ -24,12 +25,13 @@ public class EffectProperties<T> {
 	private ValueMod damageTaken;
 	private ValueMod maxSummons;
 	private EffectBase effect;
+	private ElementType resist;
+	private Skill skill;
 
 	public static final Field[] fieldCache = EffectProperties.class.getDeclaredFields();
 	private int priority;
 	private int expiration;
 	private String icon;
-	private ElementType resist;
 
 	public EffectProperties(EffectContext<T> owner) {
 		this(owner, -1);
@@ -172,6 +174,22 @@ public class EffectProperties<T> {
 		this.effect = effect;
 	}
 
+	public ElementType getResist() {
+		return resist;
+	}
+
+	public void setResist(ElementType resist) {
+		this.resist = resist;
+	}
+
+	public Skill getSkill() {
+		return skill;
+	}
+
+	public void setSkill(Skill skill) {
+		this.skill = skill;
+	}
+
 	public int getPriority() {
 		return priority;
 	}
@@ -232,13 +250,5 @@ public class EffectProperties<T> {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
-	}
-
-	public ElementType getResist() {
-		return resist;
-	}
-
-	public void setResist(ElementType resist) {
-		this.resist = resist;
 	}
 }
