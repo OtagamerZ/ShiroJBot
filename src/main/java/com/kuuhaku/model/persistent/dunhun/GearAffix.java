@@ -144,13 +144,13 @@ public class GearAffix extends DAO<GearAffix> {
 
 			String line = m.group("more");
 			if (line != null) {
-				String type = m.group("type-more");
+				String type = m.group("typeMore");
 				return fixNegativeMod(format, type, r, line, patterns[0]);
 			}
 
 			line = m.group("inc");
 			if (line != null) {
-				String type = m.group("type-inc");
+				String type = m.group("typeInc");
 				return fixNegativeMod(format, type, r, line, patterns[1]);
 			}
 
