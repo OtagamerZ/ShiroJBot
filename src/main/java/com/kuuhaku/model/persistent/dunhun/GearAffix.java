@@ -31,15 +31,18 @@ import com.kuuhaku.model.records.id.GearAffixId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import jakarta.persistence.*;
+import org.apache.commons.lang3.ArrayUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.intellij.lang.annotations.Language;
 import org.slf4j.helpers.MessageFormatter;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Pattern;
 
 @Entity
 @Cacheable
@@ -124,18 +127,40 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public String getDescription(I18N locale, boolean showScaling) {
-		if (!showScaling) {
-			return MessageFormatter.basicArrayFormat(
-					affix.getInfo(locale).getDescription(),
-					getValues().stream()
-							.map("**%s**"::formatted)
-							.toArray()
-			);
+		String format = showScaling ? "**%s (%s)**" : "**%s**";
+
+		String desc = affix.getInfo(locale).getDescription();
+		List<ValueRange> values = getRanges();
+
+		if (desc.contains("{}%")) {
+			@Language("RegExp") String pat = locale.get("str/inc_red_pattern");
+			String[] types = Objects.requireNonNull(Utils.extract(pat, "\\w+\\|\\w+")).split("\\|");
+
+			desc = Utils.regex(desc, pat).replaceAll(m -> {
+				ValueRange r = values.removeFirst();
+
+				String line = m.group();
+				int val = r.withRoll(Calc.rng(1d, roll));
+
+				if (val < 0) {
+					String type = m.group("type");
+					line = line.replace(type, types[ArrayUtils.indexOf(types, type) - 1 % types.length]);
+					val = -val;
+				}
+
+				return Pattern.quote(MessageFormatter.basicArrayFormat(line, new Integer[]{val}));
+			});
 		}
 
-		return MessageFormatter.basicArrayFormat(
-				affix.getInfo(locale).getDescription(),
-				getRanges().stream()
+		desc = Utils.regex(desc, "[+-]\\{}").replaceAll(m -> {
+			ValueRange r = values.removeFirst();
+			return Pattern.quote(format.formatted(
+					Utils.sign(r.withRoll(Calc.rng(1d, roll))), r
+			));
+		});
+
+		return MessageFormatter.basicArrayFormat(desc,
+				values.stream()
 						.map(r -> "**%s (%s)**".formatted(
 								r.withRoll(Calc.rng(1d, roll)), r
 						))
