@@ -237,7 +237,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> damage(int value) {
-		return damage(null, null, value);
+		return damage(null, (Usable) null, value);
+	}
+
+	public Tuple2<Integer, Boolean> damage(Actor<?> source, ElementType element, int value) {
+		Skill skill = Skill.ELEMENTAL_SKILLS.computeIfAbsent(element, _ -> {
+			Skill s = new Skill(0, 0, 1, 0, true);
+			s.getStats().getElements().add(element);
+			return s;
+		});
+
+		return damage(source, skill, value);
 	}
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, Usable usable, int value) {

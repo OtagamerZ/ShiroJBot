@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.dunhun.EffectProperties;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
+import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Utils;
@@ -50,6 +51,7 @@ import static jakarta.persistence.CascadeType.ALL;
 public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	public static final Skill DEFAULT_ATTACK = new Skill(1, 0, 1, 0, false);
 	public static final Skill DUAL_ATTACK = new Skill(1, 0, 0.6, 0, false);
+	public static final Map<ElementType, Skill> ELEMENTAL_SKILLS = new HashMap<>();
 
 	@Id
 	@Column(name = "id", nullable = false)
