@@ -42,7 +42,6 @@ import org.slf4j.helpers.MessageFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
 @Entity
@@ -145,12 +144,14 @@ public class GearAffix extends DAO<GearAffix> {
 
 			String line = m.group("more");
 			if (line != null) {
-				return fixNegativeMod(format, m, r, line, patterns[0]);
+				String type = m.group("type_more");
+				return fixNegativeMod(format, type, r, line, patterns[0]);
 			}
 
 			line = m.group("inc");
 			if (line != null) {
-				return fixNegativeMod(format, m, r, line, patterns[1]);
+				String type = m.group("type_inc");
+				return fixNegativeMod(format, type, r, line, patterns[1]);
 			}
 
 			line = m.group("none");
@@ -166,12 +167,11 @@ public class GearAffix extends DAO<GearAffix> {
 		});
 	}
 
-	private String fixNegativeMod(String format, MatchResult m, ValueRange r, String line, String pat) {
+	private String fixNegativeMod(String format, String type, ValueRange r, String line, String pat) {
 		String[] types = Objects.requireNonNull(Utils.extract(pat, "\\w+\\|\\w+")).split("\\|");
 
 		int val = r.withRoll(Calc.rng(1d, roll));
 		if (val < 0) {
-			String type = m.group("type");
 			line = line.replace(type, types[ArrayUtils.indexOf(types, type) - 1 % types.length]);
 			val = -val;
 		}
