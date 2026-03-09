@@ -20,14 +20,13 @@ package com.kuuhaku.model.persistent.dunhun;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
-import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.RandomList;
+import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.AffixType;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
@@ -190,9 +189,9 @@ public class Monster extends MonsterBase<Monster> {
 	}
 
 	public static String getRandomId(Dunhun game) {
-		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster WHERE weight > 0");
-
 		JSONArray pool = game.getDungeon().getMonsterPool();
+
+		List<Object[]> mons = DAO.queryAllUnmapped("SELECT id, weight FROM monster" + (pool.isEmpty() ? " WHERE weight > 0" : ""));
 		if (!pool.isEmpty()) {
 			mons.removeIf(a -> pool.contains(a[0]));
 		}

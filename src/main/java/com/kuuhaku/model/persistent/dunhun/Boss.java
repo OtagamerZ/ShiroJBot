@@ -20,7 +20,6 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.intellij.lang.annotations.Language;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -125,9 +124,9 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	public static Boss getRandom(Dunhun game) {
-		List<Object[]> bosses = DAO.queryAllUnmapped("SELECT id, weight FROM boss WHERE weight > 0");
-
 		JSONArray pool = game.getDungeon().getMonsterPool();
+
+		List<Object[]> bosses = DAO.queryAllUnmapped("SELECT id, weight FROM boss" + (pool.isEmpty() ? " WHERE weight > 0" : ""));
 		if (!pool.isEmpty()) {
 			bosses.removeIf(a -> pool.contains(a[0]));
 		}
