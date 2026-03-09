@@ -203,7 +203,7 @@ public class Monster extends MonsterBase<Monster> {
 
 		RandomList<String> rl = new RandomList<>(game.getNodeRng());
 		for (Object[] a : mons) {
-			rl.add((String) a[0], ((Number) a[1]).intValue());
+			rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 		}
 
 		return rl.get();

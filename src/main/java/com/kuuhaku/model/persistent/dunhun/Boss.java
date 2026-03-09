@@ -138,7 +138,7 @@ public class Boss extends MonsterBase<Boss> {
 
 		RandomList<String> rl = new RandomList<>(game.getNodeRng());
 		for (Object[] a : bosses) {
-			rl.add((String) a[0], ((Number) a[1]).intValue());
+			rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 		}
 
 		return DAO.find(Boss.class, rl.get());
