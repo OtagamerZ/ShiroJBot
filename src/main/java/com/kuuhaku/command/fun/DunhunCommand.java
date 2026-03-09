@@ -56,7 +56,6 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
-import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -75,8 +74,8 @@ import java.util.stream.Stream;
 		allowEmpty = true,
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
-				"<dungeon:word:r> <floor:number> <users:custom>[users]",
-				"<dungeon:word:r> <action:word>[reset]"
+				"<dungeon:word:r> <action:word>[reset]",
+				"<dungeon:word:r> <floor:number> <users:custom>[users]"
 		}
 )
 @Requires(Permission.MESSAGE_ATTACH_FILES)
