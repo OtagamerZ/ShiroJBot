@@ -578,7 +578,7 @@ public class Combat implements Renderer<BufferedImage> {
 						}
 					}
 
-					if (attackTgts.isEmpty()) {
+					if (!canAttack || attackTgts.isEmpty()) {
 						curr.getSenshi().setDefending(true);
 						curr.setAp(0);
 
