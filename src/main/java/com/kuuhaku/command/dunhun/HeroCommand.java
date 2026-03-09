@@ -92,7 +92,7 @@ public class HeroCommand implements Executable {
 					.appendNewLine(locale.get("str/level", h.getLevel()));
 
 			if (h.getLevel() < Actor.MAX_LEVEL) {
-				sb.append(" (" + h.getStats().getXp() + "/" + h.getStats().getXpToNext() + ")");
+				sb.append(" (" + locale.separate(h.getStats().getXp()) + "/" + locale.separate(h.getStats().getXpToNext()) + ")");
 			}
 
 			if (h.isRetired()) {
