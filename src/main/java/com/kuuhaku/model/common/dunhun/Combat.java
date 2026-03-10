@@ -376,7 +376,7 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			if (!curr.getAllSkills().isEmpty()) {
+			if (curr.getAllSkills().anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					Map<String, List<?>> values = w.getDropdownValues();
 					if (values == null) {
@@ -593,7 +593,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicReference<Skill> force) {
 		List<Skill> skills = new ArrayList<>();
-		for (Skill s : source.getAllSkills()) {
+		for (Skill s : Utils.iterate(source.getAllSkills())) {
 			if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
 			switch (s.canCpuUse(source, null)) {
@@ -613,7 +613,7 @@ public class Combat implements Renderer<BufferedImage> {
 		List<JSONArray> wpnTags = act.getEquipment().getWeaponTags();
 
 		StringSelectMenu.Builder b = null;
-		for (Skill s : act.getAllSkills()) {
+		for (Skill s : Utils.iterate(act.getAllSkills())) {
 			if (b == null) {
 				b = StringSelectMenu.create("skills")
 						.setPlaceholder(getLocale().get("str/use_a_skill"))
@@ -859,7 +859,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	public List<Actor<?>> getActors(boolean removeDead) {
 		if (!removeDead) {
-			return ListUtils.unmodifiableList(actors);
+			return ListUtils.unmodifiableList(actors.values());
 		}
 
 		return actors.values().stream()

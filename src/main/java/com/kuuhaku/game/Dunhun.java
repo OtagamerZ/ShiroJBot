@@ -874,7 +874,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			}
 
-			List<String> skills = a.getAllSkills().stream()
+			List<String> skills = a.getAllSkills()
 					.map(s ->
 							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) +
 									"\n" + s.getDescription(getLocale(), a).lines()
