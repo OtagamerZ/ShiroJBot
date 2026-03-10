@@ -68,8 +68,7 @@ public class HeroSkillCommand implements Executable {
 							FROM Skill s
 							INNER JOIN LocalizedSkill ls ON ls.id = s.id
 							WHERE upper(ls.name) = ?1
-							""",
-					args.getString("skill").toUpperCase()
+							""", args.getString("skill").toUpperCase()
 			);
 		}
 
