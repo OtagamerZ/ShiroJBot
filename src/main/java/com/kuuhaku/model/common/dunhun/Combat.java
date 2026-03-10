@@ -878,8 +878,12 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public List<Actor<?>> getActors(boolean removeDead) {
+		if (!removeDead) {
+			return ListUtils.unmodifiableList(actors);
+		}
+
 		return actors.values().stream()
-				.filter(a -> !(removeDead || a.isOutOfCombat()))
+				.filter(a -> !a.isOutOfCombat())
 				.toList();
 	}
 

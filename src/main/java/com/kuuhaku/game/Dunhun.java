@@ -857,9 +857,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
-		for (Actor<?> a : combat.get().getActors()) {
-			if (a.getTeam() != team) continue;
-
+		for (Actor<?> a : combat.get().getActors(team)) {
 			XStringBuilder sb = new XStringBuilder();
 
 			if (a instanceof Monster m) {
