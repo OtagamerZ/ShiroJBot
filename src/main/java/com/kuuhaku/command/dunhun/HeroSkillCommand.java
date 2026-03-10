@@ -66,7 +66,7 @@ public class HeroSkillCommand implements Executable {
 			s = DAO.query(Skill.class, """
 							SELECT s
 							FROM Skill s
-							INNER JOIN LocalizedSkill ls ON ls.id = s.id
+							INNER JOIN LocalizedSkill ls ON ls.id.id = s.id
 							WHERE upper(ls.name) = ?1
 							""", args.getString("skill").toUpperCase()
 			);
