@@ -47,7 +47,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
@@ -286,10 +285,7 @@ public class Combat implements Renderer<BufferedImage> {
 				try {
 					sen.reduceDebuffs(1);
 					sen.reduceStasis(1);
-					for (Skill s : Utils.iterate(actor.getAllSkills())) {
-						if (s == null) continue;
-						s.reduceCd();
-					}
+					actor.getAllSkills().forEach(Skill::reduceCd);
 
 					actor.setAp(actor.getMaxAp());
 					sen.setDefending(false);
@@ -380,8 +376,7 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			Stream<Skill> skills = curr.getAllSkills();
-			if (skills.anyMatch(Objects::nonNull)) {
+			if (curr.getAllSkills().anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					Map<String, List<?>> values = w.getDropdownValues();
 					if (values == null) {
@@ -532,53 +527,39 @@ public class Combat implements Renderer<BufferedImage> {
 						return a.getTargetPriority(u);
 					};
 
-					List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther()).stream()
-							.filter(a -> !a.isOutOfCombat())
-							.toList();
+					List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther(), true);
+					double threat = attackTgts.stream()
+							.mapToInt(a -> a.getHp() * a.getThreatScore() / a.getMaxHp())
+							.average()
+							.orElse(1);
 
-					AtomicBoolean force = new AtomicBoolean();
+					double risk = (1 - (double) curr.getHp() / curr.getMaxHp()) * (threat / curr.getThreatScore());
+					if (!(curr instanceof Boss) && !curr.isMinion() && risk > 1 && Calc.chance(20)) {
+						curr.setFleed(true);
+						game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
+						return;
+					}
+
+					AtomicReference<Skill> force = new AtomicReference<>();
 					List<Skill> skills = collectCpuSkills(curr, force);
 
-					if (!skills.isEmpty()) {
-						Skill skill = Utils.getRandomEntry(skills);
+					Skill skill = null;
+					if (force.get() != null) {
+						skill = force.get();
+					} else if (!skills.isEmpty()) {
+						skill = Utils.getRandomEntry(skills);
+					}
 
-						List<Actor<?>> spellTgts = skill.getTargets(curr).stream()
-								.filter(Objects::nonNull)
-								.toList();
-
+					if (skill != null && (force.get() != null || !canAttack || Calc.chance(50))) {
+						List<Actor<?>> spellTgts = skill.getTargets(curr);
 						if (!spellTgts.isEmpty()) {
 							Actor<?> t = Utils.getWeightedEntry(rngList, criteria.apply(skill), spellTgts);
-
-							if (force.get() || !canAttack || Calc.chance(50)) {
-								skill(skill, curr, t);
-								return;
-							}
-						}
-					}
-
-					if (curr.getAp() == 1) {
-						double threat = attackTgts.stream()
-								.mapToInt(a -> a.getHp() * a.getThreatScore() / a.getMaxHp())
-								.average()
-								.orElse(1);
-
-						double risk = (1 - (double) curr.getHp() / curr.getMaxHp()) * (threat / curr.getThreatScore());
-						if (!curr.isMinion() && risk > 1 && Calc.chance(20)) {
-							curr.setFleed(true);
-							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
-							return;
-						}
-
-						if (canDefend && Calc.chance(10 * risk)) {
-							curr.getSenshi().setDefending(true);
-							curr.setAp(0);
-
-							history.add(getLocale().get("str/actor_defend", curr.getName()));
+							skill(skill, curr, t);
 							return;
 						}
 					}
 
-					if (!canAttack || attackTgts.isEmpty()) {
+					if (!canAttack || attackTgts.isEmpty() || (canDefend && Calc.chance(10 * risk))) {
 						curr.getSenshi().setDefending(true);
 						curr.setAp(0);
 
@@ -610,18 +591,15 @@ public class Combat implements Renderer<BufferedImage> {
 		return lock;
 	}
 
-	private List<Skill> collectCpuSkills(Actor<?> source, AtomicBoolean force) {
+	private List<Skill> collectCpuSkills(Actor<?> source, AtomicReference<Skill> force) {
 		List<Skill> skills = new ArrayList<>();
 		for (Skill s : Utils.iterate(source.getAllSkills())) {
-			if (s == null) continue;
-			else if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
+			if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
 			switch (s.canCpuUse(source, null)) {
 				case ANY -> skills.add(s);
 				case FORCE -> {
-					skills.clear();
-					skills.add(s);
-					force.set(true);
+					force.set(s);
 					return skills;
 				}
 			}
@@ -718,7 +696,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (b != null) {
 				comps.add(ActionRow.of(b.build()));
-				b = null;
 			}
 		}
 

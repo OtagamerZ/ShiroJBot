@@ -580,6 +580,7 @@ public abstract class Utils {
 
 		randomizer.clear();
 		for (T t : col) {
+			if (t == null) continue;
 			randomizer.add(t, weighter.apply(t));
 		}
 
