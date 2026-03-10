@@ -63,9 +63,14 @@ public class HeroSkillCommand implements Executable {
 
 		Skill s = DAO.find(Skill.class, args.getString("skill").toUpperCase());
 		if (s == null) {
-			DAO.query(Skill.class, "SELECT s FROM LocalizedSkill ls WHERE upper(ls.name) = ?1",
+			s = DAO.query(Skill.class, """
+							SELECT s
+							FROM Skill s
+							INNER JOIN LocalizedSkill ls ON ls.id = s.id
+							WHERE upper(ls.name) = ?1
+							""",
 					args.getString("skill").toUpperCase()
-			)
+			);
 		}
 
 		if (s == null) {
