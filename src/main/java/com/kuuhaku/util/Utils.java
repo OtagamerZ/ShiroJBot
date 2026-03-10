@@ -1500,4 +1500,8 @@ public abstract class Utils {
 				.replace("DD", "M")
 				.replace("DCD", "CM");
 	}
+
+	public static <T> Iterable<T> iterate(Stream<T> stream) {
+		return stream::iterator;
+	}
 }

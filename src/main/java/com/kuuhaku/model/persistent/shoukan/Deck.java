@@ -642,18 +642,16 @@ public class Deck extends DAO<Deck> {
 			}
 
 			List<Race> ori = new ArrayList<>();
-			Iterator<Race> it = races.stream()
+			Stream<Race> it = races.stream()
 					.distinct()
-					.sorted(Comparator.comparingInt(races::getCount).reversed())
-					.iterator();
+					.sorted(Comparator.comparingInt(races::getCount).reversed());
 
 			int high = 0;
 			int second = 0;
 			boolean allSame = true;
-			while (it.hasNext()) {
+			for (Race r : Utils.iterate(it)) {
 				if (ori.size() >= 8) break;
 
-				Race r = it.next();
 				int count = races.getCount(r);
 				if (high == 0) high = count;
 

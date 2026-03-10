@@ -115,8 +115,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public int getReservedAp() {
 		int max = getMaxAp();
 		int total = 0;
-		for (Skill s : getAllSkills()) {
-			if (s == null || s.getToggledEffect() == null) continue;
+
+		for (Skill s : Utils.iterate(getAllSkills())) {
+			if (s.getToggledEffect() == null) continue;
 			else if (total >= max) {
 				s.setToggledEffect(this, null);
 				continue;
@@ -595,19 +596,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return cache.getSkills();
 	}
 
-	public List<Skill> getAllSkills() {
+	public Stream<Skill> getAllSkills() {
 		return Stream.concat(
 						cache.getSkills().stream(),
 						modifiers.getEffects().stream().map(EffectProperties::getSkill)
 				)
 				.filter(Objects::nonNull)
-				.distinct()
-				.toList();
+				.distinct();
 	}
 
 	public Skill getSkill(String id) {
-		return getAllSkills().stream()
-				.filter(Objects::nonNull)
+		return getAllSkills()
 				.filter(s -> s.getId().equalsIgnoreCase(id))
 				.findFirst().orElse(null);
 	}

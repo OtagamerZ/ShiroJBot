@@ -286,7 +286,7 @@ public class Combat implements Renderer<BufferedImage> {
 				try {
 					sen.reduceDebuffs(1);
 					sen.reduceStasis(1);
-					for (Skill s : actor.getAllSkills()) {
+					for (Skill s : Utils.iterate(actor.getAllSkills())) {
 						if (s == null) continue;
 						s.reduceCd();
 					}
@@ -380,8 +380,8 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			List<Skill> skills = curr.getAllSkills();
-			if (skills.stream().anyMatch(Objects::nonNull)) {
+			Stream<Skill> skills = curr.getAllSkills();
+			if (skills.anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					Map<String, List<?>> values = w.getDropdownValues();
 					if (values == null) {
@@ -612,7 +612,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicBoolean force) {
 		List<Skill> skills = new ArrayList<>();
-		for (Skill s : source.getAllSkills()) {
+		for (Skill s : Utils.iterate(source.getAllSkills())) {
 			if (s == null) continue;
 			else if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
@@ -634,26 +634,67 @@ public class Combat implements Renderer<BufferedImage> {
 		List<MessageTopLevelComponent> comps = new ArrayList<>(ma.getComponents());
 		List<JSONArray> wpnTags = act.getEquipment().getWeaponTags();
 
-		List<Skill> skills = act.getAllSkills();
-		if (skills.stream().anyMatch(Objects::nonNull)) {
-			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
-					.setPlaceholder(getLocale().get("str/use_a_skill"))
-					.setMaxValues(1);
+		StringSelectMenu.Builder b = null;
+		for (Skill s : Utils.iterate(act.getAllSkills())) {
+			if (b == null) {
+				b = StringSelectMenu.create("skills")
+						.setPlaceholder(getLocale().get("str/use_a_skill"))
+						.setMaxValues(1);
+			}
 
-			for (Skill s : skills) {
-				if (s == null) continue;
+			String extra = "";
+			if (s.getToggledEffect() != null) {
+				extra += "[" + getLocale().get("str/active").toUpperCase() + "]";
+			} else {
+				int cd = s.getRemainingCooldown();
+				if (cd > 0) {
+					extra += " (CD: " + getLocale().get("str/turns_inline", cd) + ")";
+				}
+			}
 
-				String extra = "";
-				if (s.getToggledEffect() != null) {
-					extra += "[" + getLocale().get("str/active").toUpperCase() + "]";
-				} else {
-					int cd = s.getRemainingCooldown();
-					if (cd > 0) {
-						extra += " (CD: " + getLocale().get("str/turns_inline", cd) + ")";
+			JSONArray req = s.getRequirements().tags();
+			if (!req.isEmpty()) {
+				for (JSONArray tags : wpnTags) {
+					if (!tags.containsAll(req)) {
+						String reqTags = Utils.properlyJoin(getLocale(), req.stream()
+								.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
+								.toList()
+						);
+
+						extra += " [" + getLocale().get("str/requires", reqTags) + "]";
+						break;
 					}
 				}
+			}
 
-				JSONArray req = s.getRequirements().tags();
+			String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
+			String desc = s.getDescription(getLocale(), act).replace("*", "").lines()
+					.filter(l -> !l.startsWith("-#"))
+					.collect(Collectors.joining("\n"));
+
+			b.addOption(
+					s.getInfo(getLocale()).getName() + cost + extra,
+					s.getId(),
+					StringUtils.abbreviate(desc, 100)
+			);
+		}
+
+		if (b != null) {
+			comps.add(ActionRow.of(b.build()));
+			b = null;
+		}
+
+		if (act instanceof Hero h) {
+			for (Consumable c : h.getConsumables().uniqueSet()) {
+				if (b == null) {
+					b = StringSelectMenu.create("consumables")
+							.setPlaceholder(getLocale().get("str/use_a_consumable"))
+							.setMaxValues(1);
+				}
+
+				String extra = " (x" + h.getConsumableCount(c) + ")";
+
+				JSONArray req = c.getReqTags();
 				if (!req.isEmpty()) {
 					for (JSONArray tags : wpnTags) {
 						if (!tags.containsAll(req)) {
@@ -668,54 +709,16 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 				}
 
-				String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
-				String desc = s.getDescription(getLocale(), act).replace("*", "").lines()
-						.filter(l -> !l.startsWith("-#"))
-						.collect(Collectors.joining("\n"));
-
 				b.addOption(
-						s.getInfo(getLocale()).getName() + cost + extra,
-						s.getId(),
-						StringUtils.abbreviate(desc, 100)
+						c.getName(getLocale()) + extra,
+						c.getId(),
+						StringUtils.abbreviate(c.getDescription(getLocale()), 100)
 				);
 			}
 
-			comps.add(ActionRow.of(b.build()));
-		}
-
-		if (act instanceof Hero h) {
-			Set<Consumable> cons = h.getConsumables().uniqueSet();
-			if (!cons.isEmpty()) {
-				StringSelectMenu.Builder b = StringSelectMenu.create("consumables")
-						.setPlaceholder(getLocale().get("str/use_a_consumable"))
-						.setMaxValues(1);
-
-				for (Consumable c : cons) {
-					String extra = " (x" + h.getConsumableCount(c) + ")";
-
-					JSONArray req = c.getReqTags();
-					if (!req.isEmpty()) {
-						for (JSONArray tags : wpnTags) {
-							if (!tags.containsAll(req)) {
-								String reqTags = Utils.properlyJoin(getLocale(), req.stream()
-										.map(t -> LocalizedString.get(getLocale(), "tag/" + t, "???"))
-										.toList()
-								);
-
-								extra += " [" + getLocale().get("str/requires", reqTags) + "]";
-								break;
-							}
-						}
-					}
-
-					b.addOption(
-							c.getName(getLocale()) + extra,
-							c.getId(),
-							StringUtils.abbreviate(c.getDescription(getLocale()), 100)
-					);
-				}
-
+			if (b != null) {
 				comps.add(ActionRow.of(b.build()));
+				b = null;
 			}
 		}
 
