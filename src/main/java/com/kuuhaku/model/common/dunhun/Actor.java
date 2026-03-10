@@ -41,7 +41,6 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @MappedSuperclass
 public abstract class Actor<T extends Actor<T>> extends DAO<T> {
@@ -597,13 +596,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public List<Skill> getAllSkills() {
-		return Stream.concat(
-						cache.getSkills().stream(),
-						modifiers.getEffects().stream().map(EffectProperties::getSkill)
-				)
-				.filter(Objects::nonNull)
-				.distinct()
-				.toList();
+		return getAllocSkills();
+
+//		return Stream.concat(
+//						cache.getSkills().stream(),
+//						modifiers.getEffects().stream().map(EffectProperties::getSkill)
+//				)
+//				.filter(Objects::nonNull)
+//				.distinct()
+//				.toList();
 	}
 
 	public Skill getSkill(String id) {
