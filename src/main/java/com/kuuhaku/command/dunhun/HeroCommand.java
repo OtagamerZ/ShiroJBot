@@ -215,7 +215,7 @@ public class HeroCommand implements Executable {
 
 	private void allocSkills(I18N locale, Consumer<Message> restore, Hero h, Message msg) {
 		Map<String, Skill> all = new LinkedHashMap<>();
-		for (Skill s : h.getAllSkills()) {
+		for (Skill s : h.getAvailableSkills()) {
 			all.put(s.getId(), s);
 		}
 
@@ -297,6 +297,8 @@ public class HeroCommand implements Executable {
 		};
 
 		for (int j = 0; j < 5; j++) {
+			if (skills.size() <= j) skills.add(null);
+
 			int fi = j;
 			String id = getButtonLabel.apply(j);
 			helper.addAction(id, w -> {

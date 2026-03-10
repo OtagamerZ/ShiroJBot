@@ -597,11 +597,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public List<Skill> getAllSkills() {
 		return Stream.concat(
-				cache.getSkills().stream(),
-				modifiers.getEffects().stream()
-						.map(EffectProperties::getSkill)
-						.filter(Objects::nonNull)
-		).distinct().toList();
+						cache.getSkills().stream(),
+						modifiers.getEffects().stream().map(EffectProperties::getSkill)
+				)
+				.filter(Objects::nonNull)
+				.distinct()
+				.toList();
 	}
 
 	public Skill getSkill(String id) {

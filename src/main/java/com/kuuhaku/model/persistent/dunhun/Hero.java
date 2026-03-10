@@ -263,7 +263,7 @@ public class Hero extends Actor<Hero> {
 		return DAO.query(Gear.class, "SELECT g FROM Gear g WHERE g.id = ?1 AND g.owner.id = ?2", id, getId());
 	}
 
-	public List<Skill> getAllSkills() {
+	public List<Skill> getAvailableSkills() {
 		return DAO.queryAll(Skill.class, """
 						SELECT s
 						FROM Skill s

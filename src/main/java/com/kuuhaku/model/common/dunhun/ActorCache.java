@@ -90,10 +90,7 @@ public class ActorCache {
 			}
 
 			List<Skill> alloc = DAO.queryAll(Skill.class, "SELECT s FROM Skill s WHERE s.id IN ?1", ids);
-			skills = Arrays.asList(new Skill[actor.getGame() == null ? 5 : alloc.size()]);
-			for (int i = 0; i < alloc.size(); i++) {
-				skills.set(i, alloc.get(i));
-			}
+			skills = new ArrayList<>(alloc);
 		}
 
 		return skills;
