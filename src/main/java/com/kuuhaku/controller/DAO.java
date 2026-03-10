@@ -387,11 +387,16 @@ public abstract class DAO<T extends DAO<T>> {
 	public final T refresh() {
 		return Manager.getFactory().callInTransaction(em -> {
 			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
-			T t = (T) find(getClass(), key);
-			em.refresh(t);
-			copyFields(t);
 
-			return t;
+			try {
+				T t = (T) find(getClass(), key);
+				em.refresh(t);
+				copyFields(t);
+			} catch (Exception e) {
+				Constants.LOGGER.error("Could not refresh entity of class {} [{}]", getClass().getSimpleName(), key, e);
+			}
+
+			return (T) this;
 		});
 	}
 
