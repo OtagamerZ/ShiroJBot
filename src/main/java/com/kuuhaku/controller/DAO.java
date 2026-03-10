@@ -389,7 +389,7 @@ public abstract class DAO<T extends DAO<T>> {
 			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 
 			try {
-				T t = (T) find(getClass(), key);
+				T t = (T) em.find(getClass(), key);
 				em.refresh(t);
 				copyFields(t);
 			} catch (Exception e) {
