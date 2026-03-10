@@ -388,6 +388,7 @@ public abstract class DAO<T extends DAO<T>> {
 		return Manager.getFactory().callInTransaction(em -> {
 			Object key = em.getEntityManagerFactory().getPersistenceUnitUtil().getIdentifier(this);
 			T t = (T) find(getClass(), key);
+			em.refresh(t);
 			copyFields(t);
 
 			return t;
