@@ -602,6 +602,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						modifiers.getEffects().stream().map(EffectProperties::getSkill)
 				)
 				.filter(Objects::nonNull)
+				.peek(System.out::println)
 				.distinct();
 	}
 
