@@ -414,9 +414,11 @@ public class Combat implements Renderer<BufferedImage> {
 									return;
 								}
 							}
-						} else if (h.getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
-							game.getChannel().sendMessage(getLocale().get("error/insufficient_attributes")).queue();
-							return;
+						} else if (reqs.attributes().attributes() > -1) {
+							if (h.getLevel() < reqs.level() || !h.getAttributes().has(reqs.attributes())) {
+								game.getChannel().sendMessage(getLocale().get("error/insufficient_attributes")).queue();
+								return;
+							}
 						}
 					}
 
