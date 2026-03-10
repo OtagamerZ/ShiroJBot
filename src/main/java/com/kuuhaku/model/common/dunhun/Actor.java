@@ -115,7 +115,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public int getReservedAp() {
 		int max = getMaxAp();
 		int total = 0;
-		for (Skill s : getSkills()) {
+		for (Skill s : getAllSkills()) {
 			if (s == null || s.getToggledEffect() == null) continue;
 			else if (total >= max) {
 				s.setToggledEffect(this, null);
@@ -591,7 +591,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return cache.getEquipment();
 	}
 
-	public List<Skill> getSkills() {
+	public List<Skill> getAllocSkills() {
+		return cache.getSkills();
+	}
+
+	public List<Skill> getAllSkills() {
 		return Stream.concat(
 				cache.getSkills().stream(),
 				modifiers.getEffects().stream()
@@ -601,7 +605,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Skill getSkill(String id) {
-		return getSkills().stream()
+		return getAllSkills().stream()
 				.filter(Objects::nonNull)
 				.filter(s -> s.getId().equalsIgnoreCase(id))
 				.findFirst().orElse(null);

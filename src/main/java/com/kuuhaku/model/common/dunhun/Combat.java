@@ -286,7 +286,7 @@ public class Combat implements Renderer<BufferedImage> {
 				try {
 					sen.reduceDebuffs(1);
 					sen.reduceStasis(1);
-					for (Skill s : actor.getSkills()) {
+					for (Skill s : actor.getAllSkills()) {
 						if (s == null) continue;
 						s.reduceCd();
 					}
@@ -380,7 +380,7 @@ public class Combat implements Renderer<BufferedImage> {
 				});
 			}
 
-			List<Skill> skills = curr.getSkills();
+			List<Skill> skills = curr.getAllSkills();
 			if (skills.stream().anyMatch(Objects::nonNull)) {
 				helper.addAction(Utils.parseEmoji("⚡"), w -> {
 					Map<String, List<?>> values = w.getDropdownValues();
@@ -612,7 +612,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicBoolean force) {
 		List<Skill> skills = new ArrayList<>();
-		for (Skill s : source.getSkills()) {
+		for (Skill s : source.getAllSkills()) {
 			if (s == null) continue;
 			else if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
@@ -634,7 +634,7 @@ public class Combat implements Renderer<BufferedImage> {
 		List<MessageTopLevelComponent> comps = new ArrayList<>(ma.getComponents());
 		List<JSONArray> wpnTags = act.getEquipment().getWeaponTags();
 
-		List<Skill> skills = act.getSkills();
+		List<Skill> skills = act.getAllSkills();
 		if (skills.stream().anyMatch(Objects::nonNull)) {
 			StringSelectMenu.Builder b = StringSelectMenu.create("skills")
 					.setPlaceholder(getLocale().get("str/use_a_skill"))

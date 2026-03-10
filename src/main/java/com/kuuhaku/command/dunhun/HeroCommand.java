@@ -228,7 +228,7 @@ public class HeroCommand implements Executable {
 				.setTitle(locale.get("str/skills"))
 				.setThumbnail("attachment://card.png");
 
-		List<Skill> skills = h.getSkills();
+		List<Skill> skills = h.getAllocSkills();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
 				.setTimeout(1, TimeUnit.MINUTES)
 				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()));
@@ -297,8 +297,6 @@ public class HeroCommand implements Executable {
 		};
 
 		for (int j = 0; j < 5; j++) {
-			if (skills.size() <= j) skills.add(null);
-
 			int fi = j;
 			String id = getButtonLabel.apply(j);
 			helper.addAction(id, w -> {
