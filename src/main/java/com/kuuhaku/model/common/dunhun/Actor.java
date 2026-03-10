@@ -568,13 +568,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			if (e.isLocked()) continue;
 			else if (e instanceof TriggeredEffect te) {
 				if (!Utils.equalsAny(trigger, te.getTriggers())) continue;
-				te.decLimit();
 			}
 
 			try {
 				e.lock();
 				e.getEffect().accept(e, context);
 			} finally {
+				if (e instanceof TriggeredEffect te) {
+					te.decLimit();
+				}
+
 				e.unlock();
 			}
 		}

@@ -293,9 +293,9 @@ public class Combat implements Renderer<BufferedImage> {
 
 					actor.setAp(actor.getMaxAp());
 					sen.setDefending(false);
-					actor.getModifiers().expireMods();
 
 					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
+					actor.getModifiers().expireMods();
 
 					while (actor == getCurrent()) {
 						if (checkCombatEnd()) break combat;
@@ -990,7 +990,9 @@ public class Combat implements Renderer<BufferedImage> {
 					if (ge.getOwner() != null && !Objects.equals(ge.getOwner(), getCurrent())) {
 						continue;
 					}
-				} else if (!Utils.equalsAny(t, te.getTriggers())) {
+				}
+
+				if (!Utils.equalsAny(t, te.getTriggers())) {
 					continue;
 				}
 			}
@@ -1002,7 +1004,7 @@ public class Combat implements Renderer<BufferedImage> {
 				Constants.LOGGER.warn("Failed to execute {} persistent effect", e.getSource().getSource(), ex);
 			} finally {
 				if (e instanceof TriggeredEffect te) {
-					if (e instanceof GlobalEffect ge) {
+					if (t == Trigger.ON_TURN_BEGIN && e instanceof GlobalEffect ge) {
 						ge.decTurn();
 					}
 
