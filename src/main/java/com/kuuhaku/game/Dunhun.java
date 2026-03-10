@@ -874,13 +874,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 			}
 
+			XStringBuilder sk = new XStringBuilder();
 			List<String> skills = a.getAllSkills()
-					.map(s ->
-							"- " + s.getInfo(getLocale()).getName() + " " + StringUtils.repeat('◈', s.getStats().getCost()) +
-									"\n" + s.getDescription(getLocale(), a).lines()
-									.map(l -> "-# " + l)
-									.collect(Collectors.joining("\n"))
-					)
+					.map(s -> {
+						sk.clear();
+						sk.appendNewLine("- " + s.getName(getLocale()) + " " + StringUtils.repeat('◈', s.getStats().getCost()));
+
+						for (String line : Utils.iterate(s.getDescription(getLocale(), a).lines())) {
+							if (line.startsWith("-#")) {
+								sk.appendNewLine(line);
+							} else {
+								sk.appendNewLine("-# " + line);
+							}
+						}
+
+						return sk.toString();
+					})
 					.toList();
 
 			if (!skills.isEmpty()) {
