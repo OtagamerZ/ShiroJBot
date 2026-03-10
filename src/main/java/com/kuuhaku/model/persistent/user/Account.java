@@ -594,20 +594,24 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public void addVote(int multiplier) {
 		if (isVoteAwarded()) return;
 
+		System.out.println(lastVote);
 		int streak = voteStreak + 1;
 		int cr = (int) (((1000 * multiplier) - Math.min((balance + getTransferred()) / 2000, 800)) * streak);
 		addCR(cr, "Daily");
 
+		System.out.println(lastVote);
 		int gems = 0;
 		if (streak > 0 && streak % 7 == 0) {
 			gems = Math.min((int) Calc.getFibonacci(streak / 7), 3);
 			addGems(gems, "Vote streak " + streak);
 		}
 
+		System.out.println(lastVote);
 		setStreak(streak);
 		setVoteAwarded(true);
 		save();
 
+		System.out.println(lastVote);
 		EmbedBuilder eb = new EmbedBuilder()
 				.setColor(gems > 0 ? Color.red : Color.orange)
 				.setThumbnail(Constants.ORIGIN_RESOURCES + "assets/" + (gems > 0 ? "gem_icon.png" : "cr_icon.png"))
