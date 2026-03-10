@@ -6,4 +6,9 @@ public class PermanentProperties<T> extends EffectProperties<T> {
 	public PermanentProperties(EffectContext<T> owner) {
 		super(owner);
 	}
+
+	@Override
+	public boolean isSafeToRemove() {
+		return false;
+	}
 }

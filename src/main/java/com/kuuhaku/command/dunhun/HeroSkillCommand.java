@@ -34,7 +34,6 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
@@ -52,7 +51,7 @@ import java.util.List;
 		path = "skill",
 		category = Category.INFO
 )
-@Syntax("<skill:word:r>")
+@Syntax("<skill:text:r>")
 public class HeroSkillCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
@@ -63,6 +62,12 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		Skill s = DAO.find(Skill.class, args.getString("skill").toUpperCase());
+		if (s == null) {
+			DAO.query(Skill.class, "SELECT s FROM LocalizedSkill ls WHERE upper(ls.name) = ?1",
+					args.getString("skill").toUpperCase()
+			)
+		}
+
 		if (s == null) {
 			String sug = Utils.didYouMean(args.getString("skill"), "SELECT id AS value FROM skill");
 			if (sug == null) {
