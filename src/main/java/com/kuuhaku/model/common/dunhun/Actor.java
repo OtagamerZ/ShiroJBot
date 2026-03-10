@@ -116,7 +116,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		int max = getMaxAp();
 		int total = 0;
 
-		for (Skill s : Utils.iterate(getAllSkills())) {
+		for (Skill s : getAllSkills()) {
 			if (s.getToggledEffect() == null) continue;
 			else if (total >= max) {
 				s.setToggledEffect(this, null);
