@@ -216,7 +216,9 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 	public void addCR(long value, String reason) {
 		if (value <= 0) return;
 
+		System.out.println(lastVote);
 		apply(a -> {
+			System.out.println(a.lastVote);
 			long liquid = value;
 			if (a.getDebit() > 0) {
 				long deducted = Math.min(liquid, a.getDebit());
