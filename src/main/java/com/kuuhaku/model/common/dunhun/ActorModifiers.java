@@ -237,7 +237,15 @@ public class ActorModifiers {
 	}
 
 	public void leftShift(EffectProperties<?> effect) {
+		add(effect);
+	}
+
+	public void add(EffectProperties<?> effect) {
 		effects.add(effect);
+	}
+
+	public void remove(EffectProperties<?> effect) {
+		effects.remove(effect);
 	}
 
 	public void expireMods() {
