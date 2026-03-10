@@ -380,7 +380,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			}
 
 			if (val.get() != 0) {
-				cbt.getHistory().add(locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get())));
+				String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));
+
+				if (usable instanceof Skill s) {
+					line += " " + s.getStats().getElements().stream()
+							.map(e -> "\\" + e)
+							.collect(Collectors.joining());
+				}
+
+				cbt.getHistory().add(line);
 			}
 		}
 
