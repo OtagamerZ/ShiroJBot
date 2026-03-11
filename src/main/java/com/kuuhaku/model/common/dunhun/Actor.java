@@ -3,11 +3,9 @@ package com.kuuhaku.model.common.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
+import com.kuuhaku.model.common.ListenableList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.FlatMod;
-import com.kuuhaku.model.common.shoukan.MultMod;
-import com.kuuhaku.model.common.shoukan.RegDeg;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.*;
 import com.kuuhaku.model.enums.shoukan.ElementType;
@@ -26,10 +24,7 @@ import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Tuple2;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.apache.commons.collections4.SetUtils;
 
 import java.awt.image.BufferedImage;
@@ -460,14 +455,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void applyRegDeg() {
-		AtomicInteger val = new AtomicInteger(applyMitigation(getRegDeg().next()));
-
-		Combat cbt = binding.getGame().getCombat();
-		if (cbt != null) {
-			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, this, this, null, val);
-		}
-
-		setHp(getHp() + val.get());
+		setHp(getHp() + applyMitigation(getRegDeg().next()));
 	}
 
 	public boolean isMinion() {
@@ -801,6 +789,23 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		binding.unbind();
+	}
+
+	@PostLoad
+	private void onPostLoad() {
+		regDeg.getValues().addListener(new ListenableList.ListEvent<>() {
+			@Override
+			public boolean beforeAdd(ValueOverTime v) {
+				Combat cbt = binding.getGame().getCombat();
+				if (cbt != null) {
+					AtomicInteger val = new AtomicInteger(v.getValue());
+					cbt.trigger(v instanceof Degen ? Trigger.ON_DEGEN : Trigger.ON_REGEN, Actor.this, Actor.this, null, val);
+					v.setValue(val.get());
+				}
+
+				return true;
+			}
+		});
 	}
 
 	@Override
