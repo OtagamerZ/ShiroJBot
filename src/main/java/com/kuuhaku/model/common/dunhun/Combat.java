@@ -242,7 +242,7 @@ public class Combat implements Renderer<BufferedImage> {
 				Set<ElementType> resists = a.getResists();
 				if (!resists.isEmpty()) {
 					name += " " + resists.stream()
-							.map(e -> "\\" + e)
+							.map(ElementType::toString)
 							.collect(Collectors.joining());
 				}
 

@@ -376,7 +376,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 				if (usable instanceof Skill s) {
 					line += " " + s.getStats().getElements().stream()
-							.map(e -> "\\" + e)
+							.map(ElementType::toString)
 							.collect(Collectors.joining());
 				}
 
