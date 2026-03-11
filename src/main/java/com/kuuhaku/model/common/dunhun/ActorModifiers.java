@@ -25,6 +25,7 @@ import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Skill;
+import com.kuuhaku.util.Utils;
 import org.apache.commons.collections4.IteratorUtils;
 
 import java.util.*;
@@ -273,6 +274,10 @@ public class ActorModifiers {
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {
+		for (Skill s : Utils.iterate(parent.getAllSkills())) {
+			s.getStats().getModifiers().removeIf(check);
+		}
+
 		for (Gear g : parent.getEquipment()) {
 			g.getModifiers().removeIf(check);
 		}
