@@ -157,18 +157,20 @@ public class Node {
 	}
 
 	public int travelDistance(Node node) {
-		return travelDistance(node, this);
+		Set<Node> visited = new HashSet<>();
+		visited.add(this);
+
+		return travelDistance(node, visited);
 	}
 
-	private int travelDistance(Node node, Node start) {
+	private int travelDistance(Node node, Set<Node> visited) {
 		if (node == null || equals(node)) return 0;
 
 		for (Node parent : parents) {
-			if (parent.equals(start)) break;
-			else if (parent.blocked.contains(this)) continue;
+			if (!visited.add(parent) || parent.blocked.contains(this)) continue;
 
-			int dist = parent.travelDistance(node, start) + 1;
-			if (dist > 0) return dist;
+			int dist = parent.travelDistance(node, visited) + 1;
+			if (dist >= 0) return dist;
 		}
 
 		return -1;
