@@ -145,7 +145,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	@Override
 	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
-		if (this == DEFAULT_ATTACK) {
+		if (id.equals("GENERIC_ATTACK")) {
 			target.damage(source, this, (int) (source.getSenshi().getDmg() * stats.getEfficiency()));
 			return true;
 		} else if (stats.getEffect() == null) {

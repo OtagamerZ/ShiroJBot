@@ -748,7 +748,7 @@ public class Combat implements Renderer<BufferedImage> {
 					source.consumeAp(skill.getCost(source));
 				}
 
-				String type = skill.getId().equals("DEFAULT_ATTACK") ? "str/actor_combat" : "str/used";
+				String type = skill.getId().equals("GENERIC_ATTACK") ? "str/actor_combat" : "str/used";
 				String suffix = target.equals(source) ? "_self" : "";
 
 				String action = type + suffix;
