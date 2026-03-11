@@ -128,6 +128,8 @@ public class Node {
 
 	public void addParents(Collection<Node> nodes) {
 		for (Node node : nodes) {
+			if (equals(node) || children.contains(node)) continue;
+
 			parents.add(node);
 			node.children.add(this);
 		}
@@ -143,6 +145,8 @@ public class Node {
 
 	public void addChildren(Collection<Node> nodes) {
 		for (Node node : nodes) {
+			if (equals(node) || parents.contains(node)) continue;
+
 			children.add(node);
 			node.parents.add(this);
 		}
