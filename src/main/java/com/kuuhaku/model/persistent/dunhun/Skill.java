@@ -91,6 +91,13 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 		return stats;
 	}
 
+	@Override
+	public int getCost(Actor<?> owner) {
+		if (stats.getCost() == 0) return 0;
+
+		return (int) Math.max(1, owner.getModifiers().getSkillCost(stats.getCost()));
+	}
+
 	public String getName(I18N locale) {
 		return getInfo(locale).getName();
 	}

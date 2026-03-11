@@ -108,7 +108,7 @@ public class HeroSkillCommand implements Executable {
 			eb.appendDescription("\n");
 		}
 
-		if (s.getStats().getCost() > 0) {
+		if (s.getCost(h) > 0) {
 			eb.appendDescription("-# " + locale.get("str/cost", StringUtils.repeat('◈', s.getStats().getCost())) + "\n");
 		}
 

@@ -878,7 +878,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = a.getAllSkills()
 					.map(s -> {
 						sk.clear();
-						sk.appendNewLine("- " + s.getName(getLocale()) + " " + StringUtils.repeat('◈', s.getStats().getCost()));
+						sk.appendNewLine("- " + s.getName(getLocale()) + " " + StringUtils.repeat('◈', s.getCost(a)));
 
 						for (String line : Utils.iterate(s.getDescription(getLocale(), a).lines())) {
 							if (line.startsWith("-#")) {

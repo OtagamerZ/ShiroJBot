@@ -25,7 +25,6 @@ import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Skill;
-import com.kuuhaku.util.Utils;
 import org.apache.commons.collections4.IteratorUtils;
 
 import java.util.*;

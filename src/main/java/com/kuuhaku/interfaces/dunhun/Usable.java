@@ -9,6 +9,10 @@ public interface Usable {
 
 	UsableStats getStats();
 
+	default int getCost(Actor<?> owner) {
+		return 1;
+	}
+
 	boolean execute(Dunhun game, Actor<?> source, Actor<?> target);
 
 	boolean isLocked();

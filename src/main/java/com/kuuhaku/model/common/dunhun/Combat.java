@@ -394,7 +394,7 @@ public class Combat implements Renderer<BufferedImage> {
 					if (skill == null) {
 						game.getChannel().sendMessage(getLocale().get("error/invalid_skill")).queue();
 						return;
-					} else if (skill.getStats().getCost() > curr.getAp()) {
+					} else if (skill.getCost(curr) > curr.getAp()) {
 						game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
 						return;
 					} else if (skill.getRemainingCooldown() > 0) {
@@ -596,7 +596,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicReference<Skill> force) {
 		List<Skill> skills = new ArrayList<>();
 		for (Skill s : Utils.iterate(source.getAllSkills())) {
-			if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
+			if (s.getCost(source) > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
 			switch (s.canCpuUse(source, null)) {
 				case ANY -> skills.add(s);
@@ -647,7 +647,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 			}
 
-			String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
+			String cost = " " + StringUtils.repeat('◈', s.getCost(act));
 			String desc = s.getDescription(getLocale(), act).replace("*", "").lines()
 					.filter(l -> !l.startsWith("-#"))
 					.collect(Collectors.joining("\n"));
@@ -745,7 +745,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (skill.execute(game, source, target)) {
 				if (isCurrent) {
-					source.consumeAp(skill.getStats().getCost());
+					source.consumeAp(skill.getCost(source));
 				}
 
 				String type = skill.getId().equals("DEFAULT_ATTACK") ? "str/actor_combat" : "str/used";
