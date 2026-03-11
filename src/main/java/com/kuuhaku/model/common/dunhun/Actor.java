@@ -796,13 +796,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		regDeg.getValues().addListener(new ListenableList.ListEvent<>() {
 			@Override
 			public boolean beforeAdd(ValueOverTime v) {
-				Combat cbt = binding.getGame().getCombat();
-				if (cbt != null) {
-					AtomicInteger val = new AtomicInteger(v.getValue());
-					cbt.trigger(v instanceof Degen ? Trigger.ON_DEGEN : Trigger.ON_REGEN, Actor.this, Actor.this, null, val);
-					v.setValue(val.get());
+				AtomicInteger val = new AtomicInteger(v.getValue());
+				v.setValue(Math.max(0, (int) modifiers.getDegenResist(val.get())));
+
+				if (val.get() > 0) {
+					Combat cbt = binding.getGame().getCombat();
+					if (cbt != null) {
+						cbt.trigger(v instanceof Degen ? Trigger.ON_DEGEN : Trigger.ON_REGEN, Actor.this, Actor.this, null, val);
+					}
 				}
 
+				v.setValue(val.get());
 				return true;
 			}
 		});

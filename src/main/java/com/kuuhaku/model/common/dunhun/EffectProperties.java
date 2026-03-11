@@ -27,6 +27,7 @@ public class EffectProperties<T> {
 	private ValueMod magicFind;
 	private ValueMod healing;
 	private ValueMod damageTaken;
+	private ValueMod degenResist;
 	private ValueMod maxSummons;
 	private EffectBase effect;
 	private ElementType resist;
@@ -160,6 +161,14 @@ public class EffectProperties<T> {
 
 	public void setDamageTaken(ValueMod damageTaken) {
 		this.damageTaken = damageTaken;
+	}
+
+	public ValueMod getDegenResist() {
+		return degenResist;
+	}
+
+	public void setDegenResist(ValueMod degenResist) {
+		this.degenResist = degenResist;
 	}
 
 	public ValueMod getMaxSummons() {

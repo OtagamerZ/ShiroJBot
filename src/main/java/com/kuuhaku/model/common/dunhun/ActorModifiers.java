@@ -213,6 +213,14 @@ public class ActorModifiers {
 		return accumulate(base, EffectProperties::getDamageTaken);
 	}
 
+	public double getDegenResist() {
+		return getDegenResist(0);
+	}
+
+	public double getDegenResist(double base) {
+		return accumulate(base, EffectProperties::getDegenResist);
+	}
+
 	public double getMaxSummons(double base) {
 		return accumulate(base, EffectProperties::getMaxSummons);
 	}
