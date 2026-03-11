@@ -84,7 +84,7 @@ public class HeroSkillCommand implements Executable {
 
 		MessageCreateAction ma = event.channel().sendMessageEmbeds(getSkillEmbed(locale, s, h).build());
 
-		File icon = IO.getResourceAsFile("dunhun/icons/type_" + (s.getStats().isSpell() ? "spell" : "martial") + ".png");
+		File icon = IO.getResourceAsFile("dunhun/icons/type_" + (s.getStats().getType().name().toLowerCase()) + ".png");
 		if (icon != null) {
 			ma.addFiles(FileUpload.fromData(icon, "thumb.png"));
 		}
@@ -121,10 +121,6 @@ public class HeroSkillCommand implements Executable {
 		}
 
 		int lvl = h.getLevel();
-		if (s.getStats().isSpell()) {
-			lvl = 0;
-		}
-
 		if (s.getStats().getEfficiency(lvl) > 0) {
 			String eff = Utils.roundToString(locale, s.getStats().getEfficiency(lvl) * 100, 0) + "%";
 			eb.appendDescription("-# " + locale.get("str/added_efficiency", eff) + "\n");

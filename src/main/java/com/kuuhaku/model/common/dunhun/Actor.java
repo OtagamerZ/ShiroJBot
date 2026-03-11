@@ -9,10 +9,7 @@ import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.RegDeg;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.enums.dunhun.NodeType;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.dunhun.*;
 import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -151,7 +148,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (usable != null) {
 			missFac *= 1 - s.getDodge() / 200d;
 
-			if (usable instanceof Skill sk && sk.getStats().isSpell()) {
+			if (usable instanceof Skill sk && sk.isSpell()) {
 				missFac *= 1 - s.getParry() / 200d;
 			}
 		}
@@ -231,7 +228,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Tuple2<Integer, Boolean> heal(Actor<?> source, Usable usable, int value) {
 		double crit = 0;
-		if (usable instanceof Skill s && s.getStats().isSpell()) {
+		if (usable instanceof Skill s && s.isSpell()) {
 			crit = source.getModifiers().getCritical(s.getStats().getCritical());
 		}
 
@@ -244,7 +241,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, ElementType element, int value) {
 		Skill skill = Skill.ELEMENTAL_SKILLS.computeIfAbsent(element, _ -> {
-			Skill s = new Skill(0, 0, 1, 0, true);
+			Skill s = new Skill(0, 0, 1, 0, SkillType.NONE);
 			s.getStats().getElements().add(element);
 			return s;
 		});
@@ -256,11 +253,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double crit = 0;
 		AtomicInteger val = new AtomicInteger(value);
 		if (usable instanceof Skill s && source != null) {
-			if (s.getStats().isSpell()) {
-				crit = source.getModifiers().getCritical(s.getStats().getCritical());
-			} else {
-				crit = source.getCritical();
-			}
+			crit = switch (s.getStats().getType()) {
+				case ATTACK -> source.getCritical();
+				case SPELL -> source.getModifiers().getCritical(s.getStats().getCritical());
+				default -> 0;
+			};
 
 			Set<ElementType> elements = s.getStats().getElements();
 			Set<ElementType> resists = getResists();
@@ -275,7 +272,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
-		boolean isAttack = usable instanceof Skill s && !s.getStats().isSpell();
+		boolean isAttack = usable instanceof Skill s && s.isAttack();
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 

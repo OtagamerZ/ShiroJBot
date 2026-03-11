@@ -727,16 +727,21 @@ public class Combat implements Renderer<BufferedImage> {
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
 		try {
 			if (skill.isLocked()) return;
-			boolean spell = skill.getStats().isSpell();
 			boolean isCurrent = source == getCurrent();
 
 			AtomicReference<Actor<?>> tgt = new AtomicReference<>(target);
-			trigger(spell ? Trigger.ON_SPELL_TARGET : Trigger.ON_ATTACK_TARGET, source, tgt, skill);
-			target = tgt.get();
+			switch (skill.getStats().getType()) {
+				case ATTACK -> trigger(Trigger.ON_ATTACK_TARGET, source, tgt, skill);
+				case SPELL -> trigger(Trigger.ON_SPELL_TARGET, source, tgt, skill);
+			}
 
+			target = tgt.get();
 			int lastHistor = history.size();
 			boolean wasToggle = skill.getToggledEffect() != null;
-			trigger(spell ? Trigger.ON_SPELL : Trigger.ON_ATTACK, source, target, skill);
+			switch (skill.getStats().getType()) {
+				case ATTACK -> trigger(Trigger.ON_ATTACK, source, tgt, skill);
+				case SPELL -> trigger(Trigger.ON_SPELL, source, tgt, skill);
+			}
 
 			if (skill.execute(game, source, target)) {
 				if (isCurrent) {
