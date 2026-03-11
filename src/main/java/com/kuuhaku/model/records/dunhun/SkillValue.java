@@ -37,7 +37,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 		if (withAdded && eff > 0) {
 			added = (int) switch (skill.getStats().getType()) {
 				case ATTACK -> source.getSenshi().getDmg();
-				case SPELL -> source.getModifiers().getSpellDamage();
+				case SPELL, BUFF -> source.getModifiers().getSpellDamage();
 				default -> 0;
 			};
 
