@@ -22,6 +22,7 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
+import com.kuuhaku.model.common.shoukan.CumValue;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
 import com.kuuhaku.model.enums.dunhun.SkillType;
 import com.kuuhaku.model.enums.shoukan.ElementType;
@@ -72,6 +73,7 @@ public class SkillStats extends UsableStats {
 	@Convert(converter = JSONArrayConverter.class)
 	private JSONArray tags = new JSONArray();
 
+	private final transient CumValue costModifier = new CumValue();
 	private transient Set<ElementType> elements;
 
 	public SkillStats() {
@@ -89,8 +91,14 @@ public class SkillStats extends UsableStats {
 		return reservation;
 	}
 
+	public CumValue getCostModifier() {
+		return costModifier;
+	}
+
 	public int getCost() {
-		return cost;
+		if (cost == 0) return cost;
+
+		return (int) Math.max(1, costModifier.apply(cost));
 	}
 
 	public int getCooldown() {
