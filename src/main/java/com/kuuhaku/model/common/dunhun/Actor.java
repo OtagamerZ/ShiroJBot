@@ -291,17 +291,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							String outcome = null;
 							int histIdx = cbt.getHistory().size();
 							if (srcSen.isBlinded(true) && Calc.chance(50)) {
-								cbt.trigger(Trigger.ON_MISS, source, this, usable);
+								cbt.trigger(Trigger.ON_MISS, source, this, usable, val);
 
 								outcome = cbt.getLocale().get("str/actor_miss", source.getName());
 							} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 								if (Calc.chance(tgtSen.getDodge())) {
-									cbt.trigger(Trigger.ON_MISS, source, this, usable);
-									cbt.trigger(Trigger.ON_DODGE, this, source, usable);
+									cbt.trigger(Trigger.ON_MISS, source, this, usable, val);
+									cbt.trigger(Trigger.ON_DODGE, this, source, usable, val);
 
 									outcome = cbt.getLocale().get("str/actor_dodge", this.getName());
 								} else if (isAttack && Calc.chance(tgtSen.getParry())) {
-									cbt.trigger(Trigger.ON_PARRY, this, source, usable);
+									cbt.trigger(Trigger.ON_PARRY, this, source, usable, val);
 
 									outcome = cbt.getLocale().get("str/actor_parry", this.getName());
 									cbt.attack(this, source);
@@ -314,16 +314,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							}
 						}
 
-						cbt.trigger(Trigger.ON_HIT, source, this, usable);
+						cbt.trigger(Trigger.ON_HIT, source, this, usable, val);
 						if (crit) {
-							cbt.trigger(Trigger.ON_CRITICAL, source, this, usable);
+							cbt.trigger(Trigger.ON_CRITICAL, source, this, usable, val);
 						}
 					}
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
 					if (!equals(source) && hp + val.get() <= 0) {
-						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
-						cbt.trigger(Trigger.ON_KILL, source, this, usable);
+						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable, val);
+						cbt.trigger(Trigger.ON_KILL, source, this, usable, val);
 
 						Actor<?> killer = source;
 						if (source.isMinion()) {
@@ -366,7 +366,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						}
 					}
 				} else if (hp + val.get() > 0) {
-					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);
+					cbt.trigger(Trigger.ON_REVIVE, this, this, usable, val);
 					getSenshi().setAvailable(true);
 				}
 			}
