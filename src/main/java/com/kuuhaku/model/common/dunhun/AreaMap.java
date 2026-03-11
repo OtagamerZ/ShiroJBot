@@ -20,7 +20,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
@@ -273,7 +272,7 @@ public class AreaMap {
 					boolean outsideView = visionLimit > 0
 							&& !run.getVisitedNodes().contains(node.getId())
 							&& (distance > visionLimit || distance == -1);
-					boolean occluded = node.isOccluded(width, height) || outsideView;
+					boolean occluded = !node.equals(playerNode) && (node.isOccluded(width, height) || outsideView);
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						node.setWillBeRendered(false);
 						continue;
@@ -325,7 +324,7 @@ public class AreaMap {
 						}
 						case 1 -> {
 							for (Node parent : node.getParents()) {
-								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
+								if (!parent.isPathRendered() && (!parent.equals(playerNode) && parent.isOccluded(width, height))) {
 									parent.renderPath(g2d, distance > 0);
 								}
 							}
