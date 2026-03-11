@@ -37,7 +37,7 @@ public class SenshiBoss extends Boss {
 		if (stats.getAttack() > 0) {
 			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill");
 		} else {
-			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE spell");
+			skills = DAO.queryAllNative(String.class, "SELECT id FROM skill WHERE type = 'SPELL'");
 
 			EffectProperties<?> props = new PermanentProperties<>(null);
 			props.setPower(new MultMod(0.5));
