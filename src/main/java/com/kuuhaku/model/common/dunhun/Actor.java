@@ -797,7 +797,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			@Override
 			public boolean beforeAdd(ValueOverTime v) {
 				AtomicInteger val = new AtomicInteger(v.getValue());
-				v.setValue(Math.max(0, (int) modifiers.getDegenResist(val.get())));
+				if (v instanceof Degen) {
+					v.setValue(Math.max(0, (int) modifiers.getDegenResist(val.get())));
+				}
 
 				if (val.get() > 0) {
 					Combat cbt = binding.getGame().getCombat();
