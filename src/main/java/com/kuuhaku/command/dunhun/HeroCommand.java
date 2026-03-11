@@ -252,7 +252,7 @@ public class HeroCommand implements Executable {
 						}
 
 						SkillStats stats = s.getStats();
-						if (stats.getCost() > 0) {
+						if (h.getModifiers().getAggro(stats.getCost()) > 0) {
 							title += " " + StringUtils.repeat('◈', s.getStats().getCost());
 						}
 						if (stats.getReservation() > 0) {

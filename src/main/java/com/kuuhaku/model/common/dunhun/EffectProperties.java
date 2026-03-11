@@ -29,6 +29,7 @@ public class EffectProperties<T> {
 	private ValueMod damageTaken;
 	private ValueMod degenResist;
 	private ValueMod maxSummons;
+	private ValueMod skillCost;
 	private EffectBase effect;
 	private ElementType resist;
 	private Skill skill;
@@ -177,6 +178,14 @@ public class EffectProperties<T> {
 
 	public void setMaxSummons(ValueMod maxSummons) {
 		this.maxSummons = maxSummons;
+	}
+
+	public ValueMod getSkillCost() {
+		return skillCost;
+	}
+
+	public void setSkillCost(ValueMod skillCost) {
+		this.skillCost = skillCost;
 	}
 
 	public EffectBase getEffect() {

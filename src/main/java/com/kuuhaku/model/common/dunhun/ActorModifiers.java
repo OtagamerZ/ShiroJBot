@@ -222,8 +222,20 @@ public class ActorModifiers {
 		return accumulate(base, EffectProperties::getDegenResist);
 	}
 
+	public double getMaxSummons() {
+		return getMaxSummons(0);
+	}
+
 	public double getMaxSummons(double base) {
 		return accumulate(base, EffectProperties::getMaxSummons);
+	}
+
+	public double getSkillCost() {
+		return getSkillCost(0);
+	}
+
+	public double getSkillCost(double base) {
+		return accumulate(base, EffectProperties::getSkillCost);
 	}
 
 	public UniqueProperties<?> getEffect(Object id) {
@@ -274,10 +286,6 @@ public class ActorModifiers {
 	}
 
 	public void removeIf(Predicate<ValueMod> check) {
-		for (Skill s : Utils.iterate(parent.getAllSkills())) {
-			s.getStats().getModifiers().removeIf(check);
-		}
-
 		for (Gear g : parent.getEquipment()) {
 			g.getModifiers().removeIf(check);
 		}
