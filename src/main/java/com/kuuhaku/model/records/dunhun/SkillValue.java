@@ -30,7 +30,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 
 	public int valueFor(Skill skill, Actor<?> source) {
 		int lvl = source.getLevel();
-		double mult = skill.isSpell() ? source.getSenshi().getPower() : 1;
+		double mult = !skill.isAttack() ? source.getSenshi().getPower() : 1;
 		double eff = skill.getStats().getEfficiency(lvl);
 
 		int added = 0;
