@@ -126,7 +126,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					new DungeonRun(leader, dungeon), 1,
 					(_, map) -> map.newRoot()
 			);
-			this.map.generate(this);
 		} else {
 			DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 			if (run == null) {
@@ -149,17 +148,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 
 			this.map = dungeon.init(this, run);
-			this.map.generate(this);
-
-			Floor fl = this.map.getFloor();
-			if (run.getSublevel() >= fl.size()) {
-				run.setSublevel(fl.size() - 1);
-			}
-
-			Sublevel sub = fl.getSublevel(run.getSublevel());
-			if (run.getPath() >= sub.size()) {
-				run.setPath(sub.size() - 1);
-			}
 		}
 
 		setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
@@ -172,6 +160,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 						&& combat.get().getCurrent() instanceof Hero h
 						&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
+	}
+
+	@Override
+	protected void begin() {
+		map.generate(this);
+		if (!duel) {
+			DungeonRun run = map.getRun();
+			Floor fl = map.getFloor();
+			if (run.getSublevel() >= fl.size()) {
+				run.setSublevel(fl.size() - 1);
+			}
+
+			Sublevel sub = fl.getSublevel(run.getSublevel());
+			if (run.getPath() >= sub.size()) {
+				run.setPath(sub.size() - 1);
+			}
+		}
 	}
 
 	@Override
