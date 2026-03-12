@@ -98,7 +98,9 @@ public class Floor {
 			List<Node> rests = new ArrayList<>(restSpots);
 			for (int i = 0; i < restSpots; i++) {
 				List<Node> valid = nodes.stream()
-						.filter(n -> rests.stream().noneMatch(r -> n.travelDistance(r) < minDistance))
+						.filter(n -> rests.stream()
+								.noneMatch(r -> Math.max(n.travelDistance(r), r.travelDistance(n)) < minDistance)
+						)
 						.toList();
 
 				if (valid.isEmpty()) break;
