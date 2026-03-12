@@ -28,6 +28,7 @@ import com.kuuhaku.model.common.dunhun.EffectProperties;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
+import com.kuuhaku.model.enums.dunhun.SkillType;
 import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.localized.LocalizedSkill;
 import com.kuuhaku.model.records.dunhun.Requirements;
@@ -49,8 +50,8 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "skill", schema = "dunhun")
 public class Skill extends DAO<Skill> implements Usable, Cloneable {
-	public static final Skill DEFAULT_ATTACK = new Skill(1, 0, 1, 0, false);
-	public static final Skill DUAL_ATTACK = new Skill(1, 0, 0.6, 0, false);
+	public static final Skill DEFAULT_ATTACK = new Skill(1, 0, 1, 0, SkillType.ATTACK);
+	public static final Skill DUAL_ATTACK = new Skill(1, 0, 0.6, 0, SkillType.ATTACK);
 	public static final Map<ElementType, Skill> ELEMENTAL_SKILLS = new HashMap<>();
 
 	@Id
@@ -77,9 +78,9 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	public Skill() {
 	}
 
-	public Skill(int cost, int cooldown, double efficiency, double critical, boolean spell) {
-		this.id = "DEFAULT_ATTACK";
-		this.stats = new SkillStats(cost, cooldown, efficiency, critical, spell);
+	public Skill(int cost, int cooldown, double efficiency, double critical, SkillType type) {
+		this.id = "GENERIC_" + type.name();
+		this.stats = new SkillStats(cost, cooldown, efficiency, critical, type);
 	}
 
 	public String getId() {
@@ -88,6 +89,13 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	public SkillStats getStats() {
 		return stats;
+	}
+
+	@Override
+	public int getCost(Actor<?> owner) {
+		if (stats.getCost() == 0) return 0;
+
+		return (int) Math.max(1, owner.getModifiers().getSkillCost(stats.getCost()));
 	}
 
 	public String getName(I18N locale) {
@@ -137,7 +145,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	@Override
 	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
-		if (this == DEFAULT_ATTACK) {
+		if (id.equals("GENERIC_ATTACK")) {
 			target.damage(source, this, (int) (source.getSenshi().getDmg() * stats.getEfficiency()));
 			return true;
 		} else if (stats.getEffect() == null) {
@@ -172,7 +180,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	public List<String> getTags() {
 		List<String> tags = new ArrayList<>();
-		tags.add(stats.isSpell() ? "SPELL" : "MARTIAL");
+		tags.add(stats.getType().name());
 
 		if (requirements != null) {
 			tags.addAll(requirements.tags().stream()
@@ -227,6 +235,18 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	@Override
 	public void setLocked(boolean locked) {
 		this.locked = locked;
+	}
+
+	public boolean isAttack() {
+		return stats.getType() == SkillType.ATTACK;
+	}
+
+	public boolean isSpell() {
+		return stats.getType() == SkillType.SPELL;
+	}
+
+	public boolean isBuff() {
+		return stats.getType() == SkillType.BUFF;
 	}
 
 	@Override

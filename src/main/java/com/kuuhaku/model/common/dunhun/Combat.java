@@ -242,7 +242,7 @@ public class Combat implements Renderer<BufferedImage> {
 				Set<ElementType> resists = a.getResists();
 				if (!resists.isEmpty()) {
 					name += " " + resists.stream()
-							.map(e -> "\\" + e)
+							.map(ElementType::toString)
 							.collect(Collectors.joining());
 				}
 
@@ -394,7 +394,7 @@ public class Combat implements Renderer<BufferedImage> {
 					if (skill == null) {
 						game.getChannel().sendMessage(getLocale().get("error/invalid_skill")).queue();
 						return;
-					} else if (skill.getStats().getCost() > curr.getAp()) {
+					} else if (skill.getCost(curr) > curr.getAp()) {
 						game.getChannel().sendMessage(getLocale().get("error/not_enough_ap")).queue();
 						return;
 					} else if (skill.getRemainingCooldown() > 0) {
@@ -596,7 +596,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private List<Skill> collectCpuSkills(Actor<?> source, AtomicReference<Skill> force) {
 		List<Skill> skills = new ArrayList<>();
 		for (Skill s : Utils.iterate(source.getAllSkills())) {
-			if (s.getStats().getCost() > source.getAp() || s.getRemainingCooldown() > 0) continue;
+			if (s.getCost(source) > source.getAp() || s.getRemainingCooldown() > 0) continue;
 
 			switch (s.canCpuUse(source, null)) {
 				case ANY -> skills.add(s);
@@ -647,7 +647,7 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 			}
 
-			String cost = " " + StringUtils.repeat('◈', s.getStats().getCost());
+			String cost = " " + StringUtils.repeat('◈', s.getCost(act));
 			String desc = s.getDescription(getLocale(), act).replace("*", "").lines()
 					.filter(l -> !l.startsWith("-#"))
 					.collect(Collectors.joining("\n"));
@@ -727,23 +727,28 @@ public class Combat implements Renderer<BufferedImage> {
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
 		try {
 			if (skill.isLocked()) return;
-			boolean spell = skill.getStats().isSpell();
 			boolean isCurrent = source == getCurrent();
 
 			AtomicReference<Actor<?>> tgt = new AtomicReference<>(target);
-			trigger(spell ? Trigger.ON_SPELL_TARGET : Trigger.ON_ATTACK_TARGET, source, tgt, skill);
-			target = tgt.get();
+			switch (skill.getStats().getType()) {
+				case ATTACK -> trigger(Trigger.ON_ATTACK_TARGET, source, tgt, skill);
+				case SPELL -> trigger(Trigger.ON_SPELL_TARGET, source, tgt, skill);
+			}
 
+			target = tgt.get();
 			int lastHistor = history.size();
 			boolean wasToggle = skill.getToggledEffect() != null;
-			trigger(spell ? Trigger.ON_SPELL : Trigger.ON_ATTACK, source, target, skill);
+			switch (skill.getStats().getType()) {
+				case ATTACK -> trigger(Trigger.ON_ATTACK, source, tgt, skill);
+				case SPELL -> trigger(Trigger.ON_SPELL, source, tgt, skill);
+			}
 
 			if (skill.execute(game, source, target)) {
 				if (isCurrent) {
-					source.consumeAp(skill.getStats().getCost());
+					source.consumeAp(skill.getCost(source));
 				}
 
-				String type = skill.getId().equals("DEFAULT_ATTACK") ? "str/actor_combat" : "str/used";
+				String type = skill.getId().equals("GENERIC_ATTACK") ? "str/actor_combat" : "str/used";
 				String suffix = target.equals(source) ? "_self" : "";
 
 				String action = type + suffix;

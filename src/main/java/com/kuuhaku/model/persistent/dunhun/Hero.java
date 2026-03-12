@@ -27,6 +27,7 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
@@ -348,13 +349,17 @@ public class Hero extends Actor<Hero> {
 				ORDER BY g.id DESC
 				""", getId());
 
-		DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", gear);
-		DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", gear);
+		if (!gear.isEmpty()) {
+			DAO.applyNative(GearAffix.class, "DELETE FROM gear_affix WHERE gear_id IN ?1", gear);
+			DAO.applyNative(Gear.class, "DELETE FROM gear WHERE id IN ?1", gear);
+		}
 
-		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run_modifier WHERE hero_id = ?1", getId());
-		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run_outcome WHERE hero_id = ?1", getId());
-		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run_player WHERE hero_id = ?1", getId());
-		DAO.applyNative(Gear.class, "DELETE FROM dungeon_run WHERE hero_id = ?1", getId());
+		DAO.applyNative(Hero.class, "DELETE FROM hero_dungeon_completion WHERE hero_id = ?1", getId());
+		DAO.applyNative(DungeonRun.class, "DELETE FROM dungeon_run_modifier WHERE hero_id = ?1", getId());
+		DAO.applyNative(DungeonRun.class, "DELETE FROM dungeon_run_outcome WHERE hero_id = ?1", getId());
+		DAO.applyNative(DungeonRun.class, "DELETE FROM dungeon_run_player WHERE hero_id = ?1", getId());
+		DAO.applyNative(DungeonRun.class, "DELETE FROM dungeon_run WHERE hero_id = ?1", getId());
+		DAO.applyNative(AccountSettings.class, "UPDATE account_settings SET current_hero = NULL WHERE current_hero = ?1", getId());
 	}
 
 	@Override

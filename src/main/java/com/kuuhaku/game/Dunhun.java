@@ -132,7 +132,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 					new DungeonRun(leader, dungeon), 1,
 					(_, map) -> map.newRoot()
 			);
-			this.map.generate(this);
 		} else {
 			DungeonRun run = DAO.find(DungeonRun.class, new DungeonRunId(leader.getId(), dungeon.getId()));
 			if (run == null) {
@@ -155,17 +154,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 			}
 
 			this.map = dungeon.init(this, run);
-			this.map.generate(this);
-
-			Floor fl = this.map.getFloor();
-			if (run.getSublevel() >= fl.size()) {
-				run.setSublevel(fl.size() - 1);
-			}
-
-			Sublevel sub = fl.getSublevel(run.getSublevel());
-			if (run.getPath() >= sub.size()) {
-				run.setPath(sub.size() - 1);
-			}
 		}
 
 		setTimeout(this::onTimeout, 5, TimeUnit.MINUTES);
@@ -178,6 +166,23 @@ public class Dunhun extends GameInstance<NullPhase> {
 						&& combat.get().getCurrent() instanceof Hero h
 						&& h.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
+	}
+
+	@Override
+	protected void begin() {
+		map.generate(this);
+		if (!duel) {
+			DungeonRun run = map.getRun();
+			Floor fl = map.getFloor();
+			if (run.getSublevel() >= fl.size()) {
+				run.setSublevel(fl.size() - 1);
+			}
+
+			Sublevel sub = fl.getSublevel(run.getSublevel());
+			if (run.getPath() >= sub.size()) {
+				run.setPath(sub.size() - 1);
+			}
+		}
 	}
 
 	@Override
@@ -206,6 +211,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				DungeonRun run = map.getRun();
+				Node currNode = map.getPlayerNode();
+
+				boolean deadEnd = currNode.getBlocked().containsAll(currNode.getChildren());
+				if (deadEnd) {
+					run.delete();
+					finish("str/dungeon_lost", getHeroNames());
+					return false;
+				}
+
 				String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
@@ -245,7 +259,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 						})
 						.setCancellable(false);
 
-				Node currNode = map.getPlayerNode();
 				List<String> order = List.copyOf(ICONS.keySet());
 				List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
 						.filter(n -> !currNode.getBlocked().contains(n))
@@ -322,7 +335,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									.toList();
 
 							if (!heroes.isEmpty()) {
-								runEvent(nextNode, Event.find(Event.class, "HERO_CONFLICT"));
+								runEvent(nextNode, DAO.find(Event.class, "HERO_CONFLICT"));
 							} else {
 								runEvent(nextNode, Event.getRandom(nextNode));
 							}
@@ -333,11 +346,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						run.setVisited(nextNode);
 					}
 					case REST -> {
-						runEvent(nextNode, Event.find(Event.class, "REST"));
+						runEvent(nextNode, DAO.find(Event.class, "REST"));
 						run.setVisited(nextNode);
 					}
 					case RETURN -> {
-						runEvent(nextNode, Event.find(Event.class, "RETURN"));
+						runEvent(nextNode, DAO.find(Event.class, "RETURN"));
 						if (map.getPlayerNode() == nextNode) {
 							run.setNode(currNode);
 						}
@@ -613,10 +626,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				));
 			}
 
-			try {
-				requestChoice(eb, null, helper, choices);
-			} catch (Exception ignore) {
-			}
+			requestChoice(eb, null, helper, choices);
 		}
 
 		if (combat.get() != null) {
@@ -624,7 +634,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 	}
 
-	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) throws Exception {
+	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) {
 		lock = new CompletableFuture<>();
 
 		helper.clearActions();
@@ -884,7 +894,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			List<String> skills = a.getAllSkills()
 					.map(s -> {
 						sk.clear();
-						sk.appendNewLine("- " + s.getName(getLocale()) + " " + StringUtils.repeat('◈', s.getStats().getCost()));
+						sk.appendNewLine("- " + s.getName(getLocale()) + " " + StringUtils.repeat('◈', s.getCost(a)));
 
 						for (String line : Utils.iterate(s.getDescription(getLocale(), a).lines())) {
 							if (line.startsWith("-#")) {
@@ -912,7 +922,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 			Set<ElementType> resists = a.getResists();
 			if (!resists.isEmpty()) {
 				name += " " + resists.stream()
-						.map(e -> "\\" + e)
+						.map(ElementType::toString)
 						.collect(Collectors.joining());
 			}
 

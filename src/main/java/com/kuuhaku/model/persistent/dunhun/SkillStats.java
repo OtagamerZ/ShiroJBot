@@ -23,15 +23,14 @@ import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.context.SkillContext;
 import com.kuuhaku.model.enums.dunhun.CpuRule;
+import com.kuuhaku.model.enums.dunhun.SkillType;
 import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.records.dunhun.SkillValue;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.intellij.lang.annotations.Language;
@@ -55,8 +54,9 @@ public class SkillStats extends UsableStats {
 	@Column(name = "critical", nullable = false)
 	private double critical;
 
-	@Column(name = "spell", nullable = false)
-	private boolean spell;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private SkillType type;
 
 	@Language("Groovy")
 	@Column(name = "cpu_rule", columnDefinition = "TEXT")
@@ -77,12 +77,12 @@ public class SkillStats extends UsableStats {
 	public SkillStats() {
 	}
 
-	public SkillStats(int cost, int cooldown, double efficiency, double critical, boolean spell) {
+	public SkillStats(int cost, int cooldown, double efficiency, double critical, SkillType type) {
 		this.cost = cost;
 		this.cooldown = cooldown;
 		this.efficiency = efficiency;
 		this.critical = critical;
-		this.spell = spell;
+		this.type = type;
 	}
 
 	public int getReservation() {
@@ -102,6 +102,10 @@ public class SkillStats extends UsableStats {
 	}
 
 	public double getEfficiency(int level) {
+		if (type == SkillType.SPELL) {
+			return efficiency;
+		}
+
 		return efficiency * (1 + Calc.clamp(level, 0, 100) * 0.003);
 	}
 
@@ -109,8 +113,8 @@ public class SkillStats extends UsableStats {
 		return critical;
 	}
 
-	public boolean isSpell() {
-		return spell;
+	public SkillType getType() {
+		return type;
 	}
 
 	public CpuRule canCpuUse(Usable usable, Actor<?> source, Actor<?> target) {

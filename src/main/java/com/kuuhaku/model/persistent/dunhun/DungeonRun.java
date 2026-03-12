@@ -115,6 +115,10 @@ public class DungeonRun extends DAO<DungeonRun> {
 		return seed;
 	}
 
+	public void setSeed(int seed) {
+		this.seed = seed;
+	}
+
 	public int getFloor() {
 		return floor;
 	}

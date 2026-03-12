@@ -128,6 +128,8 @@ public class Node {
 
 	public void addParents(Collection<Node> nodes) {
 		for (Node node : nodes) {
+			if (equals(node) || children.contains(node)) continue;
+
 			parents.add(node);
 			node.children.add(this);
 		}
@@ -143,6 +145,8 @@ public class Node {
 
 	public void addChildren(Collection<Node> nodes) {
 		for (Node node : nodes) {
+			if (equals(node) || parents.contains(node)) continue;
+
 			children.add(node);
 			node.parents.add(this);
 		}
@@ -157,17 +161,19 @@ public class Node {
 	}
 
 	public int travelDistance(Node node) {
-		return travelDistance(node, this);
+		Set<Node> visited = new HashSet<>();
+		visited.add(this);
+
+		return travelDistance(node, visited);
 	}
 
-	private int travelDistance(Node node, Node start) {
+	private int travelDistance(Node node, Set<Node> visited) {
 		if (node == null || equals(node)) return 0;
 
-		for (Node parent : parents) {
-			if (parent.equals(start)) break;
-			else if (parent.blocked.contains(this)) continue;
+		for (Node child : children) {
+			if (!visited.add(child) || blocked.contains(child)) continue;
 
-			int dist = parent.travelDistance(node, start) + 1;
+			int dist = child.travelDistance(node, visited) + 1;
 			if (dist > 0) return dist;
 		}
 

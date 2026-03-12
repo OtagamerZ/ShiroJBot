@@ -30,20 +30,16 @@ public record SkillValue(int min, int max, boolean withAdded) {
 
 	public int valueFor(Skill skill, Actor<?> source) {
 		int lvl = source.getLevel();
-		double mult = 1;
+		double mult = !skill.isAttack() ? source.getSenshi().getPower() : 1;
 		double eff = skill.getStats().getEfficiency(lvl);
-		if (skill.getStats().isSpell()) {
-			mult = source.getSenshi().getPower();
-			eff = skill.getStats().getEfficiency(0);
-		}
 
 		int added = 0;
 		if (withAdded && eff > 0) {
-			if (skill.getStats().isSpell()) {
-				added = (int) source.getModifiers().getSpellDamage();
-			} else {
-				added = source.getSenshi().getDmg();
-			}
+			added = (int) switch (skill.getStats().getType()) {
+				case ATTACK -> source.getSenshi().getDmg();
+				case SPELL, BUFF -> source.getModifiers().getSpellDamage();
+				default -> 0;
+			};
 
 			if (source instanceof MonsterBase<?> m) {
 				added += (int) (m.getKillXp() * MonsterBase.STAT_TABLE[m.getLevel() - 1]);

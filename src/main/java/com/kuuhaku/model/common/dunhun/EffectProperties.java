@@ -27,7 +27,9 @@ public class EffectProperties<T> {
 	private ValueMod magicFind;
 	private ValueMod healing;
 	private ValueMod damageTaken;
+	private ValueMod degenResist;
 	private ValueMod maxSummons;
+	private ValueMod skillCost;
 	private EffectBase effect;
 	private ElementType resist;
 	private Skill skill;
@@ -162,12 +164,28 @@ public class EffectProperties<T> {
 		this.damageTaken = damageTaken;
 	}
 
+	public ValueMod getDegenResist() {
+		return degenResist;
+	}
+
+	public void setDegenResist(ValueMod degenResist) {
+		this.degenResist = degenResist;
+	}
+
 	public ValueMod getMaxSummons() {
 		return maxSummons;
 	}
 
 	public void setMaxSummons(ValueMod maxSummons) {
 		this.maxSummons = maxSummons;
+	}
+
+	public ValueMod getSkillCost() {
+		return skillCost;
+	}
+
+	public void setSkillCost(ValueMod skillCost) {
+		this.skillCost = skillCost;
 	}
 
 	public EffectBase getEffect() {

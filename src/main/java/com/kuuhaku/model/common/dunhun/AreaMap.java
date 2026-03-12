@@ -7,7 +7,6 @@ import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.DungeonRunOutcome;
 import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -20,7 +19,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 public class AreaMap {
 	public static final int RENDER_FLOORS = 1;
@@ -38,15 +36,15 @@ public class AreaMap {
 
 	private Pair<Integer, Node> pnCache;
 
+	public AreaMap(DungeonRun run) {
+		this(run, LEVELS_PER_FLOOR, AreaMap::generateRandom);
+		this.renderFloor.set(run.getFloor());
+	}
+
 	public AreaMap(DungeonRun run, int areasPerFloor, BiConsumer<Dunhun, AreaMap> generator) {
 		this.generator = generator;
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
-		this.renderFloor.set(run.getFloor());
-	}
-
-	public AreaMap(DungeonRun run) {
-		this(run, LEVELS_PER_FLOOR, AreaMap::generateRandom);
 		this.renderFloor.set(run.getFloor());
 	}
 
@@ -188,7 +186,6 @@ public class AreaMap {
 
 		Random bgRng = new Random(floors.hashCode());
 		Node playerNode = getPlayerNode();
-		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 
 		{
 			int y = -sliceHeight * renderSublevel.get();
@@ -269,11 +266,13 @@ public class AreaMap {
 				for (Node node : nds) {
 					if (i == 1) node.calcColor();
 
-					int distance = node.travelDistance(playerNode);
+					int distance = playerNode.travelDistance(node);
+					int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 					boolean outsideView = visionLimit > 0
 							&& !run.getVisitedNodes().contains(node.getId())
 							&& (distance > visionLimit || distance == -1);
-					boolean occluded = node.isOccluded(width, height) || outsideView;
+
+					boolean occluded = playerNode != node && (node.isOccluded(width, height) || outsideView);
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						node.setWillBeRendered(false);
 						continue;
@@ -325,7 +324,7 @@ public class AreaMap {
 						}
 						case 1 -> {
 							for (Node parent : node.getParents()) {
-								if (!parent.isPathRendered() && parent.isOccluded(width, height)) {
+								if (!parent.isPathRendered() && (!parent.equals(playerNode) && parent.isOccluded(width, height))) {
 									parent.renderPath(g2d, distance > 0);
 								}
 							}
@@ -476,10 +475,6 @@ public class AreaMap {
 		}
 
 		m.getFloor().generateModifiers(game);
-		for (RunModifier mod : game.getModifiers()) {
-			mod.load(game);
-		}
-
 		for (DungeonRunOutcome out : m.getRun().getEventOutcomes()) {
 			if (out.isGlobal()) {
 				out.apply(game, null);

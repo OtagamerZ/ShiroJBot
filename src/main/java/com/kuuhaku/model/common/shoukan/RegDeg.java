@@ -18,7 +18,7 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.model.common.BondedList;
+import com.kuuhaku.model.common.ListenableList;
 import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.util.Utils;
@@ -30,16 +30,21 @@ import java.util.List;
 public class RegDeg {
 	@Nullable
 	private transient final Hand parent;
-	private final BondedList<ValueOverTime> values = BondedList.withBind((v, it) -> {
-		v.setValue(reduce(v.getClass(), v.getValue()));
-		return true;
-	});
+	private final ListenableList<ValueOverTime> values = new ListenableList<>(
+			new ListenableList.ListEvent<>() {
+				@Override
+				public boolean beforeAdd(ValueOverTime v) {
+					v.setValue(reduce(v.getClass(), v.getValue()));
+					return true;
+				}
+			}
+	);
 
 	public RegDeg(@Nullable Hand parent) {
 		this.parent = parent;
 	}
 
-	public BondedList<ValueOverTime> getValues() {
+	public ListenableList<ValueOverTime> getValues() {
 		return values;
 	}
 

@@ -3,16 +3,11 @@ package com.kuuhaku.model.common.dunhun;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.interfaces.dunhun.Usable;
+import com.kuuhaku.model.common.ListenableList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.shoukan.CardExtra;
-import com.kuuhaku.model.common.shoukan.FlatMod;
-import com.kuuhaku.model.common.shoukan.MultMod;
-import com.kuuhaku.model.common.shoukan.RegDeg;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.GearSlot;
-import com.kuuhaku.model.enums.dunhun.NodeType;
-import com.kuuhaku.model.enums.dunhun.RarityClass;
-import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.dunhun.*;
 import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Race;
@@ -29,10 +24,7 @@ import com.kuuhaku.model.records.dunhun.RaceValues;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Tuple2;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.Transient;
+import jakarta.persistence.*;
 import org.apache.commons.collections4.SetUtils;
 
 import java.awt.image.BufferedImage;
@@ -151,7 +143,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (usable != null) {
 			missFac *= 1 - s.getDodge() / 200d;
 
-			if (usable instanceof Skill sk && sk.getStats().isSpell()) {
+			if (usable instanceof Skill sk && sk.isSpell()) {
 				missFac *= 1 - s.getParry() / 200d;
 			}
 		}
@@ -231,7 +223,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Tuple2<Integer, Boolean> heal(Actor<?> source, Usable usable, int value) {
 		double crit = 0;
-		if (usable instanceof Skill s && s.getStats().isSpell()) {
+		if (usable instanceof Skill s && s.isSpell()) {
 			crit = source.getModifiers().getCritical(s.getStats().getCritical());
 		}
 
@@ -244,7 +236,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public Tuple2<Integer, Boolean> damage(Actor<?> source, ElementType element, int value) {
 		Skill skill = Skill.ELEMENTAL_SKILLS.computeIfAbsent(element, _ -> {
-			Skill s = new Skill(0, 0, 1, 0, true);
+			Skill s = new Skill(0, 0, 1, 0, SkillType.NONE);
 			s.getStats().getElements().add(element);
 			return s;
 		});
@@ -256,11 +248,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		double crit = 0;
 		AtomicInteger val = new AtomicInteger(value);
 		if (usable instanceof Skill s && source != null) {
-			if (s.getStats().isSpell()) {
-				crit = source.getModifiers().getCritical(s.getStats().getCritical());
-			} else {
-				crit = source.getCritical();
-			}
+			crit = switch (s.getStats().getType()) {
+				case ATTACK -> source.getCritical();
+				case SPELL -> source.getModifiers().getCritical(s.getStats().getCritical());
+				default -> 0;
+			};
 
 			Set<ElementType> elements = s.getStats().getElements();
 			Set<ElementType> resists = getResists();
@@ -275,7 +267,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public Tuple2<Integer, Boolean> modHp(Actor<?> source, Usable usable, int value, double critChance) {
-		boolean isAttack = usable instanceof Skill s && !s.getStats().isSpell();
+		boolean isAttack = usable instanceof Skill s && s.isAttack();
 		boolean crit = Calc.chance(critChance);
 		if (crit) value *= 2;
 
@@ -294,17 +286,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							String outcome = null;
 							int histIdx = cbt.getHistory().size();
 							if (srcSen.isBlinded(true) && Calc.chance(50)) {
-								cbt.trigger(Trigger.ON_MISS, source, this, usable);
+								cbt.trigger(Trigger.ON_MISS, source, this, usable, val);
 
 								outcome = cbt.getLocale().get("str/actor_miss", source.getName());
 							} else if (!srcSen.hasFlag(Flag.TRUE_STRIKE, true) && !tgtSen.isSleeping() && !tgtSen.isStasis()) {
 								if (Calc.chance(tgtSen.getDodge())) {
-									cbt.trigger(Trigger.ON_MISS, source, this, usable);
-									cbt.trigger(Trigger.ON_DODGE, this, source, usable);
+									cbt.trigger(Trigger.ON_MISS, source, this, usable, val);
+									cbt.trigger(Trigger.ON_DODGE, this, source, usable, val);
 
 									outcome = cbt.getLocale().get("str/actor_dodge", this.getName());
 								} else if (isAttack && Calc.chance(tgtSen.getParry())) {
-									cbt.trigger(Trigger.ON_PARRY, this, source, usable);
+									cbt.trigger(Trigger.ON_PARRY, this, source, usable, val);
 
 									outcome = cbt.getLocale().get("str/actor_parry", this.getName());
 									cbt.attack(this, source);
@@ -317,16 +309,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							}
 						}
 
-						cbt.trigger(Trigger.ON_HIT, source, this, usable);
+						cbt.trigger(Trigger.ON_HIT, source, this, usable, val);
 						if (crit) {
-							cbt.trigger(Trigger.ON_CRITICAL, source, this, usable);
+							cbt.trigger(Trigger.ON_CRITICAL, source, this, usable, val);
 						}
 					}
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
 					if (!equals(source) && hp + val.get() <= 0) {
-						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable);
-						cbt.trigger(Trigger.ON_KILL, source, this, usable);
+						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable, val);
+						cbt.trigger(Trigger.ON_KILL, source, this, usable, val);
 
 						Actor<?> killer = source;
 						if (source.isMinion()) {
@@ -369,7 +361,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 						}
 					}
 				} else if (hp + val.get() > 0) {
-					cbt.trigger(Trigger.ON_REVIVE, this, this, usable);
+					cbt.trigger(Trigger.ON_REVIVE, this, this, usable, val);
 					getSenshi().setAvailable(true);
 				}
 			}
@@ -379,15 +371,28 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				cbt.getHistory().add("**" + locale.get("str/critical_hit") + "**");
 			}
 
-			if (val.get() != 0) {
-				String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));
+			String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));;
+			if (usable instanceof Skill s) {
+				Set<ElementType> elems = s.getStats().getElements();
+				line += " " + elems.stream()
+						.map(ElementType::toString)
+						.collect(Collectors.joining());
 
-				if (usable instanceof Skill s) {
-					line += " " + s.getStats().getElements().stream()
-							.map(e -> "\\" + e)
-							.collect(Collectors.joining());
+				Set<ElementType> resists = getResists();
+				if (!resists.isEmpty()) {
+					if (elems.stream().anyMatch(resists::contains)) {
+						if (val.get() == 0) {
+							line += " (" + locale.get("str/actor_immune") + ")";
+						} else {
+							line += " (" + locale.get("str/actor_resist") + ")";
+						}
+					}
 				}
+			} else if (val.get() == 0) {
+				line = "";
+			}
 
+			if (!line.isEmpty()) {
 				cbt.getHistory().add(line);
 			}
 		}
@@ -463,14 +468,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void applyRegDeg() {
-		AtomicInteger val = new AtomicInteger(applyMitigation(getRegDeg().next()));
-
-		Combat cbt = binding.getGame().getCombat();
-		if (cbt != null) {
-			cbt.trigger(val.get() < 0 ? Trigger.ON_DEGEN : Trigger.ON_REGEN, this, this, null, val);
-		}
-
-		setHp(getHp() + val.get());
+		setHp(getHp() + applyMitigation(getRegDeg().next()));
 	}
 
 	public boolean isMinion() {
@@ -804,6 +802,29 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		binding.unbind();
+	}
+
+	@PostLoad
+	private void onPostLoad() {
+		regDeg.getValues().addListener(new ListenableList.ListEvent<>() {
+			@Override
+			public boolean beforeAdd(ValueOverTime v) {
+				AtomicInteger val = new AtomicInteger(v.getValue());
+				if (v instanceof Degen) {
+					v.setValue(Math.max(0, (int) modifiers.getDegenResist(val.get())));
+				}
+
+				if (val.get() > 0) {
+					Combat cbt = binding.getGame().getCombat();
+					if (cbt != null) {
+						cbt.trigger(v instanceof Degen ? Trigger.ON_DEGEN : Trigger.ON_REGEN, Actor.this, Actor.this, null, val);
+					}
+				}
+
+				v.setValue(val.get());
+				return true;
+			}
+		});
 	}
 
 	@Override
