@@ -94,25 +94,18 @@ public class Floor {
 				}
 			}
 
-			List<List<Node>> parts = new ArrayList<>(restSpots);
-			for (int i = 0, j = 0; i < restSpots; i++) {
-				List<Node> group = new ArrayList<>();
-				for (; j < nodes.size(); j++) {
-					Node n = nodes.get(j);
-					if (n.getSublevel().getNumber() / restSpots > i) {
-						break;
-					}
+			int minDistance = (int) Math.ceil(sublevels.length / (double) restSpots);
+			List<Node> rests = new ArrayList<>(restSpots);
+			for (int i = 0; i < restSpots; i++) {
+				List<Node> valid = nodes.stream()
+						.filter(n -> rests.stream().noneMatch(r -> n.travelDistance(r) < minDistance))
+						.toList();
 
-					group.add(n);
-				}
+				if (valid.isEmpty()) break;
 
-				parts.add(group);
-			}
-
-			for (List<Node> group : parts) {
-				if (group.isEmpty()) continue;
-				Node n = Utils.getRandomEntry(rng, group);
-				n.setType(NodeType.REST);
+				Node chosen = Utils.getRandomEntry(rng, valid);
+				chosen.setType(NodeType.REST);
+				rests.add(chosen);
 			}
 
 			return null;
