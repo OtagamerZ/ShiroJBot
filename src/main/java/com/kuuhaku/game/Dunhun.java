@@ -324,7 +324,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 									.toList();
 
 							if (!heroes.isEmpty()) {
-								runEvent(nextNode, Event.find(Event.class, "HERO_CONFLICT"));
+								runEvent(nextNode, DAO.find(Event.class, "HERO_CONFLICT"));
 							} else {
 								runEvent(nextNode, Event.getRandom(nextNode));
 							}
@@ -335,11 +335,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 						run.setVisited(nextNode);
 					}
 					case REST -> {
-						runEvent(nextNode, Event.find(Event.class, "REST"));
+						runEvent(nextNode, DAO.find(Event.class, "REST"));
 						run.setVisited(nextNode);
 					}
 					case RETURN -> {
-						runEvent(nextNode, Event.find(Event.class, "RETURN"));
+						runEvent(nextNode, DAO.find(Event.class, "RETURN"));
 						if (map.getPlayerNode() == nextNode) {
 							run.setNode(currNode);
 						}
@@ -615,10 +615,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				));
 			}
 
-			try {
-				requestChoice(eb, null, helper, choices);
-			} catch (Exception ignore) {
-			}
+			requestChoice(eb, null, helper, choices);
 		}
 
 		if (combat.get() != null) {
@@ -626,7 +623,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 	}
 
-	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) throws Exception {
+	public void requestChoice(EmbedBuilder eb, BufferedImage img, ButtonizeHelper helper, Set<Choice> choices) {
 		lock = new CompletableFuture<>();
 
 		helper.clearActions();
