@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.game.Dunhun;
+import com.kuuhaku.model.common.ListenableList;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
@@ -18,7 +19,17 @@ public class Floor {
 	private final Random rng;
 	private final Sublevel[] sublevels;
 	private final Set<Node> eventNodes = new HashSet<>();
-	private final Set<RunModifier> modifiers = new LinkedHashSet<>();
+	private final ListenableList<RunModifier> modifiers = new ListenableList<>(
+			new ListenableList.ListEvent<>() {
+				@Override
+				public boolean beforeAdd(RunModifier mod) {
+					if (modifiers.contains(mod)) return false;
+
+					mod.load(map.getRun().getGame());
+					return true;
+				}
+			}
+	);
 	private int visionLimit;
 	private boolean hiddenNodes;
 	private boolean unsafeArea;
@@ -55,7 +66,7 @@ public class Floor {
 		return eventNodes;
 	}
 
-	public Set<RunModifier> getModifiers() {
+	public List<RunModifier> getModifiers() {
 		return modifiers;
 	}
 

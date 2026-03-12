@@ -7,7 +7,6 @@ import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.DungeonRunOutcome;
 import com.kuuhaku.model.persistent.dunhun.Hero;
-import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -273,8 +272,6 @@ public class AreaMap {
 							&& !run.getVisitedNodes().contains(node.getId())
 							&& (distance > visionLimit || distance == -1);
 
-					System.out.println("(" + node.getId() + ") " + distance + " <> " + visionLimit + " -> " + outsideView);
-
 					boolean occluded = playerNode != node && (node.isOccluded(width, height) || outsideView);
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						node.setWillBeRendered(false);
@@ -478,10 +475,6 @@ public class AreaMap {
 		}
 
 		m.getFloor().generateModifiers(game);
-		for (RunModifier mod : game.getModifiers()) {
-			mod.load(game);
-		}
-
 		for (DungeonRunOutcome out : m.getRun().getEventOutcomes()) {
 			if (out.isGlobal()) {
 				out.apply(game, null);
