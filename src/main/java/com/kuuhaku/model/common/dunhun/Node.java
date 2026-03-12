@@ -170,11 +170,11 @@ public class Node {
 	private int travelDistance(Node node, Set<Node> visited) {
 		if (node == null || equals(node)) return 0;
 
-		for (Node parent : parents) {
-			if (!visited.add(parent) || parent.blocked.contains(this)) continue;
+		for (Node child : children) {
+			if (!visited.add(child) || blocked.contains(child)) continue;
 
-			int dist = parent.travelDistance(node, visited) + 1;
-			if (dist >= 0) return dist;
+			int dist = child.travelDistance(node, visited) + 1;
+			if (dist > 0) return dist;
 		}
 
 		return -1;

@@ -268,7 +268,7 @@ public class AreaMap {
 				for (Node node : nds) {
 					if (i == 1) node.calcColor();
 
-					int distance = node.travelDistance(playerNode);
+					int distance = playerNode.travelDistance(node);
 					boolean outsideView = visionLimit > 0
 							&& !run.getVisitedNodes().contains(node.getId())
 							&& (distance > visionLimit || distance == -1);
