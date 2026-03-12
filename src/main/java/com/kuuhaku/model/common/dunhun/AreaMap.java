@@ -272,7 +272,9 @@ public class AreaMap {
 					boolean outsideView = visionLimit > 0
 							&& !run.getVisitedNodes().contains(node.getId())
 							&& (distance > visionLimit || distance == -1);
-					boolean occluded = !node.equals(playerNode) && (node.isOccluded(width, height) || outsideView);
+
+					boolean occluded = playerNode != node && (node.isOccluded(width, height) || outsideView);
+					System.out.println("(" + node.getId() + ") " + distance + " -> " + outsideView + " " + occluded);
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						node.setWillBeRendered(false);
 						continue;
