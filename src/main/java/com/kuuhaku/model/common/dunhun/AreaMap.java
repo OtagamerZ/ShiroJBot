@@ -35,7 +35,6 @@ public class AreaMap {
 	private final AtomicInteger renderFloor = new AtomicInteger(0);
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 
-	private int seed;
 	private Pair<Integer, Node> pnCache;
 
 	public AreaMap(DungeonRun run) {
@@ -48,17 +47,10 @@ public class AreaMap {
 		this.areasPerFloor = areasPerFloor;
 		this.run = run;
 		this.renderFloor.set(run.getFloor());
-		this.seed = run.getSeed();
 	}
 
 	public int getSeed() {
-		return seed;
-	}
-
-	public void setSeed(int seed) {
-		this.seed = seed;
-		floors.clear();
-		pnCache = null;
+		return run.getSeed();
 	}
 
 	public int getAreasPerFloor() {
