@@ -479,7 +479,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		if (dungeon.isHardcore()) {
 			try {
-				if (isRanked()) {
+				if (isRanked() && dungeon.isInfinite()) {
 					Hero h = hs.iterator().next();
 					int rank = DAO.queryNative(Integer.class,
 							"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
