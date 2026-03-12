@@ -187,7 +187,6 @@ public class AreaMap {
 
 		Random bgRng = new Random(floors.hashCode());
 		Node playerNode = getPlayerNode();
-		int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 
 		{
 			int y = -sliceHeight * renderSublevel.get();
@@ -269,12 +268,14 @@ public class AreaMap {
 					if (i == 1) node.calcColor();
 
 					int distance = playerNode.travelDistance(node);
+					int visionLimit = playerNode.getSublevel().getFloor().getVisionLimit();
 					boolean outsideView = visionLimit > 0
 							&& !run.getVisitedNodes().contains(node.getId())
 							&& (distance > visionLimit || distance == -1);
 
+					System.out.println("(" + node.getId() + ") " + distance + " <> " + visionLimit + " -> " + outsideView);
+
 					boolean occluded = playerNode != node && (node.isOccluded(width, height) || outsideView);
-					System.out.println("(" + node.getId() + ") " + distance + " -> " + outsideView + " " + occluded);
 					if (node.getRenderPos().equals(ZERO) || occluded) {
 						node.setWillBeRendered(false);
 						continue;
