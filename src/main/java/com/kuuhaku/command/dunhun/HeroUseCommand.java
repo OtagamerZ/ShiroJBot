@@ -63,7 +63,7 @@ public class HeroUseCommand implements Executable {
 					hero -> new FieldMimic(
 							(hero.isCurrent() ? "✅ " : "") + "`" + hero.getId() + "` " + hero.getName(),
 							locale.get("str/level", hero.getLevel()) + (
-									hero.isRetired() ? "**" + locale.get("str/retired") + "**" : ""
+									hero.isRetired() ? " **" + locale.get("str/retired") + "**" : ""
 							)
 					).toString()
 			);
