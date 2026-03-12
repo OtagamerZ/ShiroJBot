@@ -371,15 +371,28 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				cbt.getHistory().add("**" + locale.get("str/critical_hit") + "**");
 			}
 
-			if (val.get() != 0) {
-				String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));
+			String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));;
+			if (usable instanceof Skill s) {
+				Set<ElementType> elems = s.getStats().getElements();
+				line += " " + elems.stream()
+						.map(ElementType::toString)
+						.collect(Collectors.joining());
 
-				if (usable instanceof Skill s) {
-					line += " " + s.getStats().getElements().stream()
-							.map(ElementType::toString)
-							.collect(Collectors.joining());
+				Set<ElementType> resists = getResists();
+				if (!resists.isEmpty()) {
+					if (elems.stream().anyMatch(resists::contains)) {
+						if (val.get() == 0) {
+							line += " (" + locale.get("str/actor_immune") + ")";
+						} else {
+							line += " (" + locale.get("str/actor_resist") + ")";
+						}
+					}
 				}
+			} else if (val.get() == 0) {
+				line = "";
+			}
 
+			if (!line.isEmpty()) {
 				cbt.getHistory().add(line);
 			}
 		}
