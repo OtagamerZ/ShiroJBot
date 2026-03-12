@@ -200,6 +200,15 @@ public class Dunhun extends GameInstance<NullPhase> {
 				}
 
 				DungeonRun run = map.getRun();
+				Node currNode = map.getPlayerNode();
+
+				boolean deadEnd = currNode.getBlocked().containsAll(currNode.getChildren());
+				if (deadEnd) {
+					run.delete();
+					finish("str/dungeon_lost", getHeroNames());
+					return false;
+				}
+
 				String area = getLocale().get("str/dungeon_area", run.getFloor(), run.getSublevel() + 1);
 				EmbedBuilder eb = new ColorlessEmbedBuilder()
 						.setTitle(dungeon.getInfo(getLocale()).getName() + " (" + area + ")")
@@ -239,7 +248,6 @@ public class Dunhun extends GameInstance<NullPhase> {
 						})
 						.setCancellable(false);
 
-				Node currNode = map.getPlayerNode();
 				List<String> order = List.copyOf(ICONS.keySet());
 				List<Map.Entry<String, Node>> children = currNode.getChildren().stream()
 						.filter(n -> !currNode.getBlocked().contains(n))
