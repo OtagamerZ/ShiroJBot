@@ -75,11 +75,11 @@ public class HeroUseCommand implements Executable {
 		List<Hero> heroes = acc.getHeroes(locale);
 		String hero = args.getString("hero");
 		for (Hero h : heroes) {
-			if (h.getName().equalsIgnoreCase(hero)) {
+			if (h.getId().equalsIgnoreCase(hero)) {
 				settings.setCurrentHero(h.getId());
 				settings.save();
 
-				event.channel().sendMessage(locale.get("success/switch", h.getName())).queue();
+				event.channel().sendMessage(locale.get("success/hero_switch", h.getName())).queue();
 				return;
 			}
 		}

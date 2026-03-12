@@ -103,7 +103,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		for (String p : players) {
-			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
+			Hero h = DAO.query(Hero.class, """
+					SELECT h
+					FROM Hero h
+					WHERE h.account.id = ?1
+					  AND h.id = h.account.settings.currentHero
+					""", p
+			);
 			if (h == null) {
 				throw new GameReport(GameReport.NO_HERO, p);
 			} else if (h.isRetired() && !isDuel()) {
