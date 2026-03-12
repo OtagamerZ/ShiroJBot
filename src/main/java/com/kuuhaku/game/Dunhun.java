@@ -577,12 +577,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public Supplier<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
 		if (combat.get() != null) return () -> true;
 
-		combat.set(new Combat(this, node));
-		initializer.accept(combat.get());
+		Combat cbt = new Combat(this, node);
+		initializer.accept(cbt);
 
-		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
+		return runCombat(node, cbt);
+	}
+
+	public Supplier<Boolean> runCombat(Node node, Combat combat) {
+		if (this.combat.get() != null) return () -> true;
+
+		this.combat.set(combat);
+		if (combat.getActors(Team.KEEPERS).isEmpty()) {
 			for (int i = 0; i < 4; i++) {
-				List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
+				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
 				if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 				Actor<?> chosen = node.generateEnemy();
@@ -597,8 +604,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		return () -> {
-			combat.get().process();
-			return combat.get().isWin();
+			combat.process();
+			return combat.isWin();
 		};
 	}
 
