@@ -27,7 +27,6 @@ public class AreaMap {
 	public static final int AVATAR_RADIUS = 50;
 	private static final Point ZERO = new Point();
 
-	private final int areasPerFloor;
 	private final BiConsumer<Dunhun, AreaMap> generator;
 	private final DungeonRun run;
 	private final TreeMap<Integer, Floor> floors = new TreeMap<>();
@@ -35,6 +34,7 @@ public class AreaMap {
 	private final AtomicInteger renderSublevel = new AtomicInteger(0);
 
 	private Pair<Integer, Node> pnCache;
+	private int areasPerFloor;
 
 	public AreaMap(DungeonRun run) {
 		this(run, LEVELS_PER_FLOOR, AreaMap::generateRandom);
@@ -54,6 +54,14 @@ public class AreaMap {
 
 	public int getAreasPerFloor() {
 		return areasPerFloor;
+	}
+
+	public void setAreasPerFloor(int areas) {
+		if (areas != this.areasPerFloor) {
+			floors.clear();
+		}
+
+		this.areasPerFloor = areas;
 	}
 
 	public List<Floor> getFloors() {

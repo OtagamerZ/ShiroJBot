@@ -80,7 +80,7 @@ public class DeckUseCommand implements Executable {
 			settings.setCurrentDeck(d.getId());
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/switch", d.getName())).queue();
+			event.channel().sendMessage(locale.get("success/deck_switch", d.getName())).queue();
 			return;
 		}
 
@@ -90,7 +90,7 @@ public class DeckUseCommand implements Executable {
 				settings.setCurrentDeck(deck.getId());
 				settings.save();
 
-				event.channel().sendMessage(locale.get("success/switch", deck.getName())).queue();
+				event.channel().sendMessage(locale.get("success/deck_switch", deck.getName())).queue();
 				return;
 			}
 		}

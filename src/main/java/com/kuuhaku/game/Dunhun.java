@@ -103,7 +103,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		for (String p : players) {
-			Hero h = DAO.query(Hero.class, "SELECT h FROM Hero h WHERE h.account.id = ?1", p);
+			Hero h = DAO.query(Hero.class, """
+					SELECT h
+					FROM Hero h
+					WHERE h.account.id = ?1
+					  AND h.id = h.account.settings.currentHero
+					""", p
+			);
 			if (h == null) {
 				throw new GameReport(GameReport.NO_HERO, p);
 			} else if (h.isRetired() && !isDuel()) {
@@ -473,7 +479,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		if (dungeon.isHardcore()) {
 			try {
-				if (isRanked()) {
+				if (isRanked() && dungeon.isInfinite()) {
 					Hero h = hs.iterator().next();
 					int rank = DAO.queryNative(Integer.class,
 							"SELECT rank FROM dungeon_ranking(?1) WHERE hero_id = ?2",
@@ -571,12 +577,19 @@ public class Dunhun extends GameInstance<NullPhase> {
 	public Supplier<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
 		if (combat.get() != null) return () -> true;
 
-		combat.set(new Combat(this, node));
-		initializer.accept(combat.get());
+		Combat cbt = new Combat(this, node);
+		initializer.accept(cbt);
 
-		if (combat.get().getActors(Team.KEEPERS).isEmpty()) {
+		return runCombat(node, cbt);
+	}
+
+	public Supplier<Boolean> runCombat(Node node, Combat combat) {
+		if (this.combat.get() != null) return () -> true;
+
+		this.combat.set(combat);
+		if (combat.getActors(Team.KEEPERS).isEmpty()) {
 			for (int i = 0; i < 4; i++) {
-				List<Actor<?>> keepers = combat.get().getActors(Team.KEEPERS);
+				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
 				if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 				Actor<?> chosen = node.generateEnemy();
@@ -591,8 +604,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 		}
 
 		return () -> {
-			combat.get().process();
-			return combat.get().isWin();
+			combat.process();
+			return combat.isWin();
 		};
 	}
 
