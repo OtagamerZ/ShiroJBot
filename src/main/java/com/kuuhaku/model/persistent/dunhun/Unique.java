@@ -27,6 +27,7 @@ import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.localized.LocalizedUnique;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import org.hibernate.annotations.*;
@@ -70,8 +71,6 @@ public class Unique extends DAO<Unique> {
 	@Column(name = "weight", nullable = false)
 	private int weight;
 
-	private transient List<Affix> affixCache;
-
 	public String getId() {
 		return id;
 	}
@@ -88,10 +87,8 @@ public class Unique extends DAO<Unique> {
 		return basetype;
 	}
 
-	public List<Affix> getAffixes() {
-		if (affixCache != null) return affixCache;
-
-		return affixCache = DAO.queryAll(Affix.class, "SELECT a FROM Affix a WHERE a.id IN ?1", affixes);
+	public JSONArray getAffixes() {
+		return affixes;
 	}
 
 	public JSONArray getReqTags() {
@@ -104,7 +101,22 @@ public class Unique extends DAO<Unique> {
 
 	public Gear asGear(Hero owner) {
 		Gear g = new Gear(owner, this);
-		for (Affix a : getAffixes()) {
+
+		List<String> affs = new ArrayList<>();
+		for (Object aff : affixes) {
+			if (aff instanceof JSONArray arr) {
+				if (!arr.isEmpty()) {
+					affs.add(Utils.getRandomEntry(arr).toString());
+				}
+
+				continue;
+			}
+
+			affs.add(aff.toString());
+		}
+
+		List<Affix> ents = DAO.queryAll(Affix.class, "SELECT a FROM Affix a WHERE a.id IN ?1", affs);
+		for (Affix a : ents) {
 			g.getAffixes().add(new GearAffix(g, a));
 		}
 
