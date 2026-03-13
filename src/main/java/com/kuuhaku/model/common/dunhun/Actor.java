@@ -395,6 +395,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							line += " (" + locale.get("str/actor_resist") + ")";
 						}
 					}
+				} else if (val.get() == 0) {
+					line = "";
 				}
 			} else if (val.get() == 0) {
 				line = "";
