@@ -468,7 +468,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void applyRegDeg() {
-		setHp(getHp() + applyMitigation(getRegDeg().next()));
+		int value = -getRegDeg().next();
+		setHp(getHp() - applyMitigation(value));
 	}
 
 	public boolean isMinion() {
