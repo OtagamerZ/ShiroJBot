@@ -379,7 +379,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 				cbt.getHistory().add("**" + locale.get("str/critical_hit") + "**");
 			}
 
-			String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));;
+			String line = locale.get(val.get() < 0 ? "str/actor_damage" : "str/actor_heal", getName(), Math.abs(val.get()));
+			;
 			if (usable instanceof Skill s) {
 				Set<ElementType> elems = s.getStats().getElements();
 				line += " " + elems.stream()
@@ -556,20 +557,20 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		sb.appendNewLine("-# " + bar);
 
-		StringBuilder icons = new StringBuilder();
+		Map<String, Integer> icons = new HashMap<>();
 		for (EffectProperties<?> e : modifiers.getEffects()) {
 			String icon = e.getIcon();
 			if (icon != null) {
-				icons.append('\\').append(icon);
-				if (e.getExpiration() > 0) {
-					icons.append(Utils.superscript(e.getExpiration()));
-				}
-				icons.append(' ');
+				int exp = e.getExpiration();
+				icons.compute(icon, (k, v) -> v == null ? exp : Math.max(v, exp));
 			}
 		}
 
 		if (!icons.isEmpty()) {
-			sb.appendNewLine("-# " + icons);
+			sb.appendNewLine("-# " + icons.entrySet().stream()
+					.map(e -> "\\" + e.getKey() + Utils.superscript(e.getValue()))
+					.collect(Collectors.joining(" "))
+			);
 		}
 	}
 
