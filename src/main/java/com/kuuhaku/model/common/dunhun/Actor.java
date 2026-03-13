@@ -465,10 +465,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public boolean isOutOfCombat() {
-		if (!binding.isBound()) return true;
-		else if (master != null && master.isOutOfCombat()) {
-			return true;
-		}
+		if (!binding.isBound() || isDisposed()) return true;
 
 		return hasFleed() || getHp() <= 0;
 	}

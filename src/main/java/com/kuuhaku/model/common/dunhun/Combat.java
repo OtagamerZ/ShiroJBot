@@ -90,6 +90,7 @@ public class Combat implements Renderer<BufferedImage> {
 	private final List<String> history = new ArrayList<>();
 	private final RandomList<Actor<?>> rngList = new RandomList<>();
 	private final Set<EffectBase> effects = new HashSet<>();
+	private final Set<Actor<?>> destroyed = new HashSet<>();
 	private final Loot loot;
 
 	private CompletableFuture<Runnable> lock = new CompletableFuture<>();
@@ -139,6 +140,7 @@ public class Combat implements Renderer<BufferedImage> {
 		getActors(team.getOther()).remove(actor);
 		actor.getBinding().bind(getGame(), team);
 		actors.add(actor);
+		destroyed.remove(actor);
 
 		actor.setFleed(false);
 		actor.getSenshi().setAvailable(true);
@@ -152,7 +154,7 @@ public class Combat implements Renderer<BufferedImage> {
 		trigger(Trigger.ON_REMOVE, actor, actor, null);
 		actors.remove(actor);
 		if (initialized) {
-			actor.destroy();
+			destroyed.add(actor);
 		}
 	}
 
@@ -935,6 +937,12 @@ public class Combat implements Renderer<BufferedImage> {
 			for (Actor<?> a : getActors()) {
 				a.getModifiers().removeIf(ValueMod::isExpired);
 			}
+
+			for (Actor<?> a : destroyed) {
+				a.destroy();
+			}
+
+			destroyed.clear();
 		}
 
 		for (Actor<?> a : actors.values()) {
