@@ -533,6 +533,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		int max = getMaxHp();
 		String bar = Utils.makeProgressBar(getHp(), max, Calc.clamp((int) Math.ceil(max / 100d), 1, 10), '▱', '▰');
 		sb.appendNewLine("-# " + bar);
+
+		Set<ElementType> resists = getResists();
+		if (!resists.isEmpty()) {
+			sb.append(" ");
+			for (ElementType e : resists) {
+				sb.append(e);
+			}
+		}
 	}
 
 	public void addApBar(XStringBuilder sb) {
