@@ -22,6 +22,6 @@ public class PermanentProperties<T> extends EffectProperties<T> {
 	}
 
 	public boolean isActive() {
-		return !isSafeToRemove() && !owner.isOutOfCombat();
+		return !isSafeToRemove() && !(owner != null && owner.isOutOfCombat());
 	}
 }
