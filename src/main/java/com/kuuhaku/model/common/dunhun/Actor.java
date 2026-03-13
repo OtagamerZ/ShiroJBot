@@ -59,7 +59,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient int maxHp = -1;
 	private transient String controller;
 
-	private byte state = 0;
+	private transient byte state = 0;
 	/*
 	0x0 F
         └ 0111
