@@ -21,6 +21,7 @@ import com.kuuhaku.model.records.dunhun.Attributes;
 import com.kuuhaku.model.records.dunhun.CombatContext;
 import com.kuuhaku.model.records.dunhun.Loot;
 import com.kuuhaku.model.records.dunhun.RaceValues;
+import com.kuuhaku.util.Bit32;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Tuple2;
@@ -56,9 +57,16 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	private transient Actor<?> killer;
 	private transient int hp = -1, ap;
 	private transient int maxHp = -1;
-	private transient boolean fleed;
-	private transient boolean essential;
 	private transient String controller;
+
+	private byte state = 0;
+	/*
+	0x0 F
+        └ 0111
+           ││└ disposed
+           │└─ fleed
+           └── essential
+	 */
 
 	public Actor() {
 	}
@@ -413,29 +421,39 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		return (int) Math.ceil(Math.max(raw / 10d, mit));
 	}
 
+	public boolean isDisposed() {
+		return Bit32.on(state, 0);
+	}
+
+	public void dispose() {
+		state = (byte) Bit32.set(state, 0, true);
+	}
+
 	public boolean hasFleed() {
 		if (master != null) {
-			return master.fleed;
+			return master.hasFleed();
 		}
 
-		return fleed;
+		return Bit32.on(state, 1);
 	}
 
 	public void setFleed(boolean fleed) {
-		if (getGame() != null && !this.fleed && fleed) {
+		if (master != null) return;
+
+		if (getGame() != null && !hasFleed() && fleed) {
 			getGame().getChannel().sendMessage(getGame().getString("str/actor_flee", getName()));
 		}
 
 		setAp(0);
-		this.fleed = fleed;
+		state = (byte) Bit32.set(state, 1, fleed);
 	}
 
 	public boolean isEssential() {
-		return essential;
+		return Bit32.on(state, 2);
 	}
 
 	public void setEssential(boolean essential) {
-		this.essential = essential;
+		state = (byte) Bit32.set(state, 2, essential);
 	}
 
 	public String getController() {

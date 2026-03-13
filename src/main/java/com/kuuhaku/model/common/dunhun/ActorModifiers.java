@@ -86,7 +86,10 @@ public class ActorModifiers {
 
 		double flat = 0, inc = 0, mult = 1;
 		while (it.hasNext()) {
-			ValueMod mod = extractor.apply(it.next());
+			EffectProperties<?> e = it.next();
+			if (e instanceof PermanentProperties<?> p && !p.isActive()) continue;
+
+			ValueMod mod = extractor.apply(e);
 			if (mod == null) continue;
 
 			switch (mod) {

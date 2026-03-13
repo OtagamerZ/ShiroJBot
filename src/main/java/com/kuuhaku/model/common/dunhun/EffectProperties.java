@@ -12,7 +12,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class EffectProperties<T> {
 	private final long SERIAL = ThreadLocalRandom.current().nextLong();
 
-	private final EffectContext<T> owner;
+	private final EffectContext<T> context;
 	private ValueMod maxHp;
 	private ValueMod maxAp;
 	private ValueMod damage;
@@ -39,17 +39,17 @@ public class EffectProperties<T> {
 	private int expiration;
 	private String icon;
 
-	public EffectProperties(EffectContext<T> owner) {
-		this(owner, -1);
+	public EffectProperties(EffectContext<T> context) {
+		this(context, -1);
 	}
 
-	public EffectProperties(EffectContext<T> owner, int expiration) {
-		this.owner = owner;
+	public EffectProperties(EffectContext<T> context, int expiration) {
+		this.context = context;
 		this.expiration = expiration;
 	}
 
-	public EffectContext<T> getOwner() {
-		return owner;
+	public EffectContext<T> getContext() {
+		return context;
 	}
 
 	public ValueMod getMaxHp() {
