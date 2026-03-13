@@ -618,6 +618,8 @@ public class Deck extends DAO<Deck> {
 			});
 
 			Hero h = account.getHero(locale);
+			h.createSenshi(true);
+
 			if (h != null) {
 				g2d.drawImage(h.render(locale), 1237, 834, null);
 			} else {

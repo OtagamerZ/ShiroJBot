@@ -120,7 +120,7 @@ public class HeroCommand implements Executable {
 			), true);
 
 			h.getModifiers().clear();
-			h.createSenshi();
+			h.createSenshi(true);
 
 			helper.apply(m.editMessageComponents().setContent(null).setEmbeds(eb.build()))
 					.setFiles(FileUpload.fromData(IO.getBytes(h.render(locale), "png"), "card.png"))
