@@ -821,6 +821,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		binding.unbind();
+		dispose();
 	}
 
 	@PostLoad
