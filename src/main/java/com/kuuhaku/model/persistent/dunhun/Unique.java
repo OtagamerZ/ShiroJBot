@@ -104,7 +104,7 @@ public class Unique extends DAO<Unique> {
 
 		List<String> affs = new ArrayList<>();
 		for (Object aff : affixes) {
-			if (aff instanceof JSONArray arr) {
+			if (aff instanceof Collection<?> arr) {
 				if (!arr.isEmpty()) {
 					affs.add(Utils.getRandomEntry(arr).toString());
 				}
