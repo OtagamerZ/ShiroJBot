@@ -7,6 +7,7 @@ import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.DungeonRunOutcome;
 import com.kuuhaku.model.persistent.dunhun.Hero;
+import com.kuuhaku.model.persistent.dunhun.RunModifier;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
@@ -187,6 +188,9 @@ public class AreaMap {
 	public void generate(Dunhun game) {
 		floors.clear();
 		generator.accept(game, this);
+		for (RunModifier mod : game.getModifiers()) {
+			mod.load(game);
+		}
 	}
 
 	public BufferedImage render(I18N locale, int width, int height) {
