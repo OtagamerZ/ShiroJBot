@@ -150,6 +150,7 @@ public class AreaMap {
 				  AND floor = ?2
 				  AND sublevel = ?3
 				  AND size(players) = 1
+				  AND hero.id NOT IN ?4
 				""", run.getId().dungeonId(), floor, sublevel);
 	}
 
@@ -161,9 +162,10 @@ public class AreaMap {
 				INNER JOIN dungeon_run_player rp ON rp.dungeon_id = r.dungeon_id AND rp.hero_id = r.hero_id
 				WHERE r.dungeon_id = ?1
 				  AND r.floor = ?2
+				  AND rp.hero_id NOT IN ?3
 				GROUP BY r.hero_id, r.sublevel
 				HAVING count(rp.player_id) = 1
-				""", run.getId().dungeonId(), floor);
+				""", run.getId().dungeonId(), floor, run.getGame().getHeroes().values());
 
 		Map<Integer, List<Hero>> heroes = new HashMap<>();
 		for (Object[] o : runs) {
@@ -244,8 +246,6 @@ public class AreaMap {
 					if (sub.getFloor().getNumber() == run.getFloor()) {
 						List<Hero> runsHere = runs.get(sub.getNumber());
 						if (runsHere != null) {
-							runsHere.removeIf(h -> run.getGame().getHeroes().containsKey(h.getAccount().getUid()));
-
 							for (int i = 0; i < Math.min(runsHere.size(), 5); i++) {
 								Hero hero = runsHere.get(i);
 								Graph.applyTransformed(g2d, 5 + (AVATAR_RADIUS + 5) * i, y - AVATAR_RADIUS / 2, g -> {

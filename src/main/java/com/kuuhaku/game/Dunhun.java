@@ -330,10 +330,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 						if (!nextNode.hasEventGenerator()) {
 							Sublevel level = nextNode.getSublevel();
 
-							List<Hero> heroes = map.getHeroesAt(level.getFloor().getNumber(), level.getNumber()).stream()
-									.filter(h -> !this.heroes.containsKey(h.getAccount().getUid()))
-									.toList();
-
+							List<Hero> heroes = map.getHeroesAt(level.getFloor().getNumber(), level.getNumber());
 							if (!heroes.isEmpty()) {
 								runEvent(nextNode, DAO.find(Event.class, "HERO_CONFLICT"));
 							} else {
