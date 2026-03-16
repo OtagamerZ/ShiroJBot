@@ -151,7 +151,7 @@ public class AreaMap {
 				  AND sublevel = ?3
 				  AND size(players) = 1
 				  AND hero.id NOT IN ?4
-				""", run.getId().dungeonId(), floor, sublevel);
+				""", run.getId().dungeonId(), floor, sublevel, List.copyOf(run.getGame().getHeroes().values()));
 	}
 
 	public Map<Integer, List<Hero>> getHeroesAt(int floor) {
@@ -165,7 +165,7 @@ public class AreaMap {
 				  AND rp.hero_id NOT IN ?3
 				GROUP BY r.hero_id, r.sublevel
 				HAVING count(rp.player_id) = 1
-				""", run.getId().dungeonId(), floor, run.getGame().getHeroes().values());
+				""", run.getId().dungeonId(), floor, List.copyOf(run.getGame().getHeroes().values()));
 
 		Map<Integer, List<Hero>> heroes = new HashMap<>();
 		for (Object[] o : runs) {
