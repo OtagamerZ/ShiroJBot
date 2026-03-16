@@ -143,6 +143,10 @@ public class AreaMap {
 	}
 
 	public List<Hero> getHeroesAt(int floor, int sublevel) {
+		List<String> ignore = run.getGame().getHeroes().values().stream()
+				.map(Hero::getId)
+				.toList();
+
 		return DAO.queryAll(Hero.class, """
 				SELECT hero
 				FROM DungeonRun r
@@ -151,10 +155,14 @@ public class AreaMap {
 				  AND sublevel = ?3
 				  AND size(players) = 1
 				  AND hero.id NOT IN ?4
-				""", run.getId().dungeonId(), floor, sublevel, List.copyOf(run.getGame().getHeroes().values()));
+				""", run.getId().dungeonId(), floor, sublevel, ignore);
 	}
 
 	public Map<Integer, List<Hero>> getHeroesAt(int floor) {
+		List<String> ignore = run.getGame().getHeroes().values().stream()
+				.map(Hero::getId)
+				.toList();
+
 		List<Object[]> runs = DAO.queryAllUnmapped("""
 				SELECT r.sublevel
 				     , r.hero_id
@@ -165,7 +173,7 @@ public class AreaMap {
 				  AND rp.hero_id NOT IN ?3
 				GROUP BY r.hero_id, r.sublevel
 				HAVING count(rp.player_id) = 1
-				""", run.getId().dungeonId(), floor, List.copyOf(run.getGame().getHeroes().values()));
+				""", run.getId().dungeonId(), floor, ignore);
 
 		Map<Integer, List<Hero>> heroes = new HashMap<>();
 		for (Object[] o : runs) {
