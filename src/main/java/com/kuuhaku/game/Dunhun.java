@@ -575,18 +575,22 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public Supplier<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
-		if (combat.get() != null) return () -> true;
-
-		Combat cbt = new Combat(this, node);
-		initializer.accept(cbt);
-
-		return runCombat(node, cbt);
+		return runCombat(node, new Combat(this, node), initializer);
 	}
 
 	public Supplier<Boolean> runCombat(Node node, Combat combat) {
-		if (this.combat.get() != null) return () -> true;
+		return runCombat(node, combat, Utils::doNothing);
+	}
+
+	public Supplier<Boolean> runCombat(Node node, Combat combat, Consumer<Combat> initializer) {
+		if (this.combat.get() != null) {
+			this.combat.get().close();
+			this.combat.set(null);
+		}
 
 		this.combat.set(combat);
+		initializer.accept(combat);
+
 		if (combat.getActors(Team.KEEPERS).isEmpty()) {
 			for (int i = 0; i < 4; i++) {
 				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);

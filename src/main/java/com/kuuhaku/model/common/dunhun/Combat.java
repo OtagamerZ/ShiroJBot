@@ -12,7 +12,6 @@ import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
-import com.kuuhaku.model.enums.shoukan.ElementType;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -320,9 +319,7 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		trigger(win != null && win ? Trigger.ON_VICTORY : Trigger.ON_DEFEAT);
-		done = true;
-
-		game.clearMessage();
+		close();
 	}
 
 	private boolean checkCombatEnd() {
@@ -1005,5 +1002,11 @@ public class Combat implements Renderer<BufferedImage> {
 				e.unlock();
 			}
 		}
+	}
+
+	public void close() {
+		cpu.close();
+		game.clearMessage();
+		done = true;
 	}
 }
