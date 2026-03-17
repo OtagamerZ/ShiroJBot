@@ -1913,15 +1913,14 @@ public class Shoukan extends GameInstance<Phase> {
 				.toList();
 
 		for (TriggerBind binding : binds) {
+			EffectHolder<?> holder = binding.holder();
+			if (holder.getIndex() == -1 && !binding.permanent()) {
+				bindings.remove(binding);
+				continue;
+			}
+
 			if (binding.isBound(ep)) {
 				new RuntimeException().printStackTrace();
-
-				EffectHolder<?> holder = binding.holder();
-				if (holder.getIndex() == -1 && !binding.permanent()) {
-					bindings.remove(binding);
-					continue;
-				}
-
 				holder.execute(new EffectParameters(ON_DEFER_BINDING, ep.side(), new DeferredTrigger(null, ep.trigger()), ep.source(), ep.targets()));
 			}
 		}
