@@ -1914,7 +1914,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 		for (TriggerBind binding : binds) {
 			if (binding.isBound(ep)) {
-				System.out.println(ep);
+				new RuntimeException().printStackTrace();
 
 				EffectHolder<?> holder = binding.holder();
 				if (holder.getIndex() == -1 && !binding.permanent()) {
