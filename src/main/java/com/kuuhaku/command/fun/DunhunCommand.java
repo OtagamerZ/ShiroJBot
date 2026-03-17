@@ -225,31 +225,33 @@ public class DunhunCommand implements Executable {
 		Set<User> pending = new HashSet<>(others);
 		try {
 			if (others.isEmpty()) {
-				try {
-					Dunhun dun = new Dunhun(locale, dungeon, event.user());
-					if (!setFloor(locale, event, args, dungeon, dun)) {
-						dun.close(GameReport.OTHER);
-						return;
-					}
+				Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+					try {
+						Dunhun dun = new Dunhun(locale, dungeon, event.user());
+						if (!setFloor(locale, event, args, dungeon, dun)) {
+							dun.close(GameReport.OTHER);
+							return;
+						}
 
-					dun.start(event.guild(), event.channel())
-							.whenComplete((v, e) -> {
-								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-									Constants.LOGGER.error(e, e);
-									event.channel().sendMessage(locale.get("error/error", e)).queue();
-								}
-							});
-				} catch (GameReport e) {
-					switch (e.getCode()) {
-						case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
-						case GameReport.RETIRED_HERO ->
-								event.channel().sendMessage(locale.get("error/retired_hero")).queue();
-						case GameReport.OVERBURDENED ->
-								event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
-						case GameReport.UNDERLEVELLED ->
-								event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
+						dun.start(event.guild(), event.channel())
+								.whenComplete((v, e) -> {
+									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+										Constants.LOGGER.error(e, e);
+										event.channel().sendMessage(locale.get("error/error", e)).queue();
+									}
+								});
+					} catch (GameReport e) {
+						switch (e.getCode()) {
+							case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
+							case GameReport.RETIRED_HERO ->
+									event.channel().sendMessage(locale.get("error/retired_hero")).queue();
+							case GameReport.OVERBURDENED ->
+									event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+							case GameReport.UNDERLEVELLED ->
+									event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
+						}
 					}
-				}
+				});
 
 				return;
 			}
@@ -267,42 +269,44 @@ public class DunhunCommand implements Executable {
 							return false;
 						}
 
-						try {
-							Dunhun dun = new Dunhun(locale, dungeon,
-									Stream.concat(Stream.of(event.user()), others.stream())
-											.map(User::getId)
-											.toArray(String[]::new)
-							);
+						Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+							try {
+								Dunhun dun = new Dunhun(locale, dungeon,
+										Stream.concat(Stream.of(event.user()), others.stream())
+												.map(User::getId)
+												.toArray(String[]::new)
+								);
 
-							if (!setFloor(locale, event, args, dungeon, dun)) {
-								dun.close(GameReport.OTHER);
-								return false;
-							}
-
-							dun.start(event.guild(), event.channel())
-									.whenComplete((v, e) -> {
-										if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-											Constants.LOGGER.error(e, e);
-											event.channel().sendMessage(locale.get("error/error", e)).queue();
-										}
-									});
-						} catch (GameReport e) {
-							switch (e.getCode()) {
-								case GameReport.NO_HERO -> {
-									if (e.getContent().equals(event.user().getId())) {
-										event.channel().sendMessage(locale.get("error/no_hero")).queue();
-									} else {
-										event.channel().sendMessage(locale.get("error/no_hero_target", "<@" + e.getContent() + ">")).queue();
-									}
+								if (!setFloor(locale, event, args, dungeon, dun)) {
+									dun.close(GameReport.OTHER);
+									return;
 								}
-								case GameReport.RETIRED_HERO ->
-										event.channel().sendMessage(locale.get("error/retired_hero")).queue();
-								case GameReport.OVERBURDENED ->
-										event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
-								case GameReport.UNDERLEVELLED ->
-										event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
+
+								dun.start(event.guild(), event.channel())
+										.whenComplete((v, e) -> {
+											if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+												Constants.LOGGER.error(e, e);
+												event.channel().sendMessage(locale.get("error/error", e)).queue();
+											}
+										});
+							} catch (GameReport e) {
+								switch (e.getCode()) {
+									case GameReport.NO_HERO -> {
+										if (e.getContent().equals(event.user().getId())) {
+											event.channel().sendMessage(locale.get("error/no_hero")).queue();
+										} else {
+											event.channel().sendMessage(locale.get("error/no_hero_target", "<@" + e.getContent() + ">")).queue();
+										}
+									}
+									case GameReport.RETIRED_HERO ->
+											event.channel().sendMessage(locale.get("error/retired_hero")).queue();
+									case GameReport.OVERBURDENED ->
+											event.channel().sendMessage(locale.get("error/overburdened", e.getContent())).queue();
+									case GameReport.UNDERLEVELLED ->
+											event.channel().sendMessage(locale.get("error/underlevelled", e.getContent())).queue();
+								}
 							}
-						}
+						});
 
 						return true;
 					}, others.toArray(User[]::new)

@@ -76,33 +76,35 @@ public class ShoukanCommand implements Executable {
 		try {
 			Arcade arcade = args.getEnum(Arcade.class, "arcade");
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
-				try {
-					Shoukan skn = new Shoukan(locale, arcade, event.user(), other);
-					skn.start(event.guild(), event.channel())
-							.whenComplete((v, e) -> {
-								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
-									Constants.LOGGER.error(e, e);
-									event.channel().sendMessage(locale.get("error/error", e)).queue();
+				Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+					try {
+						Shoukan skn = new Shoukan(locale, arcade, event.user(), other);
+						skn.start(event.guild(), event.channel())
+								.whenComplete((v, e) -> {
+									if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
+										Constants.LOGGER.error(e, e);
+										event.channel().sendMessage(locale.get("error/error", e)).queue();
+									}
+								});
+					} catch (GameReport e) {
+						switch (e.getCode()) {
+							case GameReport.NO_DECK -> {
+								if (e.getContent().equals(event.user().getId())) {
+									event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
+								} else {
+									event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
 								}
-							});
-				} catch (GameReport e) {
-					switch (e.getCode()) {
-						case GameReport.NO_DECK -> {
-							if (e.getContent().equals(event.user().getId())) {
-								event.channel().sendMessage(locale.get("error/no_deck", data.config().getPrefix())).queue();
-							} else {
-								event.channel().sendMessage(locale.get("error/no_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
 							}
-						}
-						case GameReport.INVALID_DECK -> {
-							if (e.getContent().equals(event.user().getId())) {
-								event.channel().sendMessage(locale.get("error/invalid_deck", data.config().getPrefix())).queue();
-							} else {
-								event.channel().sendMessage(locale.get("error/invalid_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+							case GameReport.INVALID_DECK -> {
+								if (e.getContent().equals(event.user().getId())) {
+									event.channel().sendMessage(locale.get("error/invalid_deck", data.config().getPrefix())).queue();
+								} else {
+									event.channel().sendMessage(locale.get("error/invalid_deck_target", "<@" + e.getContent() + ">", data.config().getPrefix())).queue();
+								}
 							}
 						}
 					}
-				}
+				});
 
 				return true;
 			};
