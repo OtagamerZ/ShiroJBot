@@ -88,7 +88,7 @@ public class ShiritoriCommand implements Executable {
 							return false;
 						}
 
-						Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+						Utils.sendLoading(data, locale.get("str/loading_game"), () -> {
 							try {
 								Shiritori shi = new Shiritori(locale,
 										Stream.concat(Stream.of(event.user()), others.stream())

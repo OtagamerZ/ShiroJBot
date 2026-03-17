@@ -76,7 +76,7 @@ public class ShoukanCommand implements Executable {
 		try {
 			Arcade arcade = args.getEnum(Arcade.class, "arcade");
 			ThrowingFunction<ButtonWrapper, Boolean> act = w -> {
-				Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+				Utils.sendLoading(data, locale.get("str/loading_game"), () -> {
 					try {
 						Shoukan skn = new Shoukan(locale, arcade, event.user(), other);
 						skn.start(event.guild(), event.channel())

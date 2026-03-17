@@ -225,7 +225,7 @@ public class DunhunCommand implements Executable {
 		Set<User> pending = new HashSet<>(others);
 		try {
 			if (others.isEmpty()) {
-				Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+				Utils.sendLoading(data, locale.get("str/loading_game"), () -> {
 					try {
 						Dunhun dun = new Dunhun(locale, dungeon, event.user());
 						if (!setFloor(locale, event, args, dungeon, dun)) {
@@ -269,7 +269,7 @@ public class DunhunCommand implements Executable {
 							return false;
 						}
 
-						Utils.sendLoading(data, locale.get("str/generating"), _ -> {
+						Utils.sendLoading(data, locale.get("str/loading_game"), () -> {
 							try {
 								Dunhun dun = new Dunhun(locale, dungeon,
 										Stream.concat(Stream.of(event.user()), others.stream())

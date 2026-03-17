@@ -1413,6 +1413,18 @@ public abstract class Utils {
 		return sb.toString();
 	}
 
+	public static void sendLoading(EventData event, String message, Runnable action) {
+		event.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
+			try {
+				action.run();
+				m.delete().queue(null, Utils::doNothing);
+			} catch (Exception e) {
+				Constants.LOGGER.error(e, e);
+				m.editMessage(event.config().getLocale(m.getGuildChannel()).get("error/error", e)).queue();
+			}
+		});
+	}
+
 	public static void sendLoading(EventData event, String message, Consumer<Message> action) {
 		event.channel().sendMessage("<a:loading:697879726630502401> | " + message).queue(m -> {
 			try {
