@@ -1205,7 +1205,7 @@ public class Hand {
 	}
 
 	public BufferedImage render(List<Drawable<?>> cards) {
-		if (cards.isEmpty()) return new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
+		if (cards.isEmpty()) return null;
 
 		BufferedImage bi = new BufferedImage((Drawable.SIZE.width + 20) * 5, (100 + Drawable.SIZE.height) * (int) Math.ceil(cards.size() / 5d), BufferedImage.TYPE_INT_ARGB);
 		Graphics2D g2d = bi.createGraphics();
@@ -1226,9 +1226,9 @@ public class Hand {
 				g2d.drawImage(d.render(game.getLocale(), userDeck), x, y, null);
 
 				if (!ally) {
-					Graph.applyTransformed(g2d, x, y, g -> {
+					Graph.applyTransformed(g2d, x + 15, y + 15, g -> {
 						g.setClip(userDeck.getFrame().getBoundary());
-						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 15, 15, null);
+						g.drawImage(IO.getResourceAsImage("shoukan/states/sight.png"), 0, 0, null);
 					});
 				}
 
