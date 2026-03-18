@@ -18,22 +18,25 @@
 
 package com.kuuhaku.interfaces.shoukan;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.ExpressionListener;
 import com.kuuhaku.Tag;
 import com.kuuhaku.controller.DAO;
+import com.kuuhaku.exceptions.ActivationException;
+import com.kuuhaku.exceptions.SelectionException;
+import com.kuuhaku.exceptions.TargetException;
+import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.generated.ShoukanExprLexer;
 import com.kuuhaku.generated.ShoukanExprParser;
 import com.kuuhaku.model.common.CachedScriptManager;
+import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.CardAttributes;
-import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.shoukan.FrameSkin;
-import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.model.records.shoukan.Source;
-import com.kuuhaku.model.records.shoukan.Target;
+import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.records.shoukan.*;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -42,6 +45,7 @@ import kotlin.Pair;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.util.TriConsumer;
 import org.jetbrains.annotations.Nullable;
@@ -49,9 +53,13 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.stream.Collectors;
+
+import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	Pair<Integer, Color> EMPTY = new Pair<>(-1, Color.BLACK);
@@ -165,7 +173,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void setFlag(Drawable<?> source, Flag flag) {
 		getStats().setFlag(source, flag, true, true);
 		if (getGame() != null) {
-			trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
+			trigger(ON_FLAG_ALTER, asSource(ON_FLAG_ALTER));
 		}
 	}
 
@@ -176,7 +184,7 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 	default void setFlag(Drawable<?> source, Flag flag, boolean value) {
 		getStats().setFlag(source, flag, value, false);
 		if (getGame() != null) {
-			trigger(Trigger.ON_FLAG_ALTER, asSource(Trigger.ON_FLAG_ALTER));
+			trigger(ON_FLAG_ALTER, asSource(ON_FLAG_ALTER));
 		}
 	}
 
@@ -190,6 +198,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		return getBase().getTags().contains("FIXED");
 	}
 
+	String getEffect();
+
 	boolean hasEffect();
 
 	default boolean hasTrueEffect() {
@@ -202,12 +212,262 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 	Trigger getCurrentTrigger();
 
-	boolean execute(EffectParameters ep);
+	void setCurrentTrigger(Trigger trigger);
+
+	default boolean execute(EffectParameters ep) {
+		Shoukan game = getGame();
+		if (game == null) return false;
+
+		Trigger trigger = ep.trigger();
+		boolean targeted = false;
+
+		try {
+			if (ep.trigger().name().startsWith("ON_DEFER")) {
+				trigger = ep.referee().trigger();
+			} else {
+				if (equals(ep.source().card())) {
+					trigger = ep.source().trigger();
+				} else {
+					for (Target target : ep.targets()) {
+						if (equals(target.card())) {
+							trigger = target.trigger();
+							targeted = true;
+							break;
+						}
+					}
+				}
+			}
+
+			ep = ep.forSide(getSide()).withTrigger(trigger);
+			if (ep.trigger() == NONE || getBase().isLocked(ep.trigger())) return false;
+
+			Hand hand = getHand();
+			if (!hasTrueEffect()) {
+				if (hand.getLockTime(Lock.EFFECT) > 0) return false;
+				else if (hasFlag(Flag.NO_EFFECT, true)) {
+					getBase().lockAll();
+					return false;
+				}
+			}
+
+			if (this instanceof Senshi s) {
+				if (ep.trigger() == ON_ACTIVATE && getCooldown() > 0) return false;
+				else if (hand.getOther().getOrigins().hasSynergy(Race.NIGHTMARE) && s.isSleeping()) {
+					return false;
+				}
+			}
+
+			try {
+				getBase().lock(ep.trigger());
+				if (ep.trigger() != ON_TICK) {
+					if (getSlot().getIndex() > -1 || equals(game.getArena().getField())) {
+						execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
+					}
+				}
+
+				setCurrentTrigger(ep.trigger());
+
+				if (Utils.equalsAny(ep.trigger(), ON_EFFECT_TARGET, ON_DEFEND)) {
+					if (!game.getCurrent().equals(hand)) {
+						Set<String> triggered = new HashSet<>();
+
+						for (Senshi card : game.iterateSlots(getSide())) {
+							if (!(card instanceof TrapSpell) || !card.isFlipped()) continue;
+							else if (ep.isTarget(card) || !triggered.add(card.getId())) continue;
+
+							List<Target> targets = new ArrayList<>();
+							targets.add(asTarget(ep.trigger(), TargetType.ALLY));
+							if (targeted) {
+								targets.add(ep.source().toTarget(TargetType.ENEMY));
+							}
+
+							EffectParameters params = new EffectParameters(ON_TRAP, getSide(), card.asSource(ON_TRAP), targets);
+							if (game.activateTrap(card, params)) {
+								triggered.add(card.getId());
+								game.getChannel().buffer(game.getString("str/trap_activation", card));
+							}
+						}
+					}
+				}
+
+				if (this instanceof Senshi s) {
+					List<Evogear> equipments = new ArrayList<>(s.getEquipments());
+					if (hand.getOrigins().hasSynergy(Race.EX_MACHINA)) {
+						Senshi sup = s.getSupport();
+						if (sup != null) {
+							Evogear e = new EquippableSenshi(sup);
+							e.setEquipper(s);
+							e.setHand(hand);
+
+							equipments.add(e);
+						}
+					}
+
+					for (Evogear e : equipments) {
+						e.execute(ep);
+					}
+				}
+
+				CachedScriptExecutor exec = getExecutor(ep);
+
+				if (this instanceof Senshi s && s.isStunned()) {
+					if (Trigger.getAnnounceable().contains(ep.trigger()) && !ep.isDeferred(Trigger.getAnnounceable())) {
+						game.getChannel().buffer(game.getString("str/effect_stunned", this));
+					}
+				} else {
+					if (hasEffect() && getEffect().contains(trigger.name())) {
+						exec.run();
+
+						if (ep.trigger() == ON_ACTIVATE) {
+							hand.getData().put("last_ability", this);
+							trigger(ON_ABILITY, getSide());
+						}
+					}
+
+					for (Consumer<ShoukanContext> e : List.copyOf(getBase().getSubEffects())) {
+						e.accept(exec.toContext());
+					}
+
+					if (this instanceof Senshi s && ep.referee() == null && trigger != ON_TICK) {
+						Senshi sup = s.getSupport();
+						if (sup != null) {
+							sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(s, trigger), ep.source(), ep.targets()));
+						}
+
+						for (Senshi adj : s.getNearby()) {
+							adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(s, trigger), ep.source(), ep.targets()));
+						}
+					}
+
+					if (this instanceof Evogear e && e.isSpell()) {
+						hand.getData().put("last_spell", this);
+						hand.getData().put("last_evogear", this);
+						trigger(ON_SPELL, getSide());
+
+						if (hand.getOrigins().isPure(Race.MYSTICAL)) {
+							hand.modMP(1);
+						}
+					}
+				}
+
+				return true;
+			} catch (TargetException e) {
+				if (this instanceof Senshi s && trigger == ON_ACTIVATE && s.getTargetType() != TargetType.NONE) {
+					if (ep.targets().stream().allMatch(t -> t.skip().get())) {
+						setAvailable(false);
+						return false;
+					}
+
+					game.getChannel().sendMessage(game.getString("error/target",
+							game.getString("str/target_" + s.getTargetType())
+					)).queue();
+				}
+
+				return false;
+			} catch (ActivationException e) {
+				if (e instanceof SelectionException && trigger != ON_ACTIVATE) return false;
+				else if (trigger == ON_TICK) return false;
+
+				game.getChannel().sendMessage(game.getString("error/" + (this instanceof Senshi ? "ability" : "spell"),
+						game.getString(e.getMessage())
+				)).queue();
+				return false;
+			} catch (Exception e) {
+				String name = getSource().getVanity().getName();
+				if (Utils.equalsAny(getCard().getRarity(), Rarity.HERO, Rarity.MONSTER)) {
+					name += " (" + StringUtils.capitalize(getCard().getRarity().name()) + ")";
+				}
+
+				game.getChannel().sendMessage(game.getString("error/effect")).queue();
+				Constants.LOGGER.warn("Failed to execute {} effect\n{}",
+						getVanity().getName(),
+						"/* " + name + " */\n" + getEffect(),
+						e
+				);
+				return false;
+			} finally {
+				setCurrentTrigger(null);
+				getBase().unlock(trigger);
+			}
+		} finally {
+			if (trigger == ON_TURN_END) {
+				hasFlag(Flag.EMPOWERED, true);
+			}
+		}
+	}
 
 	default void executeAssert(Trigger trigger) {
+		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
+		else if (!getEffect().contains(trigger.name())) return;
+
+		Shoukan game = getGame();
+		if (trigger == ON_INITIALIZE && this instanceof Senshi s) {
+			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
+				s.replace(new AugmentSenshi(s, Senshi.getRandom(game.getRng())));
+				return;
+			}
+		} else if (trigger == ON_REMOVE) {
+			game.unbind(this);
+		}
+
+		try {
+			getExecutor(new EffectParameters(trigger, getSide())).run();
+		} catch (Exception e) {
+			String name = getSource().getVanity().getName();
+
+			Constants.LOGGER.warn("Failed to initialize {}\n{}",
+					getVanity().getName(),
+					"/* " + name + " */\n" + getEffect(),
+					e
+			);
+		}
 	}
 
 	CachedScriptManager getCSM();
+
+	default CachedScriptExecutor getExecutor(EffectParameters ep) {
+		CachedScriptManager csm = getCSM().assertOwner(getSource(), () -> parseDescription(getHand(), getGame().getLocale()))
+				.forScript(getEffect())
+				.withConst("game", getGame())
+				.withConst("data", getStats().getData());
+
+		switch (this) {
+			case Senshi s -> {
+				csm.withConst("me", s);
+
+				if (s instanceof PlaceableEvogear pe) {
+					csm.withConst("evo", pe.getOriginal());
+				}
+			}
+			case Evogear e -> {
+				csm.withConst("evo", e);
+
+				if (e instanceof EquippableSenshi s) {
+					csm.withConst("me", s.getOriginal());
+				}
+			}
+			case Field f -> csm.withConst("field", f);
+			default -> {}
+		}
+
+		CachedScriptExecutor exec = csm
+				.toExecutor()
+				.withVar("ep", ep)
+				.withVar("side", getSide())
+				.withVar("trigger", ep.trigger());
+
+		switch (this) {
+			case Senshi s -> exec.withVar("self", s);
+			case Evogear e -> {
+				if (e.getEquipper() != null) {
+					exec.withVar("self", e.getEquipper());
+				}
+			}
+			default -> {}
+		}
+
+		return exec;
+	}
 
 	default String parseDescription(@Nullable Hand h, I18N locale) {
 		boolean display = h == null;

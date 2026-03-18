@@ -20,7 +20,6 @@ package com.kuuhaku.model.common.shoukan;
 
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
-import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.ConditionalVar;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Flag;
@@ -32,7 +31,6 @@ import com.kuuhaku.model.records.id.LocalizedId;
 import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
-import org.apache.commons.collections4.set.ListOrderedSet;
 import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
@@ -65,7 +63,6 @@ public class CardExtra implements Iterable<CumValue> {
 	private final Flags flags = new Flags();
 
 	private final JSONObject data = new JSONObject();
-	private final ListOrderedSet<String> curses = ListOrderedSet.listOrderedSet(BondedList.withBind((s, _) -> !s.isBlank()));
 
 	private Race race = null;
 	private Senshi disguise = null;
@@ -155,10 +152,6 @@ public class CardExtra implements Iterable<CumValue> {
 
 	public JSONObject getData() {
 		return data;
-	}
-
-	public ListOrderedSet<String> getCurses() {
-		return curses;
 	}
 
 	public Race getRace() {

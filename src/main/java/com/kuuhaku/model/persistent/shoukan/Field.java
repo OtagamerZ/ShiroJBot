@@ -28,7 +28,6 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.shoukan.CachedScriptExecutor;
 import com.kuuhaku.model.common.shoukan.CardExtra;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.common.shoukan.TagBundle;
@@ -37,7 +36,6 @@ import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.records.shoukan.EffectParameters;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -57,8 +55,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.random.RandomGenerator;
-
-import static com.kuuhaku.model.enums.shoukan.Trigger.*;
 
 @Entity
 @Cacheable
@@ -268,6 +264,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 		state = (byte) Bit32.set(state, 3, manipulated);
 	}
 
+	@Override
 	public String getEffect() {
 		return Utils.getOr(stats.getEffect(), base.getEffect());
 	}
@@ -283,96 +280,13 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	}
 
 	@Override
+	public void setCurrentTrigger(Trigger currentTrigger) {
+		this.currentTrigger = currentTrigger;
+	}
+
+	@Override
 	public CachedScriptManager getCSM() {
 		return cachedEffect;
-	}
-
-	@Override
-	public boolean execute(EffectParameters ep) {
-		if (!hasEffect()) return false;
-		else if (!hasTrueEffect()) {
-			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
-		}
-
-		ep = ep.forSide(getSide());
-		if (!getEffect().contains(ep.trigger().name())) {
-			return false;
-		}
-
-		Shoukan game = getGame();
-		if (base.isLocked(ep.trigger()) || ep.trigger() == NONE) {
-			return false;
-		}
-
-		try {
-			base.lock(ep.trigger());
-
-			currentTrigger = ep.trigger();
-			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
-					.forScript(getEffect())
-					.withConst("field", this)
-					.withConst("game", getGame())
-					.withConst("data", stats.getData())
-					.toExecutor()
-					.withVar("ep", ep)
-					.withVar("side", getSide())
-					.withVar("trigger", ep.trigger());
-
-			if (stats.getSource() instanceof Senshi s) {
-				exec.withVar("me", s);
-			}
-
-			exec.run();
-
-			if (ep.trigger() != ON_TICK) {
-				hasFlag(Flag.EMPOWERED, true);
-			}
-
-			return true;
-		} catch (Exception e) {
-			Drawable<?> source = Utils.getOr(stats.getSource(), this);
-			String name = source.getVanity().getName();
-
-			game.getChannel().sendMessage(game.getString("error/effect")).queue();
-			Constants.LOGGER.warn("Failed to execute {} effect\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
-			return false;
-		} finally {
-			currentTrigger = null;
-			base.unlock(ep.trigger());
-		}
-	}
-
-	@Override
-	public void executeAssert(Trigger trigger) {
-		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE) || !hasEffect()) return;
-		else if (!getEffect().contains(trigger.name())) return;
-
-		if (trigger == ON_REMOVE) {
-			getGame().unbind(this);
-		}
-
-		try {
-			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
-					.forScript(getEffect())
-					.withConst("field", this)
-					.withConst("game", getGame())
-					.withConst("data", stats.getData())
-					.toExecutor()
-					.withVar("ep", new EffectParameters(trigger, getSide()))
-					.withVar("side", getSide())
-					.withVar("trigger", trigger);
-
-			if (stats.getSource() instanceof Senshi s) {
-				exec.withVar("me", s);
-			}
-
-			exec.run();
-		} catch (Exception e) {
-			Drawable<?> source = Utils.getOr(stats.getSource(), this);
-			String name = source.getVanity().getName();
-
-			Constants.LOGGER.warn("Failed to initialize {}\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
-		}
 	}
 
 	public boolean isActive() {

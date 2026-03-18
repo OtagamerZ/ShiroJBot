@@ -108,8 +108,10 @@ public record EffectParameters(Trigger trigger, Side side, DeferredTrigger refer
 			return targets.stream()
 					.flatMap(t -> Stream.concat(
 							Stream.of(t),
-							t.card().getNearby().stream().map(n -> n.asTarget(t.trigger(), t.type()))
+							t.card().getNearby().stream()
+									.map(n -> n.asTarget(t.trigger(), t.type()))
 					))
+					.distinct()
 					.toList();
 		}
 

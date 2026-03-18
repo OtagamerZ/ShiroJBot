@@ -25,10 +25,15 @@ import com.kuuhaku.model.common.shoukan.SlotColumn;
 import com.kuuhaku.model.common.shoukan.TagBundle;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.shoukan.*;
+import com.kuuhaku.model.enums.shoukan.Flag;
+import com.kuuhaku.model.enums.shoukan.Side;
+import com.kuuhaku.model.enums.shoukan.TargetType;
+import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.persistent.shiro.Card;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.shoukan.CardTag;
 import com.kuuhaku.model.records.shoukan.Source;
@@ -36,13 +41,12 @@ import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
-import org.apache.commons.collections4.set.ListOrderedSet;
 
 import java.awt.*;
 import java.awt.font.TextAttribute;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -164,10 +168,6 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default void setCooldown(int time) {
-	}
-
-	default ListOrderedSet<String> getCurses() {
-		return new ListOrderedSet<>();
 	}
 
 	boolean isAvailable();
@@ -397,18 +397,6 @@ public interface Drawable<T extends Drawable<T>> {
 				g2d.drawImage(icon, x, y, null);
 				g2d.setColor(Color.ORANGE);
 				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.BLACK);
-				y -= icon.getHeight() + 5;
-			}
-
-			if (!getCurses().isEmpty()) {
-				icon = IO.getResourceAsImage("shoukan/icons/curse.png");
-				assert icon != null;
-				int x = 200 - icon.getWidth();
-
-				String val = String.valueOf(getCurses().size());
-				g2d.drawImage(icon, x, y, null);
-				g2d.setColor(Color.BLACK);
-				Graph.drawOutlinedString(g2d, val, x - g2d.getFontMetrics().stringWidth(val) - 5, y - 6 + (icon.getHeight() + m.getHeight()) / 2, BORDER_WIDTH, Color.WHITE);
 			}
 		}
 	}
@@ -565,9 +553,8 @@ public interface Drawable<T extends Drawable<T>> {
 	}
 
 	default List<Evogear> getEquipments(Side side, int... indexes) {
-		if (!(this instanceof EffectHolder<?> eh) || getIndex() == -1) return null;
+		if (!(this instanceof EffectHolder<?>) || getIndex() == -1) return null;
 
-		boolean empower = eh.hasFlag(Flag.EMPOWERED);
 		List<Evogear> tgts = new ArrayList<>();
 		for (int idx : indexes) {
 			if (idx < 0 || idx > 4) continue;

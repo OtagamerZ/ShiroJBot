@@ -660,16 +660,16 @@ public class Hand {
 	private Drawable<?> addToHand(Drawable<?> out, boolean manual, boolean oriSkip) {
 		if (!oriSkip) {
 			if (out instanceof Evogear e && !e.isSpell()) {
-				if (origin.hasSynergy(Race.MUMMY) && out.getCurses().isEmpty() && !selectionPending()) {
+				if (origin.hasSynergy(Race.MUMMY) && !selectionPending()) {
 					Evogear curse = Evogear.getByTag(game.getRng(), "MUMMY_CURSE").getRandom();
 
 					requestChoice(
 							null,
 							List.of(
 									new SelectionCard(out, false),
-									new SelectionCard(out.withCopy(c -> {
-										((Evogear) c).getStats().getAttr().set(new MultMod(0.3));
-										c.getCurses().add(curse.getEffect());
+									new SelectionCard(e.withCopy(c -> {
+										c.getStats().getAttr().set(new MultMod(0.3));
+										c.getBase().getSubEffects().add(ctx -> curse.execute(ctx.getParams()));
 									}), false)
 							),
 							ds -> addToHand(ds.getFirst(), false, true)

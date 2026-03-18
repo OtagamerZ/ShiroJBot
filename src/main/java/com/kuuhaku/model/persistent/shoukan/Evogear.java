@@ -21,7 +21,6 @@ package com.kuuhaku.model.persistent.shoukan;
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.exceptions.ActivationException;
-import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
@@ -30,10 +29,8 @@ import com.kuuhaku.model.common.BondedList;
 import com.kuuhaku.model.common.CachedScriptManager;
 import com.kuuhaku.model.common.XList;
 import com.kuuhaku.model.common.XStringBuilder;
-import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.converter.JSONArrayConverter;
 import com.kuuhaku.model.persistent.shiro.Card;
@@ -45,10 +42,7 @@ import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
-import groovy.lang.Closure;
 import jakarta.persistence.*;
-import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.type.SqlTypes;
@@ -59,7 +53,6 @@ import java.awt.image.RescaleOp;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.function.Consumer;
 import java.util.random.RandomGenerator;
 
 import static com.kuuhaku.model.enums.shoukan.Trigger.*;
@@ -214,11 +207,6 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	public void setEquipper(Senshi equipper) {
 		this.equipper = equipper;
-	}
-
-	@Override
-	public ListOrderedSet<String> getCurses() {
-		return stats.getCurses();
 	}
 
 	@Override
@@ -470,6 +458,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 		state = (byte) Bit32.set(state, 1, Math.max(0, curr - time), 4);
 	}
 
+	@Override
 	public String getEffect() {
 		Drawable<?> source = getSource();
 		if (source instanceof EffectHolder<?> eh) {
@@ -490,109 +479,13 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	}
 
 	@Override
-	public CachedScriptManager getCSM() {
-		return cachedEffect;
+	public void setCurrentTrigger(Trigger currentTrigger) {
+		this.currentTrigger = currentTrigger;
 	}
 
 	@Override
-	public boolean execute(EffectParameters ep) {
-		if (!hasEffect()) return false;
-		else if (!hasTrueEffect()) {
-			if (!isSpell() && hand.getLockTime(Lock.EFFECT) > 0) return false;
-		}
-
-		Shoukan game = getGame();
-		if (base.isLocked(ep.trigger()) || ep.trigger() == NONE) {
-			return false;
-		}
-
-		try {
-			base.lock(ep.trigger());
-			if (getSlot().getIndex() > -1 && ep.trigger() != ON_TICK) {
-				execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
-			}
-
-			currentTrigger = ep.trigger();
-
-			ep = ep.forSide(getSide());
-
-			if (hasEffect() || !base.getSubEffects().isEmpty()) {
-				CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, getGame().getLocale()))
-						.forScript(getEffect())
-						.withConst("evo", this)
-						.withConst("game", getGame())
-						.withConst("data", stats.getData())
-						.toExecutor()
-						.withVar("ep", ep)
-						.withVar("side", getSide())
-						.withVar("trigger", ep.trigger());
-
-				if (!isSpell()) {
-					if (this instanceof EquippableSenshi s) {
-						exec.withVar("me", s.getOriginal());
-					} else if (stats.getSource() instanceof Senshi s) {
-						exec.withVar("me", s);
-					}
-
-					if (stats.getSource() instanceof Senshi s && equipper == null) {
-						exec.withVar("self", s);
-					} else {
-						exec.withVar("self", equipper);
-					}
-				}
-
-				if (getEffect().contains(ep.trigger().name()) || (isSpell() && Utils.equalsAny(ep.trigger(), ON_ACTIVATE, ON_TRAP))) {
-					exec.run();
-				}
-
-				for (Consumer<ShoukanContext> e : base.getSubEffects()) {
-					e.accept(exec.toContext());
-				}
-
-				if (isSpell()) {
-					hand.getData().put("last_spell", this);
-					hand.getData().put("last_evogear", this);
-					trigger(ON_SPELL, getSide());
-
-					if (hand.getOrigins().isPure(Race.MYSTICAL)) {
-						hand.modMP(1);
-					}
-				}
-
-				if (ep.trigger() != ON_TICK) {
-					hasFlag(Flag.EMPOWERED, true);
-				}
-			}
-
-			return true;
-		} catch (TargetException e) {
-			if (targetType != TargetType.NONE && ep.trigger() == Trigger.ON_ACTIVATE) {
-				if (ep.targets().stream().allMatch(t -> t.skip().get())) {
-					setAvailable(false);
-					return false;
-				}
-
-				game.getChannel().sendMessage(game.getString("error/target", game.getString("str/target_" + targetType))).queue();
-			}
-
-			return false;
-		} catch (ActivationException e) {
-			game.getChannel().sendMessage(game.getString("error/spell", game.getString(e.getMessage()))).queue();
-			return false;
-		} catch (Exception e) {
-			Drawable<?> source = Utils.getOr(stats.getSource(), this);
-			String name = source.getVanity().getName();
-			if (Utils.equalsAny(card.getRarity(), Rarity.HERO, Rarity.MONSTER)) {
-				name += " (" + StringUtils.capitalize(card.getRarity().name()) + ")";
-			}
-
-			game.getChannel().sendMessage(game.getString("error/effect")).queue();
-			Constants.LOGGER.warn("Failed to execute {} effect\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
-			return false;
-		} finally {
-			currentTrigger = null;
-			base.unlock(ep.trigger());
-		}
+	public CachedScriptManager getCSM() {
+		return cachedEffect;
 	}
 
 	@Override

@@ -42,7 +42,10 @@ import com.kuuhaku.model.enums.CardType;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.MatchHistory;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.shoukan.history.HistoryTurn;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.StashedCard;
@@ -68,6 +71,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.requests.restaction.WebhookMessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
+import org.apache.commons.collections4.IterableUtils;
 import org.apache.commons.collections4.list.TreeList;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -1752,20 +1756,26 @@ public class Shoukan extends GameInstance<Phase> {
 		return arena.getSlots(side);
 	}
 
+	public Iterable<Senshi> iterateSlots() {
+		return IterableUtils.chainedIterable(
+				iterateSlots(Side.TOP),
+				iterateSlots(Side.BOTTOM)
+		);
+	}
+
 	public void iterateSlots(Consumer<Senshi> act) {
-		for (Side side : Side.values()) {
-			iterateSlots(side, act);
-		}
+		iterateSlots().forEach(act);
+	}
+
+	public Iterable<Senshi> iterateSlots(Side side) {
+		return getSlots(side).stream()
+				.flatMap(slt -> slt.getCards().stream())
+				.filter(Objects::nonNull)
+				::iterator;
 	}
 
 	public void iterateSlots(Side side, Consumer<Senshi> act) {
-		for (SlotColumn slot : arena.getSlots(side)) {
-			for (Senshi card : slot.getCards()) {
-				if (card != null) {
-					act.accept(card);
-				}
-			}
-		}
+		iterateSlots(side).forEach(act);
 	}
 
 	public Senshi findCard(Side side, String id) {

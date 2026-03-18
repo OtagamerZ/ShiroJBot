@@ -20,9 +20,6 @@ package com.kuuhaku.model.persistent.shoukan;
 
 import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
-import com.kuuhaku.exceptions.ActivationException;
-import com.kuuhaku.exceptions.SelectionException;
-import com.kuuhaku.exceptions.TargetException;
 import com.kuuhaku.game.Shoukan;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
@@ -34,29 +31,22 @@ import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.SenshiActor;
 import com.kuuhaku.model.common.dunhun.SenshiBoss;
-import com.kuuhaku.model.common.dunhun.context.ShoukanContext;
 import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.enums.shoukan.*;
 import com.kuuhaku.model.persistent.dunhun.Boss;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.records.shoukan.DeferredTrigger;
 import com.kuuhaku.model.records.shoukan.EffectParameters;
-import com.kuuhaku.model.records.shoukan.Target;
 import com.kuuhaku.util.*;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
-import org.apache.commons.collections4.set.ListOrderedSet;
-import org.apache.commons.lang3.StringUtils;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.intellij.lang.annotations.Language;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -1152,11 +1142,6 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		this.lastInteraction = last;
 	}
 
-	@Override
-	public ListOrderedSet<String> getCurses() {
-		return stats.getCurses();
-	}
-
 	public CardState getState() {
 		if (isFlipped()) return CardState.FLIPPED;
 		else if (isDefending()) return CardState.DEFENSE;
@@ -1204,6 +1189,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 		slot.setBottom(card);
 	}
 
+	@Override
 	public String getEffect() {
 		Drawable<?> source = getSource();
 		if (source instanceof EffectHolder<?> eh) {
@@ -1246,240 +1232,13 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	}
 
 	@Override
-	public CachedScriptManager getCSM() {
-		return cachedEffect;
-	}
-
-	public boolean execute(EffectParameters ep) {
-		if (!hasTrueEffect(true)) {
-			if (hand.getLockTime(Lock.EFFECT) > 0) return false;
-			else if (hasFlag(Flag.NO_EFFECT, true)) {
-				base.lockAll();
-				return false;
-			}
-		}
-		if (hand.getOther().getOrigins().hasSynergy(Race.NIGHTMARE) && isSleeping()) {
-			return false;
-		}
-
-		Trigger trigger = ep.trigger();
-		boolean targeted = false;
-
-		if (ep.trigger().name().startsWith("ON_DEFER")) {
-			trigger = ep.trigger();
-		} else {
-			if (equals(ep.source().card())) {
-				trigger = ep.source().trigger();
-			} else {
-				for (Target target : ep.targets()) {
-					if (equals(target.card())) {
-						trigger = target.trigger();
-						break;
-					}
-				}
-
-				targeted = true;
-			}
-		}
-
-		if (trigger == ON_ACTIVATE && getCooldown() > 0) return false;
-
-		Shoukan game = getGame();
-		if (base.isLocked(trigger) || trigger == NONE) {
-			return false;
-		}
-
-		try {
-			base.lock(trigger);
-			if (getSlot().getIndex() > -1 && trigger != ON_TICK) {
-				execute(new EffectParameters(ON_TICK, getSide(), asSource(ON_TICK)));
-			}
-
-			currentTrigger = trigger;
-			if (Utils.equalsAny(trigger, ON_EFFECT_TARGET, ON_DEFEND)) {
-				if (!game.getCurrent().equals(hand)) {
-					Set<String> triggered = new HashSet<>();
-
-					for (SlotColumn sc : game.getSlots(getSide())) {
-						for (Senshi card : sc.getCards()) {
-							if (card instanceof TrapSpell && card.isFlipped() && !triggered.contains(card.getId()) && !ep.isTarget(card)) {
-								EffectParameters params;
-								if (targeted) {
-									params = new EffectParameters(
-											ON_TRAP, getSide(),
-											card.asSource(ON_TRAP),
-											asTarget(trigger, TargetType.ALLY),
-											ep.source().toTarget(TargetType.ENEMY)
-									);
-								} else {
-									params = new EffectParameters(
-											ON_TRAP, getSide(),
-											card.asSource(ON_TRAP),
-											asTarget(trigger, TargetType.ALLY)
-									);
-								}
-
-								if (game.activateTrap(card, params)) {
-									triggered.add(card.getId());
-									game.getChannel().buffer(game.getString("str/trap_activation", card));
-								}
-							}
-						}
-					}
-				}
-			}
-
-			ep = ep.forSide(getSide()).withTrigger(trigger);
-			for (Evogear e : List.copyOf(equipments)) {
-				e.execute(ep);
-			}
-
-			if (hand.getOrigins().hasSynergy(Race.EX_MACHINA)) {
-				Senshi sup = getSupport();
-				if (sup != null) {
-					Evogear e = new EquippableSenshi(sup);
-					e.setEquipper(this);
-					e.setHand(hand);
-
-					e.execute(ep);
-				}
-			}
-
-			if (hasEffect() || !base.getSubEffects().isEmpty()) {
-				CachedScriptManager csm = getCSM();
-				CachedScriptExecutor exec = csm.assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
-						.forScript(getEffect())
-						.withConst("me", this)
-						.withConst("self", this)
-						.withConst("game", game)
-						.withConst("data", stats.getData())
-						.toExecutor()
-						.withVar("ep", ep)
-						.withVar("side", getSide())
-						.withVar("trigger", trigger);
-
-				if (this instanceof PlaceableEvogear pe) {
-					csm.withConst("evo", pe.getOriginal());
-				}
-
-				if (isStunned() && game.chance(25)) {
-					if (Trigger.getAnnounceable().contains(trigger) && !ep.isDeferred(Trigger.getAnnounceable())) {
-						game.getChannel().buffer(game.getString("str/effect_stunned", this));
-					}
-				} else {
-					if (getEffect().contains(trigger.name())) {
-						exec.run();
-					}
-
-					for (Consumer<ShoukanContext> e : base.getSubEffects()) {
-						e.accept(exec.toContext());
-					}
-
-					if (trigger != ON_TICK) {
-						hasFlag(Flag.EMPOWERED, true);
-					}
-
-					if (trigger == ON_ACTIVATE) {
-						hand.getData().put("last_ability", this);
-						trigger(ON_ABILITY, getSide());
-					}
-				}
-			}
-
-			if (ep.referee() == null && trigger != ON_TICK) {
-				Senshi sup = getSupport();
-				if (sup != null) {
-					sup.execute(new EffectParameters(ON_DEFER_SUPPORT, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
-				}
-
-				for (Senshi adj : getNearby()) {
-					adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(this, trigger), ep.source(), ep.targets()));
-				}
-			}
-
-			for (@Language("Groovy") String curse : stats.getCurses()) {
-				if (curse.isBlank() || !curse.contains(trigger.name())) continue;
-
-				Utils.exec(toString(), curse, Map.of(
-						"self", this,
-						"game", game,
-						"data", stats.getData(),
-						"ep", ep,
-						"side", hand.getSide(),
-						"props", getCSM().getStoredProps(),
-						"trigger", trigger
-				));
-			}
-
-			return true;
-		} catch (TargetException e) {
-			if (targetType != TargetType.NONE && trigger == ON_ACTIVATE) {
-				if (ep.targets().stream().allMatch(t -> t.skip().get())) {
-					setAvailable(false);
-					return false;
-				}
-
-				game.getChannel().sendMessage(game.getString("error/target", game.getString("str/target_" + targetType))).queue();
-			}
-
-			return false;
-		} catch (ActivationException e) {
-			if (e instanceof SelectionException && trigger != ON_ACTIVATE) return false;
-			else if (trigger == ON_TICK) return false;
-
-			game.getChannel().sendMessage(game.getString("error/activation", game.getString(e.getMessage()))).queue();
-			return false;
-		} catch (Exception e) {
-			Drawable<?> source = Utils.getOr(stats.getSource(), this);
-			String name = source.getVanity().getName();
-			if (Utils.equalsAny(card.getRarity(), Rarity.HERO, Rarity.MONSTER)) {
-				name += " (" + StringUtils.capitalize(card.getRarity().name()) + ")";
-			}
-
-			game.getChannel().sendMessage(game.getString("error/effect")).queue();
-			Constants.LOGGER.warn("Failed to execute {} effect\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
-			return false;
-		} finally {
-			currentTrigger = null;
-			base.unlock(trigger);
-		}
+	public void setCurrentTrigger(Trigger currentTrigger) {
+		this.currentTrigger = currentTrigger;
 	}
 
 	@Override
-	public void executeAssert(Trigger trigger) {
-		if (!Utils.equalsAny(trigger, ON_INITIALIZE, ON_REMOVE)) return;
-		else if (!getEffect().contains(trigger.name())) return;
-
-		Shoukan game = getGame();
-		if (trigger == ON_INITIALIZE) {
-			if (getBase().getTags().contains("AUGMENT") && !(this instanceof AugmentSenshi)) {
-				replace(new AugmentSenshi(this, Senshi.getRandom(game.getRng())));
-				return;
-			}
-		} else if (trigger == ON_REMOVE) {
-			game.unbind(this);
-		}
-
-		try {
-			CachedScriptExecutor exec = getCSM().assertOwner(getSource(), () -> parseDescription(hand, game.getLocale()))
-					.forScript(getEffect())
-					.withConst("me", this)
-					.withConst("self", this)
-					.withConst("evo", this instanceof PlaceableEvogear pe ? pe.getOriginal() : null)
-					.withConst("game", game)
-					.withConst("data", stats.getData())
-					.toExecutor()
-					.withVar("ep", new EffectParameters(trigger, getSide()))
-					.withVar("side", getSide())
-					.withVar("trigger", trigger);
-
-			exec.run();
-		} catch (Exception e) {
-			Drawable<?> source = Utils.getOr(stats.getSource(), this);
-			String name = source.getVanity().getName();
-
-			Constants.LOGGER.warn("Failed to initialize {}\n{}", getVanity().getName(), "/* " + name + " */\n" + getEffect(), e);
-		}
+	public CachedScriptManager getCSM() {
+		return cachedEffect;
 	}
 
 	public void noEffect(Consumer<Senshi> c) {
