@@ -3,6 +3,7 @@ package com.kuuhaku.model.common;
 import org.jspecify.annotations.NonNull;
 
 import java.util.*;
+import java.util.function.Predicate;
 
 public class ListenableList<T> implements List<T> {
 	public interface ListEvent<T> {
@@ -171,6 +172,32 @@ public class ListenableList<T> implements List<T> {
 			}
 
 			return t;
+		}
+
+		return null;
+	}
+
+	public T removeFirst(Predicate<T> cond) {
+		ListIterator<T> it = listIterator();
+		while (it.hasNext()) {
+			T t = it.next();
+			if (cond.test(t)) {
+				it.remove();
+				return t;
+			}
+		}
+
+		return null;
+	}
+
+	public T removeLast(Predicate<T> cond) {
+		ListIterator<T> it = listIterator(size());
+		while (it.hasPrevious()) {
+			T t = it.previous();
+			if (cond.test(t)) {
+				it.remove();
+				return t;
+			}
 		}
 
 		return null;
