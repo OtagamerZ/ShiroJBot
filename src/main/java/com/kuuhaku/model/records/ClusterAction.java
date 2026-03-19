@@ -22,12 +22,16 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.util.Utils;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageEmbed;
+import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -55,61 +59,81 @@ public record ClusterAction(long delay, Map<String, MessageCreateAction> actions
 		return this;
 	}
 
-	public void queue() {
-		queue(null);
+	public CompletableFuture<Void> queue() {
+		return queue(null);
 	}
 
-	public void queue(Consumer<? super Message> success) {
-		queue(success, Utils::doNothing);
+	public CompletableFuture<Void> queue(Consumer<? super Message> success) {
+		return queue(success, Utils::doNothing);
 	}
 
-	public void queue(Consumer<? super Message> success, Consumer<? super Throwable> failure) {
+	public CompletableFuture<Void> queue(Consumer<? super Message> success, Consumer<? super Throwable> failure) {
 		Iterator<Map.Entry<String, MessageCreateAction>> it = actions.entrySet().iterator();
+		List<CompletableFuture<Message>> futures = new ArrayList<>();
 		while (it.hasNext()) {
 			Map.Entry<String, MessageCreateAction> e = it.next();
 
 			try {
-				MessageCreateAction act = e.getValue();
-
+				RestAction<Message> act = e.getValue();
 				if (delay > 0) {
-					act.delay(delay, TimeUnit.MILLISECONDS).queue(success, failure);
-				} else {
-					act.queue(success, failure);
+					act = act.delay(delay, TimeUnit.MILLISECONDS);
 				}
+
+				futures.add(act.submit()
+						.whenComplete((msg, t) -> {
+							if (msg != null) {
+								success.accept(msg);
+							} else if (t != null) {
+								failure.accept(t);
+							}
+						})
+				);
 			} catch (Exception ex) {
 				Constants.LOGGER.error("Failed to queue action for channel {}", e.getKey(), ex);
 			}
 
 			it.remove();
 		}
+
+		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}
 
-	public void queueAfter(long delay, TimeUnit unit) {
-		queueAfter(delay, unit, null);
+	public CompletableFuture<Void> queueAfter(long delay, TimeUnit unit) {
+		return queueAfter(delay, unit, null);
 	}
 
-	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success) {
-		queueAfter(delay, unit, success, Utils::doNothing);
+	public CompletableFuture<Void> queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success) {
+		return queueAfter(delay, unit, success, Utils::doNothing);
 	}
 
-	public void queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success, Consumer<? super Throwable> failure) {
+	public CompletableFuture<Void> queueAfter(long delay, TimeUnit unit, Consumer<? super Message> success, Consumer<? super Throwable> failure) {
 		Iterator<Map.Entry<String, MessageCreateAction>> it = actions.entrySet().iterator();
+		List<CompletableFuture<Message>> futures = new ArrayList<>();
 		while (it.hasNext()) {
 			Map.Entry<String, MessageCreateAction> e = it.next();
 
 			try {
-				MessageCreateAction act = e.getValue();
-
+				RestAction<Message> act = e.getValue();
 				if (delay > 0) {
-					act.delay(delay, TimeUnit.MILLISECONDS).queueAfter(delay, unit, success, failure);
-				} else {
-					act.queueAfter(delay, unit, success, failure);
+					act = act.delay(this.delay, TimeUnit.MILLISECONDS);
 				}
+
+				futures.add(act.submitAfter(delay, unit)
+						.whenComplete((msg, t) -> {
+							if (msg != null) {
+								success.accept(msg);
+							} else if (t != null) {
+								failure.accept(t);
+							}
+						})
+				);
 			} catch (Exception ex) {
 				Constants.LOGGER.error("Failed to queue action for channel {}", e.getKey(), ex);
 			}
 
 			it.remove();
 		}
+
+		return CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
 	}
 }

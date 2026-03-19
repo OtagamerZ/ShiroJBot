@@ -83,10 +83,7 @@ import org.jetbrains.annotations.Nullable;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.Method;
 import java.util.*;
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -2172,32 +2169,40 @@ public class Shoukan extends GameInstance<Phase> {
 
 			Future<BufferedImage> img = arena.render(getLocale());
 
+			CompletableFuture<Void> sendTask;
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
 			if (buffer) {
 				getChannel().buffer(StringUtils.capitalize(getString(message, args)));
+				sendTask = CompletableFuture.completedFuture(null);
 			} else {
-				getChannel().sendMessage(StringUtils.capitalize(getString(message, args))).addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg").apply(helper::apply).queue(m -> {
-					Pages.buttonize(m, helper);
-					messages.compute(m.getChannel().getId(), replaceMessages(m));
+				sendTask = getChannel()
+						.sendMessage(StringUtils.capitalize(getString(message, args)))
+						.addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg")
+						.apply(helper::apply)
+						.queue(m -> {
+							Pages.buttonize(m, helper);
+							messages.compute(m.getChannel().getId(), replaceMessages(m));
 
-					if (!registered.get()) {
-						if (!message.startsWith("str/game_history")) {
-							getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
-						}
+							if (!registered.get()) {
+								if (!message.startsWith("str/game_history")) {
+									getHistory().add(new HistoryLog(m.getContentDisplay(), getCurrentSide()));
+								}
 
-						registered.set(true);
-					}
+								registered.set(true);
+							}
 
-					try {
-						byte[] bytes = IO.getBytes(img.get());
-						m.editMessageAttachments(FileUpload.fromData(bytes, "game.jpg")).queue(null, Utils::doNothing);
-					} catch (CancellationException ignore) {
-					} catch (ExecutionException | InterruptedException e) {
-						throw new RuntimeException(e);
-					}
-				}, Utils::doNothing);
+							try {
+								byte[] bytes = IO.getBytes(img.get());
+								m.editMessageAttachments(FileUpload.fromData(bytes, "game.jpg")).queue(null, Utils::doNothing);
+							} catch (CancellationException ignore) {
+							} catch (ExecutionException | InterruptedException e) {
+								throw new RuntimeException(e);
+							}
+						}, Utils::doNothing);
 			}
+
+			sendTask.join();
 		} finally {
 			setSending(false);
 		}
@@ -3298,7 +3303,6 @@ public class Shoukan extends GameInstance<Phase> {
 		curr.reduceOriginCooldown(1);
 		curr.setCanAttack(true);
 		curr.setSummoned(false);
-		curr.flushDiscard();
 		curr.resetDraws();
 
 		if (arcade == Arcade.DECK_ROYALE) {

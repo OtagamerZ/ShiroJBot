@@ -383,20 +383,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 					op.filter(out, out);
 				}
 
-				if (hand != null) {
-					boolean legacy = hand.getUserDeck().getFrame().isLegacy();
-					String path = "shoukan/frames/state/" + (legacy ? "old" : "new");
-
-					if (isEthereal()) {
-						BufferedImage ovr = IO.getResourceAsImage(path + "/ethereal.png");
-						g1.drawImage(ovr, 0, 0, null);
-					}
-
-					if (isManipulated()) {
-						BufferedImage ovr = IO.getResourceAsImage("shoukan/states/locked.png");
-						g1.drawImage(ovr, 15, 15, null);
-					}
-				}
+				drawOverlay(g1);
 			}
 		});
 
