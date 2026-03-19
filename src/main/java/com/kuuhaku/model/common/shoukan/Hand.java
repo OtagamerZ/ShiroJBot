@@ -889,7 +889,6 @@ public class Hand {
 			}
 
 			value = (value < 0 ? stats.getDamageMult() : stats.getHealMult()).apply(value);
-
 			if (value < 0 && origin.major() == Race.UNDEAD) {
 				regdeg.add(value);
 				value = 0;

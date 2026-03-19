@@ -23,7 +23,7 @@ import com.kuuhaku.model.common.SupplyChain;
 import java.util.List;
 import java.util.function.Supplier;
 
-public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Integer> handCapacity, int lifesteal) {
+public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Integer> handCapacity, double lifesteal) {
 	public BaseValues() {
 		this(6000, new SupplyChain<>(5), new SupplyChain<>(5), 0);
 	}
@@ -38,7 +38,7 @@ public record BaseValues(int hp, SupplyChain<Integer> mpGain, SupplyChain<Intege
 				(int) values.get(0),
 				(SupplyChain<Integer>) values.get(1),
 				(SupplyChain<Integer>) values.get(2),
-				(int) values.get(3)
+				(double) values.get(3)
 		);
 	}
 }

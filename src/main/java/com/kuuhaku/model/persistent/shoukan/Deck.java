@@ -761,13 +761,13 @@ public class Deck extends DAO<Deck> {
 							return c;
 						});
 
-				int ls = 0;
+				double ls = 0;
 				if (origin.major() == Race.DEMON) {
-					ls += 10;
+					ls += 0.1;
 				}
 
 				if (origin.hasSynergy(Race.VAMPIRE)) {
-					ls += 7;
+					ls += 0.07;
 				}
 
 				return List.of(bHP, mpGain, handCap, ls);

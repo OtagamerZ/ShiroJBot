@@ -160,6 +160,7 @@ public class Shoukan extends GameInstance<Phase> {
 			h.loadCards();
 			h.resetDraws();
 			h.manualDraw(h.getRemainingDraws());
+			h.getStats().getDamageMult().set(new MultMod(() -> getTurn() < 3 ? -0.5 : 0));
 
 			if (isNotVoided()) {
 				boolean allChrome = true;
@@ -1278,8 +1279,6 @@ public class Shoukan extends GameInstance<Phase> {
 
 		Hand you = source.getHand();
 		Hand op = hands.get(tgtSide);
-		int pHP = you.getHP();
-		int eHP = op.getHP();
 
 		if (source.getTarget() != null && !Objects.equals(source.getTarget(), target)) {
 			if (md.contains(SendMode.SEND)) {
@@ -1322,25 +1321,25 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (damage == null) {
-			damage = !source.isDefending() ? source.getActiveAttr() : 0;
+			damage = source.getActiveAttr();
 		}
 
 		int dmg = damage;
-		int direct = (int) (damage * source.getStats().getPiercing().offset());
-		int lifesteal = you.getBase().lifesteal() + (int) (100 * source.getStats().getLifesteal().offset());
-		if (you.getOrigins().hasSynergy(Race.VAMPIRE) && you.isLowLife()) {
-			lifesteal += 7;
+		if (source.hasCharm(Charm.BARRAGE)) {
+			dmg /= 2;
 		}
 
-		int thorns = (you.getLockTime(Lock.CHARM) > 0 ? 20 : 0);
-		if (target != null) {
-			thorns += (int) (100 * target.getStats().getThorns().offset());
-		}
+		int prevOpHp = op.getHP();
+		int prevYouHp = you.getHP();
 
-		double dmgMult = 1;
-		if (dmg > 0 && (getTurn() < 3 || you.getLockTime(Lock.TAUNT) > 0 || source.hasCharm(Charm.BARRAGE))) {
-			dmgMult /= 2;
-		}
+		int piercing = (int) source.getStats().getPiercing().apply(damage);
+		int drain = 0;
+
+		/* PERCENTAGES */
+		double lifesteal = you.getBase().lifesteal() + source.getStats().getLifesteal().offset();
+		double wound = 0;
+		double thorns = (you.getLockTime(Lock.CHARM) > 0 ? 0.2 : 0) + (target != null ? target.getStats().getThorns().offset() : 0);
+		/* ----------- */
 
 		boolean hit = true;
 		boolean win = false;
@@ -1381,7 +1380,7 @@ public class Shoukan extends GameInstance<Phase> {
 
 							if (md.contains(SendMode.REGULAR)) {
 								if (!source.hasFlag(Flag.NO_DAMAGE, true)) {
-									you.modHP((int) -((enemyStats - dmg) * dmgMult));
+									you.modHP(-(enemyStats - dmg));
 								}
 
 								you.getGraveyard().add(source);
@@ -1512,19 +1511,10 @@ public class Shoukan extends GameInstance<Phase> {
 						for (Object o : charms) {
 							Charm c = Charm.valueOf(String.valueOf(o));
 							switch (c) {
-								case PIERCING -> direct += damage * c.getValue(e.getTier()) / 100;
-								case WOUNDING -> {
-									int val = (int) -(damage * dmgMult * c.getValue(e.getTier()) / 100);
-									op.getRegDeg().add(val);
-								}
-								case DRAIN -> {
-									int toDrain = Math.min(c.getValue(e.getTier()), op.getMP());
-									if (toDrain > 0) {
-										you.modMP(toDrain);
-										op.modMP(-toDrain);
-									}
-								}
-								case LIFESTEAL -> lifesteal += c.getValue(e.getTier());
+								case PIERCING -> piercing += damage * c.getValue(e.getTier()) / 100;
+								case WOUNDING -> wound += c.getValue(e.getTier()) / 100d;
+								case DRAIN -> drain += c.getValue(e.getTier());
+								case LIFESTEAL -> lifesteal += c.getValue(e.getTier()) / 100d;
 							}
 						}
 					}
@@ -1536,7 +1526,7 @@ public class Shoukan extends GameInstance<Phase> {
 							for (Object o : charms) {
 								Charm c = Charm.valueOf(String.valueOf(o));
 								if (c == Charm.THORNS) {
-									thorns += c.getValue(e.getTier());
+									thorns += c.getValue(e.getTier()) / 100d;
 								}
 							}
 						}
@@ -1559,17 +1549,67 @@ public class Shoukan extends GameInstance<Phase> {
 						}
 					}
 
-					op.modHP((int) -((dmg + direct) * dmgMult));
+					{ // Things that might affect their HP
+						if (!source.isDefending()) {
+							op.modHP(-(dmg + piercing));
+						}
 
-					if (thorns > 0) {
-						you.modHP(-damage * thorns / 100);
+						drain = Math.min(drain, op.getMP());
+						if (drain > 0) {
+							op.modMP(-drain);
+						}
 					}
-					if (lifesteal > 0) {
-						you.modHP(dmg * lifesteal / 100);
+					int dmgDealt = prevOpHp - op.getHP();
+
+					if (dmgDealt > 0) {
+						if (wound > 0) {
+							op.getRegDeg().add(-dmgDealt * wound);
+						}
 					}
 
-					if (you.getOrigins().hasSynergy(Race.DAEMON)) {
-						you.modMP((int) (Math.max(0d, eHP - op.getHP()) / op.getBase().hp() * 0.05));
+					{ // Things that might affect your HP
+						if (drain > 0) {
+							you.modMP(drain);
+						}
+
+						if (dmgDealt > 0) {
+							if (thorns > 0) {
+								you.modHP((int) -(dmgDealt * thorns));
+							}
+
+							if (lifesteal > 0) {
+								if (you.getOrigins().hasSynergy(Race.VAMPIRE) && you.isLowLife()) {
+									lifesteal *= 2;
+								}
+
+								you.modHP((int) (dmgDealt * lifesteal));
+							}
+						}
+
+						if (you.getOrigins().hasSynergy(Race.DAEMON)) {
+							int gain = (int) (dmgDealt / (op.getBase().hp() * 0.05));
+							if (gain > 0) {
+								you.modMP(gain);
+							}
+						}
+					}
+					int dmgTaken = prevYouHp - you.getHP();
+
+					if (dmgDealt != 0) {
+						outcome += "\n" + getString(dmgDealt > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(dmgDealt));
+
+						double mult = (dmgDealt > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).multiplier();
+						if (mult != 1) {
+							outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
+						}
+					}
+					if (dmgTaken != 0) {
+						outcome += "\n" + getString(dmgTaken > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(dmgTaken));
+
+						double mult = (dmgTaken > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).multiplier();
+						if (mult != 1) {
+							outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
+						}
 					}
 				}
 			}
@@ -1578,25 +1618,6 @@ public class Shoukan extends GameInstance<Phase> {
 				if (target == null || (md.contains(SendMode.REGULAR) && !source.spendAttack())) {
 					source.setAvailable(false);
 				}
-			}
-		}
-
-		if (eHP != op.getHP()) {
-			int val = eHP - op.getHP();
-			outcome += "\n" + getString(val > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(val));
-
-			double mult = val > 0 ? dmgMult : (100 * op.getStats().getHealMult().offset());
-			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
-			}
-		}
-		if (pHP != you.getHP()) {
-			int val = pHP - you.getHP();
-			outcome += "\n" + getString(val > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(val));
-
-			double mult = (val > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).multiplier();
-			if (mult != 1) {
-				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
 			}
 		}
 
