@@ -1953,8 +1953,6 @@ public class Shoukan extends GameInstance<Phase> {
 			}
 
 			if (binding.isBound(ep)) {
-				System.out.println(ep);
-				new RuntimeException().printStackTrace();
 				holder.execute(new EffectParameters(ON_DEFER_BINDING, ep.side(), new DeferredTrigger(null, ep.trigger()), ep.source(), ep.targets()));
 			}
 		}
