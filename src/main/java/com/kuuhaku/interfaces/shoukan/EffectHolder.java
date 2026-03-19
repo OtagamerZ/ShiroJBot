@@ -222,18 +222,14 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		boolean targeted = false;
 
 		try {
-			if (ep.trigger().name().startsWith("ON_DEFER")) {
-				trigger = ep.referee().trigger();
+			if (equals(ep.source().card())) {
+				trigger = ep.source().trigger();
 			} else {
-				if (equals(ep.source().card())) {
-					trigger = ep.source().trigger();
-				} else {
-					for (Target target : ep.targets()) {
-						if (equals(target.card())) {
-							trigger = target.trigger();
-							targeted = true;
-							break;
-						}
+				for (Target target : ep.targets()) {
+					if (equals(target.card())) {
+						trigger = target.trigger();
+						targeted = true;
+						break;
 					}
 				}
 			}
@@ -447,7 +443,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 				}
 			}
 			case Field f -> csm.withConst("field", f);
-			default -> {}
+			default -> {
+			}
 		}
 
 		CachedScriptExecutor exec = csm
@@ -463,7 +460,8 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 					exec.withVar("self", e.getEquipper());
 				}
 			}
-			default -> {}
+			default -> {
+			}
 		}
 
 		return exec;
