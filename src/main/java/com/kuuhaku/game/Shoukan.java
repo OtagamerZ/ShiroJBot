@@ -2169,14 +2169,12 @@ public class Shoukan extends GameInstance<Phase> {
 
 			Future<BufferedImage> img = arena.render(getLocale());
 
-			CompletableFuture<Void> sendTask;
 			ButtonizeHelper helper = getButtons();
 			AtomicBoolean registered = new AtomicBoolean();
 			if (buffer) {
 				getChannel().buffer(StringUtils.capitalize(getString(message, args)));
-				sendTask = CompletableFuture.completedFuture(null);
 			} else {
-				sendTask = getChannel()
+				getChannel()
 						.sendMessage(StringUtils.capitalize(getString(message, args)))
 						.addFile(IO.getBytes(arena.getThumbnail(), "jpg"), "preview.jpg")
 						.apply(helper::apply)
@@ -2199,10 +2197,9 @@ public class Shoukan extends GameInstance<Phase> {
 							} catch (ExecutionException | InterruptedException e) {
 								throw new RuntimeException(e);
 							}
-						}, Utils::doNothing);
+						}, Utils::doNothing)
+						.join();
 			}
-
-			sendTask.join();
 		} finally {
 			setSending(false);
 		}
