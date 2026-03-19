@@ -1331,6 +1331,8 @@ public class Shoukan extends GameInstance<Phase> {
 
 		int prevOpHp = op.getHP();
 		int prevYouHp = you.getHP();
+		int dmgDealt = 0;
+		int dmgTaken = 0;
 
 		int piercing = (int) source.getStats().getPiercing().apply(damage);
 		int drain = 0;
@@ -1559,7 +1561,7 @@ public class Shoukan extends GameInstance<Phase> {
 							op.modMP(-drain);
 						}
 					}
-					int dmgDealt = prevOpHp - op.getHP();
+					dmgDealt = prevOpHp - op.getHP();
 
 					if (dmgDealt > 0) {
 						if (wound > 0) {
@@ -1593,24 +1595,7 @@ public class Shoukan extends GameInstance<Phase> {
 							}
 						}
 					}
-					int dmgTaken = prevYouHp - you.getHP();
-
-					if (dmgDealt != 0) {
-						outcome += "\n" + getString(dmgDealt > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(dmgDealt));
-
-						double mult = (dmgDealt > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).multiplier();
-						if (mult != 1) {
-							outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
-						}
-					}
-					if (dmgTaken != 0) {
-						outcome += "\n" + getString(dmgTaken > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(dmgTaken));
-
-						double mult = (dmgTaken > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).multiplier();
-						if (mult != 1) {
-							outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
-						}
-					}
+					dmgTaken = prevYouHp - you.getHP();
 				}
 			}
 		} finally {
@@ -1618,6 +1603,23 @@ public class Shoukan extends GameInstance<Phase> {
 				if (target == null || (md.contains(SendMode.REGULAR) && !source.spendAttack())) {
 					source.setAvailable(false);
 				}
+			}
+		}
+
+		if (dmgDealt != 0) {
+			outcome += "\n" + getString(dmgDealt > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(dmgDealt));
+
+			double mult = (dmgDealt > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).multiplier();
+			if (mult != 1) {
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
+			}
+		}
+		if (dmgTaken != 0) {
+			outcome += "\n" + getString(dmgTaken > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(dmgTaken));
+
+			double mult = (dmgTaken > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).multiplier();
+			if (mult != 1) {
+				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
 			}
 		}
 
