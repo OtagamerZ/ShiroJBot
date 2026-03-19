@@ -47,4 +47,13 @@ public class TrapSpell extends PlaceableEvogear {
 	public boolean canAttack() {
 		return false;
 	}
+
+	@Override
+	public TrapSpell copy() {
+		TrapSpell clone = new TrapSpell(getOriginal().copy());
+		clone.setHand(getHand());
+		clone.state = state & (0b1_1111 | 0xF_FFFFF_00);
+
+		return clone;
+	}
 }

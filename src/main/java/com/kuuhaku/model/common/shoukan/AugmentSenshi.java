@@ -29,11 +29,13 @@ import com.kuuhaku.model.persistent.shoukan.Senshi;
 import java.util.Objects;
 
 public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
+	private final Senshi augment;
 	private final Senshi original;
 
 	public AugmentSenshi(Senshi aug, Senshi original) {
 		super(aug.getId(), aug.getCard(), aug.getRace(), aug.getBase(), aug.getStats(), aug.getStashRef());
 
+		this.augment = aug;
 		this.original = original;
 		while (!aug.getEquipments().isEmpty()) {
 			getEquipments().add(aug.getEquipments().removeFirst());
@@ -112,5 +114,14 @@ public class AugmentSenshi extends Senshi implements Proxy<Senshi> {
 	@Override
 	public int hashCode() {
 		return Objects.hash(super.hashCode(), original);
+	}
+
+	@Override
+	public AugmentSenshi copy() {
+		AugmentSenshi clone = new AugmentSenshi(augment.copy(), original.copy());
+		clone.setHand(getHand());
+		clone.state = state & (0b1_1111 | 0xF_FFFFF_00);
+
+		return clone;
 	}
 }

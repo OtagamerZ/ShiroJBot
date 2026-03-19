@@ -482,12 +482,14 @@ public class Shoukan extends GameInstance<Phase> {
 		return putCard(curr, d, args);
 	}
 
-	private boolean putCard(Hand curr, Drawable<?> d, JSONObject args) {
-		if (d instanceof Senshi s) {
+	private boolean putCard(Hand curr, Drawable<?> card, JSONObject args) {
+		if (card instanceof Senshi s) {
 			if (isInvalidAction(curr, s)) return false;
 		} else {
-			if (d instanceof Evogear e && e.isSpell() && args.getString("mode").equals("b")) {
-				return putCard(curr, new TrapSpell(e), args);
+			if (card instanceof Evogear e && e.isSpell()) {
+				if (args.getString("mode").equals("b") && args.has("notCombat")) {
+					return putCard(curr, new TrapSpell(e), args);
+				}
 			} else if (curr.getLockTime(Lock.BLIND) > 0) {
 				CardState state = switch (args.getString("mode")) {
 					case "d" -> CardState.DEFENSE;
@@ -495,7 +497,7 @@ public class Shoukan extends GameInstance<Phase> {
 					default -> CardState.ATTACK;
 				};
 
-				blindFail(curr, d, "str/place_card_fail", state.toString(getLocale()));
+				blindFail(curr, card, "str/place_card_fail", state.toString(getLocale()));
 				return true;
 			}
 
@@ -560,30 +562,31 @@ public class Shoukan extends GameInstance<Phase> {
 			return false;
 		}
 
-		Drawable<?> d = curr.getCards().get(args.getInt("inHand") - 1);
-		if (!d.isAvailable() || d.isManipulated()) {
+		Drawable<?> card = curr.getCards().get(args.getInt("inHand") - 1);
+		if (!card.isAvailable() || card.isManipulated()) {
 			getChannel().sendMessage(getString("error/card_unavailable")).queue();
 			return false;
 		}
 
-		if (d instanceof Senshi s && curr.getOrigins().hasSynergy(Race.SHIKIGAMI)) {
-			d = new EquippableSenshi(s);
+		Drawable<?> orig = card;
+		if (card instanceof Senshi s && curr.getOrigins().hasSynergy(Race.SHIKIGAMI)) {
+			card = new EquippableSenshi(s.copy());
 
-			EquippableSenshi es = (EquippableSenshi) d;
+			EquippableSenshi es = (EquippableSenshi) card;
 			es.getStats().getData().put("_shiki", true);
 			es.getStats().getAttr().set(new MultMod(-0.4));
 			es.getStats().getCost().set(new MultMod(-0.5));
 		}
 
-		if (d instanceof Evogear chosen && !chosen.isSpell()) {
-			if (isInvalidAction(curr, d)) return false;
+		if (card instanceof Evogear chosen && !chosen.isSpell()) {
+			if (isInvalidAction(curr, card)) return false;
 		} else {
 			if (curr.getLockTime(Lock.BLIND) > 0) {
-				curr.getGraveyard().add(d);
+				curr.getGraveyard().add(orig);
 				curr.modLockTime(Lock.BLIND, chance(50) ? -1 : 0);
 
-				if (d instanceof EquippableSenshi es) {
-					curr.getCards().remove(es.getOriginal());
+				if (card instanceof EquippableSenshi) {
+					curr.getCards().remove(orig);
 				}
 
 				SlotColumn slot = arena.getSlots(curr.getSide()).get(args.getInt("inField") - 1);
@@ -593,7 +596,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				Senshi target = slot.getTop();
-				reportEvent("str/equip_card_fail", true, false, curr.getName(), d, target);
+				reportEvent("str/equip_card_fail", true, false, curr.getName(), card, target);
 				return true;
 			}
 
@@ -626,8 +629,8 @@ public class Shoukan extends GameInstance<Phase> {
 			chosen.getStats().getData().put("consumed", consumed);
 		}
 
-		if (d instanceof EquippableSenshi es) {
-			curr.getCards().remove(es.getOriginal());
+		if (card instanceof EquippableSenshi) {
+			curr.getCards().remove(orig);
 		}
 
 		target.getEquipments().add(chosen);
@@ -1319,7 +1322,7 @@ public class Shoukan extends GameInstance<Phase> {
 		}
 
 		if (damage == null) {
-			damage = source.getActiveAttr();
+			damage = !source.isDefending() ? source.getActiveAttr() : 0;
 		}
 
 		int dmg = damage;

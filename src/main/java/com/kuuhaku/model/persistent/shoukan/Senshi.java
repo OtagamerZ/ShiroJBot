@@ -163,7 +163,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private long state = 0b1;
+	protected long state = 0b1;
 	/*
 	0x0000 000 FF FFFFF FF
 	           ││ │││││ └┴ 1111 1111

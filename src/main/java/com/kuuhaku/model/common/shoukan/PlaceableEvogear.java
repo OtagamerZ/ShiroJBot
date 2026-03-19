@@ -70,4 +70,13 @@ public class PlaceableEvogear extends Senshi implements Proxy<Evogear> {
 	public int hashCode() {
 		return original.hashCode();
 	}
+
+	@Override
+	public PlaceableEvogear copy() {
+		PlaceableEvogear clone = new PlaceableEvogear(original.copy());
+		clone.setHand(getHand());
+		clone.state = state & (0b1_1111 | 0xF_FFFFF_00);
+
+		return clone;
+	}
 }

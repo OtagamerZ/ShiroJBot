@@ -105,7 +105,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private byte state = 0b1;
+	protected byte state = 0b1;
 	/*
 	0xF F
 	  │ └ 1111

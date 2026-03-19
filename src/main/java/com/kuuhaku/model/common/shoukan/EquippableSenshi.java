@@ -71,4 +71,13 @@ public class EquippableSenshi extends Evogear implements Proxy<Senshi> {
 	public int hashCode() {
 		return original.hashCode();
 	}
+
+	@Override
+	public EquippableSenshi copy() {
+		EquippableSenshi clone = new EquippableSenshi(original.copy());
+		clone.setHand(getHand());
+		clone.state = (byte) (state & (0b111 | 0xF0));
+
+		return clone;
+	}
 }

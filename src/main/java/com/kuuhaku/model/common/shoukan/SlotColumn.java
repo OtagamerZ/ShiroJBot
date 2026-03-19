@@ -141,15 +141,15 @@ public class SlotColumn {
 			if (card.getSide() != h.getSide()) {
 				card.getStats().removeIf(v ->
 						!v.isPermanent()
-						&& !v.getSource().equals(card)
-						&& !(v.getSource() instanceof Evogear ev && card.getEquipments().contains(ev))
+								&& !v.getSource().equals(card)
+								&& !(v.getSource() instanceof Evogear ev && card.getEquipments().contains(ev))
 				);
 
 				for (Evogear e : card.getEquipments()) {
 					e.getStats().removeIf(v ->
 							!v.isPermanent()
-							&& !v.getSource().equals(card)
-							&& !(v.getSource() instanceof Evogear ev && card.getEquipments().contains(ev))
+									&& !v.getSource().equals(card)
+									&& !(v.getSource() instanceof Evogear ev && card.getEquipments().contains(ev))
 					);
 				}
 			}
@@ -163,11 +163,15 @@ public class SlotColumn {
 			if (init) {
 				card.executeAssert(Trigger.ON_INITIALIZE);
 				if (!card.getSlot().equals(this)) return;
+
+				h.getData().put("last_summon", card);
+				if (!card.isFlipped()) {
+					h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
+				}
 			}
 
-			h.getData().put("last_summon", card);
-			if (!card.isFlipped()) {
-				h.getGame().trigger(Trigger.ON_SUMMON, card.asSource(Trigger.ON_SUMMON));
+			if (card instanceof TrapSpell && top) {
+				card.setFlipped(false);
 			}
 		}
 	}

@@ -100,7 +100,7 @@ public class Field extends DAO<Field> implements EffectHolder<Field> {
 	private transient Trigger currentTrigger = null;
 
 	@Transient
-	private byte state = 0b1;
+	protected byte state = 0b1;
 	/*
 	0xF
 	  └ 000 1111
