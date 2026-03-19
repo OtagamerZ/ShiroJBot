@@ -315,12 +315,22 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 						game.getChannel().buffer(game.getString("str/effect_stunned", this));
 					}
 				} else {
-					if (hasEffect() && getEffect().contains(trigger.name())) {
-						exec.run();
+					if (hasEffect()) {
+						if (getEffect().contains(trigger.name())) {
+							exec.run();
 
-						if (ep.trigger() == ON_ACTIVATE) {
-							hand.getData().put("last_ability", this);
-							trigger(ON_ABILITY, getSide());
+							if (this instanceof Senshi && ep.trigger() == ON_ACTIVATE) {
+								hand.getData().put("last_ability", this);
+								trigger(ON_ABILITY, getSide());
+							}
+						} else if (this instanceof Evogear e && e.isSpell() && ep.trigger() == ON_ACTIVATE) {
+							hand.getData().put("last_spell", this);
+							hand.getData().put("last_evogear", this);
+							trigger(ON_SPELL, getSide());
+
+							if (hand.getOrigins().isPure(Race.MYSTICAL)) {
+								hand.modMP(1);
+							}
 						}
 					}
 
@@ -336,16 +346,6 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 
 						for (Senshi adj : s.getNearby()) {
 							adj.execute(new EffectParameters(ON_DEFER_NEARBY, getSide(), new DeferredTrigger(s, trigger), ep.source(), ep.targets()));
-						}
-					}
-
-					if (this instanceof Evogear e && e.isSpell()) {
-						hand.getData().put("last_spell", this);
-						hand.getData().put("last_evogear", this);
-						trigger(ON_SPELL, getSide());
-
-						if (hand.getOrigins().isPure(Race.MYSTICAL)) {
-							hand.modMP(1);
 						}
 					}
 				}
