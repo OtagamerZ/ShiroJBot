@@ -222,14 +222,16 @@ public interface EffectHolder<T extends Drawable<T>> extends Drawable<T> {
 		boolean targeted = false;
 
 		try {
-			if (equals(ep.source().card())) {
-				trigger = ep.source().trigger();
-			} else {
-				for (Target target : ep.targets()) {
-					if (equals(target.card())) {
-						trigger = target.trigger();
-						targeted = true;
-						break;
+			if (ep.referee() == null) {
+				if (equals(ep.source().card())) {
+					trigger = ep.source().trigger();
+				} else {
+					for (Target target : ep.targets()) {
+						if (equals(target.card())) {
+							trigger = target.trigger();
+							targeted = true;
+							break;
+						}
 					}
 				}
 			}
