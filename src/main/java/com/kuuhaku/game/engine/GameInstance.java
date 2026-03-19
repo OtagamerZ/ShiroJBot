@@ -27,7 +27,6 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
 import com.kuuhaku.model.records.shoukan.HistoryLog;
 import com.kuuhaku.util.Utils;
-import com.kuuhaku.util.text.Uwuifier;
 import com.ygimenez.json.JSONObject;
 import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
@@ -62,7 +61,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private GameChannel channel;
 	private int turn = 1;
 	private T phase;
-	private boolean initialized;
+	private CompletableFuture<Void> initialized = new CompletableFuture<>();
 
 	private final I18N locale;
 	private final String[] players;
@@ -128,17 +127,17 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 				begin();
 				GuildListener.addHandler(guild, sml);
-				initialized = true;
+				initialized.complete(null);
 				while (!isClosed() && runtime()) {
 					Thread.onSpinWait();
 				}
 				dispose();
 			} catch (GameReport e) {
-				initialized = true;
+				initialized.complete(null);
 				//noinspection MagicConstant
 				close(e.getCode());
 			} catch (Exception e) {
-				initialized = true;
+				initialized.complete(null);
 				Constants.LOGGER.error(e, e);
 				close(GameReport.INITIALIZATION_ERROR);
 			} finally {
@@ -243,8 +242,8 @@ public abstract class GameInstance<T extends Enum<T>> {
 		this.phase = phase;
 	}
 
-	public boolean isInitialized() {
-		return initialized;
+	public void awaitInit() {
+		initialized.join();
 	}
 
 	public Deque<HistoryLog> getHistory() {

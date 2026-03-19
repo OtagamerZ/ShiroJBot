@@ -96,6 +96,7 @@ public class ShiritoriCommand implements Executable {
 												.sorted(Collections.reverseOrder())
 												.toArray(String[]::new)
 								);
+
 								shi.start(event.guild(), event.channel())
 										.whenComplete((v, e) -> {
 											if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -103,6 +104,8 @@ public class ShiritoriCommand implements Executable {
 												event.channel().sendMessage(locale.get("error/error", e)).queue();
 											}
 										});
+
+								shi.awaitInit();
 							} catch (GameReport e) {
 								if (e.getCode() == GameReport.DICT_NOT_FOUND) {
 									event.channel().sendMessage(locale.get("error/dict_not_found")).queue();

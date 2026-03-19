@@ -93,6 +93,8 @@ public class DunhunDuelCommand implements Executable {
 								event.channel().sendMessage(locale.get("error/error", e)).queue();
 							}
 						});
+
+				dun.awaitInit();
 				return;
 			}
 
@@ -111,6 +113,7 @@ public class DunhunDuelCommand implements Executable {
 									.map(User::getId)
 									.toArray(String[]::new)
 					);
+
 					dun.start(event.guild(), event.channel())
 							.whenComplete((v, e) -> {
 								if (e instanceof GameReport rep && rep.getCode() == GameReport.INITIALIZATION_ERROR) {
@@ -118,6 +121,8 @@ public class DunhunDuelCommand implements Executable {
 									event.channel().sendMessage(locale.get("error/error", e)).queue();
 								}
 							});
+
+					dun.awaitInit();
 				} catch (GameReport e) {
 					switch (e.getCode()) {
 						case GameReport.NO_HERO -> {

@@ -86,6 +86,8 @@ public class ShoukanCommand implements Executable {
 										event.channel().sendMessage(locale.get("error/error", e)).queue();
 									}
 								});
+
+						skn.awaitInit();
 					} catch (GameReport e) {
 						switch (e.getCode()) {
 							case GameReport.NO_DECK -> {

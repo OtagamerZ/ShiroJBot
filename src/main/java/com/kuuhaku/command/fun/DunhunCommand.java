@@ -240,6 +240,8 @@ public class DunhunCommand implements Executable {
 										event.channel().sendMessage(locale.get("error/error", e)).queue();
 									}
 								});
+
+						dun.awaitInit();
 					} catch (GameReport e) {
 						switch (e.getCode()) {
 							case GameReport.NO_HERO -> event.channel().sendMessage(locale.get("error/no_hero")).queue();
@@ -289,6 +291,8 @@ public class DunhunCommand implements Executable {
 												event.channel().sendMessage(locale.get("error/error", e)).queue();
 											}
 										});
+
+								dun.awaitInit();
 							} catch (GameReport e) {
 								switch (e.getCode()) {
 									case GameReport.NO_HERO -> {
