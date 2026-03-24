@@ -95,18 +95,18 @@ public class Unique extends DAO<Unique> {
 		return reqTags;
 	}
 
-	public Gear asGear() {
-		return asGear(null);
+	public Gear asGear(RandomGenerator rng) {
+		return asGear(rng, null);
 	}
 
-	public Gear asGear(Hero owner) {
+	public Gear asGear(RandomGenerator rng, Hero owner) {
 		Gear g = new Gear(owner, this);
 
 		List<String> affs = new ArrayList<>();
 		for (Object aff : affixes) {
 			if (aff instanceof Collection<?> arr) {
 				if (!arr.isEmpty()) {
-					affs.add(Utils.getRandomEntry(arr).toString());
+					affs.add(Utils.getRandomEntry(rng, arr).toString());
 				}
 
 				continue;
