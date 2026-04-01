@@ -3,17 +3,16 @@ package com.kuuhaku.model.common.dunhun;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.*;
+import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
@@ -119,6 +118,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 		Calendar cal = Calendar.getInstance();
 		if (game.getHeroes().containsKey("350836145921327115") && cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
+			EffectProperties<?> props = new PermanentProperties<>(null);
+			props.setMaxHp(new MultMod(1));
+			props.setMaxAp(new FlatMod(2));
+			props.setDamage(new MultMod(1));
+			props.setDefense(new MultMod(1));
+			props.setSpellDamage(new MultMod(1));
+			props.setPower(new MultMod(1));
+
 			hunters = hunters.stream()
 					.map(a -> {
 						if (a instanceof Hero h && game.getHeroes().containsValue(h)) {
@@ -132,6 +139,7 @@ public class Combat implements Renderer<BufferedImage> {
 							if (replace != null) {
 								replace.setController(h.getAccount().getUid());
 								replace.setLevelOverride(h.getLevel());
+								replace.getModifiers().add(props);
 								return replace;
 							}
 						}
@@ -139,43 +147,6 @@ public class Combat implements Renderer<BufferedImage> {
 						return a;
 					})
 					.toList();
-
-			List<Object[]> heroes = DAO.queryAllUnmapped("""
-								SELECT id
-									 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
-								FROM hero
-								WINDOW w AS ()
-								"""
-			);
-
-			if (!heroes.isEmpty()) {
-				RandomList<String> rl = new RandomList<>(game.getNodeRng());
-				for (Object[] a : heroes) {
-					rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
-				}
-
-				double mult = -0.8 * game.getAreaLevel() / 83d;
-				if (game.getAreaType() == NodeType.BOSS) {
-					mult += 0.4;
-				}
-
-				EffectProperties<?> props = new PermanentProperties<>(null);
-				props.setMaxHp(new MultMod(mult));
-				props.setMaxAp(new MultMod(mult));
-				props.setDamage(new MultMod(mult));
-				props.setDefense(new MultMod(mult));
-				props.setSpellDamage(new MultMod(mult));
-				props.setPower(new MultMod(mult));
-
-				keepers = keepers.stream()
-						.map(_ -> {
-							Hero replace = DAO.find(Hero.class, rl.get());
-							replace.getModifiers().getEffects().add(props);
-
-							return replace;
-						})
-						.toList();
-			}
 		}
 
 		this.hunters.addAll(hunters);
