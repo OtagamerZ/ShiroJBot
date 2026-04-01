@@ -612,7 +612,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 								rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 							}
 
-							double mult = -0.8 * getAreaLevel() / 83d;
+							double mult = -0.8 * (1 - getAreaLevel() / 83d);
 							if (getAreaType() == NodeType.BOSS) {
 								mult += 0.4;
 							}
