@@ -367,11 +367,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 					}
 				}
 
-				if (combat.get() != null) {
-					combat.get().process();
+				Combat cbt = combat.get();
+				if (cbt != null) {
+					cbt.process();
 
-					if (combat.get().isDone()) {
-						if (combat.get().isWin()) {
+					if (cbt.isDone()) {
+						if (cbt.isWin()) {
 							if (!dungeon.isHidden()) {
 								grantCombatLoot();
 							}
@@ -379,8 +380,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 							run.setVisited(nextNode);
 						} else if (nextNode.isFinalNode() || nextNode.getType() != NodeType.EVENT) {
 							try {
-								Collection<Hero> hs = heroes.values();
-								if (hs.stream().allMatch(a -> a.getHp() <= 0)) {
+								Collection<Actor<?>> hs = cbt.getActors(Team.HUNTERS);
+								if (hs.stream().allMatch(a -> a.isMinion() || a.getHp() <= 0)) {
 									if (!defeat()) return false;
 								}
 							} finally {
