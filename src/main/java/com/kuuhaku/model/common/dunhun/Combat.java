@@ -8,8 +8,6 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.dunhun.Usable;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.model.common.*;
-import com.kuuhaku.model.common.shoukan.FlatMod;
-import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
@@ -811,9 +809,9 @@ public class Combat implements Renderer<BufferedImage> {
 			return;
 		}
 
-		Hero h = (Hero) getCurrent();
+		Actor<?> a = getCurrent();
 		ButtonizeHelper helper = new ButtonizeHelper(true)
-				.setCanInteract(dt -> dt.getUser().getId().equals(h.getAccount().getUid()))
+				.setCanInteract(dt -> dt.getUser().getId().equals(a.getController()))
 				.setCancellable(false);
 
 		for (int i = 0; i < targets.size(); i++) {
@@ -831,7 +829,7 @@ public class Combat implements Renderer<BufferedImage> {
 		helper.addAction(Utils.parseEmoji(Constants.RETURN), w -> {
 			MessageEditAction ma = root.apply(msg.editMessageComponents());
 
-			addDropdowns(h, ma);
+			addDropdowns(a, ma);
 
 			ma.queue(s -> Pages.buttonize(s, root));
 		});
