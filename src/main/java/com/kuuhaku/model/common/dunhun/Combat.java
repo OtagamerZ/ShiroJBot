@@ -171,7 +171,7 @@ public class Combat implements Renderer<BufferedImage> {
 						.map(a -> {
 							if (heros.isEmpty()) return a;
 
-							Actor<?> replace = DAO.find(Hero.class, rl.get());
+							Hero replace = DAO.find(Hero.class, rl.get());
 							replace.getModifiers().getEffects().add(props);
 
 							return replace;
