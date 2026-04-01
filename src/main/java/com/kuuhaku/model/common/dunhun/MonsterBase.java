@@ -1,9 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -38,6 +36,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	protected Set<LocalizedMonster> infos = new HashSet<>();
 
 	private transient boolean droppedLoot;
+	private transient int levelOverride = 0;
 
 	public MonsterBase() {
 	}
@@ -69,7 +68,15 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 			return getMaster().getLevel();
 		}
 
-		return getGame() != null ? getGame().getAreaLevel() : 1;
+		if (levelOverride > 0) {
+			return levelOverride;
+		} else {
+			return getGame() != null ? getGame().getAreaLevel() : 1;
+		}
+	}
+
+	public void setLevelOverride(int levelOverride) {
+		this.levelOverride = levelOverride;
 	}
 
 	@Override
