@@ -599,7 +599,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
 					Calendar cal = Calendar.getInstance();
-					if (getHeroes().containsKey("350836145921327115") && cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
+					if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
 						List<Object[]> heroes = DAO.queryAllUnmapped("""
 							SELECT id
 								 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
