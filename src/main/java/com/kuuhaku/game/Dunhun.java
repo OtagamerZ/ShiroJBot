@@ -624,7 +624,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 							props.setSpellDamage(new MultMod(mult));
 							props.setPower(new MultMod(mult));
 
-							chosen = DAO.find(Hero.class, rl.get());
+							chosen = (Hero) DAO.find(Hero.class, rl.get());
 							chosen.getModifiers().getEffects().add(props);
 						}
 					} else {
