@@ -161,10 +161,8 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	@Override
 	protected boolean validate(Message message) {
-		Actor<?> curr = combat.get().getCurrent();
 		return !duel || (
-				combat.get() != null
-						&& curr.getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
+				combat.get() != null && combat.get().getCurrent().getTeam() == heroes.get(message.getAuthor().getId()).getTeam()
 		);
 	}
 

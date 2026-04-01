@@ -140,7 +140,7 @@ public class Combat implements Renderer<BufferedImage> {
 					})
 					.toList();
 
-			List<Object[]> heros = DAO.queryAllUnmapped("""
+			List<Object[]> heroes = DAO.queryAllUnmapped("""
 								SELECT id
 									 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
 								FROM hero
@@ -148,9 +148,9 @@ public class Combat implements Renderer<BufferedImage> {
 								"""
 			);
 
-			if (!heros.isEmpty()) {
+			if (!heroes.isEmpty()) {
 				RandomList<String> rl = new RandomList<>(game.getNodeRng());
-				for (Object[] a : heros) {
+				for (Object[] a : heroes) {
 					rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 				}
 
@@ -168,9 +168,7 @@ public class Combat implements Renderer<BufferedImage> {
 				props.setPower(new MultMod(mult));
 
 				keepers = keepers.stream()
-						.map(a -> {
-							if (heros.isEmpty()) return a;
-
+						.map(_ -> {
 							Hero replace = DAO.find(Hero.class, rl.get());
 							replace.getModifiers().getEffects().add(props);
 
