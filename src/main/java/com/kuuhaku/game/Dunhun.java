@@ -622,8 +622,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 							props.setDamage(new MultMod(mult));
 							props.setDefense(new MultMod(mult));
 							props.setSpellDamage(new MultMod(mult));
+							props.setInitiative(new MultMod(mult));
 							props.setPower(new MultMod(mult));
 
+							//noinspection RedundantCast
 							chosen = (Hero) DAO.find(Hero.class, rl.get());
 							chosen.getModifiers().getEffects().add(props);
 						}
