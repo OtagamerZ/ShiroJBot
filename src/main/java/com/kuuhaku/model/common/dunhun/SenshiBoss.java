@@ -41,7 +41,7 @@ public class SenshiBoss extends Boss {
 
 			EffectProperties<?> props = new PermanentProperties<>(null);
 			props.setPower(new MultMod(0.5));
-			getModifiers().getEffects().add(props);
+			getModifiers().add(props);
 		}
 
 		stats.getSkills().addAll(Utils.getRandomN(skills,  5, 1, getId().hashCode()));

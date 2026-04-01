@@ -616,7 +616,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 							//noinspection RedundantCast
 							chosen = (Hero) DAO.find(Hero.class, rl.get());
-							chosen.getModifiers().getEffects().add(getAprilBalance(false));
+							chosen.getModifiers().add(getAprilBalance(false));
 						}
 					} else {
 						chosen = Monster.getRandom(this);
@@ -637,12 +637,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public EffectProperties<?> getAprilBalance(boolean buff) {
 		EffectProperties<?> props = new PermanentProperties<>(null);
-		if (true) return props;
 
 		double mult = -0.8 * (1 - getAreaLevel() / 83d);
-
 		if (buff) {
-			mult = mult * -1.8;
+			mult *= -1.8;
 		} else if (getAreaType() == NodeType.BOSS) {
 			mult += 0.4;
 		}

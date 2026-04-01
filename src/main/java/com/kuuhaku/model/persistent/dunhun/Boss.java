@@ -70,7 +70,7 @@ public class Boss extends MonsterBase<Boss> {
 
 				EffectProperties<?> props = new UniqueProperties<>("ENRAGE", null, 1);
 				props.setDamageTaken(new MultMod(-1));
-				getModifiers().getEffects().add(props);
+				getModifiers().add(props);
 
 				Combat comb = getGame().getCombat();
 				int idx = comb.getTurns().indexOf(this);
