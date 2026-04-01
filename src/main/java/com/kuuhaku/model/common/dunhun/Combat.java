@@ -13,6 +13,7 @@ import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
+import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.enums.dunhun.Team;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
@@ -154,6 +155,10 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				double mult = -0.8 * game.getAreaLevel() / 83d;
+				if (game.getAreaType() == NodeType.BOSS) {
+					mult += 0.4;
+				}
+
 				EffectProperties<?> props = new PermanentProperties<>(null);
 				props.setMaxHp(new MultMod(mult));
 				props.setMaxAp(new MultMod(mult));
