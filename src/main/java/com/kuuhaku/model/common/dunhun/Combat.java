@@ -118,14 +118,6 @@ public class Combat implements Renderer<BufferedImage> {
 
 		Calendar cal = Calendar.getInstance();
 		if (game.getHeroes().containsKey("350836145921327115") && cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
-			EffectProperties<?> props = new PermanentProperties<>(null);
-			props.setMaxHp(new MultMod(1));
-			props.setMaxAp(new FlatMod(2));
-			props.setDamage(new MultMod(1));
-			props.setDefense(new MultMod(1));
-			props.setSpellDamage(new MultMod(1));
-			props.setPower(new MultMod(1));
-
 			hunters = hunters.stream()
 					.map(a -> {
 						if (a instanceof Hero h && game.getHeroes().containsValue(h)) {
@@ -139,7 +131,7 @@ public class Combat implements Renderer<BufferedImage> {
 							if (replace != null) {
 								replace.setController(h.getAccount().getUid());
 								replace.setLevelOverride(h.getLevel());
-								replace.getModifiers().add(props);
+								replace.getModifiers().add(game.getAprilBalance(true));
 								return replace;
 							}
 						}

@@ -18,6 +18,7 @@ import com.kuuhaku.model.common.InfiniteList;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.common.XStringBuilder;
 import com.kuuhaku.model.common.dunhun.*;
+import com.kuuhaku.model.common.shoukan.FlatMod;
 import com.kuuhaku.model.common.shoukan.MultMod;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Role;
@@ -50,6 +51,7 @@ import net.dv8tion.jda.api.entities.emoji.Emoji;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.intellij.lang.annotations.MagicConstant;
+import org.jspecify.annotations.NonNull;
 
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
@@ -612,23 +614,9 @@ public class Dunhun extends GameInstance<NullPhase> {
 								rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 							}
 
-							double mult = -0.8 * (1 - getAreaLevel() / 83d);
-							if (getAreaType() == NodeType.BOSS) {
-								mult += 0.4;
-							}
-
-							EffectProperties<?> props = new PermanentProperties<>(null);
-							props.setMaxHp(new MultMod(mult));
-							props.setMaxAp(new MultMod(mult));
-							props.setDamage(new MultMod(mult));
-							props.setDefense(new MultMod(mult));
-							props.setSpellDamage(new MultMod(mult));
-							props.setInitiative(new MultMod(mult));
-							props.setPower(new MultMod(mult));
-
 							//noinspection RedundantCast
 							chosen = (Hero) DAO.find(Hero.class, rl.get());
-							chosen.getModifiers().getEffects().add(props);
+							chosen.getModifiers().getEffects().add(getAprilBalance(false));
 						}
 					} else {
 						chosen = Monster.getRandom(this);
@@ -645,6 +633,26 @@ public class Dunhun extends GameInstance<NullPhase> {
 			combat.process();
 			return combat.isWin();
 		};
+	}
+
+	public EffectProperties<?> getAprilBalance(boolean buff) {
+		EffectProperties<?> props = new PermanentProperties<>(null);
+		double mult = -0.8 * (1 - getAreaLevel() / 83d);
+
+		if (buff) {
+			mult *= -1;
+		} else if (getAreaType() == NodeType.BOSS) {
+			mult += 0.4;
+		}
+
+		props.setMaxHp(new MultMod(mult));
+		props.setMaxAp(new MultMod(mult));
+		props.setDamage(new MultMod(mult));
+		props.setDefense(new MultMod(mult));
+		props.setSpellDamage(new MultMod(mult));
+		props.setInitiative(new MultMod(mult));
+		props.setPower(new MultMod(mult));
+		return props;
 	}
 
 	public void runEvent(Node node, Event evt) {
