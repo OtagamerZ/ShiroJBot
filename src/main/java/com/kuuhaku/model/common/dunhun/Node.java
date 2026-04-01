@@ -229,7 +229,7 @@ public class Node {
 		if (sublevel != null) {
 			if (type == NodeType.REST) {
 				Dunhun game = sublevel.getFloor().getMap().getRun().getGame();
-				if (game.getCalendar().get(Calendar.MONTH) == Calendar.APRIL && game.getCalendar().get(Calendar.WEEK_OF_MONTH) == 1) {
+				if (game.isAprilEvent()) {
 					return NodeType.NONE;
 				}
 			}

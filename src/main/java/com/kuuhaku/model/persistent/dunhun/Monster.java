@@ -193,11 +193,11 @@ public class Monster extends MonsterBase<Monster> {
 
 		List<Object[]> mons = DAO.queryAllUnmapped("""
 				SELECT id
-				     , weight
+				     , weight + ?2
 				FROM monster
-				WHERE (weight > 0 AND jsonb_array_length(cast(?1 AS JSONB)) = 0)
+				WHERE ((weight + ?2) > 0 AND jsonb_array_length(cast(?1 AS JSONB)) = 0)
 				   OR has(cast(?1 AS JSONB), id)
-				""", pool.toString()
+				""", pool.toString(), game.isAprilEvent() ? 500 : 0
 		);
 		if (mons.isEmpty()) return null;
 

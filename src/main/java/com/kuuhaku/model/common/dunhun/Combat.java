@@ -114,8 +114,7 @@ public class Combat implements Renderer<BufferedImage> {
 		this.node = node;
 		this.loot = new Loot(game.getLocale());
 
-		Calendar cal = game.getCalendar();
-		if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
+		if (game.isAprilEvent()) {
 			hunters = hunters.stream()
 					.map(a -> {
 						if (a instanceof Hero h && game.getHeroes().containsValue(h)) {

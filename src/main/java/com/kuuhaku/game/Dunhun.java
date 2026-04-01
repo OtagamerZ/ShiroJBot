@@ -592,8 +592,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 		initializer.accept(combat);
 
 		if (combat.getActors(Team.KEEPERS).isEmpty()) {
-			Calendar cal = getCalendar();
-			boolean aprilEvent = cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1;
+			boolean aprilEvent = isAprilEvent();
 
 			for (int i = 0; i < 4; i++) {
 				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
@@ -638,6 +637,11 @@ public class Dunhun extends GameInstance<NullPhase> {
 			combat.process();
 			return combat.isWin();
 		};
+	}
+
+	public boolean isAprilEvent() {
+		Calendar cal = getCalendar();
+		return cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1;
 	}
 
 	public EffectProperties<?> getAprilBalance(boolean buff) {
