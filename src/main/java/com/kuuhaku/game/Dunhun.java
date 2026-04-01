@@ -637,10 +637,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 	public EffectProperties<?> getAprilBalance(boolean buff) {
 		EffectProperties<?> props = new PermanentProperties<>(null);
+		if (true) return props;
+
 		double mult = -0.8 * (1 - getAreaLevel() / 83d);
 
 		if (buff) {
-			mult *= -1;
+			mult = mult * -1.8;
 		} else if (getAreaType() == NodeType.BOSS) {
 			mult += 0.4;
 		}
