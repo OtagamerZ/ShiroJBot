@@ -597,7 +597,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 			for (int i = 0; i < 4; i++) {
 				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
-				if (!Calc.chance(100 - (aprilEvent ? 75d : 50d) / getPlayers().length * keepers.size(), getNodeRng())) break;
+				if (!Calc.chance(100 - (aprilEvent ? 80d : 50d) / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
@@ -645,12 +645,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		double mult = -0.85 * (1 - getAreaLevel() / 83d);
 		if (buff) {
-			mult *= -1.8;
+			mult *= -2.2;
 		} else if (getAreaType() == NodeType.BOSS) {
 			mult += 0.4;
 		}
 
-		props.setMaxHp(new MultMod(mult));
+		props.setMaxHp(new MultMod(mult * (buff ? 1.5 : 1)));
 		props.setMaxAp(new MultMod(mult));
 		props.setDamage(new MultMod(mult + (buff ? 0 : (1 - mult) / 2)));
 		props.setDefense(new MultMod(mult));
