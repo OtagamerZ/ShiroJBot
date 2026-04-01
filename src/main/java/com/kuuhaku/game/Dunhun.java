@@ -650,7 +650,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		props.setMaxHp(new MultMod(mult));
 		props.setMaxAp(new MultMod(mult));
-		props.setDamage(new MultMod(mult));
+		props.setDamage(new MultMod(mult + (buff ? 0 : (1 - mult) / 2)));
 		props.setDefense(new MultMod(mult));
 		props.setSpellDamage(new MultMod(mult));
 		props.setInitiative(new MultMod(mult));
