@@ -600,30 +600,33 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
-					if (aprilEvent) {
-						List<Object[]> heroes = DAO.queryAllUnmapped("""
+					chosen = Monster.getRandom(this);
+				}
+
+				if (aprilEvent) {
+					List<Object[]> heroes = DAO.queryAllUnmapped("""
 							SELECT id
 								 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
 							FROM hero
 							WINDOW w AS ()
 							"""
-						);
+					);
 
-						if (!heroes.isEmpty()) {
-							RandomList<String> rl = new RandomList<>(getNodeRng());
-							for (Object[] a : heroes) {
-								rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
-							}
-
-							EffectProperties<?> props = getAprilBalance(false);
-
-							//noinspection RedundantCast
-							chosen = (Hero) DAO.find(Hero.class, rl.get());
-							chosen.getModifiers().add(props);
-							chosen.getModifiers().getSummon().add(props);
+					if (!heroes.isEmpty()) {
+						RandomList<String> rl = new RandomList<>(getNodeRng());
+						for (Object[] a : heroes) {
+							rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 						}
-					} else {
-						chosen = Monster.getRandom(this);
+
+						EffectProperties<?> props = getAprilBalance(false);
+						if (chosen instanceof MonsterBase<?> m) {
+							combat.getLoot().add(m.generateLoot());
+						}
+
+						//noinspection RedundantCast
+						chosen = (Hero) DAO.find(Hero.class, rl.get());
+						chosen.getModifiers().add(props);
+						chosen.getModifiers().getSummon().add(props);
 					}
 				}
 
