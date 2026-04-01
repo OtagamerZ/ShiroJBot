@@ -592,14 +592,16 @@ public class Dunhun extends GameInstance<NullPhase> {
 		initializer.accept(combat);
 
 		if (combat.getActors(Team.KEEPERS).isEmpty()) {
+			Calendar cal = getCalendar();
+			boolean aprilEvent = cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1;
+
 			for (int i = 0; i < 4; i++) {
 				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
-				if (!Calc.chance(100 - 50d / getPlayers().length * keepers.size(), getNodeRng())) break;
+				if (!Calc.chance(100 - (aprilEvent ? 75d : 50d) / getPlayers().length * keepers.size(), getNodeRng())) break;
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
-					Calendar cal = getCalendar();
-					if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
+					if (aprilEvent) {
 						List<Object[]> heroes = DAO.queryAllUnmapped("""
 							SELECT id
 								 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
