@@ -568,50 +568,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 	}
 
 	public Supplier<Boolean> runCombat(Node node, List<Actor<?>> enemies) {
-		return runCombat(node, c -> {
-			List<Actor<?>> keepers = new ArrayList<>(enemies);
-
-			Calendar cal = Calendar.getInstance();
-			if (getHeroes().containsKey("350836145921327115") && cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
-				List<Object[]> heroes = DAO.queryAllUnmapped("""
-								SELECT id
-									 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
-								FROM hero
-								WINDOW w AS ()
-								"""
-				);
-
-				if (!heroes.isEmpty()) {
-					RandomList<String> rl = new RandomList<>(getNodeRng());
-					for (Object[] a : heroes) {
-						rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
-					}
-
-					double mult = -0.8 * getAreaLevel() / 83d;
-					if (getAreaType() == NodeType.BOSS) {
-						mult += 0.4;
-					}
-
-					EffectProperties<?> props = new PermanentProperties<>(null);
-					props.setMaxHp(new MultMod(mult));
-					props.setMaxAp(new MultMod(mult));
-					props.setDamage(new MultMod(mult));
-					props.setDefense(new MultMod(mult));
-					props.setSpellDamage(new MultMod(mult));
-					props.setPower(new MultMod(mult));
-
-					ListIterator<Actor<?>> it = keepers.listIterator();
-					while (it.hasNext()) {
-						Hero replace = DAO.find(Hero.class, rl.get());
-						replace.getModifiers().getEffects().add(props);
-
-						it.set(replace);
-					}
-				}
-			}
-
-			c.getActors(Team.KEEPERS).addAll(keepers);
-		});
+		return runCombat(node, c -> c.getActors(Team.KEEPERS).addAll(enemies));
 	}
 
 	public Supplier<Boolean> runCombat(Node node, Consumer<Combat> initializer) {
@@ -638,7 +595,41 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
-					chosen = Monster.getRandom(this);
+					Calendar cal = Calendar.getInstance();
+					if (getHeroes().containsKey("350836145921327115") && cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
+						List<Object[]> heroes = DAO.queryAllUnmapped("""
+							SELECT id
+								 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
+							FROM hero
+							WINDOW w AS ()
+							"""
+						);
+
+						if (!heroes.isEmpty()) {
+							RandomList<String> rl = new RandomList<>(getNodeRng());
+							for (Object[] a : heroes) {
+								rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
+							}
+
+							double mult = -0.8 * getAreaLevel() / 83d;
+							if (getAreaType() == NodeType.BOSS) {
+								mult += 0.4;
+							}
+
+							EffectProperties<?> props = new PermanentProperties<>(null);
+							props.setMaxHp(new MultMod(mult));
+							props.setMaxAp(new MultMod(mult));
+							props.setDamage(new MultMod(mult));
+							props.setDefense(new MultMod(mult));
+							props.setSpellDamage(new MultMod(mult));
+							props.setPower(new MultMod(mult));
+
+							chosen = DAO.find(Hero.class, rl.get());
+							chosen.getModifiers().getEffects().add(props);
+						}
+					} else {
+						chosen = Monster.getRandom(this);
+					}
 				}
 
 				if (chosen != null) {
