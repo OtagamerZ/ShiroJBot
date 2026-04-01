@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.dunhun.NodeType;
 import com.kuuhaku.model.persistent.dunhun.DungeonRun;
 import com.kuuhaku.model.persistent.dunhun.Event;
@@ -226,6 +227,13 @@ public class Node {
 
 	public NodeType getType() {
 		if (sublevel != null) {
+			if (type == NodeType.REST) {
+				Dunhun game = sublevel.getFloor().getMap().getRun().getGame();
+				if (game.getCalendar().get(Calendar.MONTH) == Calendar.APRIL && game.getCalendar().get(Calendar.WEEK_OF_MONTH) == 1) {
+					return NodeType.NONE;
+				}
+			}
+
 			DungeonRun run = sublevel.getFloor().getMap().getRun();
 			if (!isFinalNode() && run.getVisitedNodes().contains(getId())) {
 				return NodeType.NONE;

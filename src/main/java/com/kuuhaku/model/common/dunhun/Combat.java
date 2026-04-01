@@ -129,7 +129,10 @@ public class Combat implements Renderer<BufferedImage> {
 							if (replace != null) {
 								replace.setController(h.getAccount().getUid());
 								replace.setLevelOverride(h.getLevel());
-								replace.getModifiers().add(game.getAprilBalance(true));
+
+								EffectProperties<?> props = game.getAprilBalance(true);
+								replace.getModifiers().add(props);
+								replace.getModifiers().getSummon().add(props);
 								return replace;
 							}
 						}

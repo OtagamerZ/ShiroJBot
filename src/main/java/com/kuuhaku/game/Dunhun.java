@@ -614,9 +614,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 								rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
 							}
 
+							EffectProperties<?> props = getAprilBalance(false);
+
 							//noinspection RedundantCast
 							chosen = (Hero) DAO.find(Hero.class, rl.get());
-							chosen.getModifiers().add(getAprilBalance(false));
+							chosen.getModifiers().add(props);
+							chosen.getModifiers().getSummon().add(props);
 						}
 					} else {
 						chosen = Monster.getRandom(this);
@@ -640,7 +643,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		double mult = -0.85 * (1 - getAreaLevel() / 83d);
 		if (buff) {
-			mult *= -2.2;
+			mult *= -1.8;
 		} else if (getAreaType() == NodeType.BOSS) {
 			mult += 0.4;
 		}

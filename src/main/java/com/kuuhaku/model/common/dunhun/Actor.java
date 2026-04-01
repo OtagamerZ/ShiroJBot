@@ -485,6 +485,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void applyRegDeg() {
+		if (isOutOfCombat()) return;
+
 		int value = -getRegDeg().next();
 		setHp(getHp() - applyMitigation(value));
 	}
