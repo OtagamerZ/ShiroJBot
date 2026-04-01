@@ -598,7 +598,7 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 				Actor<?> chosen = node.generateEnemy();
 				if (chosen == null) {
-					Calendar cal = Calendar.getInstance();
+					Calendar cal = getCalendar();
 					if (cal.get(Calendar.MONTH) == Calendar.APRIL && cal.get(Calendar.WEEK_OF_MONTH) == 1) {
 						List<Object[]> heroes = DAO.queryAllUnmapped("""
 							SELECT id

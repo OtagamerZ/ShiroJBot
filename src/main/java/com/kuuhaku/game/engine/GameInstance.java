@@ -55,6 +55,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 	private final ScheduledExecutorService service = Executors.newSingleThreadScheduledExecutor();
 	private final long seed = ThreadLocalRandom.current().nextLong();
 	private final CompletableFuture<Void> exec = new CompletableFuture<>();
+	private final Calendar calendar = Calendar.getInstance();
 
 	private SplittableRandom rng = new SplittableRandom(seed);
 	private DelayedAction timeout;
@@ -77,6 +78,10 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public long getSeed() {
 		return seed;
+	}
+
+	public Calendar getCalendar() {
+		return calendar;
 	}
 
 	public final CompletableFuture<Void> start(Guild guild, GuildMessageChannel... chns) {
