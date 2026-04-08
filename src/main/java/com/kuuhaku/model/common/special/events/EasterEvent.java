@@ -105,7 +105,7 @@ public class EasterEvent extends SpecialEvent {
 						count.set(0);
 					}
 
-					return msgs.size() >= eggs;
+					return msgs.size() < eggs;
 				})
 				.thenAccept(_ -> {
 					for (Message msg : msgs) {
