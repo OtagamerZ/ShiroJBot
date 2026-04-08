@@ -41,12 +41,13 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-//@SpecialEvent.Seasonal(months = Calendar.APRIL)
+@SpecialEvent.Seasonal(months = Calendar.APRIL)
 @Requires({Permission.MESSAGE_HISTORY, Permission.MESSAGE_EXT_EMOJI})
 public class EasterEvent extends SpecialEvent {
 	private final Set<Message> msgs = new HashSet<>();
