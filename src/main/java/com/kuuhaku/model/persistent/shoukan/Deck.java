@@ -404,7 +404,7 @@ public class Deck extends DAO<Deck> {
 				totalDfs += e.getDfs();
 			}
 
-			double[] vals = Math.clamp(new double[]{
+			double[] vals = Calc.clamp(new double[]{
 					Calc.prcnt(totalDmg, (totalDmg + totalDfs) / 1.5),
 					Calc.prcnt(totalDfs, (totalDmg + totalDfs) / 1.5),
 					getAverageMPCost() / mp,
@@ -708,7 +708,7 @@ public class Deck extends DAO<Deck> {
 					base += 4000;
 				}
 
-				int bHP = (int) Math.clamp(base * 1.5 - base * 0.3 * reduction, 10, base);
+				int bHP = (int) Calc.clamp(base * 1.5 - base * 0.3 * reduction, 10, base);
 
 				int mp = 5;
 				SupplyChain<Integer> mpGain = new SupplyChain<>(mp)
