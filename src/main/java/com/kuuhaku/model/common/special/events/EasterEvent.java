@@ -94,6 +94,10 @@ public class EasterEvent extends SpecialEvent {
 					eb.setDescription(sb.toString());
 					pu.send(null, getLocale().get("str/easter_event_found", u.getAsTag()), eb.build());
 
+					if (isComplete()) {
+						onCompletion(channel);
+					}
+
 					Pages.finalizeEvent(w.getMessage(), Utils::doNothing);
 				});
 
