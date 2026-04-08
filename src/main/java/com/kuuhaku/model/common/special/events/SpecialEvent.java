@@ -44,6 +44,7 @@ public abstract class SpecialEvent {
 	@Target(ElementType.TYPE)
 	protected @interface Seasonal {
 		@MagicConstant(valuesFromClass = Calendar.class) int[] months() default {};
+
 		int cooldown() default 3600;
 	}
 
@@ -122,15 +123,16 @@ public abstract class SpecialEvent {
 	}
 
 	public static SpecialEvent getEvent(I18N locale, GuildMessageChannel channel, int month) {
-		Set<Class<?>> evts = events.get(month);
-		if (evts == null) return null;
+		if (!events.containsKey(month)) return null;
 
-		evts.removeIf(e -> {
-			Requires req = e.getDeclaredAnnotation(Requires.class);
-			if (req == null) return false;
+		List<Class<?>> evts = events.get(month).stream()
+				.filter(e -> {
+					Requires req = e.getDeclaredAnnotation(Requires.class);
+					if (req == null) return true;
 
-			return !channel.getGuild().getSelfMember().hasPermission(channel, req.value());
-		});
+					return channel.getGuild().getSelfMember().hasPermission(channel, req.value());
+				})
+				.toList();
 
 		if (evts.isEmpty()) return null;
 
