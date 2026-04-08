@@ -110,9 +110,10 @@ public class EasterEvent extends SpecialEvent {
 					for (Message msg : msgs) {
 						Pages.buttonize(msg, helper);
 					}
-				});
+				})
+				.join();
 
-		pu.send(null, getLocale().get("str/easter_event", eggs));
+		pu.send(null, getLocale().get("str/easter_event", msgs.size()));
 
 		Utils.awaitMessage(channel, this::onMessage);
 		EXEC.schedule(() -> onTimeout(channel), 3, TimeUnit.MINUTES);
