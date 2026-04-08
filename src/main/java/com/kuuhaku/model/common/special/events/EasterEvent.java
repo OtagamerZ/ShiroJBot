@@ -65,6 +65,7 @@ public class EasterEvent extends SpecialEvent {
 
 		int eggs = Calc.rng(2, 4);
 		ButtonizeHelper helper = new ButtonizeHelper(false)
+				.setCancellable(false)
 				.setTimeout(3, TimeUnit.MINUTES)
 				.addAction(emj, w -> {
 					if (!msgs.remove(w.getMessage())) return;
