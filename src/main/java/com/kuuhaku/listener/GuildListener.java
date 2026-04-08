@@ -524,8 +524,8 @@ public class GuildListener extends ListenerAdapter {
 		if (Calc.chance(1)) {
 			SpecialEvent evt = SpecialEvent.getEvent(locale, channel, Calendar.getInstance().get(Calendar.MONTH));
 			if (evt != null) {
-				SpecialEvent.addEvent(channel.getGuild(), evt);
 				evt.start(channel);
+				SpecialEvent.addEvent(channel.getGuild(), evt);
 			}
 		}
 	}
