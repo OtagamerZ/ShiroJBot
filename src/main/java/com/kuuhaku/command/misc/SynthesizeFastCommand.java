@@ -145,7 +145,7 @@ public class SynthesizeFastCommand implements Executable {
 			sc.save();
 
 			if (sc.isChrome()) {
-				kp.getAccount().setDynValue("chrome_field", true);
+				DynamicProperty.update(kp.getUid(), "chrome_field", true);
 			}
 
 			event.channel().sendMessage(locale.get("success/synth", f))
@@ -160,7 +160,7 @@ public class SynthesizeFastCommand implements Executable {
 			sc.save();
 
 			if (sc.isChrome()) {
-				kp.getAccount().setDynValue("highest_chrome", v ->
+				DynamicProperty.update(kp.getUid(), "highest_chrome", v ->
 						Math.max(NumberUtils.toInt(v), e.getTier())
 				);
 			}

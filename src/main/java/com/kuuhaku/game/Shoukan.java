@@ -48,6 +48,7 @@ import com.kuuhaku.model.persistent.shoukan.MatchHistory;
 import com.kuuhaku.model.persistent.shoukan.Senshi;
 import com.kuuhaku.model.persistent.shoukan.history.HistoryTurn;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.records.ClusterAction;
 import com.kuuhaku.model.records.PseudoUser;
@@ -179,7 +180,7 @@ public class Shoukan extends GameInstance<Phase> {
 				}
 
 				if (allChrome && hasField && evos >= 5) {
-					h.getAccount().setDynValue("all_chrome", true);
+					DynamicProperty.update(h.getUid(), "all_chrome", true);
 				}
 
 				int fields = (int) h.getCards().parallelStream()
@@ -187,7 +188,7 @@ public class Shoukan extends GameInstance<Phase> {
 						.count();
 
 				if (fields >= 3 && h.getCards().stream().anyMatch(d -> d instanceof Senshi)) {
-					h.getAccount().setDynValue("cartographer", true);
+					DynamicProperty.update(h.getUid(), "cartographer", true);
 				}
 			}
 
@@ -2805,7 +2806,7 @@ public class Shoukan extends GameInstance<Phase> {
 											}
 
 											if (isNotVoided() && d.getTier() == 4 && d.hasFlag(Flag.EMPOWERED)) {
-												curr.getAccount().setDynValue("emp_tier_4", true);
+												DynamicProperty.update(curr.getUid(), "emp_tier_4", true);
 											}
 
 											curr.setOriginCooldown(Math.max(0, 4 - material.size()));

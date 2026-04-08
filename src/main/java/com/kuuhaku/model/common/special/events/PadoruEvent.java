@@ -16,13 +16,12 @@
  * along with Shiro J Bot.  If not, see <https://www.gnu.org/licenses/>
  */
 
-package com.kuuhaku.model.common.special;
+package com.kuuhaku.model.common.special.events;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.DynamicProperty;
 import com.kuuhaku.model.records.GuildBuff;
 import com.kuuhaku.model.records.PseudoUser;
 import com.kuuhaku.util.IO;
@@ -35,31 +34,31 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.File;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
+@SpecialEvent.Seasonal(months = Calendar.DECEMBER)
 public class PadoruEvent extends SpecialEvent {
 	private final Set<String> users = new HashSet<>();
 	private int stage = 0;
 
 	public PadoruEvent(I18N locale) {
-		super(locale);
+		super(locale, "Nero Claudius", "nero/1.png");
 	}
 
 	@Override
 	public void start(GuildMessageChannel channel) {
-		addEvent(channel.getGuild(), this);
-
-		PseudoUser pu = new PseudoUser("Nero Claudius", Constants.ORIGIN_RESOURCES + "avatar/nero/1.png", channel);
+		PseudoUser pu = getPersona(channel);
 		pu.send(null, "***Hashire sori yo***\n-# " + getLocale().get("str/padoru_event"));
 
-		Utils.awaitMessage(channel, this::onRun);
+		Utils.awaitMessage(channel, this::onMessage);
 		EXEC.schedule(() -> onTimeout(channel), 3, TimeUnit.MINUTES);
 	}
 
 	@Override
-	public boolean onRun(Message msg) {
+	public boolean onMessage(Message msg) {
 		if (isComplete()) return true;
 
 		String content = msg.getContentRaw();
@@ -98,8 +97,7 @@ public class PadoruEvent extends SpecialEvent {
 		}
 
 		for (String id : users) {
-			Account acc = DAO.find(Account.class, id);
-			acc.setDynValue("padoru", v -> NumberUtils.toInt(v) + 1);
+			DynamicProperty.update(id, "padoru", v -> NumberUtils.toInt(v) + 1);
 		}
 
 		DAO.apply(GuildConfig.class, channel.getGuild().getId(), gc -> {

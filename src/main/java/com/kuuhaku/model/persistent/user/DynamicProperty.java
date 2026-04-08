@@ -25,6 +25,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 @Entity
 @Table(name = "dynamic_property", schema = "shiro")
@@ -80,6 +81,15 @@ public class DynamicProperty extends DAO<DynamicProperty> {
 				ON CONFLICT (id, uid) DO UPDATE
 				SET value = ?3
 				""", key, uid, value);
+	}
+
+	public static void update(String uid, String key, Function<String, Object> value) {
+		String val = DAO.queryNative(String.class, "SELECT value FROM dynamic_property WHERE uid = ?1 AND id = ?2", uid, key);
+		if (val == null) {
+			val = "";
+		}
+
+		update(uid, key, value.apply(val));
 	}
 
 	@Override

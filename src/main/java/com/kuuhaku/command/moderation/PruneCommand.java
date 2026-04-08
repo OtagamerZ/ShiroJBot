@@ -120,7 +120,7 @@ public class PruneCommand implements Executable {
 
                     return ids.size() < amount;
                 })
-                .thenApply(v -> event.channel().purgeMessagesById(ids))
+                .thenApply(_ -> event.channel().purgeMessagesById(ids))
                 .thenAccept(act -> CompletableFuture.allOf(act.toArray(CompletableFuture[]::new))
                         .thenRun(() -> {
                             queue.remove(event.guild().getId());

@@ -40,10 +40,7 @@ import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
 import com.kuuhaku.model.persistent.shoukan.Field;
-import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Kawaipon;
-import com.kuuhaku.model.persistent.user.StashedCard;
-import com.kuuhaku.model.persistent.user.UserItem;
+import com.kuuhaku.model.persistent.user.*;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.SynthResult;
@@ -247,7 +244,7 @@ public class SynthesizeCommand implements Executable {
 								sc.save();
 
 								if (sc.isChrome()) {
-									kp.getAccount().setDynValue("chrome_field", true);
+									DynamicProperty.update(kp.getUid(), "chrome_field", true);
 								}
 
 								event.channel().sendMessage(locale.get("success/synth", f))
@@ -262,7 +259,7 @@ public class SynthesizeCommand implements Executable {
 								sc.save();
 
 								if (sc.isChrome()) {
-									kp.getAccount().setDynValue("highest_chrome", v ->
+									DynamicProperty.update(kp.getUid(), "highest_chrome", v ->
 										Math.max(NumberUtils.toInt(v), e.getTier())
 									);
 								}
