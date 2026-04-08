@@ -278,7 +278,7 @@ public abstract class Graph {
 	}
 
 	public static Color withOpacity(Color in, float opacity) {
-		opacity = Calc.clamp(opacity, 0, 1);
+		opacity = Math.clamp(opacity, 0, 1);
 
 		return new Color(
 				in.getRed(),
@@ -289,7 +289,7 @@ public abstract class Graph {
 	}
 
 	public static Color withBrightness(Color in, float brightness) {
-		brightness = Calc.clamp(brightness, 0, 1);
+		brightness = Math.clamp(brightness, 0, 1);
 		float[] hsl = ColorUtilities.RGBtoHSL(in);
 
 
@@ -392,8 +392,8 @@ public abstract class Graph {
 
 		float[] hsv = Color.RGBtoHSB(rgb[1], rgb[2], rgb[3], null);
 		hsv[0] = ((hsv[0] * 360 + hue) % 360) / 360;
-		hsv[1] = Calc.clamp(sat / 100f, 0, 1);
-		hsv[2] = Calc.clamp(brightness / 100f, 0, 1);
+		hsv[1] = Math.clamp(sat / 100f, 0, 1);
+		hsv[2] = Math.clamp(brightness / 100f, 0, 1);
 
 		return new Color(Color.getHSBColor(hsv[0], hsv[1], hsv[2]).getRGB());
 	}

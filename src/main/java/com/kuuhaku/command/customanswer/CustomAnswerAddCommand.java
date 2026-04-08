@@ -75,7 +75,7 @@ public class CustomAnswerAddCommand implements Executable {
 		}
 
 		if (struct.has("chance")) {
-			struct.put("chance", Utils.clamp(struct.getInt("chance"), 1, 100));
+			struct.put("chance", Math.clamp(struct.getInt("chance"), 1, 100));
 		}
 
 		try {

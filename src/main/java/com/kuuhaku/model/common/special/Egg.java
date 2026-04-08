@@ -11,7 +11,7 @@ import java.util.List;
 public record Egg(int cr, HashBag<UserItem> items) {
 	public static Egg random() {
 		RandomList<UserItem> rl = new RandomList<>();
-		List<UserItem> pool = DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.accountBound = FALSE");
+		List<UserItem> pool = DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.accountBound = FALSE AND i.currency IS NOT NULL");
 
 		for (UserItem i : pool) {
 			rl.add(i, switch (i.getCurrency()) {

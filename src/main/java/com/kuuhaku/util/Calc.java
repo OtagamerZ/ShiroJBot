@@ -54,25 +54,9 @@ public abstract class Calc {
 		return Precision.round(value, places, RoundingMode.HALF_EVEN.ordinal());
 	}
 
-	public static double clamp(double val, double min, double max) {
-		return Math.max(min, Math.min(val, max));
-	}
-
-	public static float clamp(float val, float min, float max) {
-		return Math.max(min, Math.min(val, max));
-	}
-
-	public static long clamp(long val, long min, long max) {
-		return Math.max(min, Math.min(val, max));
-	}
-
-	public static int clamp(int val, int min, int max) {
-		return Math.max(min, Math.min(val, max));
-	}
-
 	public static double[] clamp(double[] vals, double min, double max) {
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = clamp(vals[i], min, max);
+			vals[i] = Math.clamp(vals[i], min, max);
 		}
 
 		return vals;
@@ -80,7 +64,7 @@ public abstract class Calc {
 
 	public static float[] clamp(float[] vals, float min, float max) {
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = clamp(vals[i], min, max);
+			vals[i] = Math.clamp(vals[i], min, max);
 		}
 
 		return vals;
@@ -88,7 +72,7 @@ public abstract class Calc {
 
 	public static long[] clamp(long[] vals, long min, long max) {
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = clamp(vals[i], min, max);
+			vals[i] = Math.clamp(vals[i], min, max);
 		}
 
 		return vals;
@@ -96,7 +80,7 @@ public abstract class Calc {
 
 	public static int[] clamp(int[] vals, int min, int max) {
 		for (int i = 0; i < vals.length; i++) {
-			vals[i] = clamp(vals[i], min, max);
+			vals[i] = Math.clamp(vals[i], min, max);
 		}
 
 		return vals;

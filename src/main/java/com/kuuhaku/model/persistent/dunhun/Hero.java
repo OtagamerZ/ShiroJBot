@@ -139,7 +139,7 @@ public class Hero extends Actor<Hero> {
 	public int getMaxAp() {
 		int flat = 2 + getLevel() / 8;
 
-		return (int) Calc.clamp(getModifiers().getMaxAp(flat), 1, getApCap());
+		return (int) Math.clamp(getModifiers().getMaxAp(flat), 1, getApCap());
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class Hero extends Actor<Hero> {
 			crit = 1 - (1 - crit) * (1 - flat);
 		}
 
-		return Calc.clamp(crit * 100, 0, 100);
+		return Math.clamp(crit * 100, 0, 100);
 	}
 
 	@Override

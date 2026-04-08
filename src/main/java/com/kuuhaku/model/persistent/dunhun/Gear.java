@@ -375,7 +375,7 @@ public class Gear extends DAO<Gear> {
 	public double getCritical() {
 		int base = (int) basetype.getStats().critical();
 
-		return Calc.clamp(modifiers.getCritical().apply(base), 0, 100);
+		return Math.clamp(modifiers.getCritical().apply(base), 0, 100);
 	}
 
 	public boolean isDestroyed() {

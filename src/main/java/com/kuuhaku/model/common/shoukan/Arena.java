@@ -493,7 +493,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 
 				if (fac > 1) {
 					g1.setColor(new Color(0, 255, 149));
-					g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Calc.clamp(fac - 1, 0, 1)), bar.height));
+					g1.fill(new Rectangle(bar.x, bar.y, (int) (bar.width * Math.clamp(fac - 1, 0, 1)), bar.height));
 				}
 
 				int regdeg = hand.getRegDeg().peek();

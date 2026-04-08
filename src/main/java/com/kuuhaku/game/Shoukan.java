@@ -1448,7 +1448,7 @@ public class Shoukan extends GameInstance<Phase> {
 										if (enemyStats == 0) {
 											duration = 5;
 										} else {
-											duration = Utils.clamp(dmg / enemyStats, 1, 5);
+											duration = Math.clamp(dmg / enemyStats, 1, 5);
 										}
 
 										if (you.getOrigins().hasSynergy(Race.ELEMENTAL)) {

@@ -205,7 +205,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			getSenshi().reduceSleep(999);
 		}
 
-		hp = Utils.clamp(value, 0, getMaxHp());
+		hp = Math.clamp(value, 0, getMaxHp());
 	}
 
 	public int getAp() {
@@ -218,7 +218,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	}
 
 	public void setAp(int value) {
-		ap = Utils.clamp(value, 0, getMaxAp());
+		ap = Math.clamp(value, 0, getMaxAp());
 	}
 
 	public void consumeAp(int value) {
@@ -535,7 +535,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 
 		int max = getMaxHp();
-		String bar = Utils.makeProgressBar(getHp(), max, Calc.clamp((int) Math.ceil(max / 100d), 1, 10), '▱', '▰');
+		String bar = Utils.makeProgressBar(getHp(), max, Math.clamp((int) Math.ceil(max / 100d), 1, 10), '▱', '▰');
 		sb.appendNewLine("-# " + bar);
 
 		Set<ElementType> resists = getResists();

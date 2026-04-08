@@ -537,7 +537,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return Calc.round(Calc.clamp(stats.getMana().apply(flat) * getCostMult(), 0, 99));
+		return Calc.round(Math.clamp(stats.getMana().apply(flat) * getCostMult(), 0, 99));
 	}
 
 	@Override
@@ -694,7 +694,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return (int) Utils.clamp(stats.getDodge().apply(flat), min, max);
+		return (int) Math.clamp(stats.getDodge().apply(flat), min, max);
 	}
 
 	@Override
@@ -708,7 +708,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 		}
 
-		return (int) Utils.clamp(stats.getParry().apply(flat), min, 100);
+		return (int) Math.clamp(stats.getParry().apply(flat), min, 100);
 	}
 
 	@Override
@@ -776,7 +776,7 @@ public class Senshi extends DAO<Senshi> implements EffectHolder<Senshi> {
 			}
 
 			if (hand.getOrigins().hasSynergy(Race.DRYAD)) {
-				mult *= 1 + Calc.clamp(hand.getRegDeg().peek() / hand.getBase().hp(), 0, 1);
+				mult *= 1 + Math.clamp(hand.getRegDeg().peek() / hand.getBase().hp(), 0, 1);
 			}
 			if (hand.getOrigins().hasSynergy(Race.ELDRITCH)) {
 				mult *= 1 + Math.max(0, -hand.getRegDeg().peek() / (double) hand.getBase().hp()) * 2;

@@ -106,7 +106,7 @@ public class SkillStats extends UsableStats {
 			return efficiency;
 		}
 
-		return efficiency * (1 + Calc.clamp(level, 0, 100) * 0.003);
+		return efficiency * (1 + Math.clamp(level, 0, 100) * 0.003);
 	}
 
 	public double getCritical() {

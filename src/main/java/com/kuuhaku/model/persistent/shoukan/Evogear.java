@@ -262,7 +262,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			}
 		}
 
-		return Calc.round(Calc.clamp(stats.getMana().apply(flat) * getCostMult(), 0, 99));
+		return Calc.round(Math.clamp(stats.getMana().apply(flat) * getCostMult(), 0, 99));
 	}
 
 	@Override
@@ -313,7 +313,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			min += 10;
 		}
 
-		return (int) Utils.clamp(stats.getDodge().apply(flat), min, 100);
+		return (int) Math.clamp(stats.getDodge().apply(flat), min, 100);
 	}
 
 	@Override
@@ -325,7 +325,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 			min += 10;
 		}
 
-		return (int) Utils.clamp(stats.getParry().apply(flat), min, 100);
+		return (int) Math.clamp(stats.getParry().apply(flat), min, 100);
 	}
 
 	@Override

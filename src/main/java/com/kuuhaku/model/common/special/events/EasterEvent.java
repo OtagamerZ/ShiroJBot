@@ -20,6 +20,7 @@ package com.kuuhaku.model.common.special.events;
 
 import club.minnced.discord.webhook.send.WebhookEmbed;
 import club.minnced.discord.webhook.send.WebhookEmbedBuilder;
+import com.github.ygimenez.listener.EventHandler;
 import com.github.ygimenez.method.Pages;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Main;
@@ -40,14 +41,13 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-@SpecialEvent.Seasonal(months = Calendar.APRIL)
-@Requires(Permission.MESSAGE_HISTORY)
+//@SpecialEvent.Seasonal(months = Calendar.APRIL)
+@Requires({Permission.MESSAGE_HISTORY, Permission.MESSAGE_EXT_EMOJI})
 public class EasterEvent extends SpecialEvent {
 	private final Set<Message> msgs = new HashSet<>();
 
@@ -98,13 +98,14 @@ public class EasterEvent extends SpecialEvent {
 						onCompletion(channel);
 					}
 
-					Pages.finalizeEvent(w.getMessage(), Utils::doNothing);
+					EventHandler handler = Pages.getHandler();
+					handler.removeEvent(handler.getEventId(w.getMessage()));
 				});
 
 		AtomicInteger count = new AtomicInteger();
 		channel.getIterableHistory()
 				.forEachAsync(m -> {
-					if (Calc.chance(5 * count.getAndIncrement() / 10d)) {
+					if (Calc.chance(5 * count.getAndIncrement() / 25d)) {
 						msgs.add(m);
 						count.set(0);
 					}

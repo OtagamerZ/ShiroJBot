@@ -834,7 +834,7 @@ public class Hand {
 	}
 
 	public void setHP(int hp) {
-		this.hp = Utils.clamp(hp, 0, base.hp() * 2);
+		this.hp = Math.clamp(hp, 0, base.hp() * 2);
 	}
 
 	public void modHP(int value) {
@@ -903,7 +903,7 @@ public class Hand {
 			}
 		}
 
-		this.hp = (int) Utils.clamp(this.hp + value, min, base.hp() * 2);
+		this.hp = (int) Math.clamp(this.hp + value, min, base.hp() * 2);
 
 		hpDelta = this.hp - before;
 		if (hpDelta <= 0) {
@@ -980,7 +980,7 @@ public class Hand {
 			return;
 		}
 
-		this.mp = Utils.clamp(mp, 0, 99);
+		this.mp = Math.clamp(mp, 0, 99);
 	}
 
 	public void modMP(int value) {
@@ -994,7 +994,7 @@ public class Hand {
 		}
 
 		int before = this.mp;
-		this.mp = Utils.clamp(this.mp + value, 0, 99);
+		this.mp = Math.clamp(this.mp + value, 0, 99);
 		mpDelta = this.mp - before;
 
 		if (value > 0) {
@@ -1017,7 +1017,7 @@ public class Hand {
 		} else if (this.mp < value) return false;
 
 		int before = this.mp;
-		this.mp = Utils.clamp(this.mp - value, 0, 99);
+		this.mp = Math.clamp(this.mp - value, 0, 99);
 		mpDelta = this.mp - before;
 
 		if (value > 0) {

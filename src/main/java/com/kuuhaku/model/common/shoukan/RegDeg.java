@@ -127,7 +127,7 @@ public class RegDeg {
 	public void apply(double prcnt) {
 		if (parent == null) return;
 
-		int value = (int) (peek() * Utils.clamp(prcnt, 0, 1));
+		int value = (int) (peek() * Math.clamp(prcnt, 0, 1));
 		parent.modHP(value);
 
 		if (value > 0) {

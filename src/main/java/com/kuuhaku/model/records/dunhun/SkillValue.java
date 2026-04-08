@@ -25,7 +25,7 @@ public record SkillValue(int min, int max, boolean withAdded) {
 	}
 
 	public double withLevel(int level) {
-		return min + (max - min) * Calc.clamp(level, 0, 100) / 100d;
+		return min + (max - min) * Math.clamp(level, 0, 100) / 100d;
 	}
 
 	public int valueFor(Skill skill, Actor<?> source) {
