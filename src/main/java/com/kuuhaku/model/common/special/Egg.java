@@ -23,7 +23,7 @@ public record Egg(int cr, HashBag<UserItem> items) {
 
 		HashBag<UserItem> items = new HashBag<>();
 		while (Calc.chance(100d / items.size())) {
-			items.add(pool.get(Calc.rng(pool.size())));
+			items.add(rl.get());
 		}
 
 		return new Egg(Calc.rng(4000, 8000), items);
