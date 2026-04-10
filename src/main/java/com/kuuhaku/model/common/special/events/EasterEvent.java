@@ -48,7 +48,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @SpecialEvent.Seasonal(months = Calendar.APRIL)
-@Requires({Permission.MESSAGE_HISTORY, Permission.MESSAGE_EXT_EMOJI})
+@Requires({Permission.MESSAGE_HISTORY, Permission.MESSAGE_ADD_REACTION, Permission.MESSAGE_EXT_EMOJI})
 public class EasterEvent extends SpecialEvent {
 	private final Set<Message> msgs = new HashSet<>();
 
