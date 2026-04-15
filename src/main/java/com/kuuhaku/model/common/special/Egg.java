@@ -15,9 +15,9 @@ public record Egg(int cr, HashBag<UserItem> items) {
 
 		for (UserItem i : pool) {
 			rl.add(i, switch (i.getCurrency()) {
-				case CR -> 1000;
-				case ITEM -> 750;
-				case GEM -> 300;
+				case CR -> 3000;
+				case GEM -> 1000;
+				case ITEM -> 300;
 			});
 		}
 
