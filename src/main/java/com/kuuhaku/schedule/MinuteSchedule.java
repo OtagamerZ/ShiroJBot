@@ -51,6 +51,8 @@ public class MinuteSchedule implements Runnable, PreInitialize {
 			it.remove();
 		}
 
+		if (ja.isEmpty()) return;
+
 		DAO.applyNative(Profile.class, """
 				UPDATE profile
 				SET xp = xp + cast(vals -> 'xp' AS INT)

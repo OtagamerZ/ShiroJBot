@@ -277,8 +277,7 @@ public class GuildListener extends ListenerAdapter {
 		Profile profile = account.getProfile(data.member());
 		int lvl = profile.getLevel();
 
-		GuildBuff gb = config.getCumBuffs();
-		profile.addXp((int) (15 * (1 + gb.xp()) * (1 + (account.getStreak() / 100d))));
+		profile.addXp(config.getXpGained(account));
 
 		asyncExec.execute(() -> {
 			Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());

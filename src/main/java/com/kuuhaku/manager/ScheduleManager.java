@@ -39,10 +39,12 @@ public class ScheduleManager extends Scheduler {
 						if (info == null) continue;
 
 						Runnable task = (Runnable) sched.getConstructor().newInstance();
-						schedule(info.value(), task);
-
 						if (task instanceof PreInitialize) {
 							task.run();
+						}
+
+						if (!info.value().isBlank()) {
+							schedule(info.value(), task);
 						}
 					}
 				}

@@ -96,7 +96,8 @@ public class DunhunCommand implements Executable {
 			List<Dungeon> dgs = DAO.queryAll(Dungeon.class, "SELECT d FROM Dungeon d WHERE d.hidden = FALSE ORDER BY d.areaLevel, d.id");
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setAuthor(locale.get("str/dungeons"))
-					.setImage("attachment://image.png");
+					.setImage("attachment://image.png")
+					.setFooter(locale.get("str/dungeon_disclaimer"));
 
 			List<Page> pages = new ArrayList<>();
 			for (Dungeon dg : dgs) {

@@ -23,6 +23,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
+import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.model.records.GuildBuff;
 import com.ygimenez.json.JSONObject;
@@ -170,5 +171,9 @@ public class GuildConfig extends DAO<GuildConfig> implements AutoMake<GuildConfi
 
 	public List<Profile> getProfiles() {
 		return DAO.queryAll(Profile.class, "SELECT p FROM Profile p WHERE p.id.gid = ?1 ORDER BY p.xp DESC", gid);
+	}
+
+	public int getXpGained(Account account) {
+		return (int) (15 * (1 + getCumBuffs().xp()) * (1 + (account.getStreak() / 100d)));
 	}
 }

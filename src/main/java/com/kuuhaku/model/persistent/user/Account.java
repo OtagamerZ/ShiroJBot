@@ -41,6 +41,7 @@ import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import net.dv8tion.jda.api.EmbedBuilder;
+import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.User;
 import org.hibernate.annotations.Fetch;
@@ -314,6 +315,10 @@ public class Account extends DAO<Account> implements AutoMake<Account>, Blacklis
 
 	public List<Profile> getProfiles() {
 		return DAO.queryAll(Profile.class, "SELECT p FROM Profile p WHERE p.id.uid = ?1 ORDER BY p.xp DESC", uid);
+	}
+
+	public Profile getProfile(Guild guild) {
+		return DAO.find(Profile.class, new ProfileId(uid, guild.getId()));
 	}
 
 	public Profile getProfile(Member member) {

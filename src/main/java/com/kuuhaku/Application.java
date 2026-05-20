@@ -70,7 +70,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 		}
 
 		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
-				.disableCache(EnumSet.complementOf(EnumSet.of(CacheFlag.EMOJI)))
+				.disableCache(EnumSet.complementOf(EnumSet.of(CacheFlag.EMOJI, CacheFlag.VOICE_STATE)))
 				.setMemberCachePolicy(all(ONLINE.or(OWNER), m -> !m.getUser().isBot()))
 				.setBulkDeleteSplittingEnabled(false)
 				.setActivity(getRandomAction())
