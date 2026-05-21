@@ -18,23 +18,17 @@
 
 package com.kuuhaku.schedule;
 
+import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Profile;
-import com.ygimenez.json.JSONArray;
-import kotlin.Pair;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
-import net.dv8tion.jda.api.entities.Widget;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -61,10 +55,13 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 
 		GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
 		for (GuildVoiceState state : states) {
+			if (!state.getId().equals(Constants.OWNER)) return;
+
 			Account acc = DAO.find(Account.class, state.getId());
 			if (acc != null) {
 				double mult = state.isStream() ? 0.8 : 0.5;
 				int xp = config.getXpGained(acc);
+				Constants.LOGGER.info("Gained +" + xp + " xp");
 				acc.getProfile(guild).addXp((int) (xp * mult));
 			}
 		}
