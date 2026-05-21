@@ -25,6 +25,7 @@ import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.util.Calc;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 
@@ -53,13 +54,18 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 
 		if (states.isEmpty()) return;
 
+		int memberCount = guild.getMemberCount();
 		GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
 		for (GuildVoiceState state : states) {
 			if (!state.getId().equals(Constants.OWNER)) return;
 
 			Account acc = DAO.find(Account.class, state.getId());
 			if (acc != null) {
-				double mult = state.isStream() ? 0.8 : 0.5;
+				double mult = 0.2 + Calc.prcnt(memberCount, 1000) * 0.6;
+				if (state.isStream()) {
+					mult *= 1.2;
+				}
+
 				int xp = config.getXpGained(acc);
 				acc.getProfile(guild).addXp((int) (xp * mult));
 			}
