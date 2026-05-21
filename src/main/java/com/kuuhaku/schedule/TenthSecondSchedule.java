@@ -61,7 +61,6 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 			if (acc != null) {
 				double mult = state.isStream() ? 0.8 : 0.5;
 				int xp = config.getXpGained(acc);
-				Constants.LOGGER.info("Gained +" + (xp * mult) + " xp");
 				acc.getProfile(guild).addXp((int) (xp * mult));
 			}
 		}
