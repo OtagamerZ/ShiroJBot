@@ -61,9 +61,9 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 
 			Account acc = DAO.find(Account.class, state.getId());
 			if (acc != null) {
-				double mult = 0.2 + Calc.prcnt(memberCount, 1000) * 0.6;
+				double mult = 0.2 + Math.min(Calc.prcnt(memberCount, 1000), 1) * 0.4;
 				if (state.isStream()) {
-					mult *= 1.2;
+					mult *= 1.4;
 				}
 
 				int xp = config.getXpGained(acc);
