@@ -66,7 +66,7 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 					mult *= 1.4;
 				}
 
-				int xp = config.getXpGained(acc);
+				int xp = config.getXpGained(acc) * 10;
 				acc.getProfile(guild).addXp((int) (xp * mult));
 			}
 		}
