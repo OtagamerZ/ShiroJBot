@@ -169,6 +169,16 @@ public class GuildSettings extends DAO<GuildSettings> {
 	@Convert(converter = JSONObjectConverter.class)
 	private JSONObject channelLocales = new JSONObject();
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	@Column(name = "link_ignore_roles", nullable = false)
+	@Convert(converter = RoleConverter.class)
+	@CollectionTable(
+			schema = "shiro",
+			name = "guild_settings_link_ignore_roles",
+			joinColumns = @JoinColumn(name = "gid")
+	)
+	private Set<RoleImpl> linkIgnoreRoles = new HashSet<>();
+
 	public GuildSettings() {
 	}
 
@@ -292,5 +302,9 @@ public class GuildSettings extends DAO<GuildSettings> {
 
 	public JSONObject getChannelLocales() {
 		return channelLocales;
+	}
+
+	public Set<RoleImpl> getLinkIgnoreRoles() {
+		return linkIgnoreRoles;
 	}
 }

@@ -52,7 +52,7 @@ public class AllowCommand implements Executable {
 			channel = event.channel();
 		}
 
-		if (settings.getDeniedChannels().stream().noneMatch(t -> t.equals(channel))) {
+		if (settings.getDeniedChannels().stream().noneMatch(channel::equals)) {
 			event.channel().sendMessage(locale.get("error/allowed",
 					channel == event.channel() ? locale.get("str/this_channel") : channel.getAsMention()
 			)).queue();

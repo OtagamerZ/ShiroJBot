@@ -52,7 +52,7 @@ public class DenyCommand implements Executable {
 			channel = event.channel();
 		}
 
-		if (settings.getDeniedChannels().stream().anyMatch(t -> t.equals(channel))) {
+		if (settings.getDeniedChannels().stream().anyMatch(channel::equals)) {
 			event.channel().sendMessage(locale.get("error/denied",
 					channel == event.channel() ? locale.get("str/this_channel") : channel.getAsMention()
 			)).queue();

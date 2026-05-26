@@ -57,6 +57,8 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.jodah.expiringmap.ExpiringMap;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -260,11 +262,15 @@ public class GuildListener extends ListenerAdapter {
 			config.save();
 		}
 
-		if (config.getSettings().isFeatureEnabled(GuildFeature.ANTI_LINK)) {
-			Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
-			if (m.find() && data.me().hasPermission(data.channel(), Permission.MESSAGE_MANAGE)) {
-				data.message().delete().queue(null, Utils::doNothing);
-				return;
+		GuildSettings settings = config.getSettings();
+		if (settings.isFeatureEnabled(GuildFeature.ANTI_LINK)) {
+			boolean willIgnore = CollectionUtils.containsAny(settings.getLinkIgnoreRoles(), data.member().getUnsortedRoles());
+			if (!willIgnore) {
+				Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
+				if (m.find() && data.me().hasPermission(data.channel(), Permission.MESSAGE_MANAGE)) {
+					data.message().delete().queue(null, Utils::doNothing);
+					return;
+				}
 			}
 		}
 
@@ -599,7 +605,7 @@ public class GuildListener extends ListenerAdapter {
 			Permission[] missing = pc.getMissingPerms(data.channel());
 
 			if (!Constants.MOD_PRIVILEGE.apply(data.member())) {
-				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(t -> t.equals(data.channel()))) {
+				if (event.config().getSettings().getDeniedChannels().stream().anyMatch(data.channel()::equals)) {
 					data.channel().sendMessage(locale.get("error/denied_channel")).queue();
 					return;
 				} else if (event.config().getSettings().getDisabledCategories().contains(pc.category())) {

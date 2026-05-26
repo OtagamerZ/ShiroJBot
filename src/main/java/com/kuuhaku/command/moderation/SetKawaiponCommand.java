@@ -66,8 +66,8 @@ public class SetKawaiponCommand implements Executable {
 			channel = event.channel();
 		}
 
-		if (settings.getKawaiponChannels().stream().anyMatch(t -> t.equals(channel))) {
-			settings.getKawaiponChannels().removeIf(t -> t.equals(channel));
+		if (settings.getKawaiponChannels().stream().anyMatch(channel::equals)) {
+			settings.getKawaiponChannels().removeIf(channel::equals);
 			event.channel().sendMessage(locale.get("success/kawaipon_channel_remove", channel.getAsMention())).queue();
 		} else {
 			if (!(channel instanceof TextChannelImpl tc)) {

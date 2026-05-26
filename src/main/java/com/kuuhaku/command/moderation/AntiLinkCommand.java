@@ -35,7 +35,7 @@ import net.dv8tion.jda.api.Permission;
 		name = "antilink",
 		category = Category.MODERATION
 )
-@Requires(Permission.MESSAGE_EMBED_LINKS)
+@Requires(Permission.MODERATE_MEMBERS)
 public class AntiLinkCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {

@@ -66,8 +66,8 @@ public class SetDropCommand implements Executable {
 			channel = event.channel();
 		}
 
-		if (settings.getDropChannels().stream().anyMatch(t -> t.equals(channel))) {
-			settings.getDropChannels().removeIf(t -> t.equals(channel));
+		if (settings.getDropChannels().stream().anyMatch(channel::equals)) {
+			settings.getDropChannels().removeIf(channel::equals);
 			event.channel().sendMessage(locale.get("success/drop_channel_remove", channel.getAsMention())).queue();
 		} else {
 			if (!(channel instanceof TextChannelImpl tc)) {
