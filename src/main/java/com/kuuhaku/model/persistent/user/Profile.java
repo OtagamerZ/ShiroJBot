@@ -25,6 +25,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.AutoMake;
 import com.kuuhaku.interfaces.Blacklistable;
 import com.kuuhaku.model.enums.Fonts;
+import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.RuleAction;
 import com.kuuhaku.model.persistent.guild.AutoRule;
@@ -38,9 +39,8 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
 import kotlin.Pair;
-import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.*;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -49,9 +49,10 @@ import org.jdesktop.swingx.graphics.BlendComposite;
 import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -133,11 +134,47 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		});
 	}
 
-	public void applyXp() {
+	public void applyXp(I18N locale, GuildMessageChannel chn) {
+		int high = account.getHighestLevel();
+		int prize = 0;
+
 		Pair<Integer, Long> val = MinuteSchedule.XP_TO_ADD.remove(id.uid() + "-" + id.gid());
 		if (val != null) {
 			xp += val.getFirst();
 			save();
+		}
+
+		BiConsumer<GuildMessageChannel, String> notify = (c, msg) -> {
+			if (guild.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+				c = Utils.getOr(guild.getSettings().getNotificationsChannel(), c);
+				if (c.canTalk()) {
+					c.sendMessage(msg).setAllowedMentions(List.of(Message.MentionType.USER)).queue();
+				}
+			}
+		};
+
+		int level = getLevel();
+		if (level > high) {
+			prize = level * 150;
+			account.addCR(prize, "Level up prize");
+
+			notify.accept(chn, locale.get("achievement/level_up_prize", "<@" + id.uid() + ">", level, prize));
+
+			if (level <= 19) {
+				UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
+
+				account.addItem(item, 2);
+				notify.accept(chn, locale.get("str/received_item", 2, item.getName(locale)));
+			}
+		} else {
+			notify.accept(chn, locale.get("achievement/level_up", "<@" + id.uid() + ">", level, prize));
+		}
+
+		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
+			UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
+
+			account.addItem(item, level * 2);
+			notify.accept(chn, locale.get("str/received_item", level * 2, item.getName(locale)));
 		}
 	}
 

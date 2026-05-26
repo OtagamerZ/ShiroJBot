@@ -18,13 +18,13 @@
 
 package com.kuuhaku.schedule;
 
-import com.kuuhaku.Constants;
 import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Calc;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -73,7 +73,14 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 				int members = (int) chn.getMembers().stream().filter(m -> !m.getUser().isBot()).count();
 				mult *= Math.min(Calc.prcnt(members, 3), 1);
 
-				acc.getProfile(guild).addXp((int) (xp * mult));
+				Profile prof = acc.getProfile(guild);
+				int lvl = prof.getLevel();
+
+				prof.addXp((int) (xp * mult));
+
+				if (prof.getLevel() > lvl) {
+					prof.applyXp(config.getLocale(), null);
+				}
 			}
 		}
 	}

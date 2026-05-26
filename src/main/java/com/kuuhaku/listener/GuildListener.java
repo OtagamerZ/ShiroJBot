@@ -34,7 +34,10 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.*;
 import com.kuuhaku.model.persistent.localized.LocalizedTitle;
 import com.kuuhaku.model.persistent.shiro.CommandMetrics;
-import com.kuuhaku.model.persistent.user.*;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Profile;
+import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.Title;
 import com.kuuhaku.model.records.*;
 import com.kuuhaku.model.records.embed.Embed;
 import com.kuuhaku.util.*;
@@ -58,7 +61,6 @@ import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.jodah.expiringmap.ExpiringMap;
 import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.collections4.SetUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -266,7 +268,7 @@ public class GuildListener extends ListenerAdapter {
 		if (settings.isFeatureEnabled(GuildFeature.ANTI_LINK)) {
 			boolean willIgnore = CollectionUtils.containsAny(settings.getLinkIgnoreRoles(), data.member().getUnsortedRoles());
 			if (!willIgnore) {
-				Matcher m = Utils.regex(content, "(ht|f)tps?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
+				Matcher m = Utils.regex(content, "(ws|(ht|f)tp)s?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
 				if (m.find() && data.me().hasPermission(data.channel(), Permission.MESSAGE_MANAGE)) {
 					data.message().delete().queue(null, Utils::doNothing);
 					return;
@@ -307,32 +309,7 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			if (profile.getLevel() > lvl) {
-				int high = account.getHighestLevel();
-				int prize = 0;
-
-				profile.applyXp();
-				if (profile.getLevel() > high) {
-					prize = profile.getLevel() * 150;
-					account.addCR(prize, "Level up prize");
-
-					ed.notify(locale.get("achievement/level_up_prize", data.user().getAsMention(), profile.getLevel(), prize));
-
-					if (profile.getLevel() <= 19) {
-						UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
-
-						account.addItem(item, 2);
-						ed.notify(locale.get("str/received_item", 2, item.getName(locale)));
-					}
-				} else {
-					ed.notify(locale.get("achievement/level_up", data.user().getAsMention(), profile.getLevel(), prize));
-				}
-
-				if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
-					UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
-
-					account.addItem(item, profile.getLevel() * 2);
-					ed.notify(locale.get("str/received_item", profile.getLevel() * 2, item.getName(locale)));
-				}
+				profile.applyXp(locale, data.channel());
 			}
 
 			if (data.guild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {
