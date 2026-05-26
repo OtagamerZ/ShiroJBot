@@ -47,7 +47,7 @@ import java.util.List;
 public class RankLevelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+		String gid = args.get("type", "global").equals("local") ? event.guild().getId() : "";
 		List<RankLevelEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.xp DESC)  AS rank
 						     , x.uid

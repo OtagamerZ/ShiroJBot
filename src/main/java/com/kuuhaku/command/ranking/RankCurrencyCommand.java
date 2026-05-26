@@ -47,7 +47,7 @@ import java.util.List;
 public class RankCurrencyCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+		String gid = args.get("type", "global").equals("local") ? event.guild().getId() : "";
 		List<RankCurrencyEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.score DESC)  AS rank
 						     , x.uid
@@ -63,10 +63,9 @@ public class RankCurrencyCommand implements Executable {
 						          , s.private
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
-						              LEFT JOIN profile p ON p.uid = a.uid
-						     WHERE a.balance > 0
 						       AND ?1 IN ('', p.gid)
 						     ) x
+						WHERE (?1 = '' OR (SELECT 1 FROM profile p WHERE p.uid = x.uid AND gid = ?1) IS NOT NULL)
 						ORDER BY x.score DESC
 						LIMIT 10
 						""", gid).stream()

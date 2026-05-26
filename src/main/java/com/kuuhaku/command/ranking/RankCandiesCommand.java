@@ -50,7 +50,7 @@ import java.util.List;
 public class RankCandiesCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+		String gid = args.get("type", "global").equals("local") ? event.guild().getId() : "";
 		List<RankCandiesEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.candies DESC) AS rank
 						     , x.uid
@@ -62,10 +62,9 @@ public class RankCandiesCommand implements Executable {
 						          , coalesce(cast(a.inventory -> 'SPOOKY_CANDY' AS INT), 0) AS candies
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
-						              LEFT JOIN profile p ON p.uid = a.uid
-						     WHERE ?1 IN ('', p.gid)
 						     ) x
 						WHERE x.candies > 0
+						  AND (?1 = '' OR (SELECT 1 FROM profile p WHERE p.uid = x.uid AND gid = ?1) IS NOT NULL)
 						ORDER BY x.candies DESC
 						LIMIT 10
 						""", gid).stream()

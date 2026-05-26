@@ -64,7 +64,7 @@ public class RankDungeonCommand implements Executable {
 			return;
 		}
 
-		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+		String gid = args.get("type", "global").equals("local") ? event.guild().getId() : "";
 		List<RankDungeonEntry> rank = DAO.queryAllUnmapped("""
 						SELECT r.rank
 							 , h.account_uid
@@ -76,9 +76,8 @@ public class RankDungeonCommand implements Executable {
 						         INNER JOIN hero h ON h.id = r.hero_id
 						         INNER JOIN account a ON a.uid = h.account_uid
 						         INNER JOIN account_settings s ON s.uid = a.uid
-						         LEFT JOIN profile p ON p.uid = a.uid
 						WHERE NOT h.retired
-						  AND ?2 IN ('', p.gid)
+						  AND (?2 = '' OR (SELECT 1 FROM profile p WHERE p.uid = h.account_uid AND gid = ?2) IS NOT NULL)
 						""", gid, dungeon.getId()).stream()
 				.map(o -> Utils.map(RankDungeonEntry.class, o))
 				.toList();

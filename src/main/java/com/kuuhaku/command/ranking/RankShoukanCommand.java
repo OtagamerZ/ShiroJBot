@@ -47,12 +47,11 @@ import java.util.List;
 public class RankShoukanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+		String gid = args.get("type", "global").equals("local") ? event.guild().getId() : "";
 		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("""
 						SELECT r.*
 						FROM v_shoukan_ranking r
-						         LEFT JOIN profile p ON p.uid = r.uid
-						WHERE ?1 IN ('', p.gid)
+						WHERE (?1 = '' OR (SELECT 1 FROM profile p WHERE p.uid = r.uid AND gid = ?1) IS NOT NULL)
 						LIMIT 10
 						""", gid).stream()
 				.map(o -> Utils.map(RankShoukanEntry.class, o))
