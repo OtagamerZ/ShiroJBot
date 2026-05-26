@@ -22,12 +22,12 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.rank.RankCandiesEntry;
 import com.kuuhaku.model.records.rank.RankLevelEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -42,10 +42,13 @@ import java.util.List;
 		path = "level",
 		category = Category.INFO
 )
+@Syntax("<type:word:r>[local,global]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RankLevelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+
 		List<RankLevelEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.xp DESC)  AS rank
 						     , x.uid
@@ -59,9 +62,10 @@ public class RankLevelCommand implements Executable {
 						              INNER JOIN account a ON a.uid = p.uid
 						              INNER JOIN account_settings s ON s.uid = a.uid
 						     ) x
+						     WHERE ?1 IN ('', p.gid)
 						ORDER BY x.xp DESC
 						LIMIT 10
-						""").stream()
+						""", gid).stream()
 				.map(o -> Utils.map(RankLevelEntry.class, o))
 				.toList();
 
