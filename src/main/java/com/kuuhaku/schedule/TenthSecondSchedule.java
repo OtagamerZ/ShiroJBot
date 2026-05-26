@@ -58,8 +58,6 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 		int memberCount = guild.getMemberCount();
 		GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
 		for (GuildVoiceState state : states) {
-			if (!state.getId().equals(Constants.OWNER)) continue;
-
 			AudioChannelUnion chn = state.getChannel();
 			if (chn == null) continue;
 
