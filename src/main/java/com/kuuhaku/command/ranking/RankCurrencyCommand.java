@@ -22,6 +22,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
@@ -41,10 +42,12 @@ import java.util.List;
 		path = "currency",
 		category = Category.INFO
 )
+@Syntax("<type:word>[local,global]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RankCurrencyCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
 		List<RankCurrencyEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.score DESC)  AS rank
 						     , x.uid
@@ -60,11 +63,13 @@ public class RankCurrencyCommand implements Executable {
 						          , s.private
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
+						              LEFT JOIN profile p ON p.uid = a.uid
 						     WHERE a.balance > 0
+						       AND ?1 IN ('', p.gid)
 						     ) x
 						ORDER BY x.score DESC
 						LIMIT 10
-						""").stream()
+						""", gid).stream()
 				.map(o -> Utils.map(RankCurrencyEntry.class, o))
 				.toList();
 

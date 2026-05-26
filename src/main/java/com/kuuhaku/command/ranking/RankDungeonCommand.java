@@ -46,7 +46,7 @@ import java.util.List;
 		path = "dungeon",
 		category = Category.INFO
 )
-@Syntax("<dungeon:word:r>")
+@Syntax("<dungeon:word:r> <type:word>[local,global]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RankDungeonCommand implements Executable {
 	@Override
@@ -64,6 +64,7 @@ public class RankDungeonCommand implements Executable {
 			return;
 		}
 
+		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
 		List<RankDungeonEntry> rank = DAO.queryAllUnmapped("""
 						SELECT r.rank
 							 , h.account_uid
@@ -72,11 +73,13 @@ public class RankDungeonCommand implements Executable {
 						     , r.floor
 						     , r.sublevel
 						FROM dungeon_ranking(?1) r
-						INNER JOIN hero h ON h.id = r.hero_id
-						INNER JOIN account a ON a.uid = h.account_uid
-						INNER JOIN account_settings s ON s.uid = a.uid
+						         INNER JOIN hero h ON h.id = r.hero_id
+						         INNER JOIN account a ON a.uid = h.account_uid
+						         INNER JOIN account_settings s ON s.uid = a.uid
+						         LEFT JOIN profile p ON p.uid = a.uid
 						WHERE NOT h.retired
-						""", dungeon.getId()).stream()
+						  AND ?2 IN ('', p.gid)
+						""", gid, dungeon.getId()).stream()
 				.map(o -> Utils.map(RankDungeonEntry.class, o))
 				.toList();
 

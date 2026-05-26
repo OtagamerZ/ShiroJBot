@@ -23,13 +23,13 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.interfaces.annotations.Seasonal;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.rank.RankCandiesEntry;
-import com.kuuhaku.model.records.rank.RankCurrencyEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -44,11 +44,13 @@ import java.util.List;
 		path = "candies",
 		category = Category.INFO
 )
+@Syntax("<type:word>[local,global]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 @Seasonal(exclude = Calendar.OCTOBER)
 public class RankCandiesCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
+		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
 		List<RankCandiesEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.candies DESC) AS rank
 						     , x.uid
@@ -60,11 +62,13 @@ public class RankCandiesCommand implements Executable {
 						          , coalesce(cast(a.inventory -> 'SPOOKY_CANDY' AS INT), 0) AS candies
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
+						              LEFT JOIN profile p ON p.uid = a.uid
+						     WHERE ?1 IN ('', p.gid)
 						     ) x
 						WHERE x.candies > 0
 						ORDER BY x.candies DESC
 						LIMIT 10
-						""").stream()
+						""", gid).stream()
 				.map(o -> Utils.map(RankCandiesEntry.class, o))
 				.toList();
 

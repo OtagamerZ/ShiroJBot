@@ -22,12 +22,12 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.model.records.rank.RankLevelEntry;
 import com.kuuhaku.model.records.rank.RankShoukanEntry;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
@@ -42,11 +42,19 @@ import java.util.List;
 		path = "shoukan",
 		category = Category.INFO
 )
+@Syntax("<type:word>[local,global]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RankShoukanCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("SELECT * FROM v_shoukan_ranking LIMIT 10").stream()
+		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
+		List<RankShoukanEntry> rank = DAO.queryAllUnmapped("""
+						SELECT r.*
+						FROM v_shoukan_ranking r
+						         LEFT JOIN profile p ON p.uid = r.uid
+						WHERE ?1 IN ('', p.gid)
+						LIMIT 10
+						""", gid).stream()
 				.map(o -> Utils.map(RankShoukanEntry.class, o))
 				.toList();
 

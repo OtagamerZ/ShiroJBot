@@ -42,13 +42,12 @@ import java.util.List;
 		path = "level",
 		category = Category.INFO
 )
-@Syntax("<type:word:r>[local,global]")
+@Syntax("<type:word>[local,global]")
 @Requires(Permission.MESSAGE_EMBED_LINKS)
 public class RankLevelCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		String gid = !args.get("type", "local").equals("local") ? event.guild().getId() : "";
-
 		List<RankLevelEntry> rank = DAO.queryAllUnmapped("""
 						SELECT rank() OVER (ORDER BY x.xp DESC)  AS rank
 						     , x.uid
@@ -61,8 +60,8 @@ public class RankLevelCommand implements Executable {
 						     FROM profile p
 						              INNER JOIN account a ON a.uid = p.uid
 						              INNER JOIN account_settings s ON s.uid = a.uid
-						     ) x
 						     WHERE ?1 IN ('', p.gid)
+						     ) x
 						ORDER BY x.xp DESC
 						LIMIT 10
 						""", gid).stream()
