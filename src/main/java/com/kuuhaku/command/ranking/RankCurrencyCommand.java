@@ -63,7 +63,6 @@ public class RankCurrencyCommand implements Executable {
 						          , s.private
 						     FROM account a
 						              INNER JOIN account_settings s ON s.uid = a.uid
-						       AND ?1 IN ('', p.gid)
 						     ) x
 						WHERE (?1 = '' OR (SELECT 1 FROM profile p WHERE p.uid = x.uid AND gid = ?1) IS NOT NULL)
 						ORDER BY x.score DESC
