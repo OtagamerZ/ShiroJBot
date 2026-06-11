@@ -100,6 +100,7 @@ public class CommandManager {
 		name = name.toLowerCase();
 
 		if (mapped.containsKey(name)) return mapped.get(name);
+		else if (surrogate.containsKey(name)) return surrogate.get(name);
 		else {
 			for (Class<?> cmd : cmds) {
 				Command params = cmd.getDeclaredAnnotation(Command.class);
@@ -150,6 +151,8 @@ public class CommandManager {
 
 		if (mapped.containsKey(full)) {
 			commands.add(mapped.get(full));
+		} else if (surrogate.containsKey(full)) {
+			commands.add(surrogate.get(full));
 		} else {
 			Requires req = cmd.getDeclaredAnnotation(Requires.class);
 			commands.add(new PreparedCommand(
