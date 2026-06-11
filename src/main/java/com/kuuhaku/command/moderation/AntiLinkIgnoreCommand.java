@@ -23,6 +23,7 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
+import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
@@ -32,10 +33,11 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
+import net.dv8tion.jda.api.entities.MessageEmbed;
 import net.dv8tion.jda.api.entities.Role;
+import net.dv8tion.jda.api.entities.automod.AutoModRule;
 import net.dv8tion.jda.internal.entities.RoleImpl;
 
-import java.util.List;
 import java.util.Set;
 
 @Command(
@@ -61,12 +63,8 @@ public class AntiLinkIgnoreCommand implements Executable {
 			EmbedBuilder eb = new ColorlessEmbedBuilder()
 					.setTitle(locale.get("str/link_ignored_roles"));
 
-			List<Page> pages = Utils.generatePages(eb, roles, 20, 10,
-					RoleImpl::getAsMention,
-					(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
-			);
-
-			Utils.paginate(pages, 1, true, event.channel(), event.user());
+			Page page = Utils.generatePage(eb, roles, 10, RoleImpl::getAsMention);
+			event.channel().sendMessageEmbeds((MessageEmbed) page.getContent()).queue();
 			return;
 		}
 
@@ -75,28 +73,37 @@ public class AntiLinkIgnoreCommand implements Executable {
 			settings.save();
 
 			event.channel().sendMessage(locale.get("success/link_ignore_role_clear")).queue();
-			return;
-		}
-
-		Role role = event.roles(0);
-		if (role == null) {
-			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
-			return;
-		}
-
-		if (settings.getLinkIgnoreRoles().stream().anyMatch(role::equals)) {
-			settings.getLinkIgnoreRoles().removeIf(role::equals);
-			event.channel().sendMessage(locale.get("success/link_ignore_role_remove", role.getAsMention())).queue();
 		} else {
-			if (!(role instanceof RoleImpl rc)) {
-				event.channel().sendMessage(locale.get("error/invalid_role")).queue();
+			Role role = event.roles(0);
+			if (role == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 				return;
 			}
 
-			settings.getLinkIgnoreRoles().add(rc);
-			event.channel().sendMessage(locale.get("success/link_ignore_role_add", role.getAsMention())).queue();
+			if (settings.getLinkIgnoreRoles().stream().anyMatch(role::equals)) {
+				settings.getLinkIgnoreRoles().removeIf(role::equals);
+				event.channel().sendMessage(locale.get("success/link_ignore_role_remove", role.getAsMention())).queue();
+			} else {
+				if (!(role instanceof RoleImpl rc)) {
+					event.channel().sendMessage(locale.get("error/invalid_role")).queue();
+					return;
+				} else if (settings.getLinkIgnoreRoles().size() >= AutoModRule.MAX_EXEMPT_ROLES) {
+					event.channel().sendMessage(locale.get("error/link_ignore_role_max")).queue();
+					return;
+				}
+
+				settings.getLinkIgnoreRoles().add(rc);
+				event.channel().sendMessage(locale.get("success/link_ignore_role_add", role.getAsMention())).queue();
+			}
 		}
 
 		settings.save();
+
+		String id = settings.getAutoModEntries().get(AutoModType.LINK);
+		if (id != null) {
+			event.guild().modifyAutoModRuleById(id)
+					.setExemptRoles(settings.getLinkIgnoreRoles().toArray(new RoleImpl[0]))
+					.queue();
+		}
 	}
 }

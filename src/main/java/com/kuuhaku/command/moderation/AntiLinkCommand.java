@@ -18,9 +18,11 @@
 
 package com.kuuhaku.command.moderation;
 
+import com.github.ygimenez.method.Pages;
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Requires;
+import com.kuuhaku.model.enums.AutoModType;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
@@ -30,6 +32,11 @@ import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
+import net.dv8tion.jda.api.entities.automod.AutoModResponse;
+import net.dv8tion.jda.api.entities.automod.AutoModRule;
+import net.dv8tion.jda.api.entities.automod.build.AutoModRuleData;
+import net.dv8tion.jda.api.entities.automod.build.TriggerConfig;
+import org.intellij.lang.annotations.Language;
 
 @Command(
 		name = "antilink",
@@ -37,15 +44,40 @@ import net.dv8tion.jda.api.Permission;
 )
 @Requires(Permission.MODERATE_MEMBERS)
 public class AntiLinkCommand implements Executable {
+	@Language( "RegExp")
+	private static final String PATTERN = "(ws|(ht|f)tp)s?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*";
+
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
 		if (settings.isFeatureEnabled(GuildFeature.ANTI_LINK)) {
 			settings.getFeatures().remove(GuildFeature.ANTI_LINK);
 			event.channel().sendMessage(locale.get("success/anti_link_disable")).queue();
+
+			String id = settings.getAutoModEntries().remove(AutoModType.LINK);
+			if (id != null) {
+				event.guild().deleteAutoModRuleById(id).queue();
+			}
 		} else {
 			settings.getFeatures().add(GuildFeature.ANTI_LINK);
 			event.channel().sendMessage(locale.get("success/anti_link_enable")).queue();
+
+			String ruleId = settings.getAutoModEntries().get(AutoModType.LINK);
+			if (ruleId == null) {
+				AutoModRule rule = Pages.subGet(event.guild().createAutoModRule(
+						AutoModRuleData
+								.onMessage("Shiro anti-link", TriggerConfig.patternFilter(PATTERN))
+								.setExemptRoles(settings.getLinkIgnoreRoles())
+								.putResponses(AutoModResponse.blockMessage())
+				));
+
+				if (rule == null) {
+					event.channel().sendMessage(locale.get("error/automod_full")).queue();
+					return;
+				}
+
+				settings.getAutoModEntries().put(AutoModType.LINK, rule.getId());
+			}
 		}
 
 		settings.save();

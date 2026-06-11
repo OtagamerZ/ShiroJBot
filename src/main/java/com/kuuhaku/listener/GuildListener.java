@@ -60,7 +60,6 @@ import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.utils.FileUpload;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 import net.jodah.expiringmap.ExpiringMap;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
@@ -73,7 +72,6 @@ import java.util.*;
 import java.util.List;
 import java.util.concurrent.*;
 import java.util.random.RandomGenerator;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -262,18 +260,6 @@ public class GuildListener extends ListenerAdapter {
 		if (!Objects.equals(config.getName(), data.guild().getName())) {
 			config.setName(data.guild().getName());
 			config.save();
-		}
-
-		GuildSettings settings = config.getSettings();
-		if (settings.isFeatureEnabled(GuildFeature.ANTI_LINK)) {
-			boolean willIgnore = CollectionUtils.containsAny(settings.getLinkIgnoreRoles(), data.member().getUnsortedRoles());
-			if (!willIgnore) {
-				Matcher m = Utils.regex(content, "(ws|(ht|f)tp)s?://(?:www\\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b[-a-zA-Z0-9()@:%_+.~#?&/=]*");
-				if (m.find() && data.me().hasPermission(data.channel(), Permission.MESSAGE_MANAGE)) {
-					data.message().delete().queue(null, Utils::doNothing);
-					return;
-				}
-			}
 		}
 
 		Account account = DAO.find(Account.class, data.user().getId());
