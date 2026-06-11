@@ -97,13 +97,13 @@ public class AntiLinkIgnoreCommand implements Executable {
 			}
 		}
 
-		settings.save();
-
 		String id = settings.getAutoModEntries().get(AutoModType.LINK);
 		if (id != null) {
 			event.guild().modifyAutoModRuleById(id)
 					.setExemptRoles(settings.getLinkIgnoreRoles().toArray(new RoleImpl[0]))
 					.queue();
 		}
+
+		settings.save();
 	}
 }
