@@ -268,12 +268,9 @@ public class GuildListener extends ListenerAdapter {
 			account.save();
 		}
 
-		Profile profile = account.getProfile(data.member());
-		int lvl = profile.getLevel();
-
-		profile.addXp(config.getXpGained(account));
-
 		asyncExec.execute(() -> {
+			Profile profile = account.getProfile(data.member());
+
 			Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
 			EventData ed = new EventData(data.channel(), config, profile);
 			if (content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
@@ -294,7 +291,7 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (profile.getLevel() > lvl) {
+			if (profile.addXp(config.getXpGained(account))) {
 				profile.applyXp(locale, data.channel());
 			}
 

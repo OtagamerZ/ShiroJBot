@@ -74,12 +74,7 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 				mult *= Math.min(Calc.prcnt(members, 3), 1);
 
 				Profile prof = acc.getProfile(guild);
-				int lvl = prof.getLevel();
-
-				System.out.println("xp: " + xp + ", mult: " + mult);
-				prof.addXp((int) (xp * mult));
-
-				if (prof.getLevel() > lvl) {
+				if (prof.addXp((int) (xp * mult))) {
 					prof.applyXp(config.getLocale(), null);
 				}
 			}

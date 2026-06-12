@@ -68,9 +68,6 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	@Column(name = "xp", nullable = false)
 	private long xp;
 
-	@Column(name = "last_xp", nullable = false)
-	private long lastXp;
-
 	@OneToMany(mappedBy = "profile", cascade = ALL, orphanRemoval = true, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	@OrderBy("date")
@@ -119,19 +116,19 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		else return val.getFirst();
 	}
 
-	public void addXp(int value) {
+	public boolean addXp(int value) {
+		int lvl = getLevel();
 		MinuteSchedule.XP_TO_ADD.compute(id.uid() + "-" + id.gid(), (k, v) -> {
 			int total = value;
 			if (v != null) {
-				if (System.currentTimeMillis() - v.getSecond() < 1000) {
-					return v;
-				}
-
-				total += v.getFirst();
+				double mult = Math.min((System.currentTimeMillis() - v.getSecond()) / 1000, 1);
+				total += (int) (v.getFirst() * mult);
 			}
 
 			return new Pair<>(total, System.currentTimeMillis());
 		});
+
+		return getLevel() > lvl;
 	}
 
 	public void applyXp(I18N locale, GuildMessageChannel chn) {
