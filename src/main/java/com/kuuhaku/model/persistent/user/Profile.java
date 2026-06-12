@@ -123,6 +123,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 			if (v != null) {
 				double mult = Math.min((System.currentTimeMillis() - v.getSecond()) / 1000, 1);
 				total += (int) (v.getFirst() * mult);
+				System.out.println(k + ": " + v.getSecond() + " -> " + total);
 			}
 
 			return new Pair<>(total, System.currentTimeMillis());
