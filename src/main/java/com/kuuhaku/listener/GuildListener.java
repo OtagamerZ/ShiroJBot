@@ -291,7 +291,8 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (profile.addXp(config.getXpGained(account))) {
+			boolean lvlUp = profile.addXp(config.getXpGained(account));
+			if (lvlUp) {
 				profile.applyXp(locale, data.channel());
 			}
 
@@ -323,7 +324,7 @@ public class GuildListener extends ListenerAdapter {
 							.filter(r -> !data.member().getRoles().contains(r))
 							.toList();
 
-					if (!toAnnounce.isEmpty() && profile.getLevel() > lvl) {
+					if (!toAnnounce.isEmpty() && lvlUp) {
 						ed.notify(locale.get("str/level_role_earn",
 								Utils.properlyJoin(locale, toAnnounce.stream().map(Role::getAsMention).toList()))
 						);
