@@ -22,13 +22,17 @@ import com.kuuhaku.Main;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
+import com.kuuhaku.listener.GuildListener;
+import com.kuuhaku.model.common.FakeMessage;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.model.persistent.user.Account;
-import com.kuuhaku.model.persistent.user.Profile;
 import com.kuuhaku.util.Calc;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
+import net.dv8tion.jda.api.entities.Member;
+import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
 import java.util.concurrent.Executors;
@@ -73,10 +77,9 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 				int members = (int) chn.getMembers().stream().filter(m -> !m.getUser().isBot()).count();
 				mult *= Math.min(Calc.prcnt(members, 3), 1);
 
-				Profile prof = acc.getProfile(guild);
-				if (prof.addXp((int) (xp * mult))) {
-					prof.applyXp(config.getLocale(), null);
-				}
+				Member member = state.getMember();
+				Message msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "xp-add:" + (int) (xp * mult));
+				GuildListener.INSTANCE.onMessageReceived(new MessageReceivedEvent(guild.getJDA(), 200, msg));
 			}
 		}
 	}

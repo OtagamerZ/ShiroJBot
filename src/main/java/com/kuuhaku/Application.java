@@ -76,9 +76,9 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.setActivity(getRandomAction())
 				.setEventPool(Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors() - 2), true)
 				.addEventListeners(
-						new GuildListener(),
-						new AutoModListener(),
-						new PrivateChannelListener()
+						GuildListener.INSTANCE,
+						AutoModListener.INSTANCE,
+						PrivateChannelListener.INSTANCE
 				)
 				.build();
 

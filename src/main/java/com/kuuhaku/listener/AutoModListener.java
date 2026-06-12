@@ -31,6 +31,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Map;
 
 public class AutoModListener extends ListenerAdapter {
+	public static final AutoModListener INSTANCE = new AutoModListener();
+
 	@Override
 	public void onAutoModExecution(@NotNull AutoModExecutionEvent event) {
 		if (!Application.READY) return;

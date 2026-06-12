@@ -80,6 +80,8 @@ public class GuildListener extends ListenerAdapter {
 	private static final Map<String, List<SimpleMessageListener>> toHandle = new ConcurrentHashMap<>();
 	private static final ExecutorService asyncExec = Executors.newWorkStealingPool();
 
+	public static final GuildListener INSTANCE = new GuildListener();
+
 	@Override
 	public void onMessageReactionAdd(@NotNull MessageReactionAddEvent event) {
 		if (!Application.READY || !event.isFromGuild()) return;
@@ -291,7 +293,12 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			boolean lvlUp = profile.addXp(config.getXpGained(account));
+			int xp = config.getXpGained(account);
+			if (event.getMessage().getIdLong() == 0 && event.getMessage().getContentRaw().startsWith("xp-add:")) {
+				xp *= Integer.parseInt(content.substring("xp-add:".length()));
+			}
+
+			boolean lvlUp = profile.addXp(xp);
 			if (lvlUp) {
 				profile.applyXp(locale, data.channel());
 			}

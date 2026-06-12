@@ -30,6 +30,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class PrivateChannelListener extends ListenerAdapter {
+	public static final PrivateChannelListener INSTANCE = new PrivateChannelListener();
+
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {
 		if (!Application.READY) return;
