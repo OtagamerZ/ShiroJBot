@@ -18,6 +18,7 @@
 
 package com.kuuhaku.model.records;
 
+import com.kuuhaku.model.common.FakeMessage;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.concrete.PrivateChannel;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
@@ -77,6 +78,10 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 		public GuildChannel channels(int idx) {
 			return (GuildChannel) mentions(Message.MentionType.CHANNEL, idx);
 		}
+
+		public boolean isFake() {
+			return message instanceof FakeMessage;
+		}
 	}
 
 	public record Private(PrivateChannel channel, Message message, User user, long interceptMillis) {
@@ -101,6 +106,10 @@ public record MessageData(net.dv8tion.jda.api.entities.Guild guild, MessageChann
 
 		public GuildChannel channels(int idx) {
 			return (GuildChannel) mentions(Message.MentionType.CHANNEL, idx);
+		}
+
+		public boolean isFake() {
+			return message instanceof FakeMessage;
 		}
 	}
 }

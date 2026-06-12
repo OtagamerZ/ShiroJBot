@@ -247,7 +247,7 @@ public class GuildListener extends ListenerAdapter {
 			return;
 		}
 
-		if (toHandle.containsKey(data.guild().getId())) {
+		if (!data.isFake() && toHandle.containsKey(data.guild().getId())) {
 			List<SimpleMessageListener> evts = getHandler().get(data.guild().getId());
 			for (SimpleMessageListener evt : evts) {
 				if (!evt.isClosed() && evt.checkChannel(data.channel())) {
@@ -275,7 +275,7 @@ public class GuildListener extends ListenerAdapter {
 
 			Thread.currentThread().setName("Event-" + Thread.currentThread().threadId());
 			EventData ed = new EventData(data.channel(), config, profile);
-			if (content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
+			if (!data.isFake() && content.toLowerCase().startsWith(config.getPrefix()) && data.channel().canTalk()) {
 				processCommand(data, ed, content);
 			}
 
@@ -341,81 +341,83 @@ public class GuildListener extends ListenerAdapter {
 				}
 			}
 
-			if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
-				if (!data.channel().canTalk()) {
-					data.user().openPrivateChannel()
-							.flatMap(c -> c.sendMessage(locale.get("str/cant_talk", data.channel().getAsMention(), locale.get("perm/message_send"))))
-							.queue(null, Utils::doNothing);
-				} else {
-					data.channel().sendMessage(locale.get("str/mentioned",
-							data.user().getAsMention(),
-							config.getPrefix(),
-							Constants.SERVER_ROOT)
-					).queue(null, Utils::doNothing);
+			if (!data.isFake()) {
+				if (Utils.match(data.message().getContentRaw(), "<@!?" + Main.getApp().getId() + ">")) {
+					if (!data.channel().canTalk()) {
+						data.user().openPrivateChannel()
+								.flatMap(c -> c.sendMessage(locale.get("str/cant_talk", data.channel().getAsMention(), locale.get("perm/message_send"))))
+								.queue(null, Utils::doNothing);
+					} else {
+						data.channel().sendMessage(locale.get("str/mentioned",
+								data.user().getAsMention(),
+								config.getPrefix(),
+								Constants.SERVER_ROOT)
+						).queue(null, Utils::doNothing);
+					}
 				}
-			}
 
-			if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
-				Member mb = data.member();
-				boolean proxy = false;
+				if (config.getSettings().isFeatureEnabled(GuildFeature.NQN_MODE)) {
+					Member mb = data.member();
+					boolean proxy = false;
 
-				StringBuilder sb = new StringBuilder();
-				for (String s : content.split(" ")) {
-					sb.append(" ");
+					StringBuilder sb = new StringBuilder();
+					for (String s : content.split(" ")) {
+						sb.append(" ");
 
-					if (!s.isBlank()) {
-						String name = Utils.extract(s, "^:([\\w-]+):$", 1);
-						if (name != null) {
-							RichCustomEmoji emj = null;
+						if (!s.isBlank()) {
+							String name = Utils.extract(s, "^:([\\w-]+):$", 1);
+							if (name != null) {
+								RichCustomEmoji emj = null;
 
-							List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
-							if (!valid.isEmpty()) {
-								for (RichCustomEmoji e : valid) {
-									if (e.getGuild().equals(data.guild())) {
-										emj = e;
-										break;
+								List<RichCustomEmoji> valid = Main.getApp().getShiro().getEmojisByName(name, true);
+								if (!valid.isEmpty()) {
+									for (RichCustomEmoji e : valid) {
+										if (e.getGuild().equals(data.guild())) {
+											emj = e;
+											break;
+										}
+									}
+
+									if (emj == null) {
+										emj = valid.parallelStream()
+												.filter(e -> e.getGuild().isMember(mb))
+												.findAny()
+												.orElse(valid.getFirst());
 									}
 								}
 
-								if (emj == null) {
-									emj = valid.parallelStream()
-											.filter(e -> e.getGuild().isMember(mb))
-											.findAny()
-											.orElse(valid.getFirst());
+								if (emj != null) {
+									sb.append(emj.getAsMention());
+									proxy = true;
+									continue;
 								}
 							}
-
-							if (emj != null) {
-								sb.append(emj.getAsMention());
-								proxy = true;
-								continue;
-							}
 						}
+
+						sb.append(s);
 					}
 
-					sb.append(s);
+					if (proxy) {
+						PseudoUser pu = new PseudoUser(mb, data.channel());
+						pu.send(data.message(), sb.toString());
+					}
 				}
 
-				if (proxy) {
-					PseudoUser pu = new PseudoUser(mb, data.channel());
-					pu.send(data.message(), sb.toString());
-				}
-			}
+				if (!data.member().equals(data.me()) && Utils.between(content.length(), 3, 255)) {
+					List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
+							data.guild().getId(), StringUtils.stripAccents(content)
+					);
 
-			if (!data.member().equals(data.me()) && Utils.between(content.length(), 3, 255)) {
-				List<CustomAnswer> cas = DAO.queryAll(CustomAnswer.class, "SELECT ca FROM CustomAnswer ca WHERE id.gid = ?1 AND LOWER(?2) LIKE LOWER(trigger)",
-						data.guild().getId(), StringUtils.stripAccents(content)
-				);
-
-				for (CustomAnswer ca : cas) {
-					if (ca.getChannels().isEmpty() || ca.getChannels().contains(data.channel().getId())) {
-						if (ca.getUsers().isEmpty() || ca.getUsers().contains(data.user().getId())) {
-							if (Calc.chance(ca.getChance() / (data.user().isBot() ? 2d : 1d))) {
-								data.channel().sendTyping()
-										.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
-										.flatMap(v -> data.channel().sendMessage(ca.getAnswer()))
-										.queue();
-								break;
+					for (CustomAnswer ca : cas) {
+						if (ca.getChannels().isEmpty() || ca.getChannels().contains(data.channel().getId())) {
+							if (ca.getUsers().isEmpty() || ca.getUsers().contains(data.user().getId())) {
+								if (Calc.chance(ca.getChance() / (data.user().isBot() ? 2d : 1d))) {
+									data.channel().sendTyping()
+											.delay(ca.getAnswer().length() / 3, TimeUnit.SECONDS)
+											.flatMap(v -> data.channel().sendMessage(ca.getAnswer()))
+											.queue();
+									break;
+								}
 							}
 						}
 					}
@@ -654,7 +656,7 @@ public class GuildListener extends ListenerAdapter {
 						LocalizedTitle info = t.getInfo(locale);
 						event.notify(
 								locale.get("achievement/title", data.user().getAsMention(), info.getName())
-								+ "\n> " + info.getDescription()
+										+ "\n> " + info.getDescription()
 						);
 					}
 				});
