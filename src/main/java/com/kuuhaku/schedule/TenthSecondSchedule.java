@@ -25,7 +25,6 @@ import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.FakeMessage;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
-import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.util.Calc;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -60,27 +59,21 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 		if (states.isEmpty()) return;
 
 		int memberCount = guild.getMemberCount();
-		GuildConfig config = DAO.find(GuildConfig.class, guild.getId());
 		for (GuildVoiceState state : states) {
 			AudioChannelUnion chn = state.getChannel();
 			if (chn == null) continue;
 
-			Account acc = DAO.find(Account.class, state.getId());
-			if (acc != null) {
-				int xp = config.getXpGained(acc) * 10;
-
-				double mult = 0.2 + Math.min(Calc.prcnt(memberCount, 1000), 1) * 0.4;
-				if (state.isStream()) {
-					mult *= 1.4;
-				}
-
-				int members = (int) chn.getMembers().stream().filter(m -> !m.getUser().isBot()).count();
-				mult *= Math.min(Calc.prcnt(members, 3), 1);
-
-				Member member = state.getMember();
-				Message msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "xp-add:" + (int) (xp * mult));
-				GuildListener.INSTANCE.onMessageReceived(new MessageReceivedEvent(guild.getJDA(), 200, msg));
+			double mult = 2 + Math.min(Calc.prcnt(memberCount, 1000), 1) * 4;
+			if (state.isStream()) {
+				mult *= 1.4;
 			}
+
+			int members = (int) chn.getMembers().stream().filter(m -> !m.getUser().isBot()).count();
+			mult *= Math.min(Calc.prcnt(members, 3), 1);
+
+			Member member = state.getMember();
+			Message msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "xp-add:" + mult);
+			GuildListener.INSTANCE.onMessageReceived(new MessageReceivedEvent(guild.getJDA(), 200, msg));
 		}
 	}
 }

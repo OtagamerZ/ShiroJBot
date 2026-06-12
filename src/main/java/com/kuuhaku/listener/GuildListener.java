@@ -295,7 +295,7 @@ public class GuildListener extends ListenerAdapter {
 
 			int xp = config.getXpGained(account);
 			if (event.getMessage().getIdLong() == 0 && event.getMessage().getContentRaw().startsWith("xp-add:")) {
-				xp = Integer.parseInt(content.substring("xp-add:".length()));
+				xp = (int) (xp * Double.parseDouble(content.substring("xp-add:".length())));
 			}
 
 			boolean lvlUp = profile.addXp(xp);
