@@ -19,17 +19,14 @@
 package com.kuuhaku.schedule;
 
 import com.kuuhaku.Main;
-import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.FakeMessage;
-import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.Calc;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
 import net.dv8tion.jda.api.entities.Member;
-import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
@@ -72,7 +69,9 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 			mult *= Math.min(Calc.prcnt(members, 3), 1);
 
 			Member member = state.getMember();
-			Message msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "xp-add:" + mult);
+			FakeMessage msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "");
+			msg.getData().put("xp-mult", mult);
+
 			GuildListener.INSTANCE.onMessageReceived(new MessageReceivedEvent(guild.getJDA(), 200, msg));
 		}
 	}

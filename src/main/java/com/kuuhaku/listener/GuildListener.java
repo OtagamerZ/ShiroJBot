@@ -294,18 +294,13 @@ public class GuildListener extends ListenerAdapter {
 			}
 
 			int xp = config.getXpGained(account);
-			if (event.getMessage() instanceof FakeMessage) {
-				xp = (int) (xp * Double.parseDouble(content.substring("xp-add:".length())));
-				System.out.println("XP GAINED: " + xp + " (" + profile.getXp() + ")");
+			if (event.getMessage() instanceof FakeMessage m) {
+				xp = (int) (xp * m.getData().getDouble("xp-mult"));
 			}
 
 			boolean lvlUp = profile.addXp(xp);
 			if (lvlUp) {
 				profile.applyXp(locale, data.channel());
-			}
-
-			if (event.getMessage() instanceof FakeMessage) {
-				System.out.println("FINAL XP: " + profile.getXp() + " (" + xp + ") = " + (profile.getXp() + xp));
 			}
 
 			if (data.guild().getSelfMember().hasPermission(Permission.MANAGE_ROLES)) {

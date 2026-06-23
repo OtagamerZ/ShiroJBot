@@ -5,10 +5,13 @@ import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.entities.MessageType;
 import net.dv8tion.jda.api.entities.channel.middleman.MessageChannel;
 import net.dv8tion.jda.internal.entities.ReceivedMessage;
+import org.json.JSONObject;
 
 import java.util.List;
 
 public class FakeMessage extends ReceivedMessage {
+	private final JSONObject data = new JSONObject();
+
 	public FakeMessage(Guild guild, MessageChannel channel, Member member, String content) {
 		super(0,
 				channel.getIdLong(),
@@ -42,5 +45,9 @@ public class FakeMessage extends ReceivedMessage {
 				null,
 				0
 		);
+	}
+
+	public JSONObject getData() {
+		return data;
 	}
 }
