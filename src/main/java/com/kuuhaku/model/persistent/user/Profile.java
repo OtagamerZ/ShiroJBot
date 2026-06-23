@@ -118,11 +118,13 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 
 	public boolean addXp(int value) {
 		int lvl = getLevel();
-		MinuteSchedule.XP_TO_ADD.compute(id.uid() + "-" + id.gid(), (k, v) -> {
-			int total = value;
+		MinuteSchedule.XP_TO_ADD.compute(id.uid() + "-" + id.gid(), (_, v) -> {
+			int total;
 			if (v != null) {
 				double mult = Math.min((System.currentTimeMillis() - v.getSecond()) / 1000, 1);
-				total += (int) (v.getFirst() * mult);
+				total = v.getFirst() + (int) (value * mult);
+			} else {
+				total = value;
 			}
 
 			return new Pair<>(total, System.currentTimeMillis());
