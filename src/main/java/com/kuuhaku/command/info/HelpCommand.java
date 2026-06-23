@@ -42,6 +42,7 @@ import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
 import net.dv8tion.jda.api.entities.emoji.CustomEmoji;
+import net.dv8tion.jda.api.utils.ImageFormat;
 
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -173,7 +174,7 @@ public class HelpCommand implements Executable {
 				.setCanInteract(dt -> dt.getUser().equals(event.user()));
 
 		if (home != null) {
-			index.setThumbnail(home.getImageUrl());
+			index.setThumbnail(home.getImageUrl(ImageFormat.PNG));
 			helper.addCategory(Utils.parseEmoji(home.getId()), InteractPage.of(index.build()));
 		}
 
@@ -186,7 +187,7 @@ public class HelpCommand implements Executable {
 
 			eb.clear()
 					.setTitle(cat.getName(locale))
-					.setThumbnail(emt.getImageUrl())
+					.setThumbnail(emt.getImageUrl(ImageFormat.PNG))
 					.appendDescription(cat.getDescription(locale) + "\n\n")
 					.appendDescription(locale.get("str/command_counter", cat.getCommands().size()))
 					.setFooter(Constants.BOT_NAME + " " + Constants.BOT_VERSION.get());

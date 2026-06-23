@@ -42,6 +42,7 @@ import kotlin.Pair;
 import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import net.dv8tion.jda.api.utils.ImageFormat;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
@@ -453,7 +454,7 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 		Graph.applyMask(overlay, mask, 1);
 		g2d.drawImage(overlay, 0, 0, null);
 
-		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl());
+		BufferedImage emote = IO.getImage(getLevelEmote().getImageUrl(ImageFormat.PNG));
 		g2d.drawImage(emote, 6, -3, 81, 81, null);
 
 		g2d.setColor(Color.GRAY);

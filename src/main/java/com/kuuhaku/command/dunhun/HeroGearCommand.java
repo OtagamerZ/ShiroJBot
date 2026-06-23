@@ -55,6 +55,7 @@ import net.dv8tion.jda.api.requests.RestAction;
 import net.dv8tion.jda.api.requests.restaction.MessageCreateAction;
 import net.dv8tion.jda.api.requests.restaction.MessageEditAction;
 import net.dv8tion.jda.api.utils.FileUpload;
+import net.dv8tion.jda.api.utils.ImageFormat;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -226,7 +227,7 @@ public class HeroGearCommand implements Executable {
 			}).getRGB());
 
 			ThreadLocal<int[]> out = ThreadLocal.withInitial(() -> new int[4]);
-			BufferedImage icon = com.kuuhaku.util.IO.getImage(e.getImageUrl());
+			BufferedImage icon = com.kuuhaku.util.IO.getImage(e.getImageUrl(ImageFormat.PNG));
 			Graph.forEachPixel(icon, (x, y, rgb) -> {
 				double bright = (rgb & 0xFF) / 255d;
 				int[] aux = out.get();

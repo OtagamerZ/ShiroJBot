@@ -39,6 +39,7 @@ import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.api.entities.emoji.RichCustomEmoji;
+import net.dv8tion.jda.api.utils.ImageFormat;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.util.Calendar;
@@ -79,7 +80,7 @@ public class EasterEvent extends SpecialEvent {
 							.setTitle(new WebhookEmbed.EmbedTitle(
 									getLocale().get("str/content"), null
 							))
-							.setThumbnailUrl(emj.getImageUrl());
+							.setThumbnailUrl(emj.getImageUrl(ImageFormat.PNG));
 
 					Account acc = DAO.find(Account.class, u.getId());
 					acc.setDynValue("easter_eggs", v -> NumberUtils.toInt(v) + 1);
