@@ -62,11 +62,11 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 
 			double mult = 2 + Math.min(Calc.prcnt(memberCount, 1000), 1) * 4;
 			if (state.isStream()) {
-				mult *= 1.4;
+				mult *= 1.2;
 			}
 
 			int members = (int) chn.getMembers().stream().filter(m -> !m.getUser().isBot()).count();
-			mult *= Math.min(Calc.prcnt(members, 3), 1);
+			mult *= Math.min(Calc.prcnt(members, 5), 1);
 
 			Member member = state.getMember();
 			FakeMessage msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "");
