@@ -31,6 +31,7 @@ import net.dv8tion.jda.api.entities.channel.unions.AudioChannelUnion;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -60,15 +61,20 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 			AudioChannelUnion chn = state.getChannel();
 			if (chn == null) continue;
 
+			Member member = state.getMember();
+			if (member.getUser().isBot()) continue;
+
 			double mult = 2 + Math.min(Calc.prcnt(memberCount, 1000), 1) * 4;
 			if (state.isStream()) {
 				mult *= 1.2;
 			}
 
-			int members = (int) chn.getMembers().stream().filter(m -> !m.getUser().isBot()).count();
+			int members = (int) states.stream()
+					.filter(v -> Objects.equals(v.getChannel(), chn) && !v.getMember().getUser().isBot())
+					.count();
+
 			mult *= Math.min(Calc.prcnt(members, 5), 1);
 
-			Member member = state.getMember();
 			FakeMessage msg = new FakeMessage(guild, chn.asGuildMessageChannel(), member, "");
 			msg.getData().put("xp-mult", mult);
 
