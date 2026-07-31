@@ -56,6 +56,7 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 
 		if (states.isEmpty()) return;
 
+		int memberCount = guild.getMemberCount();
 		for (GuildVoiceState state : states) {
 			AudioChannelUnion chn = state.getChannel();
 			if (chn == null) continue;
@@ -63,7 +64,7 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 			Member member = state.getMember();
 			if (member.getUser().isBot()) continue;
 
-			double mult = 1;
+			double mult = 1 + Math.min(Calc.prcnt(memberCount, 1000), 1);
 			if (state.isStream()) {
 				mult *= 1.2;
 			}
