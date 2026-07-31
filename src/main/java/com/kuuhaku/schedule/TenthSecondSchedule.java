@@ -49,13 +49,14 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 	}
 
 	public void task() {
-		Main.getApp().getShiro().getGuildCache().forEach(this::computeVoiceXp);
+		List<String> enabled = DAO.queryAllNative(String.class, "SELECT gid FROM guild_settings WHERE (feature_flags & 0x40) = 0");
+
+		Main.getApp().getShiro().getGuildCache().stream()
+				.filter(g -> enabled.contains(g.getId()))
+				.forEach(this::computeVoiceXp);
 	}
 
 	public void computeVoiceXp(Guild guild) {
-		GuildSettings gs = DAO.find(GuildSettings.class, guild.getId());
-		if (gs == null || gs.isFeatureEnabled(GuildFeature.NO_CALL_XP)) return;
-
 		List<GuildVoiceState> states = guild.getVoiceStates().parallelStream()
 				.filter(v -> v.inAudioChannel() && !v.isDeafened() && !v.isMuted())
 				.toList();
