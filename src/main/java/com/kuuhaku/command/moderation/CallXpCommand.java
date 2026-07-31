@@ -20,7 +20,6 @@ package com.kuuhaku.command.moderation;
 
 import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
-import com.kuuhaku.interfaces.annotations.Requires;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
@@ -29,7 +28,6 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.Permission;
 
 @Command(
 		name = "callxp",
@@ -39,12 +37,12 @@ public class CallXpCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-		if (settings.isFeatureEnabled(GuildFeature.CALL_XP)) {
-			settings.getFeatures().remove(GuildFeature.CALL_XP);
-			event.channel().sendMessage(locale.get("success/call_xp_disable")).queue();
-		} else {
-			settings.getFeatures().add(GuildFeature.CALL_XP);
+		if (settings.isFeatureEnabled(GuildFeature.NO_CALL_XP)) {
+			settings.getFeatures().remove(GuildFeature.NO_CALL_XP);
 			event.channel().sendMessage(locale.get("success/call_xp_enable")).queue();
+		} else {
+			settings.getFeatures().add(GuildFeature.NO_CALL_XP);
+			event.channel().sendMessage(locale.get("success/call_xp_disable")).queue();
 		}
 
 		settings.save();

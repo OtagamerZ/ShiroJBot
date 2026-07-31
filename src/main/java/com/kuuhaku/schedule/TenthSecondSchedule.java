@@ -19,10 +19,13 @@
 package com.kuuhaku.schedule;
 
 import com.kuuhaku.Main;
+import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.PreInitialize;
 import com.kuuhaku.interfaces.annotations.Schedule;
 import com.kuuhaku.listener.GuildListener;
 import com.kuuhaku.model.common.FakeMessage;
+import com.kuuhaku.model.enums.GuildFeature;
+import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.util.Calc;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.GuildVoiceState;
@@ -50,6 +53,9 @@ public class TenthSecondSchedule implements Runnable, PreInitialize {
 	}
 
 	public void computeVoiceXp(Guild guild) {
+		GuildSettings gs = DAO.find(GuildSettings.class, guild.getId());
+		if (gs == null || gs.isFeatureEnabled(GuildFeature.NO_CALL_XP)) return;
+
 		List<GuildVoiceState> states = guild.getVoiceStates().parallelStream()
 				.filter(v -> v.inAudioChannel() && !v.isDeafened() && !v.isMuted())
 				.toList();
