@@ -20,6 +20,7 @@ import org.hibernate.annotations.FetchMode;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
+import java.util.random.RandomGenerator;
 
 import static jakarta.persistence.CascadeType.ALL;
 
@@ -120,7 +121,7 @@ public class RunModifier extends DAO<RunModifier> {
 		});
 	}
 
-	private static RunModifier getRandom(Random rng, Floor floor) {
+	private static RunModifier getRandom(RandomGenerator rng, Floor floor) {
 		JSONArray modifiers = new JSONArray();
 		for (RunModifier m : floor.getModifiers()) {
 			modifiers.add(m.getId());
@@ -134,6 +135,30 @@ public class RunModifier extends DAO<RunModifier> {
 				  AND min_floor <= ?1
 				  AND NOT has(get_affix_family(cast(?2 AS JSONB)), get_affix_family(id))
 				""", floor.getNumber(), modifiers.toString());
+		if (mods.isEmpty()) return null;
+
+		RandomList<String> rl = new RandomList<>(rng);
+		for (Object[] a : mods) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
+
+		if (rl.entries().isEmpty()) return null;
+		return DAO.find(RunModifier.class, rl.get());
+	}
+
+	private static RunModifier getRandom(RandomGenerator rng, DungeonRun run) {
+		JSONArray modifiers = new JSONArray();
+		for (RunModifier m : run.getModifiers()) {
+			modifiers.add(m.getId());
+		}
+
+		List<Object[]> mods = DAO.queryAllUnmapped("""
+				SELECT id
+				     , weight
+				FROM run_modifier
+				WHERE weight > 0
+				  AND NOT has(get_affix_family(cast(?1 AS JSONB)), get_affix_family(id))
+				""", modifiers.toString());
 		if (mods.isEmpty()) return null;
 
 		RandomList<String> rl = new RandomList<>(rng);
