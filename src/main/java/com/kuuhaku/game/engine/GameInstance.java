@@ -147,6 +147,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 				close(GameReport.INITIALIZATION_ERROR);
 			} finally {
 				try {
+					initialized.complete(null);
 					Arrays.stream(players).forEach(PLAYERS::remove);
 					Arrays.stream(channels).forEach(CHANNELS::remove);
 					if (moderator != null) {
