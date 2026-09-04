@@ -104,6 +104,10 @@ public class Basetype extends DAO<Basetype> {
 		JSONArray tags = new JSONArray();
 		int dropLevel = Actor.MAX_LEVEL;
 		if (source != null) {
+			if (source instanceof Boss) {
+				tags.add("BOSS");
+			}
+
 			if (source instanceof MonsterBase<?> m) {
 				tags.addAll(m.getStats().getTags());
 			}
