@@ -336,10 +336,10 @@ public class Dunhun extends GameInstance<NullPhase> {
 							if (!heroes.isEmpty()) {
 								runEvent(nextNode, DAO.find(Event.class, "HERO_CONFLICT"));
 							} else {
-								runEvent(nextNode, Event.getRandom(nextNode));
+								runEvent(nextNode, Event.getRandom(nextNode, getNodeRng()));
 							}
 						} else {
-							runEvent(nextNode, Event.getRandom(nextNode));
+							runEvent(nextNode, Event.getRandom(nextNode, getNodeRng()));
 						}
 
 						run.setVisited(nextNode);

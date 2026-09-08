@@ -222,12 +222,12 @@ public abstract class Calc {
 		if (percentage >= 100) return true;
 		else if (percentage <= 0) return false;
 
-		double out = 100;
+		double out = 0;
 		for (int i = 0; i < rolls; i++) {
-			out = Math.min(out, rng(100d, rng));
+			out = Math.max(out, rng(100d, rng));
 		}
 
-		return round(out, 2) < round(percentage, 2);
+		return out < percentage;
 	}
 
 	public static <T> T getRandom(List<Pair<T, Double>> values) {

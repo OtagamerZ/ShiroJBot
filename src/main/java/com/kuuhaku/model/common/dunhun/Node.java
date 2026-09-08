@@ -94,6 +94,10 @@ public class Node {
 	}
 
 	public int getSeed() {
+		if (sublevel.getFloor().getMap().getRun().getVisitedNodes().contains(this)) {
+			return Calc.rng(Integer.MAX_VALUE);
+		}
+
 		return seed;
 	}
 

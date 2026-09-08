@@ -25,7 +25,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Locale;
@@ -127,7 +126,7 @@ public enum I18N {
 	}
 
 	public boolean is(I18N locale) {
-		return parent == locale.parent;
+		return locale != null && parent == locale.parent;
 	}
 
 	public boolean isUwu() {

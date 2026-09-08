@@ -39,6 +39,7 @@ import org.intellij.lang.annotations.Language;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.random.RandomGenerator;
 import java.util.regex.Matcher;
 
 import static jakarta.persistence.CascadeType.ALL;
@@ -132,6 +133,13 @@ public class Event extends DAO<Event> {
 	}
 
 	public static Event getRandom(Node node) {
+		return Utils.withUnsafeRng(rng -> {
+			rng.setSeed(node.getSeed());
+			return getRandom(node, rng);
+		});
+	}
+
+	public static Event getRandom(Node node, RandomGenerator rng) {
 		Event out = node.generateEvent();
 		if (out != null) return out;
 
@@ -145,16 +153,12 @@ public class Event extends DAO<Event> {
 
 		if (evts.isEmpty()) return null;
 
-		return Utils.withUnsafeRng(rng -> {
-			rng.setSeed(node.getSeed());
+		RandomList<String> rl = new RandomList<>(rng);
+		for (Object[] a : evts) {
+			rl.add((String) a[0], ((Number) a[1]).intValue());
+		}
 
-			RandomList<String> rl = new RandomList<>(rng);
-			for (Object[] a : evts) {
-				rl.add((String) a[0], ((Number) a[1]).intValue());
-			}
-
-			if (rl.entries().isEmpty()) return null;
-			return DAO.find(Event.class, rl.get());
-		});
+		if (rl.entries().isEmpty()) return null;
+		return DAO.find(Event.class, rl.get());
 	}
 }
