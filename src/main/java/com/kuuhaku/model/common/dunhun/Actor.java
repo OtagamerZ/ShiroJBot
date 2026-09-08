@@ -558,20 +558,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 		sb.appendNewLine("-# " + bar);
 
-		Map<String, Integer> icons = new HashMap<>();
+		List<String> icons = new ArrayList<>();
 		for (EffectProperties<?> e : modifiers.getEffects()) {
 			String icon = e.getIcon();
 			if (icon != null) {
 				int exp = e.getExpiration();
-				icons.compute(icon, (k, v) -> v == null ? exp : Math.max(v, exp));
+				icons.add(icon + Utils.superscript(exp));
 			}
 		}
 
 		if (!icons.isEmpty()) {
-			sb.appendNewLine("-# " + icons.entrySet().stream()
-					.map(e -> "\\" + e.getKey() + Utils.superscript(e.getValue()))
-					.collect(Collectors.joining(" "))
-			);
+			sb.appendNewLine("-# " + String.join(" ", icons));
 		}
 	}
 
