@@ -1,9 +1,7 @@
 package com.kuuhaku.model.records.dunhun;
 
 import com.kuuhaku.model.common.dunhun.Actor;
-import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.persistent.dunhun.Skill;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import org.jetbrains.annotations.NotNull;
@@ -40,10 +38,6 @@ public record SkillValue(int min, int max, boolean withAdded) {
 				case SPELL, BUFF -> source.getModifiers().getSpellDamage();
 				default -> 0;
 			};
-
-			if (source instanceof MonsterBase<?> m) {
-				added += (int) (m.getKillXp() * MonsterBase.STAT_TABLE[m.getLevel() - 1]);
-			}
 		}
 
 		return (int) ((withLevel(lvl) + added * eff) * mult);
