@@ -359,7 +359,13 @@ public class Dunhun extends GameInstance<NullPhase> {
 						if (evt != null) {
 							runEvent(nextNode, evt);
 						} else {
-							Actor<?> boss = nextNode.generateEnemy();
+							Actor<?> boss = null;
+
+							List<Actor<?>> gen = nextNode.generateEnemies(1);
+							if (gen != null && !gen.isEmpty()) {
+								boss = gen.getFirst();
+							}
+
 							if (!(boss instanceof Boss)) {
 								boss = Boss.getRandom(this);
 							}
@@ -594,44 +600,49 @@ public class Dunhun extends GameInstance<NullPhase> {
 		if (combat.getActors(Team.KEEPERS).isEmpty()) {
 			boolean aprilEvent = isAprilEvent();
 
+			int total = 0;
 			for (int i = 0; i < 4; i++) {
-				List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
-				if (!Calc.chance(100 - (aprilEvent ? 80d : 50d) / getPlayers().length * keepers.size(), getNodeRng())) break;
+				if (!Calc.chance(100 - (aprilEvent ? 80d : 50d) / getPlayers().length * total, getNodeRng())) break;
+				total++;
+			}
 
-				Actor<?> chosen = node.generateEnemy();
-				if (chosen == null) {
-					chosen = Monster.getRandom(this);
-				}
+			List<Actor<?>> keepers = combat.getActors(Team.KEEPERS);
+			if (node.hasEnemyGenerator()) {
+				keepers.addAll(node.generateEnemies(total));
+			} else {
+				for (int i = 0; i < total; i++) {
+					Actor<?> chosen = Monster.getRandom(this);
 
-				if (aprilEvent) {
-					List<Object[]> heroes = DAO.queryAllUnmapped("""
+					if (aprilEvent) {
+						List<Object[]> heroes = DAO.queryAllUnmapped("""
 							SELECT id
 								 , round(5000 * (1 - xp / (100000.0 + xp))) AS weight
 							FROM hero
 							WINDOW w AS ()
 							"""
-					);
+						);
 
-					if (!heroes.isEmpty()) {
-						RandomList<String> rl = new RandomList<>(getNodeRng());
-						for (Object[] a : heroes) {
-							rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
+						if (!heroes.isEmpty()) {
+							RandomList<String> rl = new RandomList<>(getNodeRng());
+							for (Object[] a : heroes) {
+								rl.add((String) a[0], Math.max(1, ((Number) a[1]).intValue()));
+							}
+
+							EffectProperties<?> props = getAprilBalance(false);
+							if (chosen instanceof MonsterBase<?> m) {
+								combat.getLoot().add(m.generateLoot());
+							}
+
+							//noinspection RedundantCast
+							chosen = (Hero) DAO.find(Hero.class, rl.get());
+							chosen.getModifiers().add(props);
+							chosen.getModifiers().getSummon().add(props);
 						}
-
-						EffectProperties<?> props = getAprilBalance(false);
-						if (chosen instanceof MonsterBase<?> m) {
-							combat.getLoot().add(m.generateLoot());
-						}
-
-						//noinspection RedundantCast
-						chosen = (Hero) DAO.find(Hero.class, rl.get());
-						chosen.getModifiers().add(props);
-						chosen.getModifiers().getSummon().add(props);
 					}
-				}
 
-				if (chosen != null) {
-					keepers.add(chosen);
+					if (chosen != null) {
+						keepers.add(chosen);
+					}
 				}
 			}
 		}

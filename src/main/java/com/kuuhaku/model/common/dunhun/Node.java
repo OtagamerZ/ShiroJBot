@@ -15,6 +15,7 @@ import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.*;
 import java.util.List;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class Node {
@@ -33,7 +34,7 @@ public class Node {
 	private final Point renderPos = new Point();
 
 	private Supplier<Event> eventGenerator = null;
-	private Supplier<Actor<?>> enemyGenerator = null;
+	private Function<Integer, List<Actor<?>>> enemyGenerator = null;
 	private byte renderState = 0b1;
 	/*
 	0xF
@@ -118,13 +119,13 @@ public class Node {
 		return enemyGenerator != null;
 	}
 
-	public void setEnemyGenerator(Supplier<Actor<?>> generator) {
+	public void setEnemyGenerator(Function<Integer, List<Actor<?>>> generator) {
 		this.enemyGenerator = generator;
 	}
 
-	public Actor<?> generateEnemy() {
+	public List<Actor<?>> generateEnemies(int amount) {
 		if (enemyGenerator == null) return null;
-		return enemyGenerator.get();
+		return enemyGenerator.apply(amount);
 	}
 
 	public void addParents(Node... nodes) {
