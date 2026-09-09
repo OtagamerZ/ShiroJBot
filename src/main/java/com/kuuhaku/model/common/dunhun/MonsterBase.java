@@ -5,7 +5,6 @@ import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.records.dunhun.Loot;
-import com.kuuhaku.util.Calc;
 import jakarta.persistence.*;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
@@ -91,7 +90,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	@Override
 	public int getApCap() {
-		return (int) Math.min(getModifiers().getMaxAp(5 + getStats().getMaxAp()), 10);
+		return (int) Math.min(1 + getModifiers().getMaxAp(4 + getStats().getMaxAp()), 10);
 	}
 
 	@Override

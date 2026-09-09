@@ -29,7 +29,6 @@ import com.kuuhaku.model.persistent.converter.JSONObjectConverter;
 import com.kuuhaku.model.persistent.user.Account;
 import com.kuuhaku.model.persistent.user.AccountSettings;
 import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
@@ -144,7 +143,7 @@ public class Hero extends Actor<Hero> {
 
 	@Override
 	public int getApCap() {
-		return (int) Math.min(getModifiers().getMaxAp(5), 10);
+		return (int) Math.min(1 + getModifiers().getMaxAp(4), 10);
 	}
 
 	@Override
