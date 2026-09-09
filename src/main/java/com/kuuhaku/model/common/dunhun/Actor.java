@@ -26,6 +26,7 @@ import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Utils;
 import groovy.lang.Tuple2;
 import jakarta.persistence.*;
+import org.apache.commons.collections4.ListUtils;
 import org.apache.commons.collections4.SetUtils;
 
 import java.awt.image.BufferedImage;
@@ -563,12 +564,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			String icon = e.getIcon();
 			if (icon != null) {
 				int exp = e.getExpiration();
-				icons.add(icon + Utils.superscript(exp));
+				icons.add("\\" + icon + Utils.superscript(exp));
 			}
 		}
 
 		if (!icons.isEmpty()) {
-			sb.appendNewLine("-# " + String.join(" ", icons));
+			sb.appendNewLine("-# " + ListUtils.partition(icons, 5).stream()
+					.map(row -> String.join(" ", row))
+					.collect(Collectors.joining("\n-# "))
+			);
 		}
 	}
 
