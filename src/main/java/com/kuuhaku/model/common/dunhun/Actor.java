@@ -684,9 +684,9 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			pry = m.getStats().getParry();
 			pow = switch (getRarityClass()) {
 				case MAGIC -> 0.25;
-				case RARE -> 1;
+				case RARE -> 0.66;
 				default -> 0;
-			} + getLevel() * 0.025;
+			};
 		}
 
 		Attributes total = this instanceof Hero h ? h.getAttributes() : new Attributes();
