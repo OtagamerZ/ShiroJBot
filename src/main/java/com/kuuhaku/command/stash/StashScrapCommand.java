@@ -31,7 +31,10 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.Rarity;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.shoukan.Evogear;
-import com.kuuhaku.model.persistent.user.*;
+import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.persistent.user.Kawaipon;
+import com.kuuhaku.model.persistent.user.StashedCard;
+import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Calc;
@@ -39,10 +42,13 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.NoResultException;
 import net.dv8tion.jda.api.JDA;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -140,7 +146,7 @@ public class StashScrapCommand implements Executable {
 						acc.addCR(value, "Scrapped " + cards.stream().map(StashedCard::toString).collect(Collectors.joining(", ")));
 
 						List<Integer> batchSC = new ArrayList<>();
-						Bag<String> items = new HashBag<>();
+						MultiSet<String> items = new HashMultiSet<>();
 						for (StashedCard sc : cards) {
 							if (sc.isChrome() && Calc.chance(50)) {
 								items.add("CHROMATIC_ESSENCE", Calc.rng(3, 5));

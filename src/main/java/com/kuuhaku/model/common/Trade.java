@@ -27,8 +27,8 @@ import com.kuuhaku.model.persistent.user.StashedCard;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.ItemAmount;
 import com.kuuhaku.util.Utils;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 import org.intellij.lang.annotations.Language;
 
 import java.util.*;
@@ -41,13 +41,13 @@ public class Trade {
 
     private final Account left;
     private int leftValue;
-    private final Bag<Integer> leftOffer = new HashBag<>();
-    private final Bag<String> leftItems = new HashBag<>();
+    private final MultiSet<Integer> leftOffer = new HashMultiSet<>();
+    private final MultiSet<String> leftItems = new HashMultiSet<>();
 
     private final Account right;
     private int rightValue;
-    private final Bag<Integer> rightOffer = new HashBag<>();
-    private final Bag<String> rightItems = new HashBag<>();
+    private final MultiSet<Integer> rightOffer = new HashMultiSet<>();
+    private final MultiSet<String> rightItems = new HashMultiSet<>();
 
     private boolean finalizing = false;
 
@@ -72,11 +72,11 @@ public class Trade {
         leftValue += value;
     }
 
-    public Bag<Integer> getLeftOffer() {
+    public MultiSet<Integer> getLeftOffer() {
         return leftOffer;
     }
 
-    public Bag<String> getLeftItems() {
+    public MultiSet<String> getLeftItems() {
         return leftItems;
     }
 
@@ -92,11 +92,11 @@ public class Trade {
         rightValue += value;
     }
 
-    public Bag<Integer> getRightOffer() {
+    public MultiSet<Integer> getRightOffer() {
         return rightOffer;
     }
 
-    public Bag<String> getRightItems() {
+    public MultiSet<String> getRightItems() {
         return rightItems;
     }
 
@@ -116,11 +116,11 @@ public class Trade {
         }
     }
 
-    public Bag<Integer> getSelfOffers(String id) {
+    public MultiSet<Integer> getSelfOffers(String id) {
         return left.getUid().equals(id) ? leftOffer : rightOffer;
     }
 
-    public Bag<String> getSelfItems(String id) {
+    public MultiSet<String> getSelfItems(String id) {
         return left.getUid().equals(id) ? leftItems : rightItems;
     }
 

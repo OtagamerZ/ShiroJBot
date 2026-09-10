@@ -34,7 +34,8 @@ import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONArray;
 import com.ygimenez.json.JSONObject;
 import jakarta.persistence.*;
-import org.apache.commons.collections4.bag.TreeBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.TreeMultiSet;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.*;
 import org.hibernate.annotations.Cache;
@@ -312,12 +313,12 @@ public class Hero extends Actor<Hero> {
 		return DAO.find(Consumable.class, id.toUpperCase());
 	}
 
-	public TreeBag<Consumable> getConsumables() {
+	public MultiSet<Consumable> getConsumables() {
 		return stats.getConsumables().entrySet().parallelStream()
 				.map(e -> DAO.find(Consumable.class, e.getKey()))
 				.filter(Objects::nonNull)
 				.flatMap(c -> Collections.nCopies(getConsumableCount(c), c).stream())
-				.collect(Collectors.toCollection(() -> new TreeBag<>(Comparator.comparing(Consumable::getId))));
+				.collect(Collectors.toCollection(() -> new TreeMultiSet<>(Comparator.comparing(Consumable::getId))));
 	}
 
 	@Override

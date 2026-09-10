@@ -22,7 +22,6 @@ import com.kuuhaku.Constants;
 import com.kuuhaku.controller.DAO;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
-import com.kuuhaku.model.records.MultiProcessor;
 import com.kuuhaku.model.common.SupplyChain;
 import com.kuuhaku.model.common.shoukan.Hand;
 import com.kuuhaku.model.enums.Fonts;
@@ -34,6 +33,7 @@ import com.kuuhaku.model.persistent.dunhun.Hero;
 import com.kuuhaku.model.persistent.shiro.Anime;
 import com.kuuhaku.model.persistent.shiro.Card;
 import com.kuuhaku.model.persistent.user.Account;
+import com.kuuhaku.model.records.MultiProcessor;
 import com.kuuhaku.model.records.shoukan.BaseValues;
 import com.kuuhaku.model.records.shoukan.DeckEntry;
 import com.kuuhaku.model.records.shoukan.Origin;
@@ -45,8 +45,9 @@ import com.ygimenez.json.JSONArray;
 import jakarta.persistence.*;
 import kotlin.Pair;
 import org.apache.commons.collections4.ListUtils;
-import org.apache.commons.collections4.bag.HashBag;
-import org.apache.commons.collections4.bag.TreeBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
+import org.apache.commons.collections4.multiset.TreeMultiSet;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.jdesktop.swingx.graphics.BlendComposite;
@@ -54,8 +55,8 @@ import org.knowm.xchart.RadarChart;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.List;
 import java.util.*;
+import java.util.List;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -176,7 +177,7 @@ public class Deck extends DAO<Deck> {
 
 	public boolean validateSenshi() {
 		int allowed = getMaxSenshiCopies();
-		HashBag<String> bag = new HashBag<>();
+		MultiSet<String> bag = new HashMultiSet<>();
 
 		int count = 0;
 		for (Senshi s : getSenshi()) {
@@ -633,7 +634,7 @@ public class Deck extends DAO<Deck> {
 
 	public Origin getOrigins() {
 		if (origin == null) {
-			TreeBag<Race> races = new TreeBag<>();
+			MultiSet<Race> races = new TreeMultiSet<>();
 			for (Senshi s : getSenshi()) {
 				races.addAll(
 						s.getRace().split().stream()

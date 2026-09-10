@@ -34,7 +34,8 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 
 import java.util.stream.DoubleStream;
 
@@ -61,7 +62,7 @@ public class SynthesizeSimulateCommand implements Executable {
 
 		double[][] odds = new double[4][5];
 
-		HashBag<Byte> bag = new HashBag<>();
+		MultiSet<Byte> bag = new HashMultiSet<>();
 		for (int i = 0; i < 5; i++) {
 			bag.clear();
 

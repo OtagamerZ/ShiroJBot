@@ -119,8 +119,6 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	}
 
 	public int getKillXp() {
-		if (isMinion()) return 0;
-
 		double mult = switch (getRarityClass()) {
 			case MAGIC -> 1.5;
 			case RARE -> 2.25;
