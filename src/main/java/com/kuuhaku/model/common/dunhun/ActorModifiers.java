@@ -182,7 +182,7 @@ public class ActorModifiers {
 
 	public double getSpellDamage(double base) {
 		if (parent instanceof MonsterBase<?> m) {
-			base += (int) (m.getKillXp() * 5 * MonsterBase.STAT_TABLE[m.getLevel() - 1]);
+			base += (int) (m.getKillXp() * 2 * MonsterBase.STAT_TABLE[m.getLevel() - 1]);
 		}
 
 		return accumulate(base, EffectProperties::getSpellDamage);
