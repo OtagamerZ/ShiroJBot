@@ -35,8 +35,8 @@ import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import org.apache.commons.collections4.Bag;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -66,7 +66,7 @@ public class HeroDiscardCommand implements Executable {
 
 		Set<Integer> ids = new HashSet<>();
 		List<Gear> gears = new ArrayList<>();
-		Bag<Consumable> consumables = new HashBag<>();
+		MultiSet<Consumable> consumables = new HashMultiSet<>();
 		if (!args.has("action")) {
 			for (String s : args.getString("ids").toUpperCase().split(" +")) {
 				if (StringUtils.isNumeric(s)) {

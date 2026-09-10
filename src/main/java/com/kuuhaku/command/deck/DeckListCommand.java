@@ -39,7 +39,8 @@ import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.Permission;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 
 import java.util.Comparator;
 import java.util.concurrent.TimeUnit;
@@ -91,7 +92,7 @@ public class DeckListCommand implements Executable {
 			));
 		}
 
-		HashBag<Race> races = new HashBag<>();
+		MultiSet<Race> races = new HashMultiSet<>();
 		for (Senshi s : d.getSenshi()) {
 			Race r = s.getRace();
 			if (r.isPure()) {

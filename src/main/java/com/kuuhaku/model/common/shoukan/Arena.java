@@ -25,20 +25,23 @@ import com.kuuhaku.game.engine.Renderer;
 import com.kuuhaku.interfaces.shoukan.Drawable;
 import com.kuuhaku.interfaces.shoukan.EffectHolder;
 import com.kuuhaku.interfaces.shoukan.Proxy;
-import com.kuuhaku.model.records.BlurFilter;
 import com.kuuhaku.model.common.BondedList;
-import com.kuuhaku.model.records.MultiProcessor;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.*;
-import com.kuuhaku.model.persistent.shoukan.*;
+import com.kuuhaku.model.persistent.shoukan.Deck;
+import com.kuuhaku.model.persistent.shoukan.Evogear;
+import com.kuuhaku.model.persistent.shoukan.Field;
+import com.kuuhaku.model.persistent.shoukan.Senshi;
+import com.kuuhaku.model.records.BlurFilter;
+import com.kuuhaku.model.records.MultiProcessor;
 import com.kuuhaku.model.records.shoukan.Origin;
-import com.kuuhaku.util.Calc;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
 import com.kuuhaku.util.Utils;
 import net.coobird.thumbnailator.Thumbnails;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 import org.apache.commons.lang3.StringUtils;
 
 import java.awt.*;
@@ -694,7 +697,7 @@ public class Arena implements Renderer<Future<BufferedImage>> {
 
 			Graph.applyTransformed(g, reversed ? 265 : 2240, reversed ? 1176 : 426,
 					g1 -> {
-						HashBag<Class<?>> count = new HashBag<>();
+						MultiSet<Class<?>> count = new HashMultiSet<>();
 						count.addAll(hand.getGraveyard().stream().map(Drawable::getClass).toList());
 
 						g1.setColor(Color.WHITE);

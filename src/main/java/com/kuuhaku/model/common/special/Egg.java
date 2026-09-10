@@ -4,11 +4,12 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.model.common.RandomList;
 import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.util.Calc;
-import org.apache.commons.collections4.bag.HashBag;
+import org.apache.commons.collections4.MultiSet;
+import org.apache.commons.collections4.multiset.HashMultiSet;
 
 import java.util.List;
 
-public record Egg(int cr, HashBag<UserItem> items) {
+public record Egg(int cr, MultiSet<UserItem> items) {
 	public static Egg random() {
 		RandomList<UserItem> rl = new RandomList<>();
 		List<UserItem> pool = DAO.queryAll(UserItem.class, "SELECT i FROM UserItem i WHERE i.accountBound = FALSE AND i.currency IS NOT NULL");
@@ -21,7 +22,7 @@ public record Egg(int cr, HashBag<UserItem> items) {
 			});
 		}
 
-		HashBag<UserItem> items = new HashBag<>();
+		MultiSet<UserItem> items = new HashMultiSet<>();
 		while (Calc.chance(80d / (1 + items.size()))) {
 			items.add(rl.get());
 		}
