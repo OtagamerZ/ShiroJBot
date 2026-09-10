@@ -40,7 +40,6 @@ import com.kuuhaku.model.persistent.user.UserItem;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.kuuhaku.model.records.dunhun.Attributes;
-import com.kuuhaku.model.records.dunhun.GearStats;
 import com.kuuhaku.model.records.dunhun.Requirements;
 import com.kuuhaku.util.Graph;
 import com.kuuhaku.util.IO;
@@ -104,6 +103,8 @@ public class HeroGearCommand implements Executable {
 	}
 
 	private static void updateEmbed(I18N locale, Account acc, Gear g, EmbedBuilder eb, MessageData.Guild event, AtomicReference<Message> msg, List<GlobalDrop> mats) {
+		g.load(null, false);
+
 		GearType type = g.getBasetype().getStats().gearType();
 		if (g.getRarityClass().ordinal() >= RarityClass.RARE.ordinal()) {
 			eb.setTitle(g.getName(locale) + ", " + g.getBasetype().getInfo(locale).getName());
@@ -135,7 +136,6 @@ public class HeroGearCommand implements Executable {
 		eb.appendDescription("\n");
 
 		boolean hasStats = false;
-		GearStats stats = g.getBasetype().getStats();
 		if (g.getDmg() != 0) {
 			eb.appendDescription(locale.get("str/bonus_attack", g.getDmg()) + "\n");
 			hasStats = true;
