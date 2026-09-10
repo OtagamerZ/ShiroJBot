@@ -75,7 +75,6 @@ import java.util.stream.Stream;
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
 				"<dungeon:word:r> <floor:number> <users:custom>[users]",
-				"<dungeon:word:r> <users:custom>[users]",
 				"<dungeon:word:r> <action:word>[reset]"
 		}
 )

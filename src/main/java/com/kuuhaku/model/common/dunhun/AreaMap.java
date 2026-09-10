@@ -40,6 +40,7 @@ public class AreaMap {
 	public AreaMap(DungeonRun run) {
 		this(run, LEVELS_PER_FLOOR, AreaMap::generateRandom);
 		this.renderFloor.set(run.getFloor());
+		run.getGame().getDungeon().setInfinite(true);
 	}
 
 	public AreaMap(DungeonRun run, int areasPerFloor, BiConsumer<Dunhun, AreaMap> generator) {
@@ -368,7 +369,6 @@ public class AreaMap {
 	}
 
 	public static void generateRandom(Dunhun game, AreaMap m) {
-		game.getDungeon().setInfinite(true);
 		generateRandom(game, m, (fl, sub) -> {
 			List<Sublevel> sublevels = fl.getSublevels();
 			if (sublevels.size() == 1) {
