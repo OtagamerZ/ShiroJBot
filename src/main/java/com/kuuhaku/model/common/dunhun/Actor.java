@@ -692,6 +692,10 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		Attributes total = this instanceof Hero h ? h.getAttributes() : new Attributes();
 		Equipment equip = getEquipment();
 
+		for (Gear g : equip) {
+			g.load(null, shoukan);
+		}
+
 		attrCheck:
 		while (true) {
 			for (Gear g : equip) {
