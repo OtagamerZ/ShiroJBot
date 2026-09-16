@@ -492,12 +492,16 @@ public class Gear extends DAO<Gear> {
 					mult *= h.getModifiers().getMagicFind(1);
 				}
 
-				mult *= switch (source.getRarityClass()) {
-					case NORMAL -> 1;
-					case MAGIC -> 1.2;
-					case RARE -> 1.5;
-					case UNIQUE -> 10;
-				};
+				if (source instanceof Boss) {
+					mult *= 10;
+				} else {
+					mult *= switch (source.getRarityClass()) {
+						case NORMAL -> 1;
+						case MAGIC -> 1.2;
+						case RARE -> 1.5;
+						case UNIQUE -> 2.5;
+					};
+				}
 			}
 		} else if (source instanceof Hero h) {
 			dropLevel = Math.max(1, h.getLevel() / 2);
