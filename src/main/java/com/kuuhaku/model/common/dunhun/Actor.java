@@ -358,7 +358,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 								dropFac /= 2;
 							}
 
-							dropFac = 10 * mult;
+							dropFac = Math.max(10, cbt.getGame().getAreaLevel() / 2) * mult;
 							while (Calc.chance(dropFac)) {
 								GlobalDrop drop = GlobalDrop.getRandom(cbt.getGame());
 								if (drop == null) break;

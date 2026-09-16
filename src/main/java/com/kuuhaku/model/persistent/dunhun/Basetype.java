@@ -122,12 +122,23 @@ public class Basetype extends DAO<Basetype> {
 		}
 
 		List<Object[]> bases = DAO.queryAllUnmapped("""
-				SELECT id
-				     , weight
-				FROM basetype
-				WHERE weight > 0
-				  AND req_level <= ?1
-				  AND req_tags <@ cast(?2 AS JSONB)
+				SELECT x.id
+				     , round(x.weight * coalesce(x.tier_bias, 1)) AS weight
+				FROM (
+				         SELECT x.id
+				              , x.weight
+				              , (0.5 + (x.tier / 2.0 / max(x.tier) OVER (PARTITION BY x.gear_type))) AS tier_bias
+				         FROM (
+				                  SELECT id
+				                       , weight
+				                       , gear_type
+				                       , cast(regexp_substr(id, '\\d+$') AS INT) AS tier
+				                  FROM basetype
+				                  WHERE weight > 0
+				                    AND req_level <= ?1
+				                    AND req_tags <@ cast(?2 AS JSONB)
+				              ) x
+				     ) x
 				""", dropLevel, tags.toString()
 		);
 		if (bases.isEmpty()) return null;
