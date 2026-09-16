@@ -59,7 +59,10 @@ public class HeroInventoryCommand implements Executable {
 				.setAuthor(locale.get("str/hero_inventory", h.getName(), equips.size(), h.getInventoryCapacity()));
 
 		List<Page> pages = Utils.generatePages(eb, equips, 10, 5,
-				g -> "`" + g.getId() + "` - " + g.getBasetype().getIcon() + " " + g.getName(locale) + "\n-# " + g.getBasetype().getInfo(locale).getName() + "\n",
+				g -> "`%d` - %s %s\n-# %s (lv: $s)\n".formatted(
+						g.getId(), g.getBasetype().getIcon(), g.getName(locale),
+						g.getBasetype().getInfo(locale).getName(), g.getItemLevel()
+				),
 				(p, t) -> eb.setFooter(locale.get("str/page", p + 1, t))
 		);
 
