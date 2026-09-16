@@ -496,7 +496,7 @@ public class Gear extends DAO<Gear> {
 					case NORMAL -> 1;
 					case MAGIC -> 1.2;
 					case RARE -> 1.5;
-					case UNIQUE -> 2.5;
+					case UNIQUE -> 10;
 				};
 			}
 		} else if (source instanceof Hero h) {
