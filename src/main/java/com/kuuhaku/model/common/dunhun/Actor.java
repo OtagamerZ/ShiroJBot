@@ -566,7 +566,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			String icon = e.getIcon();
 			if (icon != null) {
 				int exp = e.getExpiration();
-				icons.add("\\" + icon + Utils.superscript(exp));
+				icons.add(icon + Utils.superscript(exp));
 			}
 		}
 
