@@ -38,6 +38,7 @@ public class EffectProperties<T> {
 	private int priority;
 	private int expiration;
 	private String icon;
+	private String name;
 
 	public EffectProperties(EffectContext<T> context) {
 		this(context, -1);
@@ -272,6 +273,14 @@ public class EffectProperties<T> {
 
 	public void setIcon(String icon) {
 		this.icon = icon;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 
 	@Override
