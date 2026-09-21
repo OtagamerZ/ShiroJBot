@@ -256,7 +256,7 @@ public class CommonSocket extends WebSocketClient {
 		if (retry > 6) retry = 6;
 
 		if (retry > 0) {
-			Constants.LOGGER.info("Failed to reconnect to {}, retrying in {} seconds", getClass().getSimpleName(), ++retry * 5);
+			Constants.LOGGER.info("Failed to reconnect to {}, retrying in {} seconds: {}", getClass().getSimpleName(), ++retry * 5, reason);
 		} else {
 			Constants.LOGGER.info("Disconnected from {} ({}), attempting reconnect in {} seconds", getClass().getSimpleName(), code, ++retry * 5);
 		}
