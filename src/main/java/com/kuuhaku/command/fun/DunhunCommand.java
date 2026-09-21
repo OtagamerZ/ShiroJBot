@@ -74,8 +74,8 @@ import java.util.stream.Stream;
 		allowEmpty = true,
 		patterns = @SigPattern(id = "users", value = "(<@!?(\\d+)>(?=\\s|$))+"),
 		value = {
-				"<dungeon:word:r> <floor:number> <users:custom>[users]",
-				"<dungeon:word:r> <action:word>[reset]"
+				"<dungeon:word:r> <action:word:r>[reset]",
+				"<dungeon:word:r> <floor:number> <users:custom>[users]"
 		}
 )
 @Requires(Permission.MESSAGE_ATTACH_FILES)
