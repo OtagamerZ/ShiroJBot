@@ -70,6 +70,7 @@ public class GearAffix extends DAO<GearAffix> {
 	private int roll = Calc.rng(Integer.MAX_VALUE);
 
 	private transient final AffixModifiers modifiers = new AffixModifiers();
+	private transient boolean isImplicit = false;
 
 	public GearAffix() {
 	}
@@ -132,7 +133,7 @@ public class GearAffix extends DAO<GearAffix> {
 		String format = showScaling ? "**%s (%s)**" : "**%s**";
 
 		String desc = affix.getInfo(locale).getDescription();
-		List<ValueRange> values = getRanges();
+		List<ValueRange> values = getRanges(!isImplicit);
 
 		@Language("RegExp")
 		String[] patterns = {
@@ -183,7 +184,11 @@ public class GearAffix extends DAO<GearAffix> {
 		}));
 	}
 
-	public List<ValueRange> getRanges() {
+	public List<ValueRange> getRanges(boolean applyBonus) {
+		if (!applyBonus) {
+			return affix.getRanges();
+		}
+
 		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
 		if (gear.getBasetype().getStats().tags().contains("2-SLOT")) {
 			mult *= 1.5;
@@ -199,13 +204,17 @@ public class GearAffix extends DAO<GearAffix> {
 	}
 
 	public List<Integer> getValues() {
-		return getRanges().stream()
+		return getRanges(!isImplicit).stream()
 				.map(r -> r.withRoll(Calc.rng(1d, roll)))
 				.toList();
 	}
 
 	public AffixModifiers getModifiers() {
 		return modifiers;
+	}
+
+	public void setImplicit(boolean implicit) {
+		isImplicit = implicit;
 	}
 
 	public void apply(Gear source, Actor<?> owner, boolean shoukan) {

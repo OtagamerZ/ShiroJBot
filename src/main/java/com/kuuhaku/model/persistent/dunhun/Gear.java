@@ -159,6 +159,7 @@ public class Gear extends DAO<Gear> {
 		List<GearAffix> affs = new ArrayList<>();
 		GearAffix imp = getImplicit();
 		if (imp != null) {
+			imp.setImplicit(true);
 			affs.add(imp);
 		}
 		affs.addAll(affixes);
