@@ -5,7 +5,6 @@ import com.kuuhaku.model.common.dunhun.Actor;
 import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.common.dunhun.MonsterBase;
 import com.kuuhaku.model.enums.shoukan.Trigger;
-import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 
 import java.util.HashSet;
@@ -19,20 +18,19 @@ public record CombatContext(
 		Actor<?> source,
 		AtomicReference<Actor<?>> target,
 		Usable usable,
-		Gear gear,
 		AtomicInteger value,
 		Set<String> tags
 ) {
 	public CombatContext(Combat combat, Trigger trigger) {
-		this(combat, trigger, null, (Actor<?>) null, null, null, null);
+		this(combat, trigger, null, (Actor<?>) null, null, null);
 	}
 
-	public CombatContext(Combat combat, Trigger trigger, Actor<?> source, Actor<?> target, Usable usable, Gear gear, AtomicInteger value) {
-		this(combat, trigger, source, new AtomicReference<>(target), usable, gear, value);
+	public CombatContext(Combat combat, Trigger trigger, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
+		this(combat, trigger, source, new AtomicReference<>(target), usable, value);
 	}
 
-	public CombatContext(Combat combat, Trigger trigger, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable, Gear gear, AtomicInteger value) {
-		this(combat, trigger, source, target, usable, gear, value, new HashSet<>());
+	public CombatContext(Combat combat, Trigger trigger, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable, AtomicInteger value) {
+		this(combat, trigger, source, target, usable, value, new HashSet<>());
 
 		if (usable instanceof Skill s) {
 			for (Object tag : s.getTags()) {

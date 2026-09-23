@@ -578,14 +578,14 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		}
 	}
 
-	public void trigger(Trigger trigger, Actor<?> target, Usable usable, Gear gear, AtomicInteger value) {
-		trigger(trigger, new AtomicReference<>(target), usable, gear, value);
+	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
+		trigger(trigger, new AtomicReference<>(target), usable, value);
 	}
 
-	public void trigger(Trigger trigger, AtomicReference<Actor<?>> target, Usable usable, Gear gear, AtomicInteger value) {
+	public void trigger(Trigger trigger, AtomicReference<Actor<?>> target, Usable usable, AtomicInteger value) {
 		if (!binding.isBound()) return;
 
-		CombatContext context = new CombatContext(getGame().getCombat(), trigger, this, target, usable, gear, value);
+		CombatContext context = new CombatContext(getGame().getCombat(), trigger, this, target, usable, value);
 
 		List<EffectBase> queue = new ArrayList<>();
 		for (Gear g : getEquipment()) {
