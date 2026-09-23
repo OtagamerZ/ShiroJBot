@@ -364,13 +364,13 @@ public class Gear extends DAO<Gear> {
 	public int getDmg() {
 		int base = basetype.getStats().attack();
 
-		return (int) (modifiers.getAttack().apply(base));
+		return (int) modifiers.getAttack().apply(base);
 	}
 
 	public int getDfs() {
 		int base = basetype.getStats().defense();
 
-		return (int) (modifiers.getDefense().apply(base));
+		return (int) modifiers.getDefense().apply(base);
 	}
 
 	public double getCritical() {
@@ -380,7 +380,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getMaxAmmo() {
-		return (int) modifiers.getMaxAmmo().apply(1);
+		return (int) Math.max(1, modifiers.getMaxAmmo().apply(1));
 	}
 
 	public int getAmmo() {
