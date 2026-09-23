@@ -166,7 +166,7 @@ public class Hero extends Actor<Hero> {
 			crit = 1 - (1 - crit) * (1 - flat);
 		}
 
-		double bonus = getModifiers().getCritical(stats.getRaceBonus().critical());
+		double bonus = stats.getRaceBonus().critical();
 		return Math.clamp(crit * 100 + bonus, 0, 100);
 	}
 
