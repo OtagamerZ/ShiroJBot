@@ -148,6 +148,10 @@ public class HeroGearCommand implements Executable {
 			eb.appendDescription(locale.get("str/bonus_critical", Utils.roundToString(locale, g.getCritical(), 2)) + "\n");
 			hasStats = true;
 		}
+		if (g.getTags().contains("AMMO")) {
+			eb.appendDescription(locale.get("str/bonus_ammo", g.getMaxAmmo()) + "\n");
+			hasStats = true;
+		}
 
 		if (hasStats) {
 			eb.appendDescription("\n");
