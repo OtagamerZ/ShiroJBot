@@ -185,10 +185,15 @@ public class GearAffix extends DAO<GearAffix> {
 
 	public List<ValueRange> getRanges() {
 		double mult = gear.getRarityClass() == RarityClass.MAGIC ? 1.2 : 1;
+		if (gear.getBasetype().getStats().tags().contains("2-SLOT")) {
+			mult *= 1.5;
+		}
+
+		double fMult = mult;
 		return affix.getRanges().stream()
 				.map(r -> r.multiply(
-						modifiers.getMinMult().multiplier() * mult,
-						modifiers.getMaxMult().multiplier() * mult
+						modifiers.getMinMult().multiplier() * fMult,
+						modifiers.getMaxMult().multiplier() * fMult
 				))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}

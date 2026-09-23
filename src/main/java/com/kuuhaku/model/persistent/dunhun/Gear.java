@@ -97,6 +97,7 @@ public class Gear extends DAO<Gear> {
 	private transient boolean destroyed;
 	private transient String nameCache;
 	private transient int nameHash = 0;
+	private transient int ammo = 0;
 
 	public Gear() {
 	}
@@ -376,6 +377,22 @@ public class Gear extends DAO<Gear> {
 		int base = (int) basetype.getStats().critical();
 
 		return Math.clamp(modifiers.getCritical().apply(base), 0, 100);
+	}
+
+	public int getMaxAmmo() {
+		return (int) modifiers.getMaxAmmo().apply(1);
+	}
+
+	public int getAmmo() {
+		return ammo;
+	}
+
+	public void consumeAmmo(int amount) {
+		ammo = Math.max(0, ammo - amount);
+	}
+
+	public void reload() {
+		ammo = getMaxAmmo();
 	}
 
 	public boolean isDestroyed() {

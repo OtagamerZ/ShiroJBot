@@ -33,6 +33,7 @@ public class GearModifiers {
 	private final CumValue critical = new CumValue();
 	private final CumValue prefixes = new CumValue();
 	private final CumValue suffixes = new CumValue();
+	private final CumValue maxAmmo = new CumValue();
 
 	private final Set<String> addedTags = new HashSet<>();
 	private final Set<Requirements> addedRequirements = new HashSet<>();
@@ -57,6 +58,10 @@ public class GearModifiers {
 
 	public CumValue getSuffixes() {
 		return suffixes;
+	}
+
+	public CumValue getMaxAmmo() {
+		return maxAmmo;
 	}
 
 	public Set<String> getAddedTags() {

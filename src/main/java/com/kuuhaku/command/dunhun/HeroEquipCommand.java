@@ -62,6 +62,17 @@ public class HeroEquipCommand implements Executable {
 			return;
 		}
 
+		if (g.isWeapon()) {
+			boolean isRanged = g.getTags().contains("RANGED");
+			for (Gear wpn : h.getEquipment().getWeaponList()) {
+				if (isRanged && wpn.getTags().contains("RANGED")) continue;
+				if (!isRanged && wpn.getTags().contains("MELEE")) continue;
+
+				event.channel().sendMessage(locale.get("error/cannot_mix_types")).queue();
+				return;
+			}
+		}
+
 		h.save();
 		event.channel().sendMessage(locale.get("success/equipped")).queue();
 	}

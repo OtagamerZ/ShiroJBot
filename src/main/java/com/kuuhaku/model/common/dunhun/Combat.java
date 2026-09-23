@@ -1,6 +1,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.github.ygimenez.method.Pages;
+import com.github.ygimenez.model.EmojiId;
 import com.github.ygimenez.model.helper.ButtonizeHelper;
 import com.kuuhaku.Constants;
 import com.kuuhaku.game.Dunhun;
@@ -152,6 +153,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (a instanceof Hero h && game.getHeroes().containsValue(h)) {
 				h.setController(h.getAccount().getUid());
+			}
+
+			for (Gear g : a.getEquipment().getWeaponList()) {
+				g.reload();
 			}
 		}
 	}
@@ -381,17 +386,59 @@ public class Combat implements Renderer<BufferedImage> {
 					.setCancellable(false);
 
 			if (canAttack) {
-				helper.addAction(Utils.parseEmoji("🗡️"), w -> {
-					List<Actor<?>> tgts = new ArrayList<>();
-					for (Actor<?> a : getActors(curr.getTeam().getOther())) {
-						Actor<?> actor = a.isOutOfCombat() ? null : a;
-						tgts.add(actor);
-					}
+				boolean canReload = false;
+				boolean mustReload = true;
+				StringBuilder ammo = new StringBuilder();
+				for (Gear g : curr.getEquipment().getWeaponList()) {
+					if (g.isWeapon() && g.getTags().contains("AMMO")) {
+						int maxAmmo = g.getMaxAmmo();
+						int digs = Utils.digits(maxAmmo);
+						if (!ammo.isEmpty()) {
+							ammo.append(" | ");
+						}
 
-					addSelector(w.getMessage(), helper, tgts,
-							t -> lock.complete(() -> attack(curr, t))
-					);
-				});
+						ammo.append(StringUtils.leftPad(String.valueOf(g.getAmmo()), digs, '0'));
+						if (g.getAmmo() < maxAmmo) {
+							canReload = true;
+						} else {
+							mustReload = false;
+						}
+					} else {
+						mustReload = false;
+					}
+				}
+
+				EmojiId id;
+				if (ammo.isEmpty()) {
+					id = new EmojiId(Utils.parseEmoji("🗡️"));
+				} else {
+					id = new EmojiId(Utils.parseEmoji("🗡️"), "(" + ammo + ")");
+				}
+
+				if (!mustReload) {
+					helper.addAction(id, w -> {
+						List<Actor<?>> tgts = new ArrayList<>();
+						for (Actor<?> a : getActors(curr.getTeam().getOther())) {
+							Actor<?> actor = a.isOutOfCombat() ? null : a;
+							tgts.add(actor);
+						}
+
+						addSelector(w.getMessage(), helper, tgts,
+								t -> lock.complete(() -> attack(curr, t))
+						);
+					});
+				}
+
+				if (canReload) {
+					helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
+						for (Gear g : curr.getEquipment().getWeaponList()) {
+							if (g.isWeapon() && g.getTags().contains("AMMO") && curr.getAp() > 0) {
+								curr.consumeAp(1);
+								g.reload();
+							}
+						}
+					});
+				}
 			}
 
 			if (curr.getAllSkills().anyMatch(Objects::nonNull)) {
@@ -729,23 +776,41 @@ public class Combat implements Renderer<BufferedImage> {
 					.toList();
 
 			if (wpns.size() > 1) {
-				for (int i = 0; i < wpns.size(); i++) {
-					if (h.getAp() <= 0 || target.isOutOfCombat()) break;
+				for (Gear wpn : wpns) {
+					if (h.getAp() <= 0 || wpn.getAmmo() <= 0 || target.isOutOfCombat()) break;
 
-					skill(Skill.DUAL_ATTACK, source, target);
+					skill(Skill.DUAL_ATTACK, wpn, source, target);
 				}
 
 				return;
+			} else {
+				if (!wpns.isEmpty()) {
+					skill(Skill.DEFAULT_ATTACK, wpns.getFirst(), source, target);
+				} else {
+					skill(Skill.DEFAULT_ATTACK, source, target);
+				}
 			}
+
+			return;
 		}
 
 		skill(Skill.DEFAULT_ATTACK, source, target);
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
+		skill(skill, null, source, target);
+	}
+
+	public void skill(Skill skill, Gear gear, Actor<?> source, Actor<?> target) {
 		try {
 			if (skill.isLocked()) return;
 			boolean isCurrent = source == getCurrent();
+			boolean useAmmo = gear != null && gear.getTags().contains("AMMO");
+
+			if (gear != null && gear.getAmmo() <= 0 && useAmmo) {
+				game.getChannel().sendMessage(getLocale().get("error/no_ammo")).queue();
+				return;
+			}
 
 			AtomicReference<Actor<?>> tgt = new AtomicReference<>(target);
 			switch (skill.getStats().getType()) {
@@ -764,6 +829,9 @@ public class Combat implements Renderer<BufferedImage> {
 			if (skill.execute(game, source, target)) {
 				if (isCurrent) {
 					source.consumeAp(skill.getCost(source));
+					if (useAmmo) {
+						gear.consumeAmmo(1);
+					}
 				}
 
 				String type = skill.getId().equals("GENERIC_ATTACK") ? "str/actor_combat" : "str/used";

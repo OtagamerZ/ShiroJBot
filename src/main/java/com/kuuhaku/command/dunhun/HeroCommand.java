@@ -448,19 +448,30 @@ public class HeroCommand implements Executable {
 					if (g == null) {
 						w.getChannel().sendMessage(locale.get("error/gear_not_found")).queue();
 						return;
-					} else {
-						if (h.getLevel() < g.getRequirements().level()) {
-							w.getChannel().sendMessage(locale.get("error/insufficient_level")).queue();
-							return;
-						} else if (!h.getAttributes().has(g.getRequirements().attributes())) {
-							w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
-							return;
-						}
+					}
+
+					if (h.getLevel() < g.getRequirements().level()) {
+						w.getChannel().sendMessage(locale.get("error/insufficient_level")).queue();
+						return;
+					} else if (!h.getAttributes().has(g.getRequirements().attributes())) {
+						w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
+						return;
 					}
 
 					if (!h.getEquipment().equip(g)) {
 						w.getChannel().sendMessage(locale.get("error/slot_full")).queue();
 						return;
+					}
+
+					if (g.isWeapon()) {
+						boolean isRanged = g.getTags().contains("RANGED");
+						for (Gear wpn : h.getEquipment().getWeaponList()) {
+							if (isRanged && wpn.getTags().contains("RANGED")) continue;
+							if (!isRanged && wpn.getTags().contains("MELEE")) continue;
+
+							w.getChannel().sendMessage(locale.get("error/cannot_mix_types")).queue();
+							return;
+						}
 					}
 
 					msg.getChannel().sendMessage(locale.get("success/equipped")).queue();
