@@ -175,14 +175,14 @@ public class Combat implements Renderer<BufferedImage> {
 
 		actor.setFleed(false);
 		actor.getSenshi().setAvailable(true);
-		trigger(Trigger.ON_INITIALIZE, actor, actor, null);
+		trigger(Trigger.ON_INITIALIZE, actor, actor, null, null);
 
 		acts.addAll(actor.getMinions());
 		return true;
 	}
 
 	public void onRemoveActor(Actor<?> actor) {
-		trigger(Trigger.ON_REMOVE, actor, actor, null);
+		trigger(Trigger.ON_REMOVE, actor, actor, null, null);
 		actors.remove(actor);
 		if (initialized) {
 			destroyed.add(actor);
@@ -315,7 +315,7 @@ public class Combat implements Renderer<BufferedImage> {
 					actor.setAp(actor.getMaxAp());
 					sen.setDefending(false);
 
-					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null);
+					trigger(Trigger.ON_TURN_BEGIN, actor, actor, null, null);
 					actor.getModifiers().expireMods();
 
 					while (actor == getCurrent()) {
@@ -338,7 +338,7 @@ public class Combat implements Renderer<BufferedImage> {
 						game.nextTurn();
 					}
 				} finally {
-					trigger(Trigger.ON_TURN_END, actor, actor, null);
+					trigger(Trigger.ON_TURN_END, actor, actor, null, null);
 					sen.setAvailable(true);
 
 					if (actor.getBinding().isBound() && !sen.isStasis()) {
@@ -526,7 +526,7 @@ public class Combat implements Renderer<BufferedImage> {
 									int lastHistor = history.size();
 									if (con.execute(game, h, t)) {
 										h.consumeAp(1);
-										trigger(ON_CONSUMABLE, h, t, con);
+										trigger(ON_CONSUMABLE, h, t, con, null);
 
 										history.add(lastHistor, getLocale().get(t.equals(h) ? "str/used_self" : "str/used",
 												h.getName(), con.getName(getLocale()), t.getName())
@@ -814,16 +814,16 @@ public class Combat implements Renderer<BufferedImage> {
 
 			AtomicReference<Actor<?>> tgt = new AtomicReference<>(target);
 			switch (skill.getStats().getType()) {
-				case ATTACK -> trigger(Trigger.ON_ATTACK_TARGET, source, tgt, skill);
-				case SPELL -> trigger(Trigger.ON_SPELL_TARGET, source, tgt, skill);
+				case ATTACK -> trigger(Trigger.ON_ATTACK_TARGET, source, tgt, skill, gear);
+				case SPELL -> trigger(Trigger.ON_SPELL_TARGET, source, tgt, skill, gear);
 			}
 
 			target = tgt.get();
 			int lastHistor = history.size();
 			boolean wasToggle = skill.getToggledEffect() != null;
 			switch (skill.getStats().getType()) {
-				case ATTACK -> trigger(Trigger.ON_ATTACK, source, tgt, skill);
-				case SPELL -> trigger(Trigger.ON_SPELL, source, tgt, skill);
+				case ATTACK -> trigger(Trigger.ON_ATTACK, source, tgt, skill, gear);
+				case SPELL -> trigger(Trigger.ON_SPELL, source, tgt, skill, gear);
 			}
 
 			if (skill.execute(game, source, target)) {
@@ -1030,29 +1030,29 @@ public class Combat implements Renderer<BufferedImage> {
 		}
 
 		for (Actor<?> a : actors.values()) {
-			a.trigger(t, a, null, null);
+			a.trigger(t, a, null, null, null);
 		}
 	}
 
-	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable) {
-		trigger(t, source, new AtomicReference<>(target), usable);
+	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, Gear gear) {
+		trigger(t, source, new AtomicReference<>(target), usable, gear);
 	}
 
-	public void trigger(Trigger t, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable) {
-		trigger(t, source, target, usable, new AtomicInteger());
+	public void trigger(Trigger t, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable, Gear gear) {
+		trigger(t, source, target, usable, gear, new AtomicInteger());
 	}
 
-	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, AtomicInteger value) {
-		trigger(t, source, new AtomicReference<>(target), usable, value);
+	public void trigger(Trigger t, Actor<?> source, Actor<?> target, Usable usable, Gear gear, AtomicInteger value) {
+		trigger(t, source, new AtomicReference<>(target), usable, gear, value);
 	}
 
-	public void trigger(Trigger t, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable, AtomicInteger value) {
+	public void trigger(Trigger t, Actor<?> source, AtomicReference<Actor<?>> target, Usable usable, Gear gear, AtomicInteger value) {
 		if (source == null || !source.getBinding().isBound()) return;
 
-		CombatContext context = new CombatContext(this, t, source, target, usable, value);
+		CombatContext context = new CombatContext(this, t, source, target, usable, gear, value);
 		triggerGlobalEffects(t, context);
 
-		source.trigger(t, Utils.getOr(target, new AtomicReference<>(source)), usable, context.value());
+		source.trigger(t, Utils.getOr(target, new AtomicReference<>(source)), usable, gear, context.value());
 	}
 
 	private void triggerGlobalEffects(Trigger t, CombatContext context) {
