@@ -134,6 +134,8 @@ public class GearAffix extends DAO<GearAffix> {
 
 		String desc = affix.getInfo(locale).getDescription();
 		List<ValueRange> values = getRanges(!isImplicit);
+		System.out.println("--------------------");
+		new RuntimeException().printStackTrace();
 
 		@Language("RegExp")
 		String[] patterns = {
