@@ -30,6 +30,8 @@ public record ValueRange(int min, int max) {
 
 	public ValueRange multiply(double minMult, double maxMult) {
 		System.out.println(min + " * " + minMult + " | " + max + " * " + maxMult);
+		System.out.println("------------------");
+		new RuntimeException().printStackTrace();
 
 		return new ValueRange((int) (min * minMult), (int) (max * maxMult));
 	}
