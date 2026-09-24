@@ -22,7 +22,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	static {
 		for (int i = 0; i < MAX_LEVEL; i++) {
 			HP_TABLE[i] = 1 + i / 10d;
-			STAT_TABLE[i] = Math.pow(1.26, i / 10d);
+			STAT_TABLE[i] = Math.pow(1.35, i / 10d);
 		}
 	}
 

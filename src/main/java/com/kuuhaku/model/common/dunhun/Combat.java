@@ -591,6 +591,10 @@ public class Combat implements Renderer<BufferedImage> {
 							return a.getTargetPriority(null);
 						}
 
+						if (a.getSenshi().isSleeping()) {
+							return 0;
+						}
+
 						return a.getTargetPriority(u);
 					};
 
