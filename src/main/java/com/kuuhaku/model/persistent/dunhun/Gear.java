@@ -381,7 +381,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getMaxAmmo(Actor<?> owner) {
-		int flat = (int) Math.max(1, modifiers.getMaxAmmo().apply(1));
+		int flat = (int) Math.max(1, modifiers.getMaxAmmo().apply(5));
 		if (owner != null) {
 			return (int) Math.max(1, owner.getModifiers().getMaxAmmo(flat));
 		}
