@@ -28,7 +28,7 @@ public class AffixModifiers {
 	private final CumValue minMult = new CumValue();
 	private final CumValue maxMult = new CumValue();
 
-	public static final Field[] fieldCache = GearModifiers.class.getDeclaredFields();
+	public static final Field[] fieldCache = AffixModifiers.class.getDeclaredFields();
 
 	public CumValue getMinMult() {
 		return minMult;

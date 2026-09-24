@@ -29,8 +29,6 @@ public record ValueRange(int min, int max) {
 	}
 
 	public ValueRange multiply(double minMult, double maxMult) {
-		System.out.println(min + " * " + minMult + " | " + max + " * " + maxMult);
-
 		return new ValueRange((int) (min * minMult), (int) (max * maxMult));
 	}
 
