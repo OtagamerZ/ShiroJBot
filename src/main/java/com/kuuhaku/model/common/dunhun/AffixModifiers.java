@@ -19,10 +19,16 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.common.shoukan.CumValue;
+import com.kuuhaku.model.common.shoukan.ValueMod;
+
+import java.lang.reflect.Field;
+import java.util.function.Predicate;
 
 public class AffixModifiers {
 	private final CumValue minMult = new CumValue();
 	private final CumValue maxMult = new CumValue();
+
+	public static final Field[] fieldCache = GearModifiers.class.getDeclaredFields();
 
 	public CumValue getMinMult() {
 		return minMult;
@@ -30,5 +36,27 @@ public class AffixModifiers {
 
 	public CumValue getMaxMult() {
 		return maxMult;
+	}
+
+	public void expireMods() {
+		removeIf(mod -> {
+			mod.decExpiration();
+			return mod.isExpired();
+		});
+	}
+
+	public void clear() {
+		removeIf(_ -> true);
+	}
+
+	public void removeIf(Predicate<ValueMod> check) {
+		for (Field f : fieldCache) {
+			try {
+				if (f.get(this) instanceof CumValue cv) {
+					cv.values().removeIf(check);
+				}
+			} catch (IllegalAccessException ignore) {
+			}
+		}
 	}
 }

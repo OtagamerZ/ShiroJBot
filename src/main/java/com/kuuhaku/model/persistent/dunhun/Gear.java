@@ -422,11 +422,13 @@ public class Gear extends DAO<Gear> {
 				continue;
 			}
 
+			ga.getModifiers().clear();
 			ga.apply(this, owner, shoukan);
 		}
 
 		if (!meta.isEmpty()) {
 			for (GearAffix ga : meta) {
+				ga.getModifiers().clear();
 				ga.apply(this, owner, shoukan);
 			}
 		}
