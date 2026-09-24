@@ -156,7 +156,7 @@ public class Combat implements Renderer<BufferedImage> {
 			}
 
 			for (Gear g : a.getEquipment().getWeaponList()) {
-				g.reload();
+				g.reload(a);
 			}
 		}
 	}
@@ -391,7 +391,7 @@ public class Combat implements Renderer<BufferedImage> {
 				StringBuilder ammo = new StringBuilder();
 				for (Gear g : curr.getEquipment().getWeaponList()) {
 					if (g.isWeapon() && g.getTags().contains("AMMO")) {
-						int maxAmmo = g.getMaxAmmo();
+						int maxAmmo = g.getMaxAmmo(curr);
 						int digs = Utils.digits(maxAmmo);
 						if (!ammo.isEmpty()) {
 							ammo.append(" | ");
@@ -434,7 +434,7 @@ public class Combat implements Renderer<BufferedImage> {
 						for (Gear g : curr.getEquipment().getWeaponList()) {
 							if (g.isWeapon() && g.getTags().contains("AMMO") && curr.getAp() > 0) {
 								curr.consumeAp(1);
-								g.reload();
+								g.reload(curr);
 							}
 						}
 					});

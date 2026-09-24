@@ -244,6 +244,14 @@ public class ActorModifiers {
 		return accumulate(base, EffectProperties::getSkillCost);
 	}
 
+	public double getMaxAmmo() {
+		return getMaxAmmo(0);
+	}
+
+	public double getMaxAmmo(double base) {
+		return accumulate(base, EffectProperties::getMaxAmmo);
+	}
+
 	public UniqueProperties<?> getEffect(Object id) {
 		return (UniqueProperties<?>) effects.stream()
 				.filter(e -> e instanceof UniqueProperties<?> u && Objects.equals(u.getIdentifier(), id))

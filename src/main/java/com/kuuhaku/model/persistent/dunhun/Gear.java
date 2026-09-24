@@ -380,8 +380,13 @@ public class Gear extends DAO<Gear> {
 		return Math.clamp(modifiers.getCritical().apply(base), 0, 100);
 	}
 
-	public int getMaxAmmo() {
-		return (int) Math.max(1, modifiers.getMaxAmmo().apply(1));
+	public int getMaxAmmo(Actor<?> owner) {
+		int flat = (int) Math.max(1, modifiers.getMaxAmmo().apply(1));
+		if (owner != null) {
+			return (int) Math.max(1, owner.getModifiers().getMaxAmmo(flat));
+		}
+
+		return flat;
 	}
 
 	public int getAmmo() {
@@ -392,8 +397,8 @@ public class Gear extends DAO<Gear> {
 		ammo = Math.max(0, ammo - amount);
 	}
 
-	public void reload() {
-		ammo = getMaxAmmo();
+	public void reload(Actor<?> owner) {
+		ammo = getMaxAmmo(owner);
 	}
 
 	public boolean isDestroyed() {

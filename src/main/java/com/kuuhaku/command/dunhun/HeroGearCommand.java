@@ -149,7 +149,7 @@ public class HeroGearCommand implements Executable {
 			hasStats = true;
 		}
 		if (g.getTags().contains("AMMO")) {
-			eb.appendDescription(locale.get("str/bonus_ammo", g.getMaxAmmo()) + "\n");
+			eb.appendDescription(locale.get("str/bonus_ammo", g.getMaxAmmo(null)) + "\n");
 			hasStats = true;
 		}
 
