@@ -410,29 +410,23 @@ public class Gear extends DAO<Gear> {
 		modifiers.clear();
 		effects.clear();
 
-		Set<GearAffix> meta = new HashSet<>();
-		List<GearAffix> affs = getAllAffixes();
-		for (GearAffix ga : affs) {
+		List<GearAffix> queue = new ArrayList<>();
+		for (GearAffix ga : getAllAffixes()) {
 			if (ga == null) {
 				Constants.LOGGER.warn("Null affix found in gear {}!", id);
 				continue;
 			}
 
 			if (ga.getAffix().getTags().contains("META")) {
-				meta.add(ga);
-				continue;
+				queue.addFirst(ga);
+			} else {
+				queue.addLast(ga);
 			}
 
 			ga.getModifiers().clear();
 		}
 
-		if (!meta.isEmpty()) {
-			for (GearAffix ga : meta) {
-				ga.apply(this, owner, shoukan);
-			}
-		}
-
-		for (GearAffix ga : affs) {
+		for (GearAffix ga : queue) {
 			ga.apply(this, owner, shoukan);
 		}
 	}
