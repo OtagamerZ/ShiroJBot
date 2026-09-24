@@ -102,7 +102,12 @@ public class CumValue implements Iterable<ValueMod> {
 	public <T extends ValueMod> T set(T value) {
 		for (ValueMod mod : values) {
 			if (mod.isPermanent() && mod.getClass() == value.getClass()) {
-				mod.setValue(mod.getValue() + value.getValue());
+				if (mod instanceof MultMod) {
+					mod.setValue((1 + mod.getValue()) * (1 + value.getValue()) - 1);
+				} else {
+					mod.setValue(mod.getValue() + value.getValue());
+				}
+
 				return (T) mod;
 			}
 		}
