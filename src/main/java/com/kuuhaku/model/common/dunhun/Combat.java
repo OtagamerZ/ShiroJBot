@@ -404,11 +404,12 @@ public class Combat implements Renderer<BufferedImage> {
 								g.getAmmo(), maxAmmo
 						));
 
+						if (g.getAmmo() < maxAmmo) {
+							canReload = true;
+						}
+
 						if (g.getAmmo() > 0) {
 							mustReload = false;
-							if (g.getAmmo() < maxAmmo) {
-								canReload = true;
-							}
 						}
 					} else {
 						mustReload = false;
@@ -436,7 +437,7 @@ public class Combat implements Renderer<BufferedImage> {
 					});
 				}
 
-				if (mustReload || canReload) {
+				if (canReload) {
 					helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 						for (Gear g : curr.getEquipment().getWeaponList()) {
 							if (g.isWeapon() && g.getTags().contains("AMMO") && curr.getAp() > 0) {
