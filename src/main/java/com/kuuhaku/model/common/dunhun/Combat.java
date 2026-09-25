@@ -436,7 +436,7 @@ public class Combat implements Renderer<BufferedImage> {
 					});
 				}
 
-				if (canReload) {
+				if (mustReload || canReload) {
 					helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
 						for (Gear g : curr.getEquipment().getWeaponList()) {
 							if (g.isWeapon() && g.getTags().contains("AMMO") && curr.getAp() > 0) {
