@@ -397,8 +397,8 @@ public class Combat implements Renderer<BufferedImage> {
 							ammo.append(" | ");
 						}
 
-						ammo.append(StringUtils.leftPad(String.valueOf(g.getAmmo()), digs, '0'));
-						if (g.getAmmo() < maxAmmo) {
+						ammo.append(StringUtils.leftPad(String.valueOf(g.getAmmo(curr)), digs, '0'));
+						if (g.getAmmo(curr) < maxAmmo) {
 							canReload = true;
 						} else {
 							mustReload = false;
@@ -781,7 +781,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (wpns.size() > 1) {
 				for (Gear wpn : wpns) {
-					if (h.getAp() <= 0 || wpn.getAmmo() <= 0 || target.isOutOfCombat()) break;
+					if (h.getAp() <= 0 || wpn.getAmmo(h) <= 0 || target.isOutOfCombat()) break;
 
 					skill(Skill.DUAL_ATTACK, wpn, source, target);
 				}
@@ -809,9 +809,9 @@ public class Combat implements Renderer<BufferedImage> {
 		try {
 			if (skill.isLocked()) return;
 			boolean isCurrent = source == getCurrent();
-			boolean useAmmo = gear != null && gear.getTags().contains("AMMO");
+			boolean useAmmo = gear != null && skill.isAttack() && gear.getTags().contains("AMMO");
 
-			if (gear != null && gear.getAmmo() <= 0 && useAmmo) {
+			if (gear != null && useAmmo && gear.getAmmo(source) <= 0) {
 				game.getChannel().sendMessage(getLocale().get("error/no_ammo")).queue();
 				return;
 			}
@@ -834,7 +834,7 @@ public class Combat implements Renderer<BufferedImage> {
 				if (isCurrent) {
 					source.consumeAp(skill.getCost(source));
 					if (useAmmo) {
-						gear.consumeAmmo(1);
+						gear.consumeAmmo(source, 1);
 					}
 				}
 
