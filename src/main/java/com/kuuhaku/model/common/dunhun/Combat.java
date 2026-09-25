@@ -404,12 +404,11 @@ public class Combat implements Renderer<BufferedImage> {
 								g.getAmmo(), maxAmmo
 						));
 
-						if (g.getAmmo() < maxAmmo) {
-							canReload = true;
-						}
-
 						if (g.getAmmo() > 0) {
 							mustReload = false;
+							if (g.getAmmo() < maxAmmo) {
+								canReload = true;
+							}
 						}
 					} else {
 						mustReload = false;
