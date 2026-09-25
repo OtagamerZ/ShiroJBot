@@ -390,7 +390,9 @@ public class Combat implements Renderer<BufferedImage> {
 				boolean mustReload = true;
 				StringBuilder ammo = new StringBuilder();
 				for (Gear g : curr.getEquipment().getWeaponList()) {
-					if (g.isWeapon() && g.getTags().contains("AMMO")) {
+					if (!g.isWeapon()) continue;
+
+					if (g.getTags().contains("AMMO")) {
 						int maxAmmo = g.getMaxAmmo(curr);
 						int digs = Utils.digits(maxAmmo);
 						if (!ammo.isEmpty()) {
@@ -404,9 +406,10 @@ public class Combat implements Renderer<BufferedImage> {
 
 						if (g.getAmmo() < maxAmmo) {
 							canReload = true;
-							if (g.getAmmo() > 0) {
-								mustReload = false;
-							}
+						}
+
+						if (g.getAmmo() > 0) {
+							mustReload = false;
 						}
 					} else {
 						mustReload = false;
