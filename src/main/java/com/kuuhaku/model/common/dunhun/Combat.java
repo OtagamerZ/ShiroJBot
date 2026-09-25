@@ -600,7 +600,7 @@ public class Combat implements Renderer<BufferedImage> {
 							return a.getTargetPriority(null);
 						}
 
-						if (a.getSenshi().isSleeping()) {
+						if (u instanceof Skill s && s.getTags().contains("DAMAGE") && a.getSenshi().isSleeping()) {
 							return 0;
 						}
 
