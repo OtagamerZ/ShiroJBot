@@ -397,11 +397,16 @@ public class Combat implements Renderer<BufferedImage> {
 							ammo.append(" | ");
 						}
 
-						ammo.append(StringUtils.leftPad(String.valueOf(g.getAmmo()), digs, '0'));
+						//noinspection StringConcatenationInFormatCall
+						ammo.append(("%0" + digs + "d/%d").formatted(
+								g.getAmmo(), maxAmmo
+						));
+
 						if (g.getAmmo() < maxAmmo) {
 							canReload = true;
-						} else {
-							mustReload = false;
+							if (g.getAmmo() > 0) {
+								mustReload = false;
+							}
 						}
 					} else {
 						mustReload = false;
