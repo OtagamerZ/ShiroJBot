@@ -132,22 +132,6 @@ public class Monster extends MonsterBase<Monster> {
 		return nameCache;
 	}
 
-	@Override
-	public int getMaxHp() {
-		int flat = getStats().getBaseHp() + getLevel() * 5;
-		double mult = switch (getRarityClass()) {
-			case MAGIC -> 1.5;
-			case RARE -> 2.25;
-			default -> 1;
-		} * HP_TABLE[getLevel() - 1];
-
-		if (getGame().getPartySize() > 1 && !isMinion()) {
-			mult *= 1 + getGame().getPartySize() * 0.5;
-		}
-
-		return (int) Math.max(1, getModifiers().getMaxHp(flat) * mult);
-	}
-
 	public Set<Affix> getAffixes() {
 		return affixes;
 	}

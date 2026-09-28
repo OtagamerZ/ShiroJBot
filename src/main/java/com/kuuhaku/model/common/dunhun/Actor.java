@@ -753,6 +753,22 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 			int level = m.getLevel();
 			mult = switch (getRarityClass()) {
+				case UNIQUE -> {
+					if (!(m instanceof Boss) || getGame() == null) {
+						yield 1;
+					}
+
+					boolean isMainBoss = getGame().getDungeon().getMonsterPool().contains(m.getId());
+					if (isMainBoss) yield 1;
+
+					if (getGame().getAreaLevel() >= Dunhun.LEVEL_BRUTAL) {
+						yield 5 / 3d;
+					} else if (getGame().getAreaLevel() >= Dunhun.LEVEL_HARD) {
+						yield 4 / 3d;
+					}
+
+					yield 2 / 3d;
+				}
 				case RARE -> {
 					senshi.setStashRef(new StashedCard(senshi.getCard(), true));
 					yield 2;

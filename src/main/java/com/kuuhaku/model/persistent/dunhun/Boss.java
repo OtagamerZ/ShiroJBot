@@ -91,11 +91,6 @@ public class Boss extends MonsterBase<Boss> {
 	}
 
 	@Override
-	public int getMaxHp() {
-		return (int) Math.max(1, stats.getBaseHp() * (1 + getLevel() / 5d));
-	}
-
-	@Override
 	public void trigger(Trigger trigger, Actor<?> target, Usable usable, AtomicInteger value) {
 		super.trigger(trigger, target, usable, value);
 		if (trigger == Trigger.ON_COMBAT && onStart != null) {

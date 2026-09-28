@@ -2,6 +2,7 @@ package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
+import com.kuuhaku.model.persistent.dunhun.Boss;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -76,6 +77,23 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	public void setLevelOverride(int levelOverride) {
 		this.levelOverride = levelOverride;
+	}
+
+	@Override
+	public int getMaxHp() {
+		int flat = getStats().getBaseHp() + getLevel() * 5;
+		double mult = switch (getRarityClass()) {
+			case MAGIC -> 1.5;
+			case RARE -> 2.25;
+			case UNIQUE -> this instanceof Boss ? 0.25 : 1;
+			default -> 1;
+		} * HP_TABLE[getLevel() - 1];
+
+		if (getGame().getPartySize() > 1 && !isMinion()) {
+			mult *= 1 + getGame().getPartySize() * 0.5;
+		}
+
+		return (int) Math.max(1, getModifiers().getMaxHp(flat) * mult);
 	}
 
 	@Override
