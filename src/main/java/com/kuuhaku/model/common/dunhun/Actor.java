@@ -658,6 +658,17 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		);
 	}
 
+	public void reloadWeapons() {
+		for (Gear g : getEquipment().getWeaponList()) {
+			if (getAp() <= 0) return;
+
+			if (g.isWeapon() && g.getTags().contains("AMMO")) {
+				consumeAp(1);
+				g.reload(this);
+			}
+		}
+	}
+
 	public Senshi createSenshi() {
 		return createSenshi(false);
 	}

@@ -50,6 +50,10 @@ import static jakarta.persistence.CascadeType.ALL;
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Table(name = "skill", schema = "dunhun")
 public class Skill extends DAO<Skill> implements Usable, Cloneable {
+	private static final String GENERIC_ATTACK = "GENERIC_ATTACK";
+	private static final String GENERIC_SPELL = "GENERIC_SPELL";
+	private static final String GENERIC_BUFF = "GENERIC_BUFF";
+
 	public static final Skill DEFAULT_ATTACK = new Skill(1, 0, 1, 0, SkillType.ATTACK);
 	public static final Skill DUAL_ATTACK = new Skill(1, 0, 0.6, 0, SkillType.ATTACK);
 	public static final Map<ElementType, Skill> ELEMENTAL_SKILLS = new HashMap<>();
@@ -79,7 +83,13 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 	}
 
 	public Skill(int cost, int cooldown, double efficiency, double critical, SkillType type) {
-		this.id = "GENERIC_" + type.name();
+		this.id = switch (type) {
+			case ATTACK -> GENERIC_ATTACK;
+			case SPELL -> GENERIC_SPELL;
+			case BUFF -> GENERIC_BUFF;
+			default -> throw new IllegalArgumentException("Unknown skill type: " + type);
+		};
+
 		this.stats = new SkillStats(cost, cooldown, efficiency, critical, type);
 	}
 
@@ -145,7 +155,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 
 	@Override
 	public boolean execute(Dunhun game, Actor<?> source, Actor<?> target) {
-		if (id.equals("GENERIC_ATTACK")) {
+		if (id.equals(GENERIC_ATTACK)) {
 			target.damage(source, this, (int) (source.getSenshi().getDmg() * stats.getEfficiency()));
 			return true;
 		} else if (stats.getEffect() == null) {

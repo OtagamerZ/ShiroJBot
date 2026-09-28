@@ -379,6 +379,37 @@ public class Combat implements Renderer<BufferedImage> {
 		boolean canAttack = sen.getDmg() > 0;
 		boolean canDefend = sen.getDfs() > 0;
 
+		boolean canReload = false;
+		boolean mustReload = true;
+		StringBuilder ammo = new StringBuilder();
+		for (Gear g : curr.getEquipment().getWeaponList()) {
+			if (!g.isWeapon()) continue;
+
+			if (g.getTags().contains("AMMO")) {
+				int currAmmo = g.getAmmo(curr);
+				int maxAmmo = g.getMaxAmmo(curr);
+				int digs = Utils.digits(maxAmmo);
+				if (!ammo.isEmpty()) {
+					ammo.append(" | ");
+				}
+
+				//noinspection StringConcatenationInFormatCall
+				ammo.append(("%0" + digs + "d/%d").formatted(
+						currAmmo, maxAmmo
+				));
+
+				if (currAmmo < maxAmmo) {
+					canReload = true;
+				}
+
+				if (currAmmo > 0) {
+					mustReload = false;
+				}
+			} else {
+				mustReload = false;
+			}
+		}
+
 		if (game.getHeroes().containsKey(curr.getController())) {
 			ca = game.getChannel().sendMessage("<@" + curr.getController() + ">").embed(getEmbed());
 			helper = new ButtonizeHelper(true)
@@ -386,37 +417,6 @@ public class Combat implements Renderer<BufferedImage> {
 					.setCancellable(false);
 
 			if (canAttack) {
-				boolean canReload = false;
-				boolean mustReload = true;
-				StringBuilder ammo = new StringBuilder();
-				for (Gear g : curr.getEquipment().getWeaponList()) {
-					if (!g.isWeapon()) continue;
-
-					if (g.getTags().contains("AMMO")) {
-						int currAmmo = g.getAmmo(curr);
-						int maxAmmo = g.getMaxAmmo(curr);
-						int digs = Utils.digits(maxAmmo);
-						if (!ammo.isEmpty()) {
-							ammo.append(" | ");
-						}
-
-						//noinspection StringConcatenationInFormatCall
-						ammo.append(("%0" + digs + "d/%d").formatted(
-								currAmmo, maxAmmo
-						));
-
-						if (currAmmo < maxAmmo) {
-							canReload = true;
-						}
-
-						if (currAmmo > 0) {
-							mustReload = false;
-						}
-					} else {
-						mustReload = false;
-					}
-				}
-
 				EmojiId id;
 				if (ammo.isEmpty()) {
 					id = new EmojiId(Utils.parseEmoji("🗡️"));
@@ -439,14 +439,9 @@ public class Combat implements Renderer<BufferedImage> {
 				}
 
 				if (canReload) {
-					helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), w -> {
-						for (Gear g : curr.getEquipment().getWeaponList()) {
-							if (g.isWeapon() && g.getTags().contains("AMMO") && curr.getAp() > 0) {
-								curr.consumeAp(1);
-								g.reload(curr);
-							}
-						}
-					});
+					helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), _ ->
+							curr.reloadWeapons()
+					);
 				}
 			}
 
@@ -584,6 +579,7 @@ public class Combat implements Renderer<BufferedImage> {
 			ca = game.getChannel().sendEmbed(getEmbed());
 			helper = null;
 
+			boolean doReload = mustReload;
 			cpu.schedule(() -> {
 				try {
 					if (!curr.getBinding().isBound()) {
@@ -591,63 +587,72 @@ public class Combat implements Renderer<BufferedImage> {
 						return;
 					}
 
-					Function<Usable, Function<Actor<?>, Integer>> criteria = u -> a -> {
-						if (a.getTeam() == curr.getTeam()) {
-							if (curr instanceof MonsterBase<?> m && Objects.equals(m.getMaster(), a)) {
-								return a.getTargetPriority(null) * 5;
+					if (doReload) {
+						curr.reloadWeapons();
+						return;
+					}
+
+					try {
+						Function<Usable, Function<Actor<?>, Integer>> criteria = u -> a -> {
+							if (a.getTeam() == curr.getTeam()) {
+								if (curr instanceof MonsterBase<?> m && Objects.equals(m.getMaster(), a)) {
+									return a.getTargetPriority(null) * 5;
+								}
+
+								return a.getTargetPriority(null);
 							}
 
-							return a.getTargetPriority(null);
-						}
+							if (u instanceof Skill s && s.getTags().contains("DAMAGE") && a.getSenshi().isSleeping()) {
+								return 0;
+							}
 
-						if (u instanceof Skill s && s.getTags().contains("DAMAGE") && a.getSenshi().isSleeping()) {
-							return 0;
-						}
+							return a.getTargetPriority(u);
+						};
 
-						return a.getTargetPriority(u);
-					};
+						List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther(), true);
+						double threat = attackTgts.stream()
+								.mapToInt(a -> a.getHp() * a.getThreatScore() / a.getMaxHp())
+								.average()
+								.orElse(1);
 
-					List<Actor<?>> attackTgts = getActors(curr.getTeam().getOther(), true);
-					double threat = attackTgts.stream()
-							.mapToInt(a -> a.getHp() * a.getThreatScore() / a.getMaxHp())
-							.average()
-							.orElse(1);
-
-					double risk = (1 - (double) curr.getHp() / curr.getMaxHp()) * (threat / curr.getThreatScore());
-					if (!(curr instanceof Boss) && !curr.isMinion() && risk > 1 && Calc.chance(20)) {
-						curr.setFleed(true);
-						game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
-						return;
-					}
-
-					AtomicReference<Skill> force = new AtomicReference<>();
-					List<Skill> skills = collectCpuSkills(curr, force);
-
-					Skill skill = null;
-					if (force.get() != null) {
-						skill = force.get();
-					} else if (!skills.isEmpty()) {
-						skill = Utils.getRandomEntry(skills);
-					}
-
-					if (skill != null && (force.get() != null || !canAttack || Calc.chance(50))) {
-						List<Actor<?>> spellTgts = skill.getTargets(curr);
-						if (!spellTgts.isEmpty()) {
-							Actor<?> t = Utils.getWeightedEntry(rngList, criteria.apply(skill), spellTgts);
-							skill(skill, curr, t);
+						double risk = (1 - (double) curr.getHp() / curr.getMaxHp()) * (threat / curr.getThreatScore());
+						if (!(curr instanceof Boss) && !curr.isMinion() && risk > 1 && Calc.chance(20)) {
+							curr.setFleed(true);
+							game.getChannel().sendMessage(getLocale().get("str/actor_flee", curr.getName())).queue();
 							return;
 						}
+
+						AtomicReference<Skill> force = new AtomicReference<>();
+						List<Skill> skills = collectCpuSkills(curr, force);
+
+						Skill skill = null;
+						if (force.get() != null) {
+							skill = force.get();
+						} else if (!skills.isEmpty()) {
+							skill = Utils.getRandomEntry(skills);
+						}
+
+						if (skill != null && (force.get() != null || !canAttack || Calc.chance(50))) {
+							List<Actor<?>> spellTgts = skill.getTargets(curr);
+							if (!spellTgts.isEmpty()) {
+								Actor<?> t = Utils.getWeightedEntry(rngList, criteria.apply(skill), spellTgts);
+								skill(skill, curr, t);
+								return;
+							}
+						}
+
+						if (canAttack && !attackTgts.isEmpty() && (!canDefend || curr.getAp() != 1 || !Calc.chance(10 * risk))) {
+							attack(curr, Utils.getWeightedEntry(rngList, criteria.apply(Skill.DEFAULT_ATTACK), attackTgts));
+							return;
+						}
+					} catch (Exception e) {
+						Constants.LOGGER.error("Failed to execute action, entering defensive stance as fallback: {}", e, e);
 					}
 
-					if (!canAttack || attackTgts.isEmpty() || (curr.getAp() == 1 && (canDefend && Calc.chance(10 * risk)))) {
-						curr.getSenshi().setDefending(true);
-						curr.setAp(0);
+					curr.getSenshi().setDefending(true);
+					curr.setAp(0);
 
-						history.add(getLocale().get("str/actor_defend", curr.getName()));
-						return;
-					}
-
-					attack(curr, Utils.getWeightedEntry(rngList, criteria.apply(Skill.DEFAULT_ATTACK), attackTgts));
+					history.add(getLocale().get("str/actor_defend", curr.getName()));
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
