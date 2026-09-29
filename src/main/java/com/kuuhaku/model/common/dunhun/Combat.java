@@ -379,34 +379,27 @@ public class Combat implements Renderer<BufferedImage> {
 		boolean canAttack = sen.getDmg() > 0;
 		boolean canDefend = sen.getDfs() > 0;
 
-		boolean canReload = false;
-		boolean mustReload = true;
+		int currAmmo = 0;
+		int totAmmo = 0;
 		StringBuilder ammo = new StringBuilder();
 		for (Gear g : curr.getEquipment().getWeaponList()) {
 			if (!g.isWeapon()) continue;
 
 			if (g.getTags().contains("AMMO")) {
-				int currAmmo = g.getAmmo(curr);
-				int maxAmmo = g.getMaxAmmo(curr);
-				int digs = Utils.digits(maxAmmo);
+				int cAmmo = g.getAmmo(curr);
+				int mAmmo = g.getMaxAmmo(curr);
+				int digs = Utils.digits(mAmmo);
 				if (!ammo.isEmpty()) {
 					ammo.append(" | ");
 				}
 
 				//noinspection StringConcatenationInFormatCall
 				ammo.append(("%0" + digs + "d/%d").formatted(
-						currAmmo, maxAmmo
+						cAmmo, mAmmo
 				));
 
-				if (currAmmo < maxAmmo) {
-					canReload = true;
-				}
-
-				if (currAmmo > 0) {
-					mustReload = false;
-				}
-			} else {
-				mustReload = false;
+				currAmmo += cAmmo;
+				totAmmo += mAmmo;
 			}
 		}
 
@@ -424,7 +417,7 @@ public class Combat implements Renderer<BufferedImage> {
 					id = new EmojiId(Utils.parseEmoji("🗡️"), "(" + ammo + ")");
 				}
 
-				if (!mustReload) {
+				if (totAmmo == 0 || currAmmo > 0) {
 					helper.addAction(id, w -> {
 						List<Actor<?>> tgts = new ArrayList<>();
 						for (Actor<?> a : getActors(curr.getTeam().getOther())) {
@@ -438,7 +431,7 @@ public class Combat implements Renderer<BufferedImage> {
 					});
 				}
 
-				if (canReload) {
+				if (currAmmo < totAmmo) {
 					helper.addAction(Utils.parseEmoji("\uD83D\uDD04"), _ ->
 							curr.reloadWeapons()
 					);
@@ -579,7 +572,7 @@ public class Combat implements Renderer<BufferedImage> {
 			ca = game.getChannel().sendEmbed(getEmbed());
 			helper = null;
 
-			boolean doReload = mustReload;
+			boolean doReload = totAmmo > 0 && currAmmo == 0;
 			cpu.schedule(() -> {
 				try {
 					if (!curr.getBinding().isBound()) {
@@ -588,7 +581,13 @@ public class Combat implements Renderer<BufferedImage> {
 					}
 
 					if (doReload) {
+						int ap = curr.getAp();
 						curr.reloadWeapons();
+						if (ap == curr.getAp()) {
+							curr.getSenshi().setDefending(true);
+							curr.setAp(0);
+						}
+
 						return;
 					}
 
@@ -795,7 +794,8 @@ public class Combat implements Renderer<BufferedImage> {
 
 			if (wpns.size() > 1) {
 				for (Gear wpn : wpns) {
-					if (h.getAp() <= 0 || wpn.getAmmo(h) <= 0 || target.isOutOfCombat()) break;
+					if (h.getAp() <= 0 || target.isOutOfCombat()) break;
+					else if (wpn.getAmmo(h) <= 0) continue;
 
 					skill(Skill.DUAL_ATTACK, wpn, source, target);
 				}
