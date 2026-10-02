@@ -118,11 +118,15 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	}
 
 	public boolean addXp(int value) {
+		return addXp(value, false);
+	}
+
+	public boolean addXp(int value, boolean applyPenalty) {
 		int lvl = getLevel();
 		MinuteSchedule.XP_TO_ADD.compute(id.uid() + "-" + id.gid(), (_, v) -> {
 			int total;
 			if (v != null) {
-				double mult = Math.min((System.currentTimeMillis() - v.getSecond()) / 1000, 1);
+				double mult = applyPenalty ? Math.min((System.currentTimeMillis() - v.getSecond()) / 1000, 1) : 1;
 				total = v.getFirst() + (int) (value * mult);
 			} else {
 				total = value;
@@ -135,46 +139,46 @@ public class Profile extends DAO<Profile> implements AutoMake<Profile>, Blacklis
 	}
 
 	public void applyXp(I18N locale, GuildMessageChannel chn) {
-		int high = account.getHighestLevel();
-		int prize = 0;
-
 		Pair<Integer, Long> val = MinuteSchedule.XP_TO_ADD.remove(id.uid() + "-" + id.gid());
 		if (val != null) {
+			int high = account.getHighestLevel();
+
 			xp += val.getFirst();
 			save();
-		}
 
-		BiConsumer<GuildMessageChannel, String> notify = (c, msg) -> {
-			if (guild.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-				c = Utils.getOr(guild.getSettings().getNotificationsChannel(), c);
-				if (c.canTalk()) {
-					c.sendMessage(msg).setAllowedMentions(List.of(Message.MentionType.USER)).queue();
+			BiConsumer<GuildMessageChannel, String> notify = (c, msg) -> {
+				if (guild.getSettings().isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+					c = Utils.getOr(guild.getSettings().getNotificationsChannel(), c);
+					if (c.canTalk()) {
+						c.sendMessage(msg).setAllowedMentions(List.of(Message.MentionType.USER)).queue();
+					}
 				}
+			};
+
+			int prize = 0;
+			int level = getLevel();
+			if (level > high) {
+				prize = level * 150;
+				account.addCR(prize, "Level up prize");
+
+				notify.accept(chn, locale.get("achievement/level_up_prize", "<@" + id.uid() + ">", level, prize));
+
+				if (level <= 19) {
+					UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
+
+					account.addItem(item, 2);
+					notify.accept(chn, locale.get("str/received_item", 2, item.getName(locale)));
+				}
+			} else {
+				notify.accept(chn, locale.get("achievement/level_up", "<@" + id.uid() + ">", level, prize));
 			}
-		};
 
-		int level = getLevel();
-		if (level > high) {
-			prize = level * 150;
-			account.addCR(prize, "Level up prize");
+			if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
+				UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
 
-			notify.accept(chn, locale.get("achievement/level_up_prize", "<@" + id.uid() + ">", level, prize));
-
-			if (level <= 19) {
-				UserItem item = DAO.find(UserItem.class, "STARTER_TOKEN");
-
-				account.addItem(item, 2);
-				notify.accept(chn, locale.get("str/received_item", 2, item.getName(locale)));
+				account.addItem(item, level * 2);
+				notify.accept(chn, locale.get("str/received_item", level * 2, item.getName(locale)));
 			}
-		} else {
-			notify.accept(chn, locale.get("achievement/level_up", "<@" + id.uid() + ">", level, prize));
-		}
-
-		if (Calendar.getInstance().get(Calendar.MONTH) == Calendar.OCTOBER) {
-			UserItem item = DAO.find(UserItem.class, "SPOOKY_CANDY");
-
-			account.addItem(item, level * 2);
-			notify.accept(chn, locale.get("str/received_item", level * 2, item.getName(locale)));
 		}
 	}
 

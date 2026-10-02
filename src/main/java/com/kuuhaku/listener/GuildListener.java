@@ -298,7 +298,7 @@ public class GuildListener extends ListenerAdapter {
 				xp = (int) (xp * m.getData().getDouble("xp-mult"));
 			}
 
-			boolean lvlUp = profile.addXp(xp);
+			boolean lvlUp = profile.addXp(xp, true);
 			if (lvlUp) {
 				profile.applyXp(locale, data.channel());
 			}
