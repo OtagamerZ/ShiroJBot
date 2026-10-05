@@ -21,7 +21,6 @@ package com.kuuhaku.model.common.shoukan;
 import com.kuuhaku.model.common.ListenableList;
 import com.kuuhaku.model.enums.shoukan.Arcade;
 import com.kuuhaku.model.enums.shoukan.Race;
-import com.kuuhaku.util.Utils;
 
 import javax.annotation.Nullable;
 import java.util.Iterator;
@@ -140,14 +139,18 @@ public class RegDeg {
 	public int next() {
 		try {
 			int value;
-			if (parent != null && parent.getOther().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
-				value = values.stream().mapToInt(ValueOverTime::peek).sum();
+			if (parent != null) {
+				if (parent.getOther().getOrigins().hasSynergy(Race.FIEND) && parent.getGame().getRng().nextBoolean()) {
+					value = values.stream().mapToInt(ValueOverTime::peek).sum();
+				} else {
+					value = values.stream().mapToInt(ValueOverTime::next).sum();
+				}
+
+				if (parent.getOrigins().hasSynergy(Race.VIRUS)) {
+					value -= Math.min(parent.getOther().getRegDeg().peek(), 0);
+				}
 			} else {
 				value = values.stream().mapToInt(ValueOverTime::next).sum();
-			}
-
-			if (parent != null && parent.getOrigins().hasSynergy(Race.VIRUS)) {
-				value -= Math.min(parent.getOther().getRegDeg().peek(), 0);
 			}
 
 			return value;

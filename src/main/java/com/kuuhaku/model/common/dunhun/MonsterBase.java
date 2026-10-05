@@ -85,7 +85,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		double mult = switch (getRarityClass()) {
 			case MAGIC -> 1.5;
 			case RARE -> 2.25;
-			case UNIQUE -> this instanceof Boss ? 0.25 : 1;
+			case UNIQUE -> this instanceof Boss ? 5 : 1;
 			default -> 1;
 		} * HP_TABLE[getLevel() - 1];
 
@@ -121,19 +121,6 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 	@Override
 	public double getCritical() {
 		return getModifiers().getCritical(5);
-	}
-
-	@Override
-	public int getThreatScore() {
-		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 150;
-		double mult = switch (getRarityClass()) {
-			case NORMAL -> 1;
-			case MAGIC -> 1.5;
-			case RARE -> 2.25;
-			case UNIQUE -> 10;
-		};
-
-		return (int) Math.max(1, flat * mult * getLevel() / 2d);
 	}
 
 	public int getKillXp() {

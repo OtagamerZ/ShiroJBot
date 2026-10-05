@@ -787,32 +787,27 @@ public class Combat implements Renderer<BufferedImage> {
 	}
 
 	public void attack(Actor<?> source, Actor<?> target) {
-		if (source instanceof Hero h) {
-			List<Gear> wpns = h.getEquipment().getWeaponList().stream()
-					.filter(Gear::isWeapon)
-					.toList();
+		List<Gear> wpns = source.getEquipment().getWeaponList().stream()
+				.filter(Gear::isWeapon)
+				.toList();
 
-			if (wpns.size() > 1) {
-				for (Gear wpn : wpns) {
-					if (h.getAp() <= 0 || target.isOutOfCombat()) break;
-					else if (wpn.getAmmo(h) <= 0) continue;
-
-					skill(Skill.DUAL_ATTACK, wpn, source, target);
+		if (wpns.size() > 1) {
+			for (Gear wpn : wpns) {
+				if (source == getCurrent()) {
+					if (source.getAp() <= 0 || target.isOutOfCombat()) break;
 				}
 
-				return;
-			} else {
-				if (!wpns.isEmpty()) {
-					skill(Skill.DEFAULT_ATTACK, wpns.getFirst(), source, target);
-				} else {
-					skill(Skill.DEFAULT_ATTACK, source, target);
-				}
+				skill(Skill.DUAL_ATTACK, wpn, source, target);
 			}
 
 			return;
+		} else {
+			if (!wpns.isEmpty()) {
+				skill(Skill.DEFAULT_ATTACK, wpns.getFirst(), source, target);
+			} else {
+				skill(Skill.DEFAULT_ATTACK, source, target);
+			}
 		}
-
-		skill(Skill.DEFAULT_ATTACK, source, target);
 	}
 
 	public void skill(Skill skill, Actor<?> source, Actor<?> target) {
@@ -823,9 +818,9 @@ public class Combat implements Renderer<BufferedImage> {
 		try {
 			if (skill.isLocked()) return;
 			boolean isCurrent = source == getCurrent();
-			boolean useAmmo = gear != null && skill.isAttack() && gear.getTags().contains("AMMO");
+			boolean useAmmo = isCurrent && gear != null && skill.isAttack() && gear.getTags().contains("AMMO");
 
-			if (gear != null && useAmmo && gear.getAmmo(source) <= 0) {
+			if (useAmmo && gear.getAmmo(source) <= 0) {
 				game.getChannel().sendMessage(getLocale().get("error/no_ammo")).queue();
 				return;
 			}

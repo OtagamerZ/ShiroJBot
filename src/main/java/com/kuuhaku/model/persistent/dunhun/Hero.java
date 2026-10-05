@@ -170,12 +170,6 @@ public class Hero extends Actor<Hero> {
 		return Math.clamp(crit * 100 + bonus, 0, 100);
 	}
 
-	@Override
-	public int getThreatScore() {
-		int flat = getSenshi().getDmg() / 10 + getSenshi().getDfs() / 20 + getHp() / 200;
-		return (int) Math.max(1, flat * getLevel() / 2d);
-	}
-
 	public Attributes getAttributes() {
 		Attributes total = getStats().getAttributes();
 		for (Gear g : getEquipment()) {

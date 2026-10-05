@@ -140,7 +140,18 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 
 	public abstract double getCritical();
 
-	public abstract int getThreatScore();
+	public int getThreatScore() {
+		int dmg = (int) (getSenshi().getDmg() + getModifiers().getSpellDamage());
+		int flat = dmg / 10 + getSenshi().getDfs() / 20;
+		double mult = switch (getRarityClass()) {
+			case NORMAL -> 1;
+			case MAGIC -> 1.5;
+			case RARE -> 2.25;
+			case UNIQUE -> this instanceof Boss ? 10 : 1;
+		} * getSenshi().getPower() / 2;
+
+		return (int) Math.max(1, flat * mult * getLevel() / 2d);
+	}
 
 	public int getTargetPriority(Usable usable) {
 		int threat = getThreatScore();

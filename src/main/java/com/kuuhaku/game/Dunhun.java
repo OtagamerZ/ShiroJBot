@@ -949,11 +949,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 
 		EmbedBuilder eb = new ColorlessEmbedBuilder();
 
+		List<String> blocks = new ArrayList<>();
 		for (Actor<?> a : combat.get().getActors(team)) {
 			XStringBuilder sb = new XStringBuilder();
+			blocks.clear();
 
 			if (a instanceof Monster m) {
 				sb.appendNewLine("#-# " + m.getInfo(getLocale()).getName());
+				sb.appendNewLine("#-# :anger: " + getLocale().separate(a.getThreatScore()));
 
 				List<String> affs = m.getAffixes().stream()
 						.map(aff -> "- " + aff.getInfo(getLocale()).getDescription())
@@ -964,7 +967,12 @@ public class Dunhun extends GameInstance<NullPhase> {
 					sb.appendNewLine("**" + getLocale().get("str/affixes") + "**");
 					sb.appendNewLine(String.join("\n", affs));
 				}
+			} else {
+				sb.appendNewLine("#-# :anger: " + getLocale().separate(a.getThreatScore()));
 			}
+
+			blocks.add(sb.toString());
+			sb.clear();
 
 			XStringBuilder sk = new XStringBuilder();
 			List<String> skills = a.getAllSkills()
@@ -985,12 +993,14 @@ public class Dunhun extends GameInstance<NullPhase> {
 					.toList();
 
 			if (!skills.isEmpty()) {
-				sb.nextLine();
 				sb.appendNewLine("**" + getLocale().get("str/skills") + "**");
 				sb.appendNewLine(String.join("\n\n", skills));
 			}
 
-			String desc = sb.toString().lines()
+			blocks.add(sb.toString());
+			sb.clear();
+
+			String desc = String.join("\n\n", blocks).lines()
 					.map(l -> l.startsWith("#") ? l.substring(1) : "> " + l)
 					.collect(Collectors.joining("\n"));
 

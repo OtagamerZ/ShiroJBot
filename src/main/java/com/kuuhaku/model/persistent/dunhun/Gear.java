@@ -390,7 +390,7 @@ public class Gear extends DAO<Gear> {
 	}
 
 	public int getAmmo(Actor<?> owner) {
-		return Math.min(ammo, getMaxAmmo(owner));
+		return ammo = Math.min(ammo, getMaxAmmo(owner));
 	}
 
 	public void consumeAmmo(Actor<?> owner, int amount) {

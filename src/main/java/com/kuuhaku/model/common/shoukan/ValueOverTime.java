@@ -18,8 +18,6 @@
 
 package com.kuuhaku.model.common.shoukan;
 
-import com.kuuhaku.util.Utils;
-
 public abstract class ValueOverTime {
 	private final int baseValue;
 
