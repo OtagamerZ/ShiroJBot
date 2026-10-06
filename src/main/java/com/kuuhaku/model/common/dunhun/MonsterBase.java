@@ -85,16 +85,18 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		Dunhun game = getGame();
 
 		int flat = getStats().getBaseHp() + getLevel() * 5;
-		double scale = 1 + switch (getRarityClass()) {
-			case MAGIC -> 0.5;
-			case RARE -> 1.25;
-			case UNIQUE -> this instanceof Boss ? 4 : 0;
-			default -> 0;
-		};
+		double scale = 1;
 
 		if (game != null && !isMinion()) {
 			double areaFac = Math.min(game.getAreaLevel() / Dunhun.LEVEL_HARD, 1);
-			scale *= (0.5 + game.getPartySize() * 0.5) * Math.pow(1.4, game.getModifiers().size()) * areaFac;
+			scale += switch (getRarityClass()) {
+				case MAGIC -> 0.5;
+				case RARE -> 1.25;
+				case UNIQUE -> this instanceof Boss ? 4 : 0;
+				default -> 0;
+			} * areaFac;
+
+			scale *= (0.5 + game.getPartySize() * 0.5) * Math.pow(1.4, game.getModifiers().size());
 		}
 
 		double mult = scale * HP_TABLE[getLevel() - 1];
