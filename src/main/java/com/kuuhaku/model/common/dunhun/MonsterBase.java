@@ -1,5 +1,6 @@
 package com.kuuhaku.model.common.dunhun;
 
+import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.Boss;
@@ -81,26 +82,32 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 
 	@Override
 	public int getMaxHp() {
-		int flat = getStats().getBaseHp() + getLevel() * 5;
-		double mult = switch (getRarityClass()) {
-			case MAGIC -> 1.5;
-			case RARE -> 2.25;
-			case UNIQUE -> this instanceof Boss ? 5 : 1;
-			default -> 1;
-		} * HP_TABLE[getLevel() - 1];
+		Dunhun game = getGame();
 
-		if (getGame().getPartySize() > 1 && !isMinion()) {
-			mult *= 1 + getGame().getPartySize() * 0.5;
+		int flat = getStats().getBaseHp() + getLevel() * 5;
+		double scale = 1 + switch (getRarityClass()) {
+			case MAGIC -> 0.5;
+			case RARE -> 1.25;
+			case UNIQUE -> this instanceof Boss ? 4 : 0;
+			default -> 0;
+		};
+
+		if (game != null && !isMinion()) {
+			double areaFac = Math.min(game.getAreaLevel() / Dunhun.LEVEL_HARD, 1);
+			scale *= (0.5 + game.getPartySize() * 0.5) * Math.pow(1.4, game.getModifiers().size()) * areaFac;
 		}
 
+		double mult = scale * HP_TABLE[getLevel() - 1];
 		return (int) Math.max(1, getModifiers().getMaxHp(flat) * mult);
 	}
 
 	@Override
 	public int getMaxAp() {
+		Dunhun game = getGame();
+
 		int flat = 1 + getStats().getMaxAp() + getLevel() / 5;
-		if (getGame().getPartySize() > 1 && !isMinion()) {
-			flat += getGame().getPartySize() / 2;
+		if (game != null && game.getPartySize() > 1 && !isMinion()) {
+			flat += game.getPartySize() / 2;
 		}
 
 		return (int) Math.clamp(getModifiers().getMaxAp(flat), 1, Math.max(1, getApCap()));
@@ -131,7 +138,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 		};
 
 		if (getGame() != null) {
-			mult *= (1 + getLevel() / 5d) * Math.pow(1.1, getGame().getModifiers().size());
+			mult *= (1 + getLevel() / 5d) * Math.pow(1.2, getGame().getModifiers().size());
 		}
 
 		return (int) (stats.getKillXp() * mult);
