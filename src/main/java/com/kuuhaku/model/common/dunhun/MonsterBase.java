@@ -4,6 +4,7 @@ import com.kuuhaku.game.Dunhun;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.shoukan.Race;
 import com.kuuhaku.model.persistent.dunhun.Boss;
+import com.kuuhaku.model.persistent.dunhun.Monster;
 import com.kuuhaku.model.persistent.dunhun.MonsterStats;
 import com.kuuhaku.model.persistent.localized.LocalizedMonster;
 import com.kuuhaku.model.records.dunhun.Loot;
@@ -96,7 +97,10 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 				default -> 0;
 			} * areaFac;
 
-			scale *= (0.5 + game.getPartySize() * 0.5) * Math.pow(1.4, getModifiers().getEffects().size());
+			scale *= 0.5 + game.getPartySize() * 0.5;
+			if (this instanceof Monster m) {
+				scale *= Math.pow(1.4, m.getAffixes().size());
+			}
 		}
 
 		double mult = scale * HP_TABLE[getLevel() - 1];
