@@ -330,7 +330,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getCostMult() {
-		double mult = stats.getCost().multiplier();
+		double mult = stats.getCost().apply(1);
 		if (hand != null) {
 			if ((!spell && hand.getOrigins().hasMinor(Race.MACHINE)) || (spell && hand.getOrigins().hasMinor(Race.MYSTICAL))) {
 				mult *= 0.8;
@@ -346,7 +346,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getAttrMult() {
-		double mult = stats.getAttr().multiplier();
+		double mult = stats.getAttr().apply(1);
 		if (hand != null) {
 			if (!spell && hand.getOrigins().hasMinor(Race.MACHINE)) {
 				mult *= 1.14 + (hand.getUserDeck().countRace(Race.MACHINE) * 0.02);
@@ -370,7 +370,7 @@ public class Evogear extends DAO<Evogear> implements EffectHolder<Evogear> {
 
 	@Override
 	public double getPower() {
-		double mult = stats.getPower().multiplier() * (hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
+		double mult = stats.getPower().apply(hasFlag(Flag.EMPOWERED) ? 1.5 : 1);
 		if (hand != null) {
 			if (spell) {
 				if (hand.getOrigins().hasMinor(Race.MYSTICAL)) {

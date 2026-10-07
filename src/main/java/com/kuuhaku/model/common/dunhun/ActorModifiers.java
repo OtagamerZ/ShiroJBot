@@ -19,10 +19,7 @@
 package com.kuuhaku.model.common.dunhun;
 
 import com.kuuhaku.model.common.ListenableList;
-import com.kuuhaku.model.common.shoukan.FlatMod;
-import com.kuuhaku.model.common.shoukan.IncMod;
-import com.kuuhaku.model.common.shoukan.MultMod;
-import com.kuuhaku.model.common.shoukan.ValueMod;
+import com.kuuhaku.model.common.shoukan.*;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 import org.apache.commons.collections4.IteratorUtils;
@@ -91,6 +88,10 @@ public class ActorModifiers {
 
 			ValueMod mod = extractor.apply(e);
 			if (mod == null) continue;
+
+			if (mod instanceof SetMod) {
+				return mod.getValue();
+			}
 
 			switch (mod) {
 				case FlatMod m -> flat += m.getValue();

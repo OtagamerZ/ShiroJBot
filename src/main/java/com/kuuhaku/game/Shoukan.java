@@ -1607,7 +1607,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (dmgDealt != 0) {
 			outcome += "\n" + getString(dmgDealt > 0 ? "str/combat_damage_dealt" : "str/combat_heal_op", Math.abs(dmgDealt));
 
-			double mult = (dmgDealt > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).multiplier();
+			double mult = (dmgDealt > 0 ? op.getStats().getDamageMult() : op.getStats().getHealMult()).apply(1);
 			if (mult != 1) {
 				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
 			}
@@ -1615,7 +1615,7 @@ public class Shoukan extends GameInstance<Phase> {
 		if (dmgTaken != 0) {
 			outcome += "\n" + getString(dmgTaken > 0 ? "str/combat_damage_taken" : "str/combat_heal_self", Math.abs(dmgTaken));
 
-			double mult = (dmgTaken > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).multiplier();
+			double mult = (dmgTaken > 0 ? you.getStats().getDamageMult() : you.getStats().getHealMult()).apply(1);
 			if (mult != 1) {
 				outcome += " (" + getString("str/value_" + (mult > 0 ? "reduction" : "increase"), Utils.roundToString(getLocale(), (1 - mult) * 100, 2)) + ")";
 			}

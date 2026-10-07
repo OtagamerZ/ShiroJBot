@@ -197,8 +197,8 @@ public class GearAffix extends DAO<GearAffix> {
 		double fMult = mult;
 		return affix.getRanges().stream()
 				.map(r -> r.multiply(
-						modifiers.getMinMult().multiplier() * fMult,
-						modifiers.getMaxMult().multiplier() * fMult
+						modifiers.getMinMult().apply(fMult),
+						modifiers.getMaxMult().apply(fMult)
 				))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}

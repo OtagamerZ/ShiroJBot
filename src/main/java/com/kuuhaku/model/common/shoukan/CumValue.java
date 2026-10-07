@@ -71,7 +71,9 @@ public class CumValue implements Iterable<ValueMod> {
 				}
 			}
 
-			if (mod instanceof FlatMod) {
+			if (mod instanceof SetMod) {
+				return mod.getValue();
+			} else if (mod instanceof FlatMod) {
 				base += mod.getValue();
 			}
 		}
@@ -93,6 +95,8 @@ public class CumValue implements Iterable<ValueMod> {
 			return (T) new IncMod(source, 0);
 		} else if (klass == MultMod.class) {
 			return (T) new MultMod(source, 0);
+		} else if (klass == SetMod.class) {
+			return (T) new SetMod(source, 0);
 		}
 
 		throw new IllegalStateException("Unexpected value: " + klass);
