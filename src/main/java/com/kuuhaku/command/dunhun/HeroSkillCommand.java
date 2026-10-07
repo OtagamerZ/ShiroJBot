@@ -45,6 +45,7 @@ import org.jspecify.annotations.NonNull;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Command(
 		name = "hero",
@@ -100,7 +101,8 @@ public class HeroSkillCommand implements Executable {
 		List<String> tags = s.getTags();
 		if (!tags.isEmpty()) {
 			List<String> tgs = tags.stream()
-					.map(t -> LocalizedString.get(locale, "tag/" + t, "???"))
+					.map(t -> LocalizedString.get(locale, "tag/" + t, null))
+					.filter(Objects::nonNull)
 					.toList();
 
 			eb.appendDescription("-# " + String.join(", ", tgs) + "\n");
