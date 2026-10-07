@@ -295,8 +295,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		AtomicInteger val = new AtomicInteger(value);
 		Combat cbt = binding.getGame().getCombat();
 		if (cbt != null) {
-			if (source != null) {
-				if (hp > 0) {
+			if (hp > 0) {
+				if (source != null) {
 					if (val.get() < 0) {
 						cbt.trigger(Trigger.ON_DEFEND, this, source, usable, val);
 
@@ -336,8 +336,11 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 					}
 
 					cbt.trigger(val.get() < 0 ? Trigger.ON_DAMAGE : Trigger.ON_HEAL, source, this, usable, val);
-					if (!equals(source) && hp + val.get() <= 0) {
-						cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable, val);
+				}
+
+				if (!equals(source) && hp + val.get() <= 0) {
+					cbt.trigger(Trigger.ON_GRAVEYARD, this, this, usable, val);
+					if (source != null) {
 						cbt.trigger(Trigger.ON_KILL, source, this, usable, val);
 
 						Actor<?> killer = source;
@@ -345,47 +348,15 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 							killer = source.getMaster();
 						}
 						setKiller(killer);
-
-						if (this instanceof MonsterBase<?> m && !m.isMinion() && !m.didDropLoot()) {
-							MonsterStats stats = m.getStats();
-							Loot lt = m.generateLoot();
-							if (!m.isMinion()) {
-								lt.xp().addAndGet(m.getKillXp());
-							}
-
-							double mf = killer.getModifiers().getMagicFind(1);
-							double mult = mf
-									* stats.getLootMultiplier(m)
-									* Math.pow(1.2, cbt.getGame().getModifiers().size())
-									* (cbt.getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
-
-							double dropFac = 30 * mult;
-							while (Calc.chance(dropFac)) {
-								Gear drop = Gear.getRandom(m);
-								if (drop != null) {
-									lt.gear().add(drop);
-								}
-
-								dropFac /= 2;
-							}
-
-							dropFac = Math.max(10, cbt.getGame().getAreaLevel() / 2) * mult;
-							while (Calc.chance(dropFac)) {
-								GlobalDrop drop = GlobalDrop.getRandom(cbt.getGame());
-								if (drop == null) break;
-
-								lt.items().add(drop.getItem());
-								dropFac /= 2;
-							}
-
-							cbt.getLoot().add(lt);
-							m.setDroppedLoot(true);
-						}
 					}
-				} else if (hp + val.get() > 0) {
-					cbt.trigger(Trigger.ON_REVIVE, this, this, usable, val);
-					getSenshi().setAvailable(true);
+
+					if (this instanceof MonsterBase<?> m && !m.isMinion() && !m.didDropLoot()) {
+						dropLoot(m, killer, cbt);
+					}
 				}
+			} else if (hp + val.get() > 0) {
+				cbt.trigger(Trigger.ON_REVIVE, this, this, usable, val);
+				getSenshi().setAvailable(true);
 			}
 
 			I18N locale = cbt.getLocale();
@@ -424,6 +395,42 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		setHp(Math.max(equals(source) ? 1 : 0, getHp() + val.get()));
 
 		return Tuple2.tuple(val.get(), crit);
+	}
+
+	private static void dropLoot(MonsterBase<?> m, Actor<?> killer, Combat cbt) {
+		MonsterStats stats = m.getStats();
+		Loot lt = m.generateLoot();
+		if (!m.isMinion()) {
+			lt.xp().addAndGet(m.getKillXp());
+		}
+
+		double mf = killer != null ? killer.getModifiers().getMagicFind(1) : 1;
+		double mult = mf
+				* stats.getLootMultiplier(m)
+				* Math.pow(1.2, cbt.getGame().getModifiers().size())
+				* (cbt.getGame().getAreaType() == NodeType.DANGER ? 1.5 : 1);
+
+		double dropFac = 30 * mult;
+		while (Calc.chance(dropFac)) {
+			Gear drop = Gear.getRandom(m);
+			if (drop != null) {
+				lt.gear().add(drop);
+			}
+
+			dropFac /= 2;
+		}
+
+		dropFac = Math.max(10, cbt.getGame().getAreaLevel() / 2) * mult;
+		while (Calc.chance(dropFac)) {
+			GlobalDrop drop = GlobalDrop.getRandom(cbt.getGame());
+			if (drop == null) break;
+
+			lt.items().add(drop.getItem());
+			dropFac /= 2;
+		}
+
+		cbt.getLoot().add(lt);
+		m.setDroppedLoot(true);
 	}
 
 	public int applyMitigation(int raw) {
@@ -501,8 +508,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public void applyRegDeg() {
 		if (isOutOfCombat()) return;
 
-		int value = -getRegDeg().next();
-		setHp(getHp() - applyMitigation(value));
+		int value = -applyMitigation(getRegDeg().next());
+		modHp(null, null, value, 0);
 	}
 
 	public boolean isMinion() {
