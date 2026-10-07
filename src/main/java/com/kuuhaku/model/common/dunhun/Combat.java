@@ -574,6 +574,7 @@ public class Combat implements Renderer<BufferedImage> {
 
 			boolean doReload = totAmmo > 0 && currAmmo == 0;
 			cpu.schedule(() -> {
+				int startAp = curr.getAp();
 				try {
 					if (!curr.getBinding().isBound()) {
 						curr.setAp(0);
@@ -655,6 +656,10 @@ public class Combat implements Renderer<BufferedImage> {
 				} catch (Exception e) {
 					Constants.LOGGER.error(e, e);
 				} finally {
+					if (curr.getAp() == startAp) {
+						curr.consumeAp(1);
+					}
+
 					lock.complete(null);
 				}
 			}, Calc.rng(3000, 5000), TimeUnit.MILLISECONDS);
