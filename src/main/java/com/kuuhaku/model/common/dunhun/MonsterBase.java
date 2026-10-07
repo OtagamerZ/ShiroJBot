@@ -96,7 +96,7 @@ public abstract class MonsterBase<T extends MonsterBase<T>> extends Actor<T> {
 				default -> 0;
 			} * areaFac;
 
-			scale *= (0.5 + game.getPartySize() * 0.5) * Math.pow(1.4, game.getModifiers().size());
+			scale *= (0.5 + game.getPartySize() * 0.5) * Math.pow(1.4, getModifiers().getEffects().size());
 		}
 
 		double mult = scale * HP_TABLE[getLevel() - 1];
