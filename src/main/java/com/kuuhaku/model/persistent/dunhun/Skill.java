@@ -87,7 +87,7 @@ public class Skill extends DAO<Skill> implements Usable, Cloneable {
 			case ATTACK -> GENERIC_ATTACK;
 			case SPELL -> GENERIC_SPELL;
 			case BUFF -> GENERIC_BUFF;
-			default -> throw new IllegalArgumentException("Unknown skill type: " + type);
+			case NONE -> "NONE";
 		};
 
 		this.stats = new SkillStats(cost, cooldown, efficiency, critical, type);
