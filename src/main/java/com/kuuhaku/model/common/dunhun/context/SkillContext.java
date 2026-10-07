@@ -59,14 +59,14 @@ public class SkillContext extends EffectContext<Usable> {
 
 	public List<Actor<?>> getAllies() {
 		Combat cbt = getGame().getCombat();
-		if (cbt == null) return List.of();
+		if (cbt == null) return new ArrayList<>();
 
 		return cbt.getActors(origin.getTeam());
 	}
 
 	public List<Actor<?>> getEnemies() {
 		Combat cbt = getGame().getCombat();
-		if (cbt == null) return List.of();
+		if (cbt == null) return new ArrayList<>();
 
 		return cbt.getActors(origin.getTeam().getOther());
 	}

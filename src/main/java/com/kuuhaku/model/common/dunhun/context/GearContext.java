@@ -1,9 +1,11 @@
 package com.kuuhaku.model.common.dunhun.context;
 
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.persistent.dunhun.Gear;
 import com.kuuhaku.model.persistent.dunhun.GearAffix;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -42,6 +44,20 @@ public class GearContext extends EffectContext<Gear> {
 
 	public boolean isShoukan() {
 		return shoukan;
+	}
+
+	public List<Actor<?>> getAllies() {
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return new ArrayList<>();
+
+		return cbt.getActors(actor.getTeam());
+	}
+
+	public List<Actor<?>> getEnemies() {
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return new ArrayList<>();
+
+		return cbt.getActors(actor.getTeam().getOther());
 	}
 
 	@Override

@@ -1,8 +1,11 @@
 package com.kuuhaku.model.common.dunhun.context;
 
 import com.kuuhaku.model.common.dunhun.Actor;
+import com.kuuhaku.model.common.dunhun.Combat;
 import com.kuuhaku.model.persistent.dunhun.Affix;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class ActorContext extends EffectContext<Actor<?>> {
@@ -25,6 +28,20 @@ public class ActorContext extends EffectContext<Actor<?>> {
 
 	public int getDuration() {
 		return duration;
+	}
+
+	public List<Actor<?>> getAllies() {
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return new ArrayList<>();
+
+		return cbt.getActors(getSource().getTeam());
+	}
+
+	public List<Actor<?>> getEnemies() {
+		Combat cbt = getGame().getCombat();
+		if (cbt == null) return new ArrayList<>();
+
+		return cbt.getActors(getSource().getTeam().getOther());
 	}
 
 	@Override
