@@ -13,6 +13,7 @@ import com.kuuhaku.model.common.shoukan.ValueMod;
 import com.kuuhaku.model.enums.Fonts;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.enums.dunhun.Team;
+import com.kuuhaku.model.enums.shoukan.Flag;
 import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.*;
 import com.kuuhaku.model.persistent.localized.LocalizedString;
@@ -376,8 +377,8 @@ public class Combat implements Renderer<BufferedImage> {
 		ButtonizeHelper helper;
 		Actor<?> curr = getCurrent();
 		Senshi sen = curr.getSenshi();
-		boolean canAttack = sen.getDmg() > 0;
-		boolean canDefend = sen.getDfs() > 0;
+		boolean canAttack = sen.getDmg() > 0 && !sen.hasFlag(Flag.NO_ATTACK);
+		boolean canDefend = sen.getDfs() > 0 && !sen.hasFlag(Flag.ALWAYS_ATTACK);
 
 		int currAmmo = 0;
 		int totAmmo = 0;
