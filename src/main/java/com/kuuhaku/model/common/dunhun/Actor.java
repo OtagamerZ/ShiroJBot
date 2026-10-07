@@ -508,8 +508,12 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 	public void applyRegDeg() {
 		if (isOutOfCombat()) return;
 
-		int value = -applyMitigation(getRegDeg().next());
-		modHp(null, null, value, 0);
+		int value = getRegDeg().next();
+		if (value < 0) {
+			damage(-value);
+		} else {
+			heal(value);
+		}
 	}
 
 	public boolean isMinion() {
