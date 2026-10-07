@@ -8,6 +8,7 @@ import com.kuuhaku.model.enums.shoukan.Trigger;
 import com.kuuhaku.model.persistent.dunhun.Skill;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,5 +48,13 @@ public record CombatContext(
 
 	public boolean isEnemy() {
 		return source.getTeam() != target.get().getTeam();
+	}
+
+	public List<Actor<?>> getAllies() {
+		return combat.getActors(source.getTeam());
+	}
+
+	public List<Actor<?>> getEnemies() {
+		return combat.getActors(source.getTeam().getOther());
 	}
 }
