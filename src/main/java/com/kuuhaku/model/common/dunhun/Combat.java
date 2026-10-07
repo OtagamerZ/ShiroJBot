@@ -824,7 +824,11 @@ public class Combat implements Renderer<BufferedImage> {
 		try {
 			if (skill.isLocked()) return;
 			boolean isCurrent = source == getCurrent();
-			boolean useAmmo = isCurrent && gear != null && skill.isAttack() && gear.getTags().contains("AMMO");
+			boolean useAmmo = isCurrent
+					&& gear != null
+					&& skill.isAttack()
+					&& gear.getTags().contains("AMMO")
+					&& !skill.getTags().contains("NO_AMMO");
 
 			if (useAmmo && gear.getAmmo(source) <= 0) {
 				game.getChannel().sendMessage(getLocale().get("error/no_ammo")).queue();
