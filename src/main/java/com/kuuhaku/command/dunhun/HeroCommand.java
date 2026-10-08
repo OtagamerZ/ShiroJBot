@@ -456,6 +456,12 @@ public class HeroCommand implements Executable {
 					} else if (!h.getAttributes().has(g.getRequirements().attributes())) {
 						w.getChannel().sendMessage(locale.get("error/insufficient_attributes")).queue();
 						return;
+					} else if (g.getTags().contains("OFFHAND")) {
+						boolean has = h.getEquipment().getWeapons().getEntries().stream().anyMatch(wpn -> wpn.getTags().contains("OFFHAND"));
+						if (has) {
+							w.getChannel().sendMessage(locale.get("error/cannot_two_offhand")).queue();
+							return;
+						}
 					}
 
 					if (!h.getEquipment().equip(g)) {
