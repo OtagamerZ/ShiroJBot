@@ -29,6 +29,7 @@ import com.kuuhaku.model.persistent.localized.LocalizedEvent;
 import com.kuuhaku.model.records.dunhun.EventAction;
 import com.kuuhaku.model.records.dunhun.EventDescription;
 import com.kuuhaku.util.Utils;
+import com.kuuhaku.util.text.Uwuifier;
 import jakarta.persistence.*;
 import org.apache.commons.text.WordUtils;
 import org.hibernate.annotations.Cache;
@@ -83,7 +84,7 @@ public class Event extends DAO<Event> {
 	}
 
 	public EventDescription parse(Dunhun game, Node node) {
-		String desc = getInfo(game.getLocale()).getDescription();
+		String desc = getInfo(game.getLocale().getParent()).getDescription();
 
 		List<EventAction> out = new ArrayList<>();
 		if (script != null) {
@@ -103,6 +104,10 @@ public class Event extends DAO<Event> {
 
 			return Matcher.quoteReplacement(hide ? "" : "**" + m.group(1) + "**");
 		});
+
+		if (game.getLocale().isUwu()) {
+			desc = Uwuifier.INSTANCE.uwu(game.getLocale(), desc);
+		}
 
 		return new EventDescription(game.parsePlural(desc), out);
 	}

@@ -85,7 +85,7 @@ public class Uwuifier {
 								word = word.replaceAll(p.getLeft(), p.getRight());
 							}
 
-							words[j] = word.replaceAll("[!?.]", Utils.getRandomEntry(rng, punctuation));
+							words[j] = word.replaceAll("(?<=\\w)[!?.]", Utils.getRandomEntry(rng, punctuation));
 						}
 
 						String out = String.join(" ", words);

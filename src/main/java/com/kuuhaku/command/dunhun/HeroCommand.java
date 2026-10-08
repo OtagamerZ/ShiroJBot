@@ -240,7 +240,7 @@ public class HeroCommand implements Executable {
 			eb.setDescription(locale.get("str/remaining_points", h.getStats().getPointsLeft()));
 
 			pages.clear();
-			pages.addAll(Utils.generatePages(eb, all.values(), 10, 5,
+			pages.addAll(Utils.generatePages(eb, all.values(), 8, 4,
 					s -> {
 						int idx = skills.indexOf(s);
 						String title = s.getName(locale);

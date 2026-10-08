@@ -188,7 +188,7 @@ public abstract class GameInstance<T extends Enum<T>> {
 
 	public String getString(String key, Object... args) {
 		try {
-			String out = locale.get(key, args);
+			String out = locale.getParent().get(key, args);
 			if (out.isBlank() || out.equalsIgnoreCase(key)) {
 				out = LocalizedString.get(locale.getParent(), key, "").formatted(args);
 			}
