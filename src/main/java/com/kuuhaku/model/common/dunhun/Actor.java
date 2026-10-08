@@ -163,7 +163,7 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 		if (usable != null) {
 			missFac *= 1 - s.getDodge() / 200d;
 
-			if (usable instanceof Skill sk && sk.isSpell()) {
+			if (usable instanceof Skill sk && sk.isAttack()) {
 				missFac *= 1 - s.getParry() / 200d;
 			}
 		}
@@ -717,7 +717,8 @@ public abstract class Actor<T extends Actor<T>> extends DAO<T> {
 			pry = m.getStats().getParry();
 			pow = switch (getRarityClass()) {
 				case MAGIC -> 0.25;
-				case RARE -> 0.66;
+				case RARE -> 0.33;
+				case UNIQUE -> 0.5;
 				default -> 0;
 			};
 		}
