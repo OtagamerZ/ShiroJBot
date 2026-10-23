@@ -26,47 +26,60 @@ import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
+import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Role;
-
-import java.util.Set;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
-		name = "welcomer",
+		name = "set",
+		path = "starboard",
 		category = Category.MODERATION
 )
-@Syntax(allowEmpty = true, value = {
+@Syntax({
 		"<action:word:r>[clear]",
-		"<role:role:r>"
+		"<channel:channel:r>",
+		"<value:number:r>"
 })
-public class WelcomerRoleCommand implements Executable {
+public class SetStarboardCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
 		if (args.has("action")) {
-			settings.setWelcomer(null);
+			settings.setStarboardChannel(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/welcomer_role_clear")).queue();
+			event.channel().sendMessage(locale.get("success/starboard_clear")).queue();
 			return;
-		} else if (args.has("role")) {
-			Role role = event.roles(0);
-			if (role == null) {
+		} else if (args.has("channel")) {
+			GuildChannel channel = event.channels(0);
+			if (channel == null) {
 				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 				return;
 			}
 
-			settings.setWelcomer(role);
+			if (!(channel instanceof TextChannelImpl tc)) {
+				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+				return;
+			}
+
+			settings.setStarboardChannel(tc);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/welcomer_role_save")).queue();
+			event.channel().sendMessage(locale.get("success/starboard_channel_save")).queue();
 			return;
 		}
 
-		Role role = settings.getWelcomer();
-		event.channel().sendMessage(locale.get("str/current_welcomer_role",
-				role == null ? "`" + locale.get("str/none") + "`" : role.getAsMention()
-		)).setAllowedMentions(Set.of()).queue();
+		int value = args.getInt("value");
+		if (!Utils.between(value, 3, 50)) {
+			event.channel().sendMessage(locale.get("error/invalid_value_range", 3, 50)).queue();
+			return;
+		}
+
+		settings.setStarboardThreshold(value);
+		settings.save();
+
+		event.channel().sendMessage(locale.get("success/starboard_threshold_save")).queue();
 	}
 }

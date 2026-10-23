@@ -22,63 +22,52 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
-import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
-import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
+import net.dv8tion.jda.api.entities.Role;
+
+import java.util.Set;
 
 @Command(
-		name = "notifications",
+		name = "set",
+		path = "joinrole",
 		category = Category.MODERATION
 )
 @Syntax(allowEmpty = true, value = {
 		"<action:word:r>[clear]",
-		"<channel:channel:r>"
+		"<role:role:r>"
 })
-public class NotificationsCommand implements Executable {
+public class SetJoinRoleCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
-
 		if (args.has("action")) {
-			settings.setNotificationsChannel(null);
+			settings.setJoinRole(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/notifications_channel_clear")).queue();
+			event.channel().sendMessage(locale.get("success/join_role_clear")).queue();
 			return;
-		} else if (!args.has("channel")) {
-			if (settings.isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
-				settings.getFeatures().remove(GuildFeature.NOTIFICATIONS);
-				event.channel().sendMessage(locale.get("success/notifications_disable")).queue();
-			} else {
-				settings.getFeatures().add(GuildFeature.NOTIFICATIONS);
-				event.channel().sendMessage(locale.get("success/notifications_enable")).queue();
+		} else if (args.has("role")) {
+			Role role = event.roles(0);
+			if (role == null) {
+				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
+				return;
 			}
 
+			settings.setJoinRole(role);
 			settings.save();
+
+			event.channel().sendMessage(locale.get("success/join_role_save")).queue();
 			return;
 		}
 
-		GuildChannel channel = event.channels(0);
-		if (channel == null) {
-			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
-			return;
-		}
-
-		if (!(channel instanceof TextChannelImpl tc)) {
-			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
-			return;
-		}
-
-		settings.getFeatures().add(GuildFeature.NOTIFICATIONS);
-		settings.setNotificationsChannel(tc);
-		settings.save();
-
-		event.channel().sendMessage(locale.get("success/notifications_channel_set", channel.getAsMention())).queue();
+		Role role = settings.getJoinRole();
+		event.channel().sendMessage(locale.get("str/current_join_role",
+				role == null ? "`" + locale.get("str/none") + "`" : role.getAsMention()
+		)).setAllowedMentions(Set.of()).queue();
 	}
 }

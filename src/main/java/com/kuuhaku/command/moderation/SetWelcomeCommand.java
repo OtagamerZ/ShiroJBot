@@ -25,7 +25,7 @@ import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.common.ColorlessEmbedBuilder;
 import com.kuuhaku.model.enums.Category;
 import com.kuuhaku.model.enums.I18N;
-import com.kuuhaku.model.persistent.guild.GoodbyeSettings;
+import com.kuuhaku.model.persistent.guild.WelcomeSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
@@ -37,7 +37,8 @@ import net.dv8tion.jda.api.entities.channel.middleman.GuildMessageChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
-		name = "goodbye",
+		name = "set",
+		path = "welcome",
 		category = Category.MODERATION
 )
 @Syntax(allowEmpty = true, value = {
@@ -46,16 +47,16 @@ import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 		"<message:text:r>"
 })
 @Requires(Permission.MESSAGE_EMBED_LINKS)
-public class GoodbyeCommand implements Executable {
+public class SetWelcomeCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
-		GoodbyeSettings settings = data.config().getGoodbyeSettings();
+		WelcomeSettings settings = data.config().getWelcomeSettings();
 		if (args.has("action")) {
-			settings.setMessage(locale.get("default/goodbye_message"));
+			settings.setMessage(locale.get("default/welcome_message"));
 			settings.setChannel(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/goodbye_clear")).queue();
+			event.channel().sendMessage(locale.get("success/welcome_clear")).queue();
 			return;
 		} else if (args.has("channel")) {
 			GuildChannel channel = event.channels(0);
@@ -72,7 +73,7 @@ public class GoodbyeCommand implements Executable {
 			settings.setChannel(tc);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/goodbye_channel_save")).queue();
+			event.channel().sendMessage(locale.get("success/welcome_channel_save")).queue();
 			return;
 		}
 
@@ -82,7 +83,7 @@ public class GoodbyeCommand implements Executable {
 					.setDescription(settings.getMessage());
 
 			GuildMessageChannel chn = settings.getChannel();
-			event.channel().sendMessage(locale.get("str/current_goodbye_message",
+			event.channel().sendMessage(locale.get("str/current_welcome_message",
 					chn == null ? "`" + locale.get("str/none") + "`" : chn.getAsMention()
 			)).setEmbeds(eb.build()).queue();
 			return;
@@ -91,6 +92,6 @@ public class GoodbyeCommand implements Executable {
 		settings.setMessage(msg);
 		settings.save();
 
-		event.channel().sendMessage(locale.get("success/goodbye_message_save")).queue();
+		event.channel().sendMessage(locale.get("success/welcome_message_save")).queue();
 	}
 }

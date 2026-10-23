@@ -22,63 +22,64 @@ import com.kuuhaku.interfaces.Executable;
 import com.kuuhaku.interfaces.annotations.Command;
 import com.kuuhaku.interfaces.annotations.Syntax;
 import com.kuuhaku.model.enums.Category;
+import com.kuuhaku.model.enums.GuildFeature;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildSettings;
 import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
-import com.kuuhaku.util.Utils;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
 import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
-		name = "starboard",
+		name = "set",
+		path = "notifications",
 		category = Category.MODERATION
 )
-@Syntax({
+@Syntax(allowEmpty = true, value = {
 		"<action:word:r>[clear]",
-		"<channel:channel:r>",
-		"<value:number:r>"
+		"<channel:channel:r>"
 })
-public class StarboardCommand implements Executable {
+public class SetNotificationsCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
+
 		if (args.has("action")) {
-			settings.setStarboardChannel(null);
+			settings.setNotificationsChannel(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/starboard_clear")).queue();
+			event.channel().sendMessage(locale.get("success/notifications_channel_clear")).queue();
 			return;
-		} else if (args.has("channel")) {
-			GuildChannel channel = event.channels(0);
-			if (channel == null) {
-				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
-				return;
+		} else if (!args.has("channel")) {
+			if (settings.isFeatureEnabled(GuildFeature.NOTIFICATIONS)) {
+				settings.getFeatures().remove(GuildFeature.NOTIFICATIONS);
+				event.channel().sendMessage(locale.get("success/notifications_disable")).queue();
+			} else {
+				settings.getFeatures().add(GuildFeature.NOTIFICATIONS);
+				event.channel().sendMessage(locale.get("success/notifications_enable")).queue();
 			}
 
-			if (!(channel instanceof TextChannelImpl tc)) {
-				event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
-				return;
-			}
-
-			settings.setStarboardChannel(tc);
 			settings.save();
-
-			event.channel().sendMessage(locale.get("success/starboard_channel_save")).queue();
 			return;
 		}
 
-		int value = args.getInt("value");
-		if (!Utils.between(value, 3, 50)) {
-			event.channel().sendMessage(locale.get("error/invalid_value_range", 3, 50)).queue();
+		GuildChannel channel = event.channels(0);
+		if (channel == null) {
+			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
 			return;
 		}
 
-		settings.setStarboardThreshold(value);
+		if (!(channel instanceof TextChannelImpl tc)) {
+			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+			return;
+		}
+
+		settings.getFeatures().add(GuildFeature.NOTIFICATIONS);
+		settings.setNotificationsChannel(tc);
 		settings.save();
 
-		event.channel().sendMessage(locale.get("success/starboard_threshold_save")).queue();
+		event.channel().sendMessage(locale.get("success/notifications_channel_set", channel.getAsMention())).queue();
 	}
 }

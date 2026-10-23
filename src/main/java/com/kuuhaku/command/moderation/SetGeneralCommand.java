@@ -28,45 +28,44 @@ import com.kuuhaku.model.records.EventData;
 import com.kuuhaku.model.records.MessageData;
 import com.ygimenez.json.JSONObject;
 import net.dv8tion.jda.api.JDA;
-import net.dv8tion.jda.api.entities.Role;
-
-import java.util.Set;
+import net.dv8tion.jda.api.entities.channel.middleman.GuildChannel;
+import net.dv8tion.jda.internal.entities.channel.concrete.TextChannelImpl;
 
 @Command(
-		name = "joinrole",
+		name = "set",
+		path = "general",
 		category = Category.MODERATION
 )
 @Syntax(allowEmpty = true, value = {
 		"<action:word:r>[clear]",
-		"<role:role:r>"
+		"<channel:channel:r>"
 })
-public class JoinRoleCommand implements Executable {
+public class SetGeneralCommand implements Executable {
 	@Override
 	public void execute(JDA bot, I18N locale, EventData data, MessageData.Guild event, JSONObject args) {
 		GuildSettings settings = data.config().getSettings();
 		if (args.has("action")) {
-			settings.setJoinRole(null);
+			settings.setGeneralChannel(null);
 			settings.save();
 
-			event.channel().sendMessage(locale.get("success/join_role_clear")).queue();
-			return;
-		} else if (args.has("role")) {
-			Role role = event.roles(0);
-			if (role == null) {
-				event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
-				return;
-			}
-
-			settings.setJoinRole(role);
-			settings.save();
-
-			event.channel().sendMessage(locale.get("success/join_role_save")).queue();
+			event.channel().sendMessage(locale.get("success/general_channel_clear")).queue();
 			return;
 		}
 
-		Role role = settings.getJoinRole();
-		event.channel().sendMessage(locale.get("str/current_join_role",
-				role == null ? "`" + locale.get("str/none") + "`" : role.getAsMention()
-		)).setAllowedMentions(Set.of()).queue();
+		GuildChannel channel = event.channels(0);
+		if (channel == null) {
+			event.channel().sendMessage(locale.get("error/invalid_mention")).queue();
+			return;
+		}
+
+		if (!(channel instanceof TextChannelImpl tc)) {
+			event.channel().sendMessage(locale.get("error/invalid_channel")).queue();
+			return;
+		}
+
+		settings.setGeneralChannel(tc);
+		settings.save();
+
+		event.channel().sendMessage(locale.get("success/general_channel_set", channel.getAsMention())).queue();
 	}
 }
