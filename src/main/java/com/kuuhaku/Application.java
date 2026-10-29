@@ -71,6 +71,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 
 		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.of(
 						GatewayIntent.GUILD_MEMBERS,
+						GatewayIntent.GUILD_PRESENCES,
 						GatewayIntent.GUILD_VOICE_STATES,
 						GatewayIntent.GUILD_EXPRESSIONS,
 						GatewayIntent.GUILD_MESSAGES,
