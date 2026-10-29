@@ -29,8 +29,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class PrivateChannelListener extends ListenerAdapter {
-	public static final PrivateChannelListener INSTANCE = new PrivateChannelListener();
+public class ShiroListener extends ListenerAdapter {
+	public static final ShiroListener INSTANCE = new ShiroListener();
 
 	@Override
 	public void onGuildJoin(@NotNull GuildJoinEvent event) {

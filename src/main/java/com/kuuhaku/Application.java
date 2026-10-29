@@ -26,7 +26,7 @@ import com.kuuhaku.controller.DAO;
 import com.kuuhaku.controller.Manager;
 import com.kuuhaku.listener.AutoModListener;
 import com.kuuhaku.listener.GuildListener;
-import com.kuuhaku.listener.PrivateChannelListener;
+import com.kuuhaku.listener.ShiroListener;
 import com.kuuhaku.model.enums.I18N;
 import com.kuuhaku.model.persistent.guild.GuildConfig;
 import com.kuuhaku.util.API;
@@ -69,7 +69,14 @@ public class Application implements Thread.UncaughtExceptionHandler {
 			Constants.LOGGER.error("Database latency: {}ms", latency);
 		}
 
-		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.allOf(GatewayIntent.class))
+		shiro = DefaultShardManagerBuilder.create(Constants.BOT_TOKEN, EnumSet.of(
+						GatewayIntent.GUILD_MEMBERS,
+						GatewayIntent.GUILD_VOICE_STATES,
+						GatewayIntent.GUILD_MESSAGES,
+						GatewayIntent.GUILD_MESSAGE_REACTIONS,
+						GatewayIntent.MESSAGE_CONTENT,
+						GatewayIntent.AUTO_MODERATION_EXECUTION
+				))
 				.disableCache(EnumSet.complementOf(EnumSet.of(CacheFlag.EMOJI, CacheFlag.VOICE_STATE)))
 				.setMemberCachePolicy(all(ONLINE.or(OWNER), m -> !m.getUser().isBot()))
 				.setBulkDeleteSplittingEnabled(false)
@@ -78,7 +85,7 @@ public class Application implements Thread.UncaughtExceptionHandler {
 				.addEventListeners(
 						GuildListener.INSTANCE,
 						AutoModListener.INSTANCE,
-						PrivateChannelListener.INSTANCE
+						ShiroListener.INSTANCE
 				)
 				.build();
 
